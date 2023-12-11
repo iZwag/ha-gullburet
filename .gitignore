@@ -1,0 +1,10 @@
+# Ignore all directories and files starting with .
+.*/*
+.*
+# Except for .gitignore itself
+!.gitignore
+
+*.log*
+custom_components/
+secrets.yaml
+*.db*
