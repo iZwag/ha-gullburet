@@ -1,0 +1,301 @@
+# MDB = MasterDim Brigthness
+- id: 646aaad9d27041feb9f5017a5e4c65d6
+  alias: Masterdim Brigthness ALL Lights
+  description: Masterdims the brightness of ALL lights
+  trigger:
+    - platform: state
+      entity_id: input_number.apartment_dimmer
+  action:
+    - service: automation.trigger
+      data:
+        skip_condition: false
+      target:
+        entity_id:
+          - automation.mdb_office_3_pendants
+          #- automation.mdb_bedroom_pendant
+          #- automation.mdb_bedroom_closet
+          #- automation.mdb_guestroom_cloud
+          - automation.mdb_bathroom_downlights
+          - automation.mdb_bathroom_strip
+          - automation.mdb_toilet_downlight
+          - automation.mdb_kitchen_6_track
+          - automation.mdb_kitchen_flowerpots
+          - automation.mdb_kitchen_pendants
+          - automation.mdb_livingroom_4_track
+          - automation.mdb_livingroom_downlights
+          - automation.mdb_entry_downlights
+- id: mdb201
+  alias: MDB Office 3-pendants
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.3_pendants_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb202
+  alias: MDB Bedroom Pendant
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.pendant_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb203
+  alias: MDB Bedroom Closet
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.closet_light
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb204
+  alias: MDB Guestroom Cloud
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.cloud_pendant_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb301
+  alias: MDB Bathroom Downlights
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.bath_downlights_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb302
+  alias: MDB Bathroom Strip
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.tub_lightstrip_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb303
+  alias: MDB Toilet Downlight
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.downlight_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb101
+  alias: MDB Kitchen 6-track
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.6_spot_track_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb102
+  alias: MDB Kitchen Flowerpots
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.flowerpots_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb103
+  alias: MDB Kitchen Pendants
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.ball_pendants_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb104
+  alias: MDB Livingroom 4-track
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.4_spot_track_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb105
+  alias: MDB Livingroom Downlights
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.dimmer_2
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+- id: mdb106
+  alias: MDB Entry downlights
+  description: Masterdim brightness
+  use_blueprint:
+    path: homeassistant/masterdim_light.yaml
+    input:
+      light_entity: light.downlights_3
+      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+
+- id: "1691932328153"
+  alias: Auto masterdim with Sun-cycle
+  description:
+    Automatically adjusts the brightness of all lights in the apartment
+    (masterdim) at 6 times during the suns cycle.
+  trigger:
+    - platform: time
+      at: sensor.sun_next_midnight
+      id: midnight
+    - platform: time
+      at: sensor.sun_next_dawn
+      id: dawn
+    - platform: time
+      at: sensor.sun_next_rising
+      id: sunrise
+    - platform: time
+      at: input_datetime.risenoon
+      id: risenoon
+    - platform: time
+      id: noon
+      at: sensor.sun_next_noon
+    - platform: time
+      at: input_datetime.noonset
+      id: noonset
+    - platform: time
+      at: sensor.sun_next_setting
+      id: sunset
+    - platform: time
+      at: sensor.sun_next_dusk
+      id: dusk
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - midnight
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_lowest') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_dawn') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - dawn
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_low') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_rising') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - sunrise
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_medium') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('input_datetime.risenoon') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - risenoon
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_high') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_noon') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - noon
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_highest') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('input_datetime.noonset') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - noonset
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_high') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_setting') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - sunset
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_medium') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_dusk') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+        - conditions:
+            - condition: trigger
+              id:
+                - dusk
+          sequence:
+            - service: input_number.set_value
+              data:
+                value: "{{ states('input_number.dimconstant_low') | int }}"
+              target:
+                entity_id: input_number.apartment_dimmer
+            - service: input_datetime.set_datetime
+              data:
+                datetime: "{{ states('sensor.sun_next_midnight') }}"
+              target:
+                entity_id: input_datetime.next_sun_event
+  mode: single
+
+- id: "1692303915080"
+  alias: Daily Calculate RiseNoon and NoonSet
+  description:
+    "Calculates the daily middle-times between Sunrise and Noon, and Noon
+    and Sunset after midnight"
+  trigger:
+    - platform: time
+      at: input_datetime.dailyservicetime
+  condition: []
+  action:
+    - service: script.calculate_risenoon
+      data: {}
+    - service: script.calculate_noonset
+      data: {}
+  mode: single

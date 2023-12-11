@@ -1,0 +1,149 @@
+- id: "1688915226284"
+  alias: 6-track + under-shelf link ON/OFF
+  description: Mirrors turning ON/FF 6-track with the under-shelf lights
+  trigger:
+    - platform: device
+      type: turned_off
+      device_id: eb4b79fde63f5daa13b1fb3cd99799b5
+      entity_id: f1d90054494528764c740b2e13e0aae1
+      domain: light
+      id: 6spots-turned-off
+  condition: []
+  action:
+    - type: turn_off
+      device_id: 348d87a4696206184017eba3dc1c94d1
+      entity_id: 8b46a012e4936bc3b8efffb425d84342
+      domain: light
+  mode: single
+- id: "1688915580578"
+  alias: Mirror 6-track + under-shelf turn ON
+  description: Defines the mirroring of turning on 6-track to the under-shelf
+  trigger:
+    - platform: device
+      type: turned_on
+      device_id: eb4b79fde63f5daa13b1fb3cd99799b5
+      entity_id: f1d90054494528764c740b2e13e0aae1
+      domain: light
+  condition: []
+  action:
+    - type: turn_on
+      device_id: 348d87a4696206184017eba3dc1c94d1
+      entity_id: 8b46a012e4936bc3b8efffb425d84342
+      domain: light
+      brightness_pct: 50
+  variables:
+    6_track_level: ""
+  mode: single
+- id: "1689102622500"
+  alias: Tablet charge-switch ON/OFF
+  description:
+    Turns the tablet charge-switch ON if it is below 15%, and OFF if it
+    is above 85%.
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.lenovo_tab_m10_fhd_plus_battery
+      below: 15
+      alias: Below 15 pcnt
+      id: below-15-pcnt
+    - platform: numeric_state
+      entity_id: sensor.lenovo_tab_m10_fhd_plus_battery
+      above: 85
+      alias: Above 85 pcnt
+      id: above-85-pcnt
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - below-15-pcnt
+          sequence:
+            - type: turn_on
+              device_id: 993cb6afd77dabc2392bb1d90ff89620
+              entity_id: bca96df95cd9d55568ded6bba1d67c56
+              domain: switch
+              alias: Turn Tablet charge-switch ON
+        - conditions:
+            - condition: trigger
+              id:
+                - above-85-pcnt
+          sequence:
+            - type: turn_off
+              device_id: 993cb6afd77dabc2392bb1d90ff89620
+              entity_id: bca96df95cd9d55568ded6bba1d67c56
+              domain: switch
+              alias: Turn charge-switch OFF
+      alias: Choose switch ON or OFF
+  mode: single
+- id: "1689104769483"
+  alias: Tablet motion turns screen ON/OFF
+  description: ""
+  trigger:
+    - platform: state
+      entity_id:
+        - switch.lenovo_tab_m10_fhd_plus_motion_detection
+      to: "on"
+      id: tablet-motion-on
+      alias: Tablet motion ON
+    - platform: state
+      entity_id:
+        - switch.lenovo_tab_m10_fhd_plus_motion_detection
+      to: "off"
+      alias: Tablet motion OFF
+      id: tablet-motion-off
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - tablet-motion-on
+          sequence:
+            - service: switch.turn_on
+              data: {}
+              target:
+                entity_id: switch.lenovo_tab_m10_fhd_plus_screen
+              alias: Turn Tablet screen ON
+        - conditions:
+            - condition: trigger
+              id:
+                - tablet-motion-off
+          sequence:
+            - service: switch.turn_off
+              data: {}
+              target:
+                entity_id: switch.lenovo_tab_m10_fhd_plus_screen
+              alias: Turn tablet screen OFF
+  mode: single
+- id: "1691520863532"
+  alias: Veranda dusk-ON/dawn-OFF
+  description: ""
+  trigger:
+    - platform: time
+      at: sensor.sun_next_setting
+      id: sun-down
+    - platform: time
+      at: sensor.sun_next_dawn
+      id: sun-dawn
+  condition: []
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - sun-down
+          sequence:
+            - type: turn_on
+              device_id: 6755b78338463da39a1e2277e1e83efa
+              entity_id: 45273657fa091adfaf780ed9adb0d97a
+              domain: switch
+        - conditions:
+            - condition: trigger
+              id:
+                - sun-dawn
+          sequence:
+            - type: turn_off
+              device_id: 6755b78338463da39a1e2277e1e83efa
+              entity_id: 45273657fa091adfaf780ed9adb0d97a
+              domain: switch
+  mode: single

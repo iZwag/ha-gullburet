@@ -1,0 +1,200 @@
+- id: '1690996142517'
+  name: 'Living Room lights: Off'
+  entities:
+    light.dimmer_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Downlights
+      supported_features: 32
+      state: 'off'
+    light.dimmer_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Downlights  (2)
+      supported_features: 32
+      state: 'off'
+    light.4_spot_track_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: 4-spot track
+      supported_features: 32
+      state: 'off'
+    light.4_spot_track_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: 4-spot track  (2)
+      supported_features: 32
+      state: 'off'
+    light.mood_ball:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      mode: normal
+      dynamics: none
+      friendly_name: Mood ball
+      supported_features: 40
+      state: 'off'
+    switch.shroom_lamp_switch:
+      friendly_name: Shroom lamp Switch
+      state: 'off'
+    switch.globe:
+      icon: mdi:lamp
+      friendly_name: Globe lamp Switch
+      state: 'off'
+    light.globe_lamp_switch:
+      supported_color_modes:
+      - onoff
+      friendly_name: Globe lamp Switch
+      supported_features: 0
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata:
+    switch.shroom_lamp_switch:
+      entity_only: true
+- id: '1690996655003'
+  name: 'Kitchen lights: Off'
+  entities:
+    light.flowerpots_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Flowerpots
+      supported_features: 32
+      state: 'off'
+    light.6_spot_track_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: 6-spot track
+      supported_features: 32
+      state: 'off'
+    light.ball_pendants_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Ball pendants
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata:
+    light.flowerpots_3:
+      entity_only: true
+    light.6_spot_track_3:
+      entity_only: true
+    light.ball_pendants_3:
+      entity_only: true
+- id: '1690999915263'
+  name: 'Bathroom lights: Off'
+  entities:
+    light.bath_downlights_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Bath downlights
+      supported_features: 32
+      state: 'off'
+    light.bath_downlights_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Bath downlights  (2)
+      supported_features: 32
+      state: 'off'
+    light.tub_lightstrip_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Tub lightstrip
+      supported_features: 32
+      state: 'off'
+    light.tub_lightstrip_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Tub lightstrip  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1691001055077'
+  name: 'Toilet lights: Off'
+  entities:
+    light.downlight_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Downlight
+      supported_features: 32
+      state: 'off'
+    light.downlight_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Downlight  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1691001138338'
+  name: 'Entry lights: Off'
+  entities:
+    light.downlights_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Entry downlights
+      supported_features: 32
+      state: 'off'
+    light.downlights_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Entry downlights  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1691001208430'
+  name: 'Guestroom lights: Off'
+  entities:
+    light.cloud_pendant_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Cloud pendant
+      supported_features: 32
+      state: 'off'
+    light.cloud_pendant_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Cloud pendant  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1691001316665'
+  name: 'Office lights: Off'
+  entities:
+    light.3_pendants_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: 3 pendants
+      supported_features: 32
+      state: 'off'
+    light.3_pendants_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: 3 pendants  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1691002062131'
+  name: 'Bedroom lights: Off'
+  entities:
+    light.pendant_3:
+      supported_color_modes:
+      - brightness
+      friendly_name: Pendant
+      supported_features: 32
+      state: 'off'
+    light.pendant_2_2:
+      supported_color_modes:
+      - brightness
+      friendly_name: Pendant  (2)
+      supported_features: 32
+      state: 'off'
+  icon: mdi:lightbulb-group-outline
+  metadata: {}

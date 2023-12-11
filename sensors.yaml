@@ -1,0 +1,78 @@
+# Entur / Ruter holdeplass sanntidsdata om avganger
+- platform: entur_public_transport
+  name: Ruter
+  expand_platforms: true
+  show_on_map: true
+  number_of_departures: 4
+  stop_ids:
+    - "NSR:StopPlace:58185" # Sandaker senter
+    - "NSR:StopPlace:58256" # Torshov
+    - "NSR:StopPlace:6404" # Haarklous plass
+    - "NSR:StopPlace:58195" # Storo
+
+  # System monitoring of Home Assistant Raspberry Pi
+- platform: systemmonitor
+  resources:
+    - type: processor_use
+
+  # Tibber future prices
+- platform: rest
+  name: Tibber Prices
+  resource: https://api.tibber.com/v1-beta/gql
+  method: POST
+  payload: '{ "query": "{ viewer { homes { currentSubscription { status priceInfo { current { total } today { total } tomorrow { total } } } } } }" }'
+  json_attributes_path: "$.data.viewer.homes[0].currentSubscription.priceInfo"
+  json_attributes:
+    - today
+    - tomorrow
+  value_template: "{{ value_json.data.viewer.homes[0].currentSubscription.priceInfo.current.total | float }}"
+  scan_interval: 30
+  headers:
+    Authorization: !secret tibber_token
+    Content-Type: application/json
+    User-Agent: REST
+  unit_of_measurement: NOK/kWh
+
+  # Time and date as sensors
+- platform: time_date
+  display_options:
+    - "time"
+    - "date"
+    - "date_time"
+    - "date_time_utc"
+    - "date_time_iso"
+    - "time_date"
+    - "time_utc"
+    - "beat"
+
+  # Dashboard date-string
+- platform: template
+  sensors:
+    ## Converts time and date into sentence for UI
+    day:
+      value_template: >
+        {% set days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"] %}
+        {{ days[now().weekday()] }}
+
+    month:
+      value_template: >
+        {% set months = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"] %}
+        {{ months[now().month-1] }}
+
+    date_string:
+      friendly_name: "Full Date"
+      value_template: "{{ states('sensor.day') }}, {{ now().day }}.  {{ states('sensor.month') }} {{ now().year }}"
+
+    # Temperature sensor for Kitchen Heater
+    kitchen_temperature:
+      friendly_name: "Kitchen Heater measured temperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ state_attr('climate.kitchen_heater', 'current_temperature') }}"
+      device_class: temperature
+
+    # Temperature sensor for current outdoor weather from weather integration
+    outdoor_temperature:
+      friendly_name: "Outdoor current temperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
+      device_class: temperature

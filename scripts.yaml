@@ -1,0 +1,151 @@
+all_lights_off:
+  alias: 'All lights: Off'
+  mode: single
+  icon: mdi:lightbulb-group-outline
+  sequence:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.kitchen_lights_off
+    metadata: {}
+  - delay: 00:00:01
+  - service: scene.turn_on
+    target:
+      entity_id: scene.living_room_lights_off
+    metadata: {}
+  - delay: 00:00:01
+  - service: scene.turn_on
+    target:
+      entity_id: scene.entry_lights_off
+    metadata: {}
+  - delay: 00:00:01
+  - service: scene.turn_on
+    target:
+      entity_id: scene.bathroom_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.toilet_lights_off
+    metadata: {}
+  - delay: 00:00:01
+  - service: scene.turn_on
+    target:
+      entity_id: scene.guestroom_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.office_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.bedroom_lights_off
+    metadata: {}
+all_lights_on:
+  alias: 'All lights: On'
+  mode: restart
+  icon: mdi:lightbulb-group
+  sequence:
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.downlights_3
+  - delay: 00:00:01
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.dimmer_2
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.4_spot_track_3
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.shroom_lamp_switch
+  - service: light.turn_on
+    data:
+      color_temp: 400
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.mood_ball
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.globe
+  - delay: 00:00:01
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.6_spot_track_3
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.flowerpots_3
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.ball_pendants_3
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.bath_downlights_3
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.downlight_3
+calculate_risenoon:
+  alias: Calculates RiseNoon-time
+  mode: single
+  icon: mdi:sun-angle
+  sequence:
+  - service: python_script.calculate_middle_time
+    data:
+      time1: '{{ states(''sensor.sun_next_rising'') }}'
+      time2: '{{ states(''sensor.sun_next_noon'') }}'
+      entity_id: input_datetime.risenoon
+calculate_noonset:
+  alias: Calculates NoonSet-time
+  mode: single
+  icon: mdi:sun-angle-outline
+  sequence:
+  - service: python_script.calculate_middle_time
+    data:
+      time1: '{{ states(''sensor.sun_next_noon'') }}'
+      time2: '{{ states(''sensor.sun_next_setting'') }}'
+      entity_id: input_datetime.noonset
+bedtime_lights:
+  alias: Bedtime-mode (Lights off)
+  sequence:
+  - service: scene.turn_on
+    target:
+      entity_id: scene.toilet_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.bathroom_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.office_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.entry_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.living_room_lights_off
+    metadata: {}
+  - service: scene.turn_on
+    target:
+      entity_id: scene.kitchen_lights_off
+    metadata: {}
+  mode: single
+  icon: mdi:bed

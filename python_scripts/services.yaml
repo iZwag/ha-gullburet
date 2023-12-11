@@ -1,0 +1,13 @@
+calculate_middle_time:
+  name: Calculate middle time
+  description: Takes two times as input, the 1st one must before the 2nd, and finds the middle time between those
+  fields:
+    time1:
+      description: The 1st time-point
+      example: "2023-01-23T12:34:56+00:00"
+    time2:
+      description: The 2nd time-point
+      example: "2023-01-23T13:45:56+00:00"
+    entity_id:
+      description: The input_datetime helper that should store the result
+      example: input_datetime.noonset

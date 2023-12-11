@@ -1,0 +1,604 @@
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+
+views:
+  - title: Dashboard
+    path: dashboard
+    background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
+    type: "custom:ha-dashboard"
+    theme: ios-dark-mode
+    badges: []
+    usePanel: true
+    sidebar:
+      screenMinWidth: 828
+      buttons: []
+      stickyCards:
+        - type: picture-elements
+          image: "/local/ui/clck-background.png"
+          elements:
+            - type: state-label
+              entity: sensor.time
+              hold_action:
+                action: none
+              style:
+                color: var(--primary-text-color)
+                font-size: 5.41vw
+                font-weight: 200
+                left: 16%
+                letter-spacing: "-0.05vw"
+                max-width: 1px
+                top: 37.5%
+                pointer-events: none
+              tap_action:
+                action: none
+            - type: state-label
+              entity: sensor.date_string
+              hold_action:
+                action: none
+              style:
+                color: var(--secondary-text-color)
+                font-size: 1.3vw
+                font-weight: 300
+                left: 31.5%
+                letter-spacing: "-0.05vw"
+                text-align: left
+                top: 65%
+                width: 30%
+                pointer-events: none
+              tap_action:
+                action: none
+      cards:
+        - type: custom:stack-in-card
+          mode: vertical
+          keep:
+            border_radius: true
+            margin: true
+            box_shadow: true
+            background: true
+          card_mod:
+            style: |
+              ha-card {
+                padding: 0% 1% 0% 1%;
+              }
+          cards:
+            - type: "custom:button-card"
+              icon: mdi:home
+              name: Dashboard
+              template: navbar_button
+              variables:
+                link_active: "true"
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/dashboard
+            - type: "custom:button-card"
+              icon: mdi:view-dashboard
+              name: Floorplan control
+              template: navbar_button
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/floorplan
+            - type: "custom:button-card"
+              icon: mdi:thermometer
+              name: Climate control
+              template: navbar_button
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/climate
+            # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT WITH THE "height: xx vh"
+            - type: "custom:button-card"
+              color_type: blank_card
+              styles:
+                card:
+                  - height: 45vh
+            - type: custom:mushroom-chips-card
+              chips:
+                - type: entity
+                  entity: sensor.hall_sensor_temperature
+                  icon: mdi:home-thermometer
+                #- type: entity
+                #  entity: sensor.electricity_price_tibber
+                #  icon: mdi:lightning-bolt-circle
+                - type: entity
+                  entity: sensor.outdoor_temperature
+                  icon: mdi:thermometer
+              alignment: center
+              card_mod:
+                style: |
+                  ha-card {
+                    --chip-background:: rgba(25, 25, 25, 0.2);
+                    --primary-text-color: var(--secondary-text-color);
+                  }
+    cards:
+      - type: "custom:bootstrap-grid-card"
+        #container_padding: 10px
+        #use_hass_style_gutter: true
+        #hass_style_gutter_size: "10px"
+        cards:
+          - type: row
+            cards:
+              - type: "custom:ruter-stop-info"
+                entities:
+                  - sensor.ruter_sandaker_senter_platform_11752
+                  - sensor.ruter_sandaker_senter_platform_11755
+                show_departures: 3
+                walking_distance: 4
+                class: "col-xs-4 col-md-4 col-xxl-3"
+              - type: "custom:ruter-stop-info"
+                entities:
+                  - sensor.ruter_torshov_platform_11734
+                  - sensor.ruter_torshov_platform_11733
+                show_departures: 3
+                walking_distance: 7
+                class: "col-xs-4 col-md-4 col-xxl-3"
+              - type: custom:ruter-stop-info
+                entities:
+                  - sensor.ruter_storo_platform_1
+                  - sensor.ruter_storo_platform_2
+                show_departures: 3
+                walking_distance: 7
+                class: "col-xs-4 col-md-4 col-xxl-3"
+          - type: row
+            cards:
+              - type: col
+                class: "col-xs-8 col-md-6 col-xxl-3"
+                cards:
+                  - type: custom:weather-card
+                    entity: weather.yr_weather_home
+                    hide_precipitation: false
+                    details: false
+                    card_mod:
+                      # SHOULD MATCH THE STYLE OF ROW ELEMENTS
+                      style: |
+                        ha-card {
+                          height: 39vh;
+                        }
+              - type: col
+                class: "col-xs-8 col-md-6 col-xxl-3"
+                cards:
+                  - type: custom:apexcharts-card
+                    experimental:
+                      color_threshold: true
+                    all_series_config:
+                      unit: øre/kWh
+                    apex_config:
+                      grid:
+                        show: true
+                        borderColor: "#E0E0E0"
+                      chart:
+                        height: 250px
+                      tooltip:
+                        enabled: true
+                        followCursor: false
+                        x:
+                          show: false
+                        fixed:
+                          enabled: true
+                    header:
+                      show: true
+                      title: Electricity price
+                      show_states: true
+                      colorize_states: true
+                      standard_format: false
+                    graph_span: 48h
+                    now:
+                      show: true
+                      color: 9E9E9E
+                    span:
+                      start: day
+                    card_mod:
+                      style: |
+                        ha-card {
+                          height: 39vh;
+                        }
+                    series:
+                      - entity: sensor.tibber_prices
+                        show:
+                          in_header: before_now
+                          name_in_header: false
+                        color_threshold:
+                          - value: 0
+                            color: 4DD0E1
+                          - value: 10
+                            color: 26A69A
+                          - value: 15
+                            color: 4CAF50
+                          - value: 20
+                            color: 7CB342
+                          - value: 25
+                            color: FBC02D
+                          - value: 30
+                            color: EF6C00
+                          - value: 40
+                            color: B71C1C
+                        type: line
+                        curve: stepline
+                        extend_to: false
+                        stroke_width: 4
+                        float_precision: 2
+                        data_generator: |
+                          const noon = new Date()
+                          noon.setHours(0, 0, 0, 0)
+                          const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                          const data = [];
+                          for(let i = 0; i < prices.length; i++) {
+                            data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                          }
+                          return data;
+          - type: row
+            container_padding: 0px
+            cards:
+              - type: col
+                class: "col-xs-8 col-md-9 col-xxl-3"
+                cards:
+                  - type: custom:hourly-weather
+                    entity: weather.yr_weather_home_hourly
+                    name: null
+                    icons: true
+                    forecast_type: hourly
+                    hide_temperatures: false
+                    show_precipitation_amounts: "true"
+                    num_segments: 11
+                    label_spacing: 1
+                    card_mod:
+                      style: |
+                        ha-card {
+                          height: 18.2vh;
+                        }
+              - type: col
+                class: "md-3"
+                cards:
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      max_cols: 2
+                      height: "18.2vh"
+                      grid-template-columns: 1fr 1fr
+                      margin: 0px 0px 0px 0px
+                    cards:
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb-group
+                        name: Alle på
+                        template: light_mode
+                        entity: script.all_lights_on
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.all_lights_on
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb-group-off-outline
+                        name: Alle av
+                        entity: script.all_lights_off
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.all_lights_off
+                      - type: "custom:button-card"
+                        icon: mdi:knob
+                        name: Dim alle
+                        entity: input_number.apartment_dimmer
+                        template: light_mode
+                      - type: "custom:button-card"
+                        icon: mdi:bed
+                        name: Leggetid
+                        template: light_mode
+                        entity: script.bedtime_lights
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.bedtime_lights
+
+  - title: Climate control
+    path: climate
+    background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
+    type: "custom:ha-dashboard"
+    theme: ios-dark-mode
+    badges: []
+    usePanel: true
+    sidebar:
+      screenMinWidth: 828
+      buttons: []
+      stickyCards:
+        - type: picture-elements
+          image: "/local/ui/clck-background.png"
+          elements:
+            - type: state-label
+              entity: sensor.time
+              hold_action:
+                action: none
+              style:
+                color: var(--primary-text-color)
+                font-size: 5.41vw
+                font-weight: 200
+                left: 16%
+                letter-spacing: "-0.05vw"
+                max-width: 1px
+                top: 37.5%
+                pointer-events: none
+              tap_action:
+                action: none
+            - type: state-label
+              entity: sensor.date_string
+              hold_action:
+                action: none
+              style:
+                color: var(--secondary-text-color)
+                font-size: 1.3vw
+                font-weight: 300
+                left: 31.5%
+                letter-spacing: "-0.05vw"
+                text-align: left
+                top: 65%
+                width: 30%
+                pointer-events: none
+              tap_action:
+                action: none
+      cards:
+        - type: custom:stack-in-card
+          mode: vertical
+          keep:
+            border_radius: true
+            margin: true
+            box_shadow: true
+            background: true
+          card_mod:
+            style: |
+              ha-card {
+                padding: 0% 1% 0% 1%;
+              }
+          cards:
+            - type: "custom:button-card"
+              icon: mdi:home
+              name: Dashboard
+              template: navbar_button
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/dashboard
+            - type: "custom:button-card"
+              icon: mdi:view-dashboard
+              name: Floorplan control
+              template: navbar_button
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/floorplan
+            - type: "custom:button-card"
+              icon: mdi:thermometer
+              name: Climate control
+              template: navbar_button
+              variables:
+                link_active: "true"
+              tap_action:
+                action: navigate
+                navigation_path: /dashboard-tablet-2/climate
+            - type: "custom:button-card"
+              color_type: blank_card
+              styles:
+                card:
+                  - height: 45vh
+            - type: custom:mushroom-chips-card
+              chips:
+                - type: entity
+                  entity: sensor.hall_sensor_temperature
+                  icon: mdi:home-thermometer
+                - type: entity
+                  entity: sensor.outdoor_temperature
+                  icon: mdi:thermometer
+              alignment: center
+              card_mod:
+                style: |
+                  ha-card {
+                    --chip-background:: rgba(25, 25, 25, 0.2);
+                    --primary-text-color: var(--secondary-text-color);
+                  }
+    cards:
+      - type: "custom:bootstrap-grid-card"
+        #container_padding: 10px
+        #use_hass_style_gutter: true
+        #hass_style_gutter_size: "10px"
+        cards:
+          - type: row
+            cards:
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### Stue og kjøkken"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.kitchen_heater_3
+                  - type: custom:button-card
+                    color_type: blank-card
+                    styles:
+                      card:
+                        - background: transparent
+                        - height: "5vh"
+
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### Bad"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.floor_heat
+                  - type: custom:swipe-card
+                    cards:
+                      - type: "custom:button-card"
+                        entity: input_boolean.baththermostatprogram
+                        icon: mdi:calendar
+                        name: Program
+                        template: thermostat_program
+                      - type: custom:numberbox-card
+                        entity: input_number.bathtempcomfort
+                        name: "Komfort"
+                        style: |
+                          ha-card {
+                            background: transparent;
+                          }
+                      - type: custom:numberbox-card
+                        entity: input_number.bathtempeco
+                        name: "Eco"
+                        style: |
+                          ha-card {
+                            background: transparent;
+                          }
+                      - type: custom:numberbox-card
+                        entity: input_number.bathtempaway
+                        name: "Borte"
+                        style: |
+                          ha-card {
+                            background: transparent;
+                          }
+
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### WC"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.floor_heat_wc
+                  - type: custom:swipe-card
+                    cards:
+                      - type: "custom:button-card"
+                        entity: input_boolean.wcthermostatprogram
+                        icon: mdi:calendar
+                        name: Program
+                        template: thermostat_program
+          - type: row
+            cards:
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### Soverom"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.bedroom_heater_3
+                  - type: custom:button-card
+                    color_type: blank-card
+                    styles:
+                      card:
+                        - background: transparent
+                        - height: "5vh"
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### Kontor"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.office_heater_3
+                  - type: custom:button-card
+                    color_type: blank-card
+                    styles:
+                      card:
+                        - background: transparent
+                        - height: "5vh"
+              - type: custom:stack-in-card
+                mode: vertical
+                class: "col-xs-4 col-md-4 col-xxl-3"
+                cards:
+                  - type: markdown
+                    content: " ### Gjesterom"
+                  - type: thermostat
+                    name: " "
+                    entity: climate.gulvovn
+                  - type: custom:button-card
+                    color_type: blank-card
+                    styles:
+                      card:
+                        - background: transparent
+                        - height: "5vh"
+
+# TEMPLATE FOR "custom:button-card" BUTTONS
+button_card_templates:
+  # NAVIGATION BUTTONS IN SIDEBAR
+  navbar_button:
+    variables:
+      link_active: "false"
+    layout: icon_name_state
+    styles:
+      grid:
+        - grid-template-areas: '"s n i"'
+        - grid-template-columns: 12.5% 1fr 20%
+      card:
+        - box-shadow: "0px 0.2vw 0.8vw 0px rgba(0,0,0,0.1)"
+        - background-color: "rgba(25,25,25,0.25)"
+        - padding: 15px
+        - --keep-background: "true"
+      icon:
+        - width: 25px
+        - height: 25px
+        - color: >
+            [[[ 
+              if (variables.link_active == "true") return "var(--primary-text-color)";
+              return "var(--secondary-text-color)";
+            ]]]
+      name:
+        - align-self: middle
+        - justify-self: start
+        - color: >
+            [[[ 
+              if (variables.link_active == "true") return "var(--primary-text-color)";
+              return "var(--secondary-text-color)";
+            ]]]
+      custom_fields:
+        notification:
+          - background-color: >
+              [[[
+                if (variables.link_active == "true") return "var(--accent-color)";
+                return "rgba(0,0,0,0)";
+              ]]]
+          - color: rgba(0,0,0,0)
+          - border-radius: 50%
+          - position: absolute
+          - left: 8%
+          - top: 45%
+          - height: 7px
+          - width: 7px
+    custom_fields:
+      notification: false
+
+  # LIGHT MODES: ALL ON, ALL OFF, BEDTIME ETC.
+  light_mode:
+    show_state: false
+    size: 25px
+    #aspect_ratio: 3/2
+    styles:
+      card:
+        - height: "62px"
+      name:
+        - font-size: "0.8em"
+        - color: var(--secondary-text-color)
+
+  # THERMOSTAT PROGRAM/MANUAL TOGGLE SWITCH
+  thermostat_program:
+    layout: icon_name
+    state:
+      - value: "on"
+        name: "Program"
+        icon: mdi:toggle-switch
+        color: rgb(255, 111, 34)
+      - value: "off"
+        name: "Manuell"
+        icon: mdi:toggle-switch-off
+        color: rgb(85, 85, 85)
+    styles:
+      grid:
+        - grid-template-areas: '"s n i l"'
+        - grid-template-columns: 20% 1fr 1fr 20%
+      card:
+        - padding-top: 0%
+        - padding-bottom: 0%
+        - height: "5vh"
+        - background: transparent

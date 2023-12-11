@@ -1,0 +1,57 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Load frontend themes from the themes folder
+frontend:
+  # Default template themes, commented out
+  # themes: !include_dir_merge_named themes
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /local/community/custom-brand-icons/custom-brand-icons.js
+    - /local/community/lovelace-card-mod/card-mod.js
+
+automation: !include_dir_merge_list automations/
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+sensor: !include sensors.yaml
+
+python_script:
+
+logger:
+  default: info
+
+lovelace:
+  mode: storage
+  resources:
+    - type: module
+      url: /local/custom/ruter-stop-info/ruter-stop-info.js
+    - type: module
+      url: /local/community/config-template-card/config-template-card.js
+    - type: module
+      url: /local/community/stack-in-card/stack-in-card.js
+    - type: module
+      url: /local/community/bom-weather-card/bom-weather-card.js
+    - type: module
+      url: /local/community/lovelace-hourly-weather/hourly-weather.js
+    - type: module
+      url: /local/community/weather-card/weather-card.js?ver=1
+    - type: module
+      url: /local/community/lovelace-ha-dashboard/ha-dashboard.js
+    - type: module
+      url: /local/community/button-card/button-card.js
+    - type: module
+      url: /local/community/bootstrap-grid-card/bootstrap-grid-card.js
+    - type: module
+      url: /local/community/swipe-card/swipe-card.js
+  dashboards:
+    dashboard-tablet:
+      mode: yaml
+      filename: dashboard-tablet.yaml
+      title: Tablet Dashboard
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: true
