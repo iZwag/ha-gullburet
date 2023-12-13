@@ -17,10 +17,12 @@ The system is compromised of many hardware devices, obviously.
 ### Router
 The network router is of type Asus RT-AC88U.
 
-### Wi-Fi Devices
-- Mill Heaters
-- Philips Hue
-- Sonos
+### Wi-Fi/Network Devices
+- Mill Heat: Panel heaters
+- Philips Hue: Lights and switches
+- Sonos: Speakers (S1, One, Beam)
+- Roborock S7 Plus
+- Samsung: The Frame 55" TV
 
 ### Z-Wave Devices
 - Fibaro Dimmer Switch 2
@@ -28,8 +30,7 @@ The network router is of type Asus RT-AC88U.
 - Heat-it Z-TRM3
 
 ### Zigbee Devices
-- TRÅDFRI Transformers
-- IKEA Lightbulbs
+- IKEA TRÅDFRI: Transformers, lightbulbs, sockets, switches
 
 ## Software 
 
