@@ -1,3 +1,4 @@
+# Fixed
 - id: "1702582088817"
   alias: Spot-track6 to Lightstrip shelf ON/OFF/DIM
   description:
@@ -38,47 +39,51 @@
               data:
                 brightness: "{{ trigger.to_state.attributes.brightness }}"
   mode: single
-- id: "1689102622500"
+# Fixed
+- id: "1702586142625"
   alias: Tablet charge-switch ON/OFF
   description:
     Turns the tablet charge-switch ON if it is below 15%, and OFF if it
     is above 85%.
   trigger:
-    - platform: numeric_state
-      entity_id: sensor.lenovo_tab_m10_fhd_plus_battery
+    - alias: Below 15 pcnt
+      platform: numeric_state
+      entity_id:
+        - sensor.lenovo_wall_tablet_battery_level
       below: 15
-      alias: Below 15 pcnt
       id: below-15-pcnt
-    - platform: numeric_state
-      entity_id: sensor.lenovo_tab_m10_fhd_plus_battery
+    - alias: Above 85 pcnt
+      platform: numeric_state
+      entity_id:
+        - sensor.lenovo_wall_tablet_battery_level
       above: 85
-      alias: Above 85 pcnt
       id: above-85-pcnt
   condition: []
   action:
-    - choose:
+    - alias: Choose switch ON or OFF
+      choose:
         - conditions:
             - condition: trigger
               id:
                 - below-15-pcnt
           sequence:
-            - type: turn_on
-              device_id: 993cb6afd77dabc2392bb1d90ff89620
-              entity_id: bca96df95cd9d55568ded6bba1d67c56
+            - alias: Turn Tablet charge-switch ON
+              type: turn_on
+              device_id: e7edcdcfed58b7cedd57142e4434bc5d
+              entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
               domain: switch
-              alias: Turn Tablet charge-switch ON
         - conditions:
             - condition: trigger
               id:
                 - above-85-pcnt
           sequence:
-            - type: turn_off
-              device_id: 993cb6afd77dabc2392bb1d90ff89620
-              entity_id: bca96df95cd9d55568ded6bba1d67c56
+            - alias: Turn charge-switch OFF
+              type: turn_off
+              device_id: e7edcdcfed58b7cedd57142e4434bc5d
+              entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
               domain: switch
-              alias: Turn charge-switch OFF
-      alias: Choose switch ON or OFF
   mode: single
+# TODO
 - id: "1689104769483"
   alias: Tablet motion turns screen ON/OFF
   description: ""
@@ -119,7 +124,8 @@
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
               alias: Turn tablet screen OFF
   mode: single
-- id: "1691520863532"
+# Fixed
+- id: "1702588010634"
   alias: Veranda dusk-ON/dawn-OFF
   description: ""
   trigger:
@@ -138,8 +144,8 @@
                 - sun-down
           sequence:
             - type: turn_on
-              device_id: 6755b78338463da39a1e2277e1e83efa
-              entity_id: 45273657fa091adfaf780ed9adb0d97a
+              device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
+              entity_id: f7e543af2bb56185534ecba1eb4a0c2d
               domain: switch
         - conditions:
             - condition: trigger
@@ -147,7 +153,7 @@
                 - sun-dawn
           sequence:
             - type: turn_off
-              device_id: 6755b78338463da39a1e2277e1e83efa
-              entity_id: 45273657fa091adfaf780ed9adb0d97a
+              device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
+              entity_id: f7e543af2bb56185534ecba1eb4a0c2d
               domain: switch
   mode: single
