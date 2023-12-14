@@ -1,38 +1,42 @@
-- id: "1688915226284"
-  alias: 6-track + under-shelf link ON/OFF
-  description: Mirrors turning ON/FF 6-track with the under-shelf lights
+- id: "1702582088817"
+  alias: Spot-track6 to Lightstrip shelf ON/OFF/DIM
+  description:
+    Handles the mirroring of turning ON/OFF and dimming the brightness
+    of the shelf lightning when the Spot-track is interacted with.
   trigger:
     - platform: device
       type: turned_off
-      device_id: eb4b79fde63f5daa13b1fb3cd99799b5
-      entity_id: f1d90054494528764c740b2e13e0aae1
+      device_id: 3b314b934fee629a9f95316c027e2ad0
+      entity_id: 6a483694307cabbe1f0abc602ed6b17f
       domain: light
-      id: 6spots-turned-off
+      id: turned-off
+    - platform: state
+      entity_id:
+        - light.spottrack6_kitchen
+      attribute: brightness
+      id: turned-on-dimmed
   condition: []
   action:
-    - type: turn_off
-      device_id: 348d87a4696206184017eba3dc1c94d1
-      entity_id: 8b46a012e4936bc3b8efffb425d84342
-      domain: light
-  mode: single
-- id: "1688915580578"
-  alias: Mirror 6-track + under-shelf turn ON
-  description: Defines the mirroring of turning on 6-track to the under-shelf
-  trigger:
-    - platform: device
-      type: turned_on
-      device_id: eb4b79fde63f5daa13b1fb3cd99799b5
-      entity_id: f1d90054494528764c740b2e13e0aae1
-      domain: light
-  condition: []
-  action:
-    - type: turn_on
-      device_id: 348d87a4696206184017eba3dc1c94d1
-      entity_id: 8b46a012e4936bc3b8efffb425d84342
-      domain: light
-      brightness_pct: 50
-  variables:
-    6_track_level: ""
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - turned-off
+          sequence:
+            - service: light.turn_off
+              target:
+                entity_id: light.lightstrip_kitchen
+              data: {}
+        - conditions:
+            - condition: trigger
+              id:
+                - turned-on-dimmed
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id: light.lightstrip_kitchen
+              data:
+                brightness: "{{ trigger.to_state.attributes.brightness }}"
   mode: single
 - id: "1689102622500"
   alias: Tablet charge-switch ON/OFF
