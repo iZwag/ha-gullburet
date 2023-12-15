@@ -1,30 +1,41 @@
 - id: '1690996142517'
   name: 'Living Room lights: Off'
   entities:
-    light.dimmer_2:
+    light.spot_track_4_2_3:
       supported_color_modes:
       - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 4 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack4_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 4
+      supported_features: 32
+      state: 'off'
+    light.dimmer_2_2_2:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
+      supported_features: 32
+      state: 'off'
+    light.downlights_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
       friendly_name: Downlights
       supported_features: 32
       state: 'off'
-    light.dimmer_2_2:
-      supported_color_modes:
-      - brightness
-      friendly_name: Downlights  (2)
-      supported_features: 32
-      state: 'off'
-    light.4_spot_track_3:
-      supported_color_modes:
-      - brightness
-      friendly_name: 4-spot track
-      supported_features: 32
-      state: 'off'
-    light.4_spot_track_2_2:
-      supported_color_modes:
-      - brightness
-      friendly_name: 4-spot track  (2)
-      supported_features: 32
-      state: 'off'
+    switch.mushroom_lamp_bryter:
+      friendly_name: Mushroom lamp Bryter
+      state: 'on'
     light.mood_ball:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -33,28 +44,39 @@
       supported_color_modes:
       - color_temp
       - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
       mode: normal
       dynamics: none
       friendly_name: Mood ball
       supported_features: 40
       state: 'off'
-    switch.shroom_lamp_switch:
-      friendly_name: Shroom lamp Switch
-      state: 'off'
-    switch.globe:
-      icon: mdi:lamp
-      friendly_name: Globe lamp Switch
-      state: 'off'
-    light.globe_lamp_switch:
+    light.pendants_2:
       supported_color_modes:
-      - onoff
-      friendly_name: Globe lamp Switch
-      supported_features: 0
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, dining (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, dining
+      supported_features: 32
+      state: 'off'
+    switch.globe_switch_bryter:
+      friendly_name: Globe switch Bryter
       state: 'off'
   icon: mdi:lightbulb-group-outline
-  metadata:
-    switch.shroom_lamp_switch:
-      entity_only: true
+  metadata: {}
 - id: '1690996655003'
   name: 'Kitchen lights: Off'
   entities:
