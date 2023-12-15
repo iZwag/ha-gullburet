@@ -83,8 +83,8 @@
               entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
               domain: switch
   mode: single
-# TODO
-- id: "1689104769483"
+# Fixed
+- id: "1702642524314"
   alias: Tablet motion turns screen ON/OFF
   description: ""
   trigger:
@@ -108,21 +108,21 @@
               id:
                 - tablet-motion-on
           sequence:
-            - service: switch.turn_on
+            - alias: Turn Tablet screen ON
+              service: switch.turn_on
               data: {}
               target:
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
-              alias: Turn Tablet screen ON
         - conditions:
             - condition: trigger
               id:
                 - tablet-motion-off
           sequence:
-            - service: switch.turn_off
+            - alias: Turn tablet screen OFF
+              service: switch.turn_off
               data: {}
               target:
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
-              alias: Turn tablet screen OFF
   mode: single
 # Fixed
 - id: "1702588010634"
