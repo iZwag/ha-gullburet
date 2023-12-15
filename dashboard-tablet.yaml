@@ -232,7 +232,7 @@ views:
                 class: "col-xs-8 col-md-9 col-xxl-3"
                 cards:
                   - type: custom:hourly-weather
-                    entity: weather.yr_weather_home_hourly
+                    entity: weather.yr_weather_home
                     name: null
                     icons: true
                     forecast_type: hourly
