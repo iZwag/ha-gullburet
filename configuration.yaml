@@ -35,8 +35,6 @@ lovelace:
     - type: module
       url: /local/community/stack-in-card/stack-in-card.js
     - type: module
-      url: /local/community/bom-weather-card/bom-weather-card.js
-    - type: module
       url: /local/community/lovelace-hourly-weather/hourly-weather.js
     - type: module
       url: /local/community/weather-card/weather-card.js?ver=1
