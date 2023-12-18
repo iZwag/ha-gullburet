@@ -17,10 +17,9 @@ frontend:
 automation: !include_dir_merge_list automations/
 script: !include scripts.yaml
 scene: !include scenes.yaml
-
 sensor: !include sensors.yaml
 
-python_script:
+python_script: !include_dir_merge_list python_scripts/
 
 logger:
   default: info
