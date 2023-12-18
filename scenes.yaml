@@ -35,7 +35,7 @@
       state: 'off'
     switch.mushroom_lamp_bryter:
       friendly_name: Mushroom lamp Bryter
-      state: 'on'
+      state: 'off'
     light.mood_ball:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -75,62 +75,104 @@
     switch.globe_switch_bryter:
       friendly_name: Globe switch Bryter
       state: 'off'
+    remote.the_frame_tv:
+      friendly_name: The Frame TV
+      supported_features: 0
+      state: unknown
+    media_player.the_frame_tv:
+      source_list:
+      - TV
+      - HDMI
+      device_class: tv
+      friendly_name: The Frame TV
+      supported_features: 20413
+      state: 'off'
+    media_player.tv_the_frame_tv:
+      friendly_name: '[TV] The Frame TV'
+      supported_features: 0
+      state: unavailable
   icon: mdi:lightbulb-group-outline
   metadata: {}
 - id: '1690996655003'
   name: 'Kitchen lights: Off'
   entities:
-    light.flowerpots_3:
+    light.spot_track_6_2_4:
       supported_color_modes:
       - brightness
-      friendly_name: Flowerpots
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6 (2)
       supported_features: 32
       state: 'off'
-    light.6_spot_track_3:
+    light.spottrack6_kitchen:
       supported_color_modes:
       - brightness
-      friendly_name: 6-spot track
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6
       supported_features: 32
       state: 'off'
-    light.ball_pendants_3:
+    light.pendants_flowerpots_2_5:
       supported_color_modes:
       - brightness
-      friendly_name: Ball pendants
+      color_mode:
+      brightness:
+      friendly_name: Pendants, Flowerpots (2)
       supported_features: 32
+      state: 'off'
+    light.pendants_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, Flowerpots
+      supported_features: 32
+      state: 'off'
+    light.lightstrip_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 70
+      friendly_name: Lightstrip, shelf
+      supported_features: 40
       state: 'off'
   icon: mdi:lightbulb-group-outline
-  metadata:
-    light.flowerpots_3:
-      entity_only: true
-    light.6_spot_track_3:
-      entity_only: true
-    light.ball_pendants_3:
-      entity_only: true
+  metadata: {}
 - id: '1690999915263'
   name: 'Bathroom lights: Off'
   entities:
-    light.bath_downlights_3:
+    light.downlights_2_12:
       supported_color_modes:
       - brightness
-      friendly_name: Bath downlights
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
       supported_features: 32
       state: 'off'
-    light.bath_downlights_2_2:
+    light.downlights_bath:
       supported_color_modes:
       - brightness
-      friendly_name: Bath downlights  (2)
+      color_mode:
+      brightness:
+      friendly_name: Downlights
       supported_features: 32
       state: 'off'
-    light.tub_lightstrip_3:
+    light.lightstrip_2_11:
       supported_color_modes:
       - brightness
-      friendly_name: Tub lightstrip
+      color_mode:
+      brightness:
+      friendly_name: Lightstrip (2)
       supported_features: 32
       state: 'off'
-    light.tub_lightstrip_2_2:
+    light.lightstrip_bath:
       supported_color_modes:
       - brightness
-      friendly_name: Tub lightstrip  (2)
+      color_mode:
+      brightness:
+      friendly_name: Lightstrip
       supported_features: 32
       state: 'off'
   icon: mdi:lightbulb-group-outline
@@ -138,16 +180,20 @@
 - id: '1691001055077'
   name: 'Toilet lights: Off'
   entities:
-    light.downlight_3:
+    light.downlight_2_10:
       supported_color_modes:
       - brightness
-      friendly_name: Downlight
+      color_mode:
+      brightness:
+      friendly_name: Downlight (2)
       supported_features: 32
       state: 'off'
-    light.downlight_2_2:
+    light.downlight_toilet:
       supported_color_modes:
       - brightness
-      friendly_name: Downlight  (2)
+      color_mode:
+      brightness:
+      friendly_name: Downlight
       supported_features: 32
       state: 'off'
   icon: mdi:lightbulb-group-outline
@@ -155,33 +201,59 @@
 - id: '1691001138338'
   name: 'Entry lights: Off'
   entities:
-    light.downlights_3:
+    light.downlights_2_9:
       supported_color_modes:
       - brightness
-      friendly_name: Entry downlights
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
       supported_features: 32
       state: 'off'
-    light.downlights_2_2:
+    light.downlights_entry:
       supported_color_modes:
       - brightness
-      friendly_name: Entry downlights  (2)
+      color_mode:
+      brightness:
+      friendly_name: Downlights
       supported_features: 32
+      state: 'off'
+    media_player.lenovo_tab_m10_fhd_plus:
+      assumed_state: true
+      friendly_name: Lenovo Tab M10 FHD Plus
+      supported_features: 135684
+      state: idle
+    number.lenovo_tab_m10_fhd_plus_screen_brightness:
+      min: 0
+      max: 255
+      step: 1
+      mode: auto
+      friendly_name: Lenovo Tab M10 FHD Plus Screen brightness
+      state: '43'
+    switch.lenovo_tab_m10_fhd_plus_screensaver:
+      friendly_name: Lenovo Tab M10 FHD Plus Screensaver
+      state: 'off'
+    switch.lenovo_tab_m10_fhd_plus_screen:
+      friendly_name: Lenovo Tab M10 FHD Plus Screen
       state: 'off'
   icon: mdi:lightbulb-group-outline
   metadata: {}
 - id: '1691001208430'
   name: 'Guestroom lights: Off'
   entities:
-    light.cloud_pendant_3:
+    light.cloud_pendant_2_8:
       supported_color_modes:
       - brightness
-      friendly_name: Cloud pendant
+      color_mode:
+      brightness:
+      friendly_name: Pendant, cloud (2)
       supported_features: 32
       state: 'off'
-    light.cloud_pendant_2_2:
+    light.pendant_guest:
       supported_color_modes:
       - brightness
-      friendly_name: Cloud pendant  (2)
+      color_mode:
+      brightness:
+      friendly_name: Pendant, cloud
       supported_features: 32
       state: 'off'
   icon: mdi:lightbulb-group-outline
@@ -189,16 +261,20 @@
 - id: '1691001316665'
   name: 'Office lights: Off'
   entities:
-    light.3_pendants_3:
+    light.pendants_2_7:
       supported_color_modes:
       - brightness
-      friendly_name: 3 pendants
+      color_mode:
+      brightness:
+      friendly_name: Pendants (2)
       supported_features: 32
       state: 'off'
-    light.3_pendants_2_2:
+    light.pendants_office:
       supported_color_modes:
       - brightness
-      friendly_name: 3 pendants  (2)
+      color_mode:
+      brightness:
+      friendly_name: Pendants
       supported_features: 32
       state: 'off'
   icon: mdi:lightbulb-group-outline
