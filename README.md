@@ -1,6 +1,6 @@
 # Home Assistant // Gullburet
 
-This repo contains (the shareable part of) my smart-home configuration. Orhcestration of is handled by [Home Assistant](https://www.home-assistant.io/). 
+This repo contains (the shareable part of) my smart-home configuration. Orhcestration is handled by [Home Assistant](https://www.home-assistant.io/). 
 
 What is *Gullburet*? It's the nickname of our apartment, and it means "the golden cage".
 
@@ -10,6 +10,7 @@ The system is compromised of many hardware devices, obviously.
 
 ### The system's central processor
 - Raspberry Pi 4 model B 2GB
+- OS: Home Assistant OS
 - PSU: 5V/3A USB-C
 - Storage: Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
 - Network: CAT-6 network cable and Wi-Fi to router
