@@ -48,22 +48,22 @@ all_lights_on:
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.downlights_3
+      entity_id: light.downlights_entry
   - delay: 00:00:01
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.dimmer_2
+      entity_id: light.downlights_living
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.4_spot_track_3
+      entity_id: light.spottrack4_living
   - service: switch.turn_on
     data: {}
     target:
-      entity_id: switch.shroom_lamp_switch
+      entity_id: switch.mushroom_lamp_bryter
   - service: light.turn_on
     data:
       color_temp: 400
@@ -73,33 +73,33 @@ all_lights_on:
   - service: switch.turn_on
     data: {}
     target:
-      entity_id: switch.globe
+      entity_id: switch.globe_switch_bryter
   - delay: 00:00:01
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.6_spot_track_3
+      entity_id: light.pendants_living
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.flowerpots_3
+      entity_id: light.pendants_kitchen
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.ball_pendants_3
+      entity_id: light.spottrack6_kitchen
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.bath_downlights_3
+      entity_id: light.downlights_bath
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.downlight_3
+      entity_id: light.downlight_toilet
 calculate_risenoon:
   alias: Calculates RiseNoon-time
   mode: single
