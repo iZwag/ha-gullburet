@@ -1,6 +1,8 @@
 # Home Assistant // Gullburet
 
-The nickname of our apartment is Gullburet.
+This repo contains (the shareable part of) my smart-home configuration. Orhcestration of is handled by [Home Assistant](https://www.home-assistant.io/). 
+
+What is *Gullburet*? It's the nickname of our apartment, and it means "the golden cage".
 
 ## Hardware
 
@@ -8,21 +10,22 @@ The system is compromised of many hardware devices, obviously.
 
 ### The system's central processor
 - Raspberry Pi 4 model B 2GB
-- Powered with 5V @3A USB-C PSU
-- Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
-- Connected to Router with CAT-6 network cable
-- ConBee II Stick (as Zigbee-controller)
-- Aeotec Z-Stick 7 (as Z-Wave-controller)
+- PSU: 5V/3A USB-C
+- Storage: Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
+- Network: CAT-6 network cable and Wi-Fi to router
+- USB: ConBee II Stick (as Zigbee-controller)
+- USB: Aeotec Z-Stick 7 (as Z-Wave-controller)
 
 ### Router
-The network router is of type Asus RT-AC88U.
+Asus RT-AC88U
 
 ### Wi-Fi/Network Devices
-- Mill Heat: Panel heaters
-- Philips Hue: Lights and switches
-- Sonos: Speakers (S1, One, Beam)
-- Roborock S7 Plus
-- Samsung: The Frame 55" TV
+- Heating: Mill Heat (panel heaters, movable floor-unit)
+- Lights: Philips Hue (bulbs, switches, sensors)
+- Speakers: Sonos (Play:1, One, Beam)
+- Robot vacuum: Roborock S7 Plus
+- TV: Samsung The Frame 55"
+- Tablet, wall-mounted dashboard: Lenovo Tab M10 FHD Plus
 
 ### Z-Wave Devices
 - Fibaro Dimmer Switch 2
