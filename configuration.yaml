@@ -19,8 +19,12 @@ script: !include scripts.yaml
 scene: !include scenes.yaml
 sensor: !include sensors.yaml
 
-python_script: !include_dir_merge_list python_scripts/
+# Enabling Python-scripts with an Integration is obsolete.
+# Add scripts to <config>/python_scripts
+# The following line enables Python-scripts.
+python_script:
 
+# Enables logging from Python-scripts.
 logger:
   default: info
 
