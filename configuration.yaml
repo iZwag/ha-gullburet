@@ -30,25 +30,25 @@ logger:
 
 lovelace:
   mode: storage
-  resources:
-    - type: module
-      url: /local/custom/ruter-stop-info/ruter-stop-info.js
-    - type: module
-      url: /local/community/config-template-card/config-template-card.js
-    - type: module
-      url: /local/community/stack-in-card/stack-in-card.js
-    - type: module
-      url: /local/community/lovelace-hourly-weather/hourly-weather.js
-    - type: module
-      url: /local/community/weather-card/weather-card.js?ver=1
-    - type: module
-      url: /local/community/lovelace-ha-dashboard/ha-dashboard.js
-    - type: module
-      url: /local/community/button-card/button-card.js
-    - type: module
-      url: /local/community/bootstrap-grid-card/bootstrap-grid-card.js
-    - type: module
-      url: /local/community/swipe-card/swipe-card.js
+  #resources:
+  #  - type: module
+  #    url: /local/custom/ruter-stop-info/ruter-stop-info.js
+  #  - type: module
+  #    url: /local/community/config-template-card/config-template-card.js
+  #  - type: module
+  #    url: /local/community/stack-in-card/stack-in-card.js
+  #  - type: module
+  #    url: /local/community/lovelace-hourly-weather/hourly-weather.js
+  #  - type: module
+  #    url: /local/community/weather-card/weather-card.js?ver=1
+  #  - type: module
+  #    url: /local/community/lovelace-ha-dashboard/ha-dashboard.js
+  #  - type: module
+  #    url: /local/community/button-card/button-card.js
+  #  - type: module
+  #    url: /local/community/bootstrap-grid-card/bootstrap-grid-card.js
+  #  - type: module
+  #    url: /local/community/swipe-card/swipe-card.js
   dashboards:
     dashboard-tablet:
       mode: yaml
