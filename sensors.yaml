@@ -10,11 +10,6 @@
     - "NSR:StopPlace:6404" # Haarklous plass
     - "NSR:StopPlace:58195" # Storo
 
-  # System monitoring of Home Assistant Raspberry Pi
-- platform: systemmonitor
-  resources:
-    - type: processor_use
-
   # Tibber future prices
 - platform: rest
   name: Tibber Prices
