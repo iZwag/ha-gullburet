@@ -1,5 +1,5 @@
-title: "Floorplan control"
-path: "floorplan"
+title: Bedtime & wakeup
+path: sleep
 background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
 type: "custom:ha-dashboard"
 theme: ios-dark-mode
@@ -68,8 +68,6 @@ sidebar:
           icon: mdi:view-dashboard
           name: Floorplan control
           template: navbar_button
-          variables:
-            link_active: "true"
           tap_action:
             action: navigate
             navigation_path: /dashboard-tablet/floorplan
@@ -84,10 +82,11 @@ sidebar:
           icon: mdi:bed
           name: Bedtime & wake-up
           template: navbar_button
+          variables:
+            link_active: "true"
           tap_action:
             action: navigate
             navigation_path: /dashboard-tablet/sleep
-        # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT WITH THE "height: xx vh"
         - type: "custom:button-card"
           color_type: blank_card
           styles:
@@ -98,9 +97,6 @@ sidebar:
             - type: entity
               entity: sensor.hall_sensor_temperature
               icon: mdi:home-thermometer
-            #- type: entity
-            #  entity: sensor.electricity_price_tibber
-            #  icon: mdi:lightning-bolt-circle
             - type: entity
               entity: sensor.outdoor_temperature
               icon: mdi:thermometer
@@ -121,18 +117,9 @@ cards:
         class: "col-md-6 col-xxl-3"
         cards:
           - type: markdown
-            content: "THis is markdown"
+            content: "Here comes bedtime"
       - type: col
         class: "col-md-6 col-xxl-3"
         cards:
-          - type: picture-elements
-            image: /local/floorplan/base-dark.png
-            elements:
-              - type: image
-                image: "/local/floorplan/office.png"
-            card_mod:
-              # SHOULD MATCH THE STYLE OF ROW ELEMENTS
-              style: |
-                ha-card {
-                  height: 98vh;
-                }
+          - type: markdown
+            content: "Here comes wake-up"

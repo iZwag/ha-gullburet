@@ -80,12 +80,19 @@ sidebar:
           tap_action:
             action: navigate
             navigation_path: /dashboard-tablet/climate
+        - type: "custom:button-card"
+          icon: mdi:bed
+          name: Bedtime & wake-up
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/sleep
         # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT WITH THE "height: xx vh"
         - type: "custom:button-card"
           color_type: blank_card
           styles:
             card:
-              - height: 45vh
+              - height: 37.5vh
         - type: custom:mushroom-chips-card
           chips:
             - type: entity

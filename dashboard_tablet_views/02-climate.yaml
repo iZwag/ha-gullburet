@@ -81,10 +81,17 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/climate
         - type: "custom:button-card"
+          icon: mdi:bed
+          name: Bedtime & wake-up
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/sleep
+        - type: "custom:button-card"
           color_type: blank_card
           styles:
             card:
-              - height: 45vh
+              - height: 37.5vh
         - type: custom:mushroom-chips-card
           chips:
             - type: entity
@@ -194,7 +201,7 @@ cards:
                 styles:
                   card:
                     - background: transparent
-                    - height: "5vh"
+                    - height: "1vh"
           - type: custom:stack-in-card
             mode: vertical
             class: "col-xs-4 col-md-4 col-xxl-3"
@@ -209,7 +216,7 @@ cards:
                 styles:
                   card:
                     - background: transparent
-                    - height: "5vh"
+                    - height: "1vh"
           - type: custom:stack-in-card
             mode: vertical
             class: "col-xs-4 col-md-4 col-xxl-3"
@@ -224,4 +231,4 @@ cards:
                 styles:
                   card:
                     - background: transparent
-                    - height: "5vh"
+                    - height: "1vh"
