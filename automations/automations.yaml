@@ -153,3 +153,56 @@
               entity_id: f7e543af2bb56185534ecba1eb4a0c2d
               domain: switch
   mode: single
+
+- id: "1704665200068"
+  alias: Irja remote controls heated sheet on/off
+  description: ""
+  trigger:
+    - device_id: 6d307d44235cf1a24620d50d7aead120
+      domain: hue
+      platform: device
+      type: short_release
+      subtype: 1
+      unique_id: fbb8e052-aef2-4e2d-9f7e-5b64ff5b87dd
+      id: "on"
+    - device_id: 6d307d44235cf1a24620d50d7aead120
+      domain: hue
+      platform: device
+      type: short_release
+      subtype: 4
+      unique_id: 3ae253c0-9a8d-42c8-a97d-1c0c8f34d3ba
+      id: "off"
+    - platform: state
+      entity_id:
+        - timer.heated_sheet_timer
+      to: idle
+      from: active
+      id: timeout
+  condition: []
+  action:
+    - if:
+        - condition: trigger
+          id:
+            - "on"
+      then:
+        - type: turn_on
+          device_id: b7f6e30daaa39a28f6356d29ffd5efe5
+          entity_id: 9b7ec62590734746bf02741e11be30ba
+          domain: switch
+        - service: timer.start
+          metadata: {}
+          data:
+            duration: 00:30:00
+          target:
+            entity_id: timer.heated_sheet_timer
+    - if:
+        - condition: trigger
+          id:
+            - "off"
+            - timeout
+      then:
+        - type: turn_off
+          device_id: b7f6e30daaa39a28f6356d29ffd5efe5
+          entity_id: 9b7ec62590734746bf02741e11be30ba
+          domain: switch
+  mode: single
