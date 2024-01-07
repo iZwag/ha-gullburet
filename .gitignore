@@ -7,5 +7,5 @@
 *.log*
 custom_components/
 secrets.yaml
-*.db*
+#*.db*
 testarea.js
