@@ -71,3 +71,14 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
+
+- platform: template
+  sensors:
+    bedtime_alarm_difference:
+      value_template: >
+        {% set current_time = states('sensor.time') %}
+        {% set target_time = states('input_datetime.bedtime_alarm') %}
+        {% set current_time_object = strptime(current_time, '%H:%M') %}
+        {% set target_time_object = strptime(target_time, '%H:%M') %}
+
+        {{ ((target_time_object - current_time_object).total_seconds() / 60) | round(0) }}
