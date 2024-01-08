@@ -234,7 +234,7 @@ def calculate_next_due(chore_type: str, reference_date: datetime.date, cycle: in
        return calculate_next_monthly(reference_time, monthly_day)
     
     elif chore_type == ChoreType.YEARLY.value:
-        return datetime.datetime.strptime(yearly_date, "%Y-%m-%d %H:%M:%S")
+        return calculate_next_yearly(reference_time, format_string_date(yearly_date))
 
 def calculate_next_cyclic(ref: datetime.datetime, cycle: int):
     return ref + datetime.timedelta(days=cycle)
@@ -288,6 +288,31 @@ def calculate_next_monthly(ref: datetime.datetime, monthly_day: int):
     next_due_datetime = datetime.datetime.combine(next_due_date, next_due_time)
     
     return next_due_datetime
+
+def calculate_next_yearly(ref: datetime.datetime, yearly_date: datetime.date):
+        
+        # Check if it is at or past the yearly_date of this year
+        # Find the yearly_date of next year, as well as year
+        if ref.month > yearly_date.month:
+            next_year = ref.year + 1 
+        elif ref.month == yearly_date.month and ref.day >= yearly_date.day:
+            next_year = ref.year + 1
+        else:
+            next_year = ref.year
+            
+        if yearly_date.month == 2 and yearly_date.day == 29:
+            # Check if next_year is a leap year
+            if not calendar.isleap(next_year):
+                yearly_date = datetime.date(next_year, 2, 28)
+        
+        # Calculate the next occurrence of the yearly_date
+        next_due_date = datetime.date(next_year, yearly_date.month, yearly_date.day)
+        
+        # Add time to the next_due_date
+        next_due_time = datetime.time(12, 0)
+        next_due_datetime = datetime.datetime.combine(next_due_date, next_due_time)
+        
+        return next_due_datetime
 
 def format_string_date(date: str):
     return datetime.datetime.strptime(date, "%Y-%m-%d")
@@ -365,3 +390,4 @@ table execution:
 #print(get_chore(2))
 #print(calculate_next_due("weekly", format_string_date("2024-01-08"), 7, 1, 1, "2021-01-01 12:00:00")))
 #print(calculate_next_monthly(format_string_date("2024-02-02"), 30))
+print(calculate_next_yearly(datetime.date(2024, 3, 10), datetime.date(2020, 2, 29)))
