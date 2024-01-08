@@ -254,15 +254,13 @@ def calculate_next_monthly(ref: datetime.datetime, monthly_day: int):
     
     # Truncate monthly_day if it exceeds the last day of the month
     if monthly_day > last_day_of_month:
-        original_monthly_day = monthly_day
         monthly_day = last_day_of_month
+        
         
     # Check if it is at or past the monthly_day of this month
     # Find the monthly_day of next month, as well as year and month
     if ref.day >= monthly_day:
-        
-        monthly_day = original_monthly_day
-        
+         
         # Calculate the next month
         if ref.month == 12:
             next_month = 1
@@ -283,7 +281,7 @@ def calculate_next_monthly(ref: datetime.datetime, monthly_day: int):
         next_year = ref.year
     
     # Calculate the next occurrence of the monthly_day
-    next_due_date = datetime.date(ref.year, ref.month, monthly_day)
+    next_due_date = datetime.date(next_year, next_month, monthly_day)
     
     # Add time to the next_due_date
     next_due_time = datetime.time(12, 0)
@@ -366,4 +364,4 @@ table execution:
 #print("")
 #print(get_chore(2))
 #print(calculate_next_due("weekly", format_string_date("2024-01-08"), 7, 1, 1, "2021-01-01 12:00:00")))
-print(calculate_next_monthly(format_string_date("2024-02-08"), 31))
+#print(calculate_next_monthly(format_string_date("2024-02-02"), 30))
