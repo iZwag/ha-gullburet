@@ -4,6 +4,8 @@ import json
 import calendar
 from enum import Enum
 
+DB_FILEPATH = "www/custom/chores/chores.db"
+
 class ChoreTable(Enum):
     ID = "id"
     TITLE = "title"
@@ -74,7 +76,7 @@ def create_chore(title: str, type="cyclic", cycle: int = 7, category="house", pr
      prev_exec = 0
      next_due = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=cycle), datetime.time(12, 0))
      
-     conn = sqlite3.connect("chores.db")
+     conn = sqlite3.connect(DB_FILEPATH)
      c = conn.cursor()
 
      c.execute('''INSERT INTO chore (title, description, instructions, type, cycle, prev_exec, next_due, category, priority)
@@ -86,7 +88,7 @@ def create_chore(title: str, type="cyclic", cycle: int = 7, category="house", pr
 
 
 def update_chore_field(chore_id: int, field: ChoreTable, value):
-    conn = sqlite3.connect("chores.db")
+    conn = sqlite3.connect(DB_FILEPATH)
     c = conn.cursor()
 
     c.execute(f"UPDATE chore SET {field.value} = ? WHERE id = ?", (value, chore_id))
@@ -96,7 +98,7 @@ def update_chore_field(chore_id: int, field: ChoreTable, value):
 
 
 def get_chore(chore_id: int):
-    conn = sqlite3.connect("chores.db")
+    conn = sqlite3.connect(DB_FILEPATH)
     c = conn.cursor()
 
     c.execute('''SELECT id, title, description, instructions, type, cycle, weekly_day, monthly_day, yearly_date,
@@ -143,7 +145,7 @@ def get_chore(chore_id: int):
 
 # Deletes a chore from the database
 def delete_chore(chore_id: int):
-    conn = sqlite3.connect("chores.db")
+    conn = sqlite3.connect(DB_FILEPATH)
     c = conn.cursor()
 
     c.execute("DELETE FROM chore WHERE id = ?", (chore_id,))
@@ -153,7 +155,7 @@ def delete_chore(chore_id: int):
 
 # Returns a list of chores ordered by next_due date
 def get_chore_list(items: int = 25):
-    conn = sqlite3.connect("chores.db")
+    conn = sqlite3.connect(DB_FILEPATH)
     c = conn.cursor()
 
     c.execute('''SELECT id, title, type, cycle, next_due FROM chore
@@ -221,38 +223,74 @@ def calculate_next_due(chore_type: str, reference_date: datetime.date, cycle: in
     
     # Cyclic
     if chore_type == ChoreType.CYCLIC.value:
-        return reference_time + datetime.timedelta(days=cycle)
+        return calculate_next_cyclic(reference_time, cycle)
     
     # Weekly
     elif chore_type == ChoreType.WEEKLY.value:
-        ref_weekday = reference_date.isoweekday()
-        if weekly_day == ref_weekday:
-            days_until_next_day = 7
-        else:
-            days_until_next_day = (weekly_day - ref_weekday + 7) % 7
-        return reference_time + datetime.timedelta(days=days_until_next_day)
+        return calculate_next_weekly(reference_time, weekly_day)
     
     # Monthly
     elif chore_type == ChoreType.MONTHLY.value:
-        # Get the last day of the month
-        last_day_of_month = calendar.monthrange(reference_date.year, reference_date.month)[1]
-        
-        # Truncate monthly_day if it exceeds the last day of the month
-        if monthly_day > last_day_of_month:
-            monthly_day = last_day_of_month
-        
-        # Calculate the next occurrence of the monthly_day
-        next_due_date = datetime.date(reference_date.year, reference_date.month, monthly_day)
-        
-        # Add time to the next_due_date
-        next_due_time = datetime.time(12, 0)
-        next_due_datetime = datetime.datetime.combine(next_due_date, next_due_time)
-        
-        return next_due_datetime
+       return calculate_next_monthly(reference_time, monthly_day)
     
     elif chore_type == ChoreType.YEARLY.value:
         return datetime.datetime.strptime(yearly_date, "%Y-%m-%d %H:%M:%S")
+
+def calculate_next_cyclic(ref: datetime.datetime, cycle: int):
+    return ref + datetime.timedelta(days=cycle)
+
+def calculate_next_weekly(ref: datetime.datetime, weekly_day: int):
+    ref_weekday = ref.isoweekday()
+    if weekly_day == ref_weekday:
+        days_until_next_day = 7
+    else:
+        days_until_next_day = (weekly_day - ref_weekday + 7) % 7
+    return ref + datetime.timedelta(days=days_until_next_day)
     
+def calculate_next_monthly(ref: datetime.datetime, monthly_day: int):
+    
+    # Get the last day of this month
+    last_day_of_month = calendar.monthrange(ref.year, ref.month)[1]
+    
+    # Truncate monthly_day if it exceeds the last day of the month
+    if monthly_day > last_day_of_month:
+        original_monthly_day = monthly_day
+        monthly_day = last_day_of_month
+        
+    # Check if it is at or past the monthly_day of this month
+    # Find the monthly_day of next month, as well as year and month
+    if ref.day >= monthly_day:
+        
+        monthly_day = original_monthly_day
+        
+        # Calculate the next month
+        if ref.month == 12:
+            next_month = 1
+            next_year = ref.year + 1
+        else:
+            next_month = ref.month + 1
+            next_year = ref.year
+            
+        # Find the last day of the next month
+        last_day_of_month = calendar.monthrange(next_year, next_month)[1]
+        
+        if monthly_day > last_day_of_month:
+            monthly_day = last_day_of_month
+            
+    # It is this month, so just use the current month and year and the monthly_day
+    else:
+        next_month = ref.month
+        next_year = ref.year
+    
+    # Calculate the next occurrence of the monthly_day
+    next_due_date = datetime.date(ref.year, ref.month, monthly_day)
+    
+    # Add time to the next_due_date
+    next_due_time = datetime.time(12, 0)
+    next_due_datetime = datetime.datetime.combine(next_due_date, next_due_time)
+    
+    return next_due_datetime
+
 def format_string_date(date: str):
     return datetime.datetime.strptime(date, "%Y-%m-%d")
 
@@ -262,7 +300,7 @@ Executions
 
 def quick_add_execution(chore_id: int):
     # Connect to the database
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(DB_FILEPATH)
     cursor = conn.cursor()
 
     # Retrieve next_due and score from chore table
@@ -327,4 +365,5 @@ table execution:
 #print(get_chore_list(20))  
 #print("")
 #print(get_chore(2))
-print(calculate_next_due("weekly", format_string_date("2024-01-08"), 7, 1, 1, "2021-01-01 12:00:00"))
+#print(calculate_next_due("weekly", format_string_date("2024-01-08"), 7, 1, 1, "2021-01-01 12:00:00")))
+print(calculate_next_monthly(format_string_date("2024-02-08"), 31))
