@@ -52,42 +52,7 @@ class ChoreCategory(Enum):
     OTHER = "other"
 
 '''
- table chore:
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT,
-        instructions TEXT,        
-        type TEXT NOT NULL,
-        cycle INTEGER DEFAULT 7,
-        weekly_day INTEGER DEFAULT 7,
-        monthly_day INTEGER DEFAULT 1,
-        yearly_date DATETIME,
-        prev_exec INTEGER,
-        next_due DATETIME,
-        time_estimate INTEGER,
-        category TEXT NOT NULL DEFAULT 'house',
-        score INTEGER,
-        priority INTEGER DEFAULT 5,
-        FOREIGN KEY (prev_exec) REFERENCES execution (id)
-'''
-
-'''
-Table chore does not need to include field "state", as this can be calculated upon
-request by comparing next_due with current date. It also requires an update of all entries
-regulary.
-'''
-
-'''
-table execution:
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        chore INTEGER NOT NULL,
-        timestamp DATETIME NOT NULL,
-        days_to_due INTEGER,
-        performed_by TEXT,
-        time_spent INTEGER,
-        comment TEXT,
-        score_awarded INTEGER,
-        FOREIGN KEY (chore) REFERENCES chore (id)
+Chores
 '''
 
 def create_chore(title: str, type="cyclic", cycle: int = 7, weekly_day: int = 7,
@@ -135,11 +100,11 @@ def get_chore(chore_id: int):
     prev_exec, next_due, time_estimate, category, score, priority = row
 
     next_due = format_string_datetime(next_due)
-    current_datetime = datetime.datetime.now()
+    current_datetime = datetime.datetime.now().replace(microsecond=0)
 
     state = calculate_chore_state(next_due, current_datetime)
     time_left = calculate_time_left(next_due, current_datetime)
-    pcnt_left = calculate_percentage_left(time_left, cycle)
+    pcnt_left = calculate_percentage_left(chore_type, cycle, time_left)
 
     chore_data = {
         "id": chore_id,
@@ -233,6 +198,74 @@ def calculate_percentage_left(chore_type: str, cycle: int, time_left: int):
         return 100
 
     return percentage_left
+
+'''
+Executions
+'''
+
+# The quickest way to add an execution, using the current time, and skips performed_by and comment
+def quick_add_execution(chore_id: int):
+
+    conn = sqlite3.connect(DB_FILEPATH)
+    cursor = conn.cursor()
+
+    # Retrieve next_due, type, cycle, weekly_day, monthly_day, yearly_date, and score from chore table
+    cursor.execute("SELECT next_due, type, cycle, weekly_day, monthly_day, yearly_date, score FROM chore WHERE id = ?", (chore_id,))
+    result = cursor.fetchone()
+    next_due, chore_type, cycle, weekly_day, monthly_day, yearly_date, score = result
+
+    # Get current date and time
+    timestamp = datetime.datetime.now().replace(microsecond=0)
+    
+    # Convert next_due to datetime object
+    next_due = format_string_datetime(next_due)
+
+    # Calculate days_to_due
+    days_to_due = (next_due - timestamp).days
+
+    # Calculate the next due date using the calculate_next_due function
+    next_due = calculate_next_due(chore_type, next_due.date(), cycle, weekly_day, monthly_day, yearly_date)
+
+    # Insert new row into execution table
+    cursor.execute("INSERT INTO execution (chore, timestamp, days_to_due, performed_by, score_awarded) VALUES (?, ?, ?, NULL, ?)",
+                   (chore_id, timestamp, days_to_due, score))
+    execution_id = cursor.lastrowid
+
+    # Update prev_exec and next_due in chore table
+    cursor.execute("UPDATE chore SET prev_exec = ?, next_due = ? WHERE id = ?", (execution_id, next_due, chore_id))
+
+    conn.commit()
+    conn.close()
+    
+
+# The comprehensive way of adding an execution, using some given timestamp, performed by someone, and with a comment
+def add_execution(chore_id: int, timestamp: datetime.datetime, performed_by: str, comment: str = None):
+
+    conn = sqlite3.connect(DB_FILEPATH)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT next_due, type, cycle, weekly_day, monthly_day, yearly_date, score FROM chore WHERE id = ?", (chore_id,))
+    result = cursor.fetchone()
+    next_due, chore_type, cycle, weekly_day, monthly_day, yearly_date, score = result
+
+    next_due = format_string_datetime(next_due)
+
+    days_to_due = (next_due - timestamp).days
+
+    # Calculate the next due date using the calculate_next_due function
+    next_due = calculate_next_due(chore_type, timestamp, cycle, weekly_day, monthly_day, yearly_date)
+
+    # Insert new row into execution table
+    cursor.execute("INSERT INTO execution (chore, timestamp, days_to_due, performed_by, score_awarded, comment) VALUES (?, ?, ?, ?, ?, ?)",
+                   (chore_id, timestamp, days_to_due, performed_by, score, comment))
+    execution_id = cursor.lastrowid
+
+    # Update prev_exec and next_due in chore table
+    cursor.execute("UPDATE chore SET prev_exec = ?, next_due = ? WHERE id = ?", (execution_id, next_due, chore_id))
+
+    conn.commit()
+    conn.close()
+
 
 '''
 Utility functions
@@ -362,81 +395,10 @@ def format_string_date(date: str):
 def format_string_datetime(dt: str):
     return datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
 
-'''
-Executions
-'''
 
-# The quickest way to add an execution, using the current time, and skips performed_by and comment
-def quick_add_execution(chore_id: int):
-
-    conn = sqlite3.connect(DB_FILEPATH)
-    cursor = conn.cursor()
-
-    # Retrieve next_due, type, cycle, weekly_day, monthly_day, yearly_date, and score from chore table
-    cursor.execute("SELECT next_due, type, cycle, weekly_day, monthly_day, yearly_date, score FROM chore WHERE id = ?", (chore_id,))
-    result = cursor.fetchone()
-    next_due, chore_type, cycle, weekly_day, monthly_day, yearly_date, score = result
-
-    # Get current date and time
-    timestamp = datetime.datetime.now()
-    
-    # Convert next_due to datetime object
-    next_due = format_string_datetime(next_due)
-
-    # Calculate days_to_due
-    days_to_due = (next_due - timestamp).days
-
-    # Calculate the next due date using the calculate_next_due function
-    next_due = calculate_next_due(chore_type, next_due.date(), cycle, weekly_day, monthly_day, yearly_date)
-
-    # Insert new row into execution table
-    cursor.execute("INSERT INTO execution (chore, timestamp, days_to_due, performed_by, score_awarded) VALUES (?, ?, ?, NULL, ?)",
-                   (chore_id, timestamp, days_to_due, score))
-    execution_id = cursor.lastrowid
-
-    # Update prev_exec and next_due in chore table
-    cursor.execute("UPDATE chore SET prev_exec = ?, next_due = ? WHERE id = ?", (execution_id, next_due, chore_id))
-
-    conn.commit()
-    conn.close()
-    
-
-# The comprehensive way of adding an execution, using some given timestamp, performed by someone, and with a comment
-def add_execution(chore_id: int, timestamp: datetime.datetime, performed_by: str, comment: str = None):
-
-    conn = sqlite3.connect(DB_FILEPATH)
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT next_due, type, cycle, weekly_day, monthly_day, yearly_date, score FROM chore WHERE id = ?", (chore_id,))
-    result = cursor.fetchone()
-    next_due, chore_type, cycle, weekly_day, monthly_day, yearly_date, score = result
-
-    next_due = format_string_datetime(next_due)
-
-    days_to_due = (next_due - timestamp).days
-
-    # Calculate the next due date using the calculate_next_due function
-    next_due = calculate_next_due(chore_type, timestamp, cycle, weekly_day, monthly_day, yearly_date)
-
-    # Insert new row into execution table
-    cursor.execute("INSERT INTO execution (chore, timestamp, days_to_due, performed_by, score_awarded, comment) VALUES (?, ?, ?, ?, ?, ?)",
-                   (chore_id, timestamp, days_to_due, performed_by, score, comment))
-    execution_id = cursor.lastrowid
-
-    # Update prev_exec and next_due in chore table
-    cursor.execute("UPDATE chore SET prev_exec = ?, next_due = ? WHERE id = ?", (execution_id, next_due, chore_id))
-
-    conn.commit()
-    conn.close()
-
-
-print(get_chore_list(20))  
-#print("")
+#print(get_chore_list(20))  
 #print(get_chore(2))
-#print(calculate_next_due("weekly", format_string_date("2024-01-08"), 7, 1, 1, "2021-01-01 12:00:00")))
-#print(calculate_next_monthly(format_string_date("2024-02-02"), 30))
-#print(calculate_next_yearly(datetime.date(2024, 3, 10), datetime.date(2020, 5, 7)))
-#create_chore("Pynte til jul", "yearly", yearly_date="2024-11-06", category="house", instructions="Hente dedikert eske på loftet som all pynt skal i. Plasttreet går for seg selv i loftsboden. Julepapir legges sammen med annet gavepapir.")
-#update_chore_field(4, ChoreTable.NEXT_DUE, "2024-01-06 12:00:00")
+#create_chore("EU godkjenning på bilen", ChoreType.CYCLIC.value, cycle=670, category=ChoreCategory.CAR.value, instructions="Få bilen til et sted som kan gjøre et EU-godkjenningsforsøk, og se ev. på forbedringstiltak")
+#update_chore_field(1, ChoreTable.INSTRUCTIONS, "Bruk en av de beige, lysegrå eller grønne lakenene.")
 #quick_add_execution(4)
-#print(calculate_next_due("cyclic", format_string_date("2024-01-06"), cycle=28))
+#add_execution(7, format_string_datetime("2024-01-08 16:15:00"), "Oslo Bremseservice", "Bilen ble godkjent frem til 31.01.2026")
