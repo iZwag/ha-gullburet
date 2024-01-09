@@ -1,7 +1,9 @@
 import sqlite3
 
+DB_FILEPATH = "www/custom/chores/chores.db"
+
 # Connect to the database (creates a new file if it doesn't exist)
-conn = sqlite3.connect('chores.db')
+conn = sqlite3.connect(DB_FILEPATH)
 
 # Create the "Chore" table
 conn.execute('''
@@ -33,18 +35,23 @@ conn.execute('''
         timestamp DATETIME NOT NULL,
         days_to_due INTEGER,
         performed_by TEXT,
+        time_spent INTEGER,
+        comment TEXT,
         score_awarded INTEGER,
         FOREIGN KEY (chore) REFERENCES chore (id)
     )
 ''')
 
 # Execute the SELECT statement
+print("Chore table:")
 cursor = conn.execute('SELECT * FROM chore')
-
-# Fetch all rows from the cursor
 rows = cursor.fetchall()
+for row in rows:
+    print(row)
 
-# Print the rows
+print("Execution table:")
+cursor = conn.execute('SELECT * FROM execution')
+rows = cursor.fetchall()
 for row in rows:
     print(row)
 
