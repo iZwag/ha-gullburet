@@ -74,11 +74,8 @@
 
 - platform: template
   sensors:
-    bedtime_alarm_difference:
+    bedtime_30min_before:
+      friendly_name: "Bedtime - 30 minutes before"
       value_template: >
-        {% set current_time = states('sensor.time') %}
-        {% set target_time = states('input_datetime.bedtime_alarm') %}
-        {% set current_time_object = strptime(current_time, '%H:%M') %}
-        {% set target_time_object = strptime(target_time, '%H:%M') %}
-
-        {{ ((target_time_object - current_time_object).total_seconds() / 60) | round(0) }}
+        {% set bedtime_time = strptime(states('input_datetime.bedtime_alarm'), '%H:%M:%S') %}
+        {{ (bedtime_time - timedelta(minutes=30)).strftime('%H:%M:%S') }}
