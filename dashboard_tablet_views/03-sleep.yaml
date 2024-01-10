@@ -113,13 +113,70 @@ cards:
     #use_hass_style_gutter: true
     #hass_style_gutter_size: "10px"
     cards:
-      - type: col
-        class: "col-md-6 col-xxl-3"
+      - type: row
         cards:
-          - type: markdown
-            content: "Here comes bedtime"
-      - type: col
-        class: "col-md-6 col-xxl-3"
-        cards:
-          - type: markdown
-            content: "Here comes wake-up"
+          # Bedtime column
+          - type: custom:stack-in-card
+            mode: vertical
+            class: "col-md-6"
+            cards:
+              # Title card: Bedtime
+              - type: custom:mushroom-title-card
+                title: Bedtime
+              # Horizontal stack: Automatic on/off + time picker
+              - type: horizontal-stack
+                card_mod:
+                  style: |
+                    hui-horizontal-stack-card #root: { 
+                      align-items: center;
+                      justify-content: center;
+                    }
+                cards:
+                  - type: custom:mushroom-entity-card
+                    entity: input_boolean.bedtime_alarm_active
+                    name: Automatic bedtime
+                    icon: mdi:power
+                    tap_action:
+                      action: toggle
+                  - type: custom:time-picker-card
+                    entity: input_datetime.bedtime_alarm
+                    hour_mode: 24
+                    hour_step: 1
+                    minute_step: 1
+                    layout:
+                      hour_mode: double
+                      align_controls: center
+                      name: header
+                      embedded: false
+                      thin: true
+                    hide:
+                      seconds: true
+                      icon: true
+                      name: true
+              # Chips relevant bedtime info
+              - type: custom:mushroom-chips-card
+                alignment: center
+                chips:
+                  - type: entity
+                    entity: switch.heated_sheet_switch
+                    content_info: state
+                    name: Varmelaken
+                    icon: mdi:heating-coil
+                    use_entity_picture: false
+                  - type: entity
+                    entity: sensor.heated_sheet_switch_switch_0_power
+                    icon: mdi:heating-coil
+                  - type: entity
+                    entity: input_number.apartment_dimmer
+                    icon: mdi:lightbulb-group
+                  - type: light
+                    entity: light.pendant_bedroom
+                    icon: mdi:ceiling-light
+
+          # Wake-up column
+          - type: custom:stack-in-card
+            mode: vertical
+            class: "col-md-6"
+            cards:
+              - type: custom:mushroom-title-card
+                title: Wake-up
