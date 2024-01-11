@@ -154,9 +154,10 @@
               domain: switch
   mode: single
 
-- id: "1704665200068"
-  alias: Irja remote controls heated sheet on/off
-  description: ""
+# Bedside (Irja) Heated Sheet remote control on/off/up/down
+- id: "1704923668281"
+  alias: Bedside (Irja) Heated Sheet remote control on/off/up/down
+  description: "Controls the behavior of Irja's heated sheet on/off/longer/shorter."
   trigger:
     - device_id: 6d307d44235cf1a24620d50d7aead120
       domain: hue
@@ -178,6 +179,20 @@
       to: idle
       from: active
       id: timeout
+    - device_id: 6d307d44235cf1a24620d50d7aead120
+      domain: hue
+      platform: device
+      type: short_release
+      subtype: 2
+      unique_id: f2c150a3-71ea-4394-a111-84dcda198d42
+      id: up
+    - device_id: 6d307d44235cf1a24620d50d7aead120
+      domain: hue
+      platform: device
+      type: short_release
+      subtype: 3
+      unique_id: 36db30f0-b90d-4ec4-907b-983978a747af
+      id: down
   condition: []
   action:
     - if:
@@ -205,4 +220,51 @@
           device_id: b7f6e30daaa39a28f6356d29ffd5efe5
           entity_id: 9b7ec62590734746bf02741e11be30ba
           domain: switch
+    - if:
+        - condition: trigger
+          id:
+            - up
+      then:
+        - service: timer.change
+          target:
+            entity_id: timer.heated_sheet_timer
+          data:
+            duration: 00:30:00
+    - if:
+        - condition: trigger
+          id:
+            - down
+      then:
+        - service: timer.change
+          metadata: {}
+          data:
+            duration: -00:10:00
+          target:
+            entity_id: timer.heated_sheet_timer
+  mode: single
+
+# Bedtime: Start Heated Sheet 30 minutes before bedtime
+- id: "1704979192442"
+  alias: Start Heated Sheet ON 30min before Bedtime
+  description: "Heated sheet takes 20-30mins to warm up. Turn Heated Sheet ON with a 60min timer."
+  trigger:
+    - platform: template
+      value_template:
+        "{{ now() >= today_at(states('input_datetime.bedtime_alarm'))
+        - timedelta(minutes=30) }}"
+  condition:
+    - condition: state
+      entity_id: input_boolean.bedtime_alarm_active
+      state: "on"
+  action:
+    - type: turn_on
+      device_id: b7f6e30daaa39a28f6356d29ffd5efe5
+      entity_id: 9b7ec62590734746bf02741e11be30ba
+      domain: switch
+    - service: timer.start
+      metadata: {}
+      data:
+        duration: 01:00:00
+      target:
+        entity_id: timer.heated_sheet_timer
   mode: single
