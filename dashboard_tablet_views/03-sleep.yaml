@@ -119,18 +119,18 @@ cards:
           - type: custom:stack-in-card
             mode: vertical
             class: "col-md-6"
+            card_mod:
+              style: |
+                hui-horizontal-stack-card #root: { 
+                  align-items: center;
+                  justify-content: center;
+                }
             cards:
               # Title card: Bedtime
               - type: custom:mushroom-title-card
                 title: Bedtime
               # Horizontal stack: Automatic on/off + time picker
               - type: horizontal-stack
-                card_mod:
-                  style: |
-                    hui-horizontal-stack-card #root: { 
-                      align-items: center;
-                      justify-content: center;
-                    }
                 cards:
                   - type: custom:mushroom-entity-card
                     entity: input_boolean.bedtime_alarm_active
