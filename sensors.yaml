@@ -71,11 +71,3 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
-
-- platform: template
-  sensors:
-    bedtime_30min_before:
-      friendly_name: "Bedtime - 30 minutes before"
-      value_template: >
-        {% set bedtime_time = strptime(states('input_datetime.bedtime_alarm'), '%H:%M:%S') %}
-        {{ (bedtime_time - timedelta(minutes=30)).strftime('%H:%M:%S') }}
