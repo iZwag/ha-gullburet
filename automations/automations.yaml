@@ -289,7 +289,7 @@
             entity_id: timer.heated_sheet_timer
   mode: single
 
-- id: "1705065292754"
+- id: "1705067967420"
   alias: Wake-up alarm - Time triggered actions
   description:
     Handles all time-triggered actions associated with the wake-up alarm,
@@ -300,13 +300,13 @@
       id: alarm
     - platform: template
       value_template:
-        '"{{ now() >= today_at(states(''input_datetime.wakeup_alarm''))
-        - timedelta(minutes=10) }}"'
+        "{{ now() >= today_at(states('input_datetime.wakeup_alarm'))
+        - timedelta(minutes=10) }}"
       id: 10min-before
     - platform: template
       value_template:
-        '"{{ now() >= today_at(states(''input_datetime.wakeup_alarm''))
-        + timedelta(minutes=30) }}"'
+        "{{ now() >= today_at(states('input_datetime.wakeup_alarm'))
+        + timedelta(minutes=30) }}"
       id: 30min-after
   condition:
     - condition: state
@@ -319,13 +319,17 @@
             - 10min-before
       then:
         - service: light.turn_on
-          target:
-            device_id:
-              - 2b7ecd61051d91604909dd749cb5cbc8
+          metadata: {}
           data:
-            brightness_step: 1
-            brightness_pct: 20
+            brightness_pct: 3
+          target:
+            entity_id: light.pendant_bedroom
+        - service: light.turn_on
+          data:
+            brightness_pct: 25
             transition: 300
+          target:
+            entity_id: light.pendant_bedroom
     - if:
         - condition: trigger
           id:
