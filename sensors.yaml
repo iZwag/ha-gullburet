@@ -79,6 +79,8 @@
           Off
         {% elif states('sensor.heated_sheet_switch_switch_0_power')|float >= 15 and states('sensor.heated_sheet_switch_switch_0_power')|float <= 20 %}
           #1
+        {% elif states('sensor.heated_sheet_switch_switch_0_power')|float >= 28 and states('sensor.heated_sheet_switch_switch_0_power')|float <= 40 %}
+          Feet
         {% elif states('sensor.heated_sheet_switch_switch_0_power')|float >= 50 and states('sensor.heated_sheet_switch_switch_0_power')|float <= 80 %}
           #2
         {% else %}
