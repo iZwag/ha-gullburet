@@ -164,7 +164,7 @@ cards:
                     icon: mdi:heating-coil
                     use_entity_picture: false
                   - type: entity
-                    entity: sensor.heated_sheet_switch_switch_0_power
+                    entity: sensor.heated_sheet_setting
                     icon: mdi:heating-coil
                   - type: entity
                     entity: input_number.apartment_dimmer
@@ -180,3 +180,34 @@ cards:
             cards:
               - type: custom:mushroom-title-card
                 title: Wake-up
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-entity-card
+                    entity: input_boolean.wakeup_alarm_active
+                    name: Wake-up alarm for tomorrow
+                    icon: mdi:power
+                    tap_action:
+                      action: toggle
+                  - type: custom:time-picker-card
+                    entity: input_datetime.wakeup_alarm
+                    hour_mode: 24
+                    hour_step: 1
+                    minute_step: 1
+                    layout:
+                      hour_mode: double
+                      align_controls: center
+                      name: header
+                      embedded: false
+                      thin: true
+                    hide:
+                      seconds: true
+                      icon: true
+                      name: true
+              - type: custom:numberbox-card
+                border: false
+                entity: input_number.wakeup_alarm_volume
+                name: Alarm volume
+                icon: mdi:alarm-note
+                min: 1
+                max: 30
+                step: 1
