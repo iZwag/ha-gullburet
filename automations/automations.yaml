@@ -243,28 +243,48 @@
             entity_id: timer.heated_sheet_timer
   mode: single
 
-# Bedtime: Start Heated Sheet 30 minutes before bedtime
-- id: "1704979192442"
-  alias: Start Heated Sheet ON 30min before Bedtime
-  description: "Heated sheet takes 20-30mins to warm up. Turn Heated Sheet ON with a 60min timer."
+# Bedtime: Start Heated Sheet 30 minutes before bedtime, and turn off lights.
+- id: "1705059631645"
+  alias: Bedtime - Mode triggers from time
+  description:
+    If automatic bedtime is toggled ON, then certain actions are automatically
+    started. For winter, heated sheet is turned on 30 min ahead. Lights are automatically
+    turned off.
   trigger:
+    - platform: time
+      at: input_datetime.bedtime_alarm
+      id: alarm
     - platform: template
       value_template:
         "{{ now() >= today_at(states('input_datetime.bedtime_alarm'))
         - timedelta(minutes=30) }}"
+      id: 30min-before
   condition:
     - condition: state
       entity_id: input_boolean.bedtime_alarm_active
       state: "on"
   action:
-    - type: turn_on
-      device_id: b7f6e30daaa39a28f6356d29ffd5efe5
-      entity_id: 9b7ec62590734746bf02741e11be30ba
-      domain: switch
-    - service: timer.start
-      metadata: {}
-      data:
-        duration: 01:00:00
-      target:
-        entity_id: timer.heated_sheet_timer
+    - if:
+        - condition: trigger
+          id:
+            - alarm
+      then:
+        - service: script.bedtime_lights
+          metadata: {}
+          data: {}
+    - if:
+        - condition: trigger
+          id:
+            - 30min-before
+      then:
+        - type: turn_on
+          device_id: b7f6e30daaa39a28f6356d29ffd5efe5
+          entity_id: 9b7ec62590734746bf02741e11be30ba
+          domain: switch
+        - service: timer.start
+          metadata: {}
+          data:
+            duration: 01:00:00
+          target:
+            entity_id: timer.heated_sheet_timer
   mode: single
