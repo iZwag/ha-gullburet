@@ -8,7 +8,7 @@ What is *Gullburet*? It's the nickname of our apartment, and it means "the golde
 
 The system is compromised of many hardware devices, obviously. 
 
-### The system's central processor
+### Host system
 - Raspberry Pi 4 model B 2GB
 - OS: Home Assistant OS
 - PSU: 5V/3A USB-C
@@ -21,20 +21,20 @@ The system is compromised of many hardware devices, obviously.
 Asus RT-AC88U
 
 ### Wi-Fi/Network Devices
-- Heating: Mill Heat (panel heaters, movable floor-unit)
-- Lights: Philips Hue (bulbs, switches, sensors)
-- Speakers: Sonos (Play:1, One, Beam)
-- Robot vacuum: Roborock S7 Plus
-- TV: Samsung The Frame 55"
-- Tablet, wall-mounted dashboard: Lenovo Tab M10 FHD Plus
+- Heating: **Mill Heat** (panel heaters, movable floor-unit)
+- Lights: **Philips Hue** (bulbs, switches, sensors)
+- Speakers: **Sonos** (Play:1, One, Beam)
+- Robot vacuum: **Roborock** S7 Plus
+- TV: **Samsung** The Frame 55"
+- Tablet, wall-mounted dashboard: **Lenovo** Tab M10 FHD Plus
+- **Shelly** Plug Plus S
 
 ### Z-Wave Devices
-- Fibaro Dimmer Switch 2
-- Fibaro Switch 2
-- Heat-it Z-TRM3
+- **Fibaro** Dimmer Switch 2, Switch 2
+- **Heat-it** Z-TRM3 Thermostat for floor heating
 
 ### Zigbee Devices
-- IKEA TRÅDFRI: Transformers, lightbulbs, sockets, switches
+- **IKEA** TRÅDFRI: Transformers, lightbulbs, sockets, switches
 
 ## Software 
 
@@ -43,3 +43,9 @@ To display relevant info about life in Oslo and Norway, here are some public API
 - Entur (Ruter): Public transportation
 - Met.no (Yr): Weather
 - Tibber: Local electricity ratings, including fees
+
+### Dashboard preview
+
+Here is how the main view of the wall-mounted tablet dashboard looks like.
+
+![Wall-mounted tablet dashboard main view](./www/overview-dashboard.png)
