@@ -1,0 +1,42 @@
+#background: center / cover no-repeat url("/local/ui/sidebarBG2.png") fixed
+type: sidebar
+theme: ios-dark-mode
+cards:
+  - type: "custom:button-card"
+    icon: mdi:home
+    name: Dashboard
+    template: navbar_button
+    variables:
+      link_active: "true"
+    tap_action:
+      action: navigate
+      navigation_path: /tablet-test
+    view_layout:
+      position: sidebar
+  - type: "custom:button-card"
+    icon: mdi:view-dashboard
+    name: Floorplan control
+    template: navbar_button
+    tap_action:
+      action: navigate
+      navigation_path: /tablet-test
+    view_layout:
+      position: sidebar
+  - type: "custom:button-card"
+    icon: mdi:thermometer
+    name: Climate control
+    template: navbar_button
+    tap_action:
+      action: navigate
+      navigation_path: /tablet-test
+    view_layout:
+      position: sidebar
+  - type: "custom:button-card"
+    icon: mdi:bed
+    name: Bedtime & wake-up
+    template: navbar_button
+    tap_action:
+      action: navigate
+      navigation_path: /tablet-test
+    view_layout:
+      position: sidebar
