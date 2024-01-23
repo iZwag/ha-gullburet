@@ -117,22 +117,31 @@ cards:
     #use_hass_style_gutter: true
     #hass_style_gutter_size: "10px"
     cards:
-      - type: col
-        class: "col-md-6 col-xxl-3"
+      - type: row
         cards:
-          - type: markdown
-            content: "THis is markdown"
-      - type: col
-        class: "col-md-6 col-xxl-3"
-        cards:
-          - type: picture-elements
-            image: /local/floorplan/base-dark.png
-            elements:
-              - type: image
-                image: "/local/floorplan/office.png"
-            card_mod:
-              # SHOULD MATCH THE STYLE OF ROW ELEMENTS
-              style: |
-                ha-card {
-                  height: 98vh;
-                }
+          - type: col
+            class: "col-md-6 col-xxl-3"
+            cards:
+              - type: markdown
+                content: "Floor settings will show here"
+          - type: col
+            class: "col-md-6 col-xxl-3"
+            cards:
+              - type: picture-elements
+                image: /local/floorplan/base-dark.png
+                elements:
+                  - type: image
+                    image: "/local/floorplan/common-dining.png"
+                    entity: input_number.apartment_dimmer
+                    style:
+                      left: 50%
+                      top: 50%
+                      width: 100%
+                      mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
+                      #opacity: "{{ states('input_number.apartment_dimmer') | int / 100}}"
+                    #state_filter:
+                card_mod:
+                  style: |
+                    ha-card {
+                      height: 100vh;
+                    }
