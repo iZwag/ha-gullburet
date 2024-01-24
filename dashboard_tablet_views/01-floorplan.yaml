@@ -120,28 +120,84 @@ cards:
       - type: row
         cards:
           - type: col
-            class: "col-md-6 col-xxl-3"
+            class: "col-md-5 col-xxl-4"
             cards:
               - type: markdown
                 content: "Floor settings will show here"
           - type: col
-            class: "col-md-6 col-xxl-3"
+            class: "col-md-7 col-xxl-8"
             cards:
               - type: picture-elements
-                image: /local/floorplan/base-dark.png
+                image: /local/floorplan/base-dark-v2.png
+                card_mod:
+                  style: |
+                    ha-card {
+                      width: 89%;
+                      background-color: transparent;
+                    }
                 elements:
+                  # Z-INDEX HIERARCHY:
+                  # base: 0, 1
+                  # light-renders: 2 - 9
+                  # outlines: 10
+                  # outlines-hidden: 11, 12
+                  # device-icons: 13, 14
+                  ############################################
+                  # OUTLINES
                   - type: image
-                    image: "/local/floorplan/common-dining.png"
-                    entity: input_number.apartment_dimmer
+                    entity: input_text.floorplan_select_state
+                    state_image:
+                      "bath": "/local/floorplan/outline-bath.png"
+                      "bedroom": "/local/floorplan/outline-bedroom.png"
+                      "commons": "/local/floorplan/outline-commons.png"
+                      "entry": "/local/floorplan/outline-entry.png"
+                      "guest": "/local/floorplan/outline-guest.png"
+                      "kitchen": "/local/floorplan/outline-kitchen.png"
+                      "living": "/local/floorplan/outline-living.png"
+                      "office": "/local/floorplan/outline-office.png"
+                      "storage": "/local/floorplan/outline-storage.png"
+                      "toilet": "/local/floorplan/outline-toilet.png"
+                      "veranda": "/local/floorplan/outline-veranda.png"
+                      "none": "/local/floorplan/base-empty.png"
                     style:
                       left: 50%
                       top: 50%
                       width: 100%
-                      mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
+                      z-index: 10
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                  # LIGHTS
+                  - type: image
+                    entity: light.pendants_office
+                    style:
+                      left: 50%
+                      top: 50%
+                      width: 100%
+                      z-index: 2
+                      mix-blend-mode: lighten
+                    state_filter:
+                      "on": opacity(100%)
+                      "off": opacity(0%)
+
+                      #mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
                       #opacity: "{{ states('input_number.apartment_dimmer') | int / 100}}"
-                    #state_filter:
-                card_mod:
-                  style: |
-                    ha-card {
-                      height: 100vh;
-                    }
+
+                  #- type: conditional
+                  #  conditions:
+                  #    - entity: input_text.floorplan_select_state
+                  #      state: "toilet"
+                  #  elements:
+                  #    - type: image
+                  #      image: "/local/floorplan/outline-toilet.png"
+                  #      entity: input_text.floorplan_select_state
+                  #      style:
+                  #        left: 50%
+                  #        top: 50%
+                  #       width: 100%
+                  #       z-index: 10
+                  #       mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
+                  #       #opacity: "{{ states('input_number.apartment_dimmer') | int / 100}}"
