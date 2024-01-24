@@ -11,3 +11,14 @@ calculate_middle_time:
     entity_id:
       description: The input_datetime helper that should store the result
       example: input_datetime.noonset
+
+brightness_interval:
+  name: Brightness interval
+  description: Calculates which interval the brightness value (0-255) of a light belongs to, as percent (0-100).
+  fields:
+    brightness:
+      description: The brightness value (0-255, "null")
+      example: "128"
+    entity_id:
+      description: The sensor entity that should store the result
+      example: sensor.dim_pendants_office

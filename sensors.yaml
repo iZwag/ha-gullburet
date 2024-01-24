@@ -1,44 +1,3 @@
-# ###########################################################
-# MACRO DEFINITIONS
-# ###########################################################
-{% macro dim_interval(brightness) %}
-  {% if brightness <= 0 %}
-    0
-  {% elif brightness > 0 and brightness <= 5 %}
-    5
-  {% elif brightness > 5 and brightness <= 10 %}
-    10
-  {% elif brightness > 10 and brightness <= 15 %}
-    15
-  {% elif brightness > 15 and brightness <= 20 %}
-    20
-  {% elif brightness > 20 and brightness <= 25 %}
-    25
-  {% elif brightness > 25 and brightness <= 30 %}
-    30
-  {% elif brightness > 30 and brightness <= 40 %}
-    40
-  {% elif brightness > 40 and brightness <= 50 %}
-    50
-  {% elif brightness > 50 and brightness <= 60 %}
-    60
-  {% elif brightness > 60 and brightness <= 70 %}
-    70
-  {% elif brightness > 70 and brightness <= 80 %}
-    80
-  {% elif brightness > 80 and brightness <= 90 %}
-    90
-  {% elif brightness > 90 %}
-    100
-  {% else %}
-    0
-  {% endif %}
-{% endmacro %}
-
-# ###########################################################
-# SENSORS
-# ###########################################################
-
 # Entur / Ruter holdeplass sanntidsdata om avganger
 - platform: entur_public_transport
   name: Ruter
@@ -51,7 +10,7 @@
     - "NSR:StopPlace:6404" # Haarklous plass
     - "NSR:StopPlace:58195" # Storo
 
-  # Tibber future prices
+# Tibber future prices
 - platform: rest
   name: Tibber Prices
   resource: https://api.tibber.com/v1-beta/gql
@@ -69,7 +28,7 @@
     User-Agent: REST
   unit_of_measurement: NOK/kWh
 
-  # Time and date as sensors
+# Time and date as sensors
 - platform: time_date
   display_options:
     - "time"
@@ -81,24 +40,26 @@
     - "time_utc"
     - "beat"
 
-  # Dashboard date-string
+# All template sensors
 - platform: template
   sensors:
-    ## Converts time and date into sentence for UI
+    # Readable string for week-day, as sensor
     day:
       value_template: >
         {% set days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"] %}
         {{ days[now().weekday()] }}
-
+    
+    # Readable string for month, as sensor
     month:
       value_template: >
         {% set months = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"] %}
         {{ months[now().month-1] }}
-
+    
+    # Formats the week-day and date into a humanly readable sentence for UI, as sensor
     date_string:
       friendly_name: "Full Date"
       value_template: "{{ states('sensor.day') }}, {{ now().day }}.  {{ states('sensor.month') }} {{ now().year }}"
-
+    
     # Temperature sensor for Kitchen Heater
     kitchen_temperature:
       friendly_name: "Kitchen Heater measured temperature"
@@ -113,6 +74,7 @@
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
 
+    # Finds the current setting of the physical remote for the heated sheet
     heated_sheet_setting:
       friendly_name: "Heated Sheet - Control setting"
       value_template: >-
@@ -128,47 +90,70 @@
           On
         {% endif %}
     
-    # Floorplan light brightness (dim) sensors
+    # FLOORPLAN LIGHT BRIGHTNESS INTERVAL-LEVEL SENSORS
+    # Defined here. Automatically updated by automations.
     dim_pendant_bedroom:
       friendly_name: "Bedroom pendant brightness level"
-      value_template : >-
-        {% set brightness = (state_attr('light.pendant_bedroom', 'brightness') | default(0) / 255 * 100) | round %}
-        {% if brightness <= 0 %}
-          0
-        {% elif brightness > 0 and brightness <= 5 %}
-          5
-        {% elif brightness > 5 and brightness <= 10 %}
-          10
-        {% elif brightness > 10 and brightness <= 15 %}
-          15
-        {% elif brightness > 15 and brightness <= 20 %}
-          20
-        {% elif brightness > 20 and brightness <= 25 %}
-          25
-        {% elif brightness > 25 and brightness <= 30 %}
-          30
-        {% elif brightness > 30 and brightness <= 40 %}
-          40
-        {% elif brightness > 40 and brightness <= 50 %}
-          50
-        {% elif brightness > 50 and brightness <= 60 %}
-          60
-        {% elif brightness > 60 and brightness <= 70 %}
-          70
-        {% elif brightness > 70 and brightness <= 80 %}
-          80
-        {% elif brightness > 80 and brightness <= 90 %}
-          90
-        {% elif brightness > 90 %}
-          100
-        {% else %}
-          0
-        {% endif %}
+      value_template: "{{ states('sensor.dim_pendant_bedroom') }}"
+      unit_of_measurement: '%'
     
     dim_pendants_office:
       friendly_name: "Office pendants brightness level"
-      value_template : >-
-        {% dim_interval((state_attr('light.pendants_office', 'brightness') | default(0) / 255 * 100) | round) %}
-
+      value_template: "{{ states('sensor.dim_pendants_office') }}"
+      unit_of_measurement: '%'
     
+    dim_pendant_guest:
+      friendly_name: "Guest pendant brightness level"
+      value_template: "{{ states('sensor.dim_pendant_guest') }}"
+      unit_of_measurement: '%'
+    
+    dim_downlight_toilet:
+      friendly_name: " brightness level"
+      value_template: "{{ states('sensor.dim_downlight_toilet') }}"
+      unit_of_measurement: '%'
+
+    dim_downlights_bath:
+      friendly_name: "Guest pendant brightness level"
+      value_template: "{{ states('sensor.dim_downlights_bath') }}"
+      unit_of_measurement: '%'
+
+    dim_lightstrip_bath:
+      friendly_name: "Guest pendant brightness level"
+      value_template: "{{ states('sensor.dim_lightstrip_bath') }}"
+      unit_of_measurement: '%'
+
+    dim_downlights_entry:
+      friendly_name: "Entry downlights brightness level"
+      value_template: "{{ states('sensor.dim_downlights_entry') }}"
+      unit_of_measurement: '%'
+    
+    dim_spottrack_living:
+      friendly_name: "Living room spot-track brightness level"
+      value_template: "{{ states('sensor.dim_spottrack4_living') }}"
+      unit_of_measurement: '%'
+    
+    dim_downlights_living:
+      friendly_name: "Living room downlights brightness level"
+      value_template: "{{ states('sensor.dim_downlights_living') }}"
+      unit_of_measurement: '%'
+    
+    dim_pendants_dining:
+      friendly_name: "Dining pendants brightness level"
+      value_template: "{{ states('sensor.dim_pendants_dining') }}"
+      unit_of_measurement: '%'
+
+    dim_pendants_kitchen:
+      friendly_name: "Dining pendants brightness level"
+      value_template: "{{ states('sensor.dim_pendants_kitchen') }}"
+      unit_of_measurement: '%'
+    
+    dim_spottrack_kitchen:
+      friendly_name: "Dining pendants brightness level"
+      value_template: "{{ states('sensor.dim_spottrack_kitchen') }}"
+      unit_of_measurement: '%'
+
+    dim_lightstrip_kitchen:
+      friendly_name: "Dining pendants brightness level"
+      value_template: "{{ states('sensor.dim_lightstrip_kitchen') }}"
+      unit_of_measurement: '%'
     
