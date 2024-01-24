@@ -1,3 +1,44 @@
+# ###########################################################
+# MACRO DEFINITIONS
+# ###########################################################
+{% macro dim_interval(brightness) %}
+  {% if brightness <= 0 %}
+    0
+  {% elif brightness > 0 and brightness <= 5 %}
+    5
+  {% elif brightness > 5 and brightness <= 10 %}
+    10
+  {% elif brightness > 10 and brightness <= 15 %}
+    15
+  {% elif brightness > 15 and brightness <= 20 %}
+    20
+  {% elif brightness > 20 and brightness <= 25 %}
+    25
+  {% elif brightness > 25 and brightness <= 30 %}
+    30
+  {% elif brightness > 30 and brightness <= 40 %}
+    40
+  {% elif brightness > 40 and brightness <= 50 %}
+    50
+  {% elif brightness > 50 and brightness <= 60 %}
+    60
+  {% elif brightness > 60 and brightness <= 70 %}
+    70
+  {% elif brightness > 70 and brightness <= 80 %}
+    80
+  {% elif brightness > 80 and brightness <= 90 %}
+    90
+  {% elif brightness > 90 %}
+    100
+  {% else %}
+    0
+  {% endif %}
+{% endmacro %}
+
+# ###########################################################
+# SENSORS
+# ###########################################################
+
 # Entur / Ruter holdeplass sanntidsdata om avganger
 - platform: entur_public_transport
   name: Ruter
@@ -86,3 +127,48 @@
         {% else %}
           On
         {% endif %}
+    
+    # Floorplan light brightness (dim) sensors
+    dim_pendant_bedroom:
+      friendly_name: "Bedroom pendant brightness level"
+      value_template : >-
+        {% set brightness = (state_attr('light.pendant_bedroom', 'brightness') | default(0) / 255 * 100) | round %}
+        {% if brightness <= 0 %}
+          0
+        {% elif brightness > 0 and brightness <= 5 %}
+          5
+        {% elif brightness > 5 and brightness <= 10 %}
+          10
+        {% elif brightness > 10 and brightness <= 15 %}
+          15
+        {% elif brightness > 15 and brightness <= 20 %}
+          20
+        {% elif brightness > 20 and brightness <= 25 %}
+          25
+        {% elif brightness > 25 and brightness <= 30 %}
+          30
+        {% elif brightness > 30 and brightness <= 40 %}
+          40
+        {% elif brightness > 40 and brightness <= 50 %}
+          50
+        {% elif brightness > 50 and brightness <= 60 %}
+          60
+        {% elif brightness > 60 and brightness <= 70 %}
+          70
+        {% elif brightness > 70 and brightness <= 80 %}
+          80
+        {% elif brightness > 80 and brightness <= 90 %}
+          90
+        {% elif brightness > 90 %}
+          100
+        {% else %}
+          0
+        {% endif %}
+    
+    dim_pendants_office:
+      friendly_name: "Office pendants brightness level"
+      value_template : >-
+        {% dim_interval((state_attr('light.pendants_office', 'brightness') | default(0) / 255 * 100) | round) %}
+
+    
+    
