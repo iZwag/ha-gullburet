@@ -172,7 +172,8 @@ cards:
                       action: none
                   # LIGHTS
                   - type: image
-                    entity: light.pendants_office
+                    entity: sensor.dim_pendants_office
+                    image: "/local/floorplan/office.png"
                     style:
                       left: 50%
                       top: 50%
@@ -180,9 +181,20 @@ cards:
                       z-index: 2
                       mix-blend-mode: lighten
                     state_filter:
-                      "on": opacity(100%)
-                      "off": opacity(0%)
-
+                      "0": opacity(0%)
+                      "5": opacity(5%)
+                      "10": opacity(10%)
+                      "15": opacity(15%)
+                      "20": opacity(20%)
+                      "25": opacity(25%)
+                      "30": opacity(30%)
+                      "40": opacity(40%)
+                      "50": opacity(50%)
+                      "60": opacity(60%)
+                      "70": opacity(70%)
+                      "80": opacity(80%)
+                      "90": opacity(90%)
+                      "100": opacity(100%)
                       #mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
                       #opacity: "{{ states('input_number.apartment_dimmer') | int / 100}}"
 
