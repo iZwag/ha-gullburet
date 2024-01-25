@@ -149,3 +149,33 @@ bedtime_lights:
     metadata: {}
   mode: single
   icon: mdi:bed
+select_floorplan_room:
+  alias: Select floorplan room
+  sequence:
+  - service: input_text.set_value
+    metadata: {}
+    data:
+      value: '{{ room_name }}'
+    target:
+      entity_id: input_text.floorplan_select_state
+  mode: restart
+  icon: mdi:gesture-tap-button
+  fields:
+    room_name:
+      selector:
+        text:
+          multiple: false
+      required: true
+      name: Room name
+      description: The name-ID of the room as text
+deselect_floorplan_room:
+  alias: De-select floorplan room
+  sequence:
+  - service: input_text.set_value
+    metadata: {}
+    data:
+      value: none
+    target:
+      entity_id: input_text.floorplan_select_state
+  mode: single
+  icon: mdi:select-remove
