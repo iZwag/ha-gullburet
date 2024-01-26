@@ -128,7 +128,7 @@ cards:
             class: "col-md-7 col-xxl-8"
             cards:
               - type: picture-elements
-                image: /local/floorplan/base-dark-v2.png
+                image: /local/floorplan/base-dark-v3.png
                 card_mod:
                   style: |
                     ha-card {
@@ -143,162 +143,179 @@ cards:
                   # outlines, hidden: 11, 12, 13
                   # device icons: 14, 15
                   # ###########################################################
-                  # BEDROOM PENDANT ICON
-                  - type: state-icon
-                    entity: light.pendant_bedroom
-                    icon: mdi:ceiling-light
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 27%
-                      top: 80%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # OFFICE PENDANTS ICON
-                  - type: state-icon
-                    entity: light.pendants_office
-                    icon: mdi:ceiling-light-multiple
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 54%
-                      top: 80%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # GUEST PENDANT ICON
-                  - type: state-icon
-                    entity: light.pendant_guest
-                    icon: mdi:ceiling-light
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 75%
-                      top: 80%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # ENTRY DOWNLIGHTS ICON
-                  - type: state-icon
-                    entity: light.downlights_entry
-                    icon: mdi:light-recessed
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 71.75%
-                      top: 64%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # TOILET DOWNLIGHT ICON
-                  - type: state-icon
-                    entity: light.downlight_toilet
-                    icon: mdi:light-recessed
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 82%
-                      top: 55%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # BATH DOWNLIGHTS ICON
-                  - type: state-icon
-                    entity: light.downlights_bath
-                    icon: mdi:light-recessed
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 64%
-                      top: 55%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # BATH LIGHTSTRIP ICON
-                  - type: state-icon
-                    entity: light.lightstrip_bath
-                    icon: mdi:led-strip-variant
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 87%
-                      top: 41%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # LIVING ROOM SPOTTRACK ICON
-                  - type: state-icon
-                    entity: light.spottrack4_living
-                    icon: mdi:track-light
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 41%
-                      top: 44%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # LIVING ROOM DOWNLIGHTS ICON
-                  - type: state-icon
-                    entity: light.downlights_living
-                    icon: mdi:light-recessed
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 16%
-                      top: 44%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # DINING PENDANTS ICON
-                  - type: state-icon
-                    entity: light.pendants_living
-                    icon: mdi:globe-light
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 34.5%
-                      top: 20%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # KITCHEN PENDANTS ICON
-                  - type: state-icon
-                    entity: light.pendants_kitchen
-                    icon: mdi:ceiling-light-multiple
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 61%
-                      top: 19.7%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
-                  # KITCHEN SPOTTRACK ICON
-                  - type: state-icon
-                    entity: light.spottrack6_kitchen
-                    icon: mdi:track-light
-                    tap_action:
-                      action: toggle
-                    hold_action:
-                      action: more-info
-                    style:
-                      left: 74%
-                      top: 20%
-                      z-index: 14
-                      '--mdc-icon-size': 25px
+                  - type: conditional
+                    conditions:
+                      - entity: input_boolean.floorplan_show_icons
+                        state: "on"
+                    elements:
+                      # BEDROOM PENDANT ICON
+                      - type: state-icon
+                        entity: light.pendant_bedroom
+                        icon: mdi:lightbulb
+                        #icon: mdi:ceiling-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 27%
+                          top: 80%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # OFFICE PENDANTS ICON
+                      - type: state-icon
+                        entity: light.pendants_office
+                        icon: mdi:lightbulb
+                        #icon: mdi:ceiling-light-multiple
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 54%
+                          top: 80%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # GUEST PENDANT ICON
+                      - type: state-icon
+                        entity: light.pendant_guest
+                        icon: mdi:lightbulb
+                        #icon: mdi:ceiling-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 75%
+                          top: 80%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # ENTRY DOWNLIGHTS ICON
+                      - type: state-icon
+                        entity: light.downlights_entry
+                        icon: mdi:lightbulb
+                        #icon: mdi:light-recessed
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 71.75%
+                          top: 64%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # TOILET DOWNLIGHT ICON
+                      - type: state-icon
+                        entity: light.downlight_toilet
+                        icon: mdi:lightbulb
+                        #icon: mdi:light-recessed
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 82%
+                          top: 55%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # BATH DOWNLIGHTS ICON
+                      - type: state-icon
+                        entity: light.downlights_bath
+                        icon: mdi:lightbulb
+                        #icon: mdi:light-recessed
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 64%
+                          top: 55%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # BATH LIGHTSTRIP ICON
+                      - type: state-icon
+                        entity: light.lightstrip_bath
+                        icon: mdi:lightbulb
+                        #icon: mdi:led-strip-variant
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 87%
+                          top: 41%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # LIVING ROOM SPOTTRACK ICON
+                      - type: state-icon
+                        entity: light.spottrack4_living
+                        icon: mdi:lightbulb
+                        #icon: mdi:track-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 41%
+                          top: 44%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # LIVING ROOM DOWNLIGHTS ICON
+                      - type: state-icon
+                        entity: light.downlights_living
+                        icon: mdi:lightbulb
+                        #icon: mdi:light-recessed
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 16%
+                          top: 44%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # DINING PENDANTS ICON
+                      - type: state-icon
+                        entity: light.pendants_living
+                        icon: mdi:lightbulb
+                        #icon: mdi:globe-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 34.5%
+                          top: 20%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # KITCHEN PENDANTS ICON
+                      - type: state-icon
+                        entity: light.pendants_kitchen
+                        icon: mdi:lightbulb
+                        #icon: mdi:ceiling-light-multiple
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 61%
+                          top: 19.7%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # KITCHEN SPOTTRACK ICON
+                      - type: state-icon
+                        entity: light.spottrack6_kitchen
+                        icon: mdi:lightbulb
+                        #icon: mdi:track-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 74%
+                          top: 20%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
                   # DE-SELECT ROOM ICON
                   # Adds a clickable icon to not select a room
                   - type: conditional
@@ -320,6 +337,44 @@ cards:
                           z-index: 14
                           color: '#03A9F4'
                           '--mdc-icon-size': 35px
+                  - type: conditional
+                    conditions:
+                      - entity: input_boolean.floorplan_show_icons
+                        state: "on"
+                    elements:
+                      - type: state-icon
+                        entity: input_boolean.floorplan_show_icons
+                        icon: mdi:eye-off
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: none
+                        style:
+                          left: 5%
+                          top: 2%
+                          z-index: 14
+                          color: white
+                          '--mdc-icon-size': 35px
+                  - type: conditional
+                    conditions:
+                      - entity: input_boolean.floorplan_show_icons
+                        state: "off"
+                    elements:
+                      - type: state-icon
+                        entity: input_boolean.floorplan_show_icons
+                        icon: mdi:eye
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: none
+                        style:
+                          left: 5%
+                          top: 2%
+                          z-index: 14
+                          color: white
+                          '--mdc-icon-size': 35px
+                          '--paper-item-icon-active-color': white
+                  
                   # ###########################################################
                   # OUTLINES HIDDEN SELECT ICONS
                   # Veranda
