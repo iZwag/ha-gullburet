@@ -65,7 +65,7 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/dashboard
         - type: "custom:button-card"
-          icon: mdi:view-dashboard
+          icon: mdi:floor-plan
           name: Floorplan control
           template: navbar_button
           variables:
@@ -119,11 +119,49 @@ cards:
     cards:
       - type: row
         cards:
-          - type: col
+          - type: custom:stack-in-card
+            mode: vertical
             class: "col-md-5 col-xxl-4"
             cards:
-              - type: markdown
-                content: "Floor settings will show here"
+              - type: custom:mushroom-title-card
+                title: Gullburet
+              - type: custom:mushroom-number-card
+                entity: input_number.apartment_dimmer
+                layout: horizontal
+                name: Dim all lights
+                icon_color: accent
+              - type: horizontal-stack
+                cards:
+                  - type: "custom:button-card"
+                    icon: mdi:lightbulb-group
+                    name: Alle på
+                    template: light_mode
+                    entity: script.all_lights_on
+                    tap_action:
+                      action: call-service
+                      service: script.turn_on
+                      data:
+                        entity_id: script.all_lights_on
+                  - type: "custom:button-card"
+                    icon: mdi:lightbulb-group-off-outline
+                    name: Alle av
+                    entity: script.all_lights_off
+                    template: light_mode
+                    tap_action:
+                      action: call-service
+                      service: script.turn_on
+                      data:
+                        entity_id: script.all_lights_off
+                  - type: "custom:button-card"
+                    icon: mdi:bed
+                    name: Leggetid
+                    template: light_mode
+                    entity: script.bedtime_lights
+                    tap_action:
+                      action: call-service
+                      service: script.turn_on
+                      data:
+                        entity_id: script.bedtime_lights
           - type: col
             class: "col-md-7 col-xxl-8"
             cards:
@@ -214,8 +252,8 @@ cards:
                         hold_action:
                           action: more-info
                         style:
-                          left: 82%
-                          top: 55%
+                          left: 85%
+                          top: 52%
                           z-index: 14
                           '--mdc-icon-size': 25px
                       # BATH DOWNLIGHTS ICON
@@ -228,8 +266,8 @@ cards:
                         hold_action:
                           action: more-info
                         style:
-                          left: 64%
-                          top: 55%
+                          left: 63%
+                          top: 46%
                           z-index: 14
                           '--mdc-icon-size': 25px
                       # BATH LIGHTSTRIP ICON
@@ -299,7 +337,7 @@ cards:
                           action: more-info
                         style:
                           left: 61%
-                          top: 19.7%
+                          top: 20%
                           z-index: 14
                           '--mdc-icon-size': 25px
                       # KITCHEN SPOTTRACK ICON
