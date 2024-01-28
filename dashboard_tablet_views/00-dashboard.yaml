@@ -67,7 +67,7 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/dashboard
         - type: "custom:button-card"
-          icon: mdi:view-dashboard
+          icon: mdi:floor-plan
           name: Floorplan control
           template: navbar_button
           tap_action:
