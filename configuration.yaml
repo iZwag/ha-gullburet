@@ -20,7 +20,7 @@ scene: !include scenes.yaml
 sensor: !include sensors.yaml
 
 # Enabling Python-scripts with an Integration is obsolete.
-# Add scripts to <config>/python_scripts
+# Add scripts to <config>/python_scripts. Also add its entry to services.yaml in same folder.
 # The following line enables Python-scripts.
 python_script:
 
@@ -44,3 +44,12 @@ lovelace:
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
       
+camera:
+  - platform: xiaomi_cloud_map_extractor
+    host: !secret xiaomi_vacuum_host
+    token: !secret xiaomi_vacuum_token
+    username: !secret xiaomi_cloud_username
+    password: !secret xiaomi_cloud_password
+    draw: ['all']
+    attributes:
+      - calibration_points
