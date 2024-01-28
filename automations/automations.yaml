@@ -264,14 +264,14 @@
       entity_id: input_boolean.bedtime_alarm_active
       state: "on"
   action:
-    - if:
-        - condition: trigger
-          id:
-            - alarm
-      then:
-        - service: script.bedtime_lights
-          metadata: {}
-          data: {}
+    #- if:
+    #    - condition: trigger
+    #      id:
+    #        - alarm
+    #  then:
+    #    - service: script.bedtime_lights
+    #      metadata: {}
+    #      data: {}
     - if:
         - condition: trigger
           id:
