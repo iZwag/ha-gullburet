@@ -125,11 +125,6 @@ cards:
             cards:
               - type: custom:mushroom-title-card
                 title: Gullburet
-              - type: custom:mushroom-number-card
-                entity: input_number.apartment_dimmer
-                layout: horizontal
-                name: Dim all lights
-                icon_color: accent
               - type: horizontal-stack
                 cards:
                   - type: "custom:button-card"
@@ -162,6 +157,12 @@ cards:
                       service: script.turn_on
                       data:
                         entity_id: script.bedtime_lights
+              - type: custom:mushroom-number-card
+                entity: input_number.apartment_dimmer
+                layout: horizontal
+                name: Dim all lights
+                icon_color: accent
+              
           - type: col
             class: "col-md-7 col-xxl-8"
             cards:
@@ -312,6 +313,45 @@ cards:
                           top: 44%
                           z-index: 14
                           '--mdc-icon-size': 25px
+                      # LIVING ROOM MUSHROOM LAMP
+                      - type: state-icon
+                        entity: switch.lamp_mushroom_living
+                        icon: mdi:lightbulb
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 50%
+                          top: 50%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # LIVING ROOM MOOD BALL
+                      - type: state-icon
+                        entity: light.mood_ball
+                        icon: mdi:lightbulb
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 50%
+                          top: 41%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # LIVING ROOM GLOBE LAMP
+                      - type: state-icon
+                        entity: switch.lamp_globe_living
+                        icon: mdi:lightbulb
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 18%
+                          top: 67%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
                       # DINING PENDANTS ICON
                       - type: state-icon
                         entity: light.pendants_living
@@ -352,6 +392,20 @@ cards:
                         style:
                           left: 74%
                           top: 20%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # KITCHEN LIGHTSTRIP UNDER-SHELF
+                      - type: state-icon
+                        entity: light.lightstrip_undershelf_kitchen
+                        icon: mdi:lightbulb
+                        #icon: mdi:track-light
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 80%
+                          top: 32%
                           z-index: 14
                           '--mdc-icon-size': 25px
                   # DE-SELECT ROOM ICON
