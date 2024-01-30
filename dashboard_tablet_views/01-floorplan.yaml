@@ -1,6 +1,6 @@
 title: "Floorplan control"
 path: "floorplan"
-background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
+background: center / cover no-repeat url("/local/ui/bg-6.jpg") fixed
 type: "custom:ha-dashboard"
 theme: ios-dark-mode
 badges: []
@@ -398,14 +398,76 @@ cards:
                       - type: state-icon
                         entity: light.lightstrip_undershelf_kitchen
                         icon: mdi:lightbulb
-                        #icon: mdi:track-light
                         tap_action:
                           action: toggle
                         hold_action:
                           action: more-info
                         style:
-                          left: 80%
+                          left: 85%
                           top: 32%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # STORAGE ROOM CEILING LIGHT
+                      # TODO: display different icon/label depending on state
+                      # TODO: Countdown with label when on
+                      - type: conditional
+                        conditions:
+                          - entity: light.ceiling_light_storage
+                            state: "off"
+                        elements:
+                          - type: state-icon
+                            entity: light.ceiling_light_storage
+                            icon: mdi:lightbulb
+                            tap_action:
+                              action: call-service
+                              service: script.storage_light_on_manual
+                            hold_action:
+                              action: more-info
+                            style:
+                              left: 80%
+                              top: 4%
+                              z-index: 14
+                              '--mdc-icon-size': 25px
+                      - type: conditional
+                        conditions:
+                          - entity: light.ceiling_light_storage
+                            state: "on"
+                        elements:
+                          - type: state-label
+                            entity: sensor.storage_room_time_remaining
+                            tap_action:
+                              action: none
+                            hold_action:
+                              action: none
+                            style:
+                              left: 80%
+                              top: 4%
+                              z-index: 14
+                              color: white
+                      # VERANDA WALL LANTERN
+                      - type: state-icon
+                        entity: light.wall_lantern_veranda
+                        icon: mdi:lightbulb
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 53.5%
+                          top: 6.5%
+                          z-index: 14
+                          '--mdc-icon-size': 25px
+                      # VERANDA STRING LIGHTS
+                      - type: state-icon
+                        entity: switch.plug_switch_string_lights_bryter
+                        icon: mdi:lightbulb
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: more-info
+                        style:
+                          left: 49%
+                          top: 2%
                           z-index: 14
                           '--mdc-icon-size': 25px
                   # DE-SELECT ROOM ICON
@@ -417,7 +479,6 @@ cards:
                     elements:
                       - type: icon
                         icon: mdi:close-circle-outline
-                        #icon: mdi:selection-remove
                         tap_action:
                           action: call-service
                           service: script.deselect_floorplan_room
@@ -658,9 +719,11 @@ cards:
                       action: none
                     double_tap_action:
                       action: none
-                  # LIGHTS
+                  # -----------------------------------------------------------
+                  # LIGHT LAYERS
+                  # Bedroom
                   - type: image
-                    entity: sensor.dim_pendant_bedroom
+                    entity: sensor.pendant_bedroom_dim
                     image: "/local/floorplan/bedroom-v2.png"
                     style:
                       left: 50%
@@ -682,8 +745,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Office
                   - type: image
-                    entity: sensor.dim_pendants_office
+                    entity: sensor.pendants_office_dim
                     image: "/local/floorplan/office-v2.png"
                     style:
                       left: 50%
@@ -705,8 +769,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Guest
                   - type: image
-                    entity: sensor.dim_pendant_guest
+                    entity: sensor.pendant_guest_dim
                     image: "/local/floorplan/guest-v2.png"
                     style:
                       left: 50%
@@ -728,8 +793,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Toilet
                   - type: image
-                    entity: sensor.dim_downlight_toilet
+                    entity: sensor.downlight_toilet_dim
                     image: "/local/floorplan/toilet-v2.png"
                     style:
                       left: 50%
@@ -751,8 +817,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Bathroom downlights
                   - type: image
-                    entity: sensor.dim_downlights_bath
+                    entity: sensor.downlights_bath_dim
                     image: "/local/floorplan/bath-downlights-v2.png"
                     style:
                       left: 50%
@@ -775,8 +842,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Bathroom lightstrip
                   - type: image
-                    entity: sensor.dim_lightstrip_bath
+                    entity: sensor.lightstrip_bath_dim
                     image: "/local/floorplan/bath-lightstrip-v2.png"
                     style:
                       left: 50%
@@ -798,8 +866,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Entry 
                   - type: image
-                    entity: sensor.dim_downlights_entry
+                    entity: sensor.downlights_entry_dim
                     image: "/local/floorplan/common-entry-v2.png"
                     style:
                       left: 50%
@@ -821,8 +890,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Living room spottrack
                   - type: image
-                    entity: sensor.dim_spottrack_living
+                    entity: sensor.spottrack_living_dim
                     image: "/local/floorplan/common-4track-v2.png"
                     style:
                       left: 50%
@@ -845,8 +915,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Living room downlights
                   - type: image
-                    entity: sensor.dim_downlights_living
+                    entity: sensor.downlights_living_dim
                     image: "/local/floorplan/common-downlights-v2.png"
                     style:
                       left: 50%
@@ -869,8 +940,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Dining pendants
                   - type: image
-                    entity: sensor.dim_pendants_dining
+                    entity: sensor.pendants_dining_dim
                     image: "/local/floorplan/common-dining-v2.png"
                     style:
                       left: 50%
@@ -893,8 +965,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Kitchen pendants
                   - type: image
-                    entity: sensor.dim_pendants_kitchen
+                    entity: sensor.pendants_kitchen_dim
                     image: "/local/floorplan/common-flowerpots-v2.png"
                     style:
                       left: 50%
@@ -917,8 +990,9 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Kitchen spottrack
                   - type: image
-                    entity: sensor.dim_spottrack_kitchen
+                    entity: sensor.spottrack_kitchen_dim
                     image: "/local/floorplan/common-6track-v2.png"
                     style:
                       left: 50%
@@ -941,5 +1015,81 @@ cards:
                       "80": opacity(90%)
                       "90": opacity(95%)
                       "100": opacity(100%)
+                  # Kitchen lightstrip
+                  - type: image
+                    entity: sensor.lightstrip_undershelf_kitchen_dim
+                    image: "/local/floorplan/common-shelfstrip.png"
+                    style:
+                      left: 50%
+                      top: 50%
+                      width: 100%
+                      z-index: 8
+                      mix-blend-mode: lighten
+                    state_filter:
+                      "0": opacity(0%)
+                      "5": opacity(20%)
+                      "10": opacity(28%)
+                      "15": opacity(36%)
+                      "20": opacity(44%)
+                      "25": opacity(52%)
+                      "30": opacity(60%)
+                      "40": opacity(68%)
+                      "50": opacity(75%)
+                      "60": opacity(80%)
+                      "70": opacity(85%)
+                      "80": opacity(90%)
+                      "90": opacity(95%)
+                      "100": opacity(100%)
+                  # Storage room
+                  - type: image
+                    entity: sensor.ceiling_light_storage_dim
+                    image: "/local/floorplan/storage.png"
+                    style:
+                      left: 50%
+                      top: 50%
+                      width: 100%
+                      z-index: 2
+                      mix-blend-mode: lighten
+                    state_filter:
+                      "0": opacity(0%)
+                      "5": opacity(20%)
+                      "10": opacity(28%)
+                      "15": opacity(36%)
+                      "20": opacity(44%)
+                      "25": opacity(52%)
+                      "30": opacity(60%)
+                      "40": opacity(68%)
+                      "50": opacity(75%)
+                      "60": opacity(80%)
+                      "70": opacity(85%)
+                      "80": opacity(90%)
+                      "90": opacity(95%)
+                      "100": opacity(100%)
+                  # Veranda
+                  - type: image
+                    entity: sensor.wall_lantern_veranda_dim
+                    image: "/local/floorplan/common-veranda.png"
+                    style:
+                      left: 50%
+                      top: 50%
+                      width: 100%
+                      z-index: 9
+                      mix-blend-mode: lighten
+                    state_filter:
+                      "0": opacity(0%)
+                      "5": opacity(20%)
+                      "10": opacity(28%)
+                      "15": opacity(36%)
+                      "20": opacity(44%)
+                      "25": opacity(52%)
+                      "30": opacity(60%)
+                      "40": opacity(68%)
+                      "50": opacity(75%)
+                      "60": opacity(80%)
+                      "70": opacity(85%)
+                      "80": opacity(90%)
+                      "90": opacity(95%)
+                      "100": opacity(100%)
+                  
 
                       #mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
