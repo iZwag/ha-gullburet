@@ -6,6 +6,7 @@ automation: !include_dir_merge_list automations/
 script: !include scripts.yaml
 scene: !include scenes.yaml
 sensor: !include sensors.yaml
+template: !include templates.yaml
 
 # TEXT TO SPEECH
 tts:
@@ -57,10 +58,3 @@ camera:
     attributes:
       - calibration_points
 
-template:
-  - sensor:
-      - name: "Kitchen lightstrip brightness level"
-        unit_of_measurement: '%'
-        state: >
-          {% set brightness = state_attr('light.lightstrip_undershelf_kitchen', 'brightness') %}
-          {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
