@@ -39,6 +39,7 @@ all_lights_off:
     target:
       entity_id: scene.bedroom_lights_off
     metadata: {}
+# -----------------------------------------------------------------------------
 all_lights_on:
   alias: 'All lights: On'
   mode: restart
@@ -100,6 +101,7 @@ all_lights_on:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlight_toilet
+# -----------------------------------------------------------------------------
 calculate_risenoon:
   alias: Calculates RiseNoon-time
   mode: single
@@ -110,6 +112,7 @@ calculate_risenoon:
       time1: '{{ states(''sensor.sun_next_rising'') }}'
       time2: '{{ states(''sensor.sun_next_noon'') }}'
       entity_id: input_datetime.risenoon
+# -----------------------------------------------------------------------------
 calculate_noonset:
   alias: Calculates NoonSet-time
   mode: single
@@ -120,6 +123,7 @@ calculate_noonset:
       time1: '{{ states(''sensor.sun_next_noon'') }}'
       time2: '{{ states(''sensor.sun_next_setting'') }}'
       entity_id: input_datetime.noonset
+# -----------------------------------------------------------------------------
 bedtime_lights:
   alias: Bedtime-mode (Lights off)
   sequence:
@@ -149,6 +153,7 @@ bedtime_lights:
     metadata: {}
   mode: single
   icon: mdi:bed
+# -----------------------------------------------------------------------------
 select_floorplan_room:
   alias: Select floorplan room
   sequence:
@@ -168,6 +173,7 @@ select_floorplan_room:
       required: true
       name: Room name
       description: The name-ID of the room as text
+# -----------------------------------------------------------------------------
 deselect_floorplan_room:
   alias: De-select floorplan room
   sequence:
@@ -179,3 +185,64 @@ deselect_floorplan_room:
       entity_id: input_text.floorplan_select_state
   mode: single
   icon: mdi:select-remove
+# -----------------------------------------------------------------------------
+storage_room_light_on_auto:
+  alias: Storage room - Light on - Auto
+  sequence:
+  - service: timer.start
+    metadata: {}
+    data:
+      duration: 00:03:00
+    target:
+      entity_id: timer.storage_room_light_timer
+  - type: turn_on
+    device_id: 0f0cf256bc675de29f236888b06ff677
+    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
+    domain: light
+  mode: single
+  icon: mdi:lightbulb-auto
+# -----------------------------------------------------------------------------
+storage_room_light_on_manual:
+  alias: Storage room - Light on - Manual
+  sequence:
+  - service: timer.start
+    metadata: {}
+    data:
+      duration: 00:10:00
+    target:
+      entity_id: timer.storage_room_light_timer
+  - type: turn_on
+    device_id: 0f0cf256bc675de29f236888b06ff677
+    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
+    domain: light
+  mode: single
+  icon: mdi:lightbulb
+# -----------------------------------------------------------------------------
+# This script is work-in-progress and does not work currently
+masterdim_script:
+  alias: Masterdim script
+  mode: single
+  icon: mdi:brightness-7
+  fields:
+    light_entity:
+      selector:
+        entity: {}
+      required: true
+    brightness:
+      selector:
+        number:
+          min: 1
+          max: 100
+      required: true
+  sequence:
+    - if:
+        - condition: state
+          entity_id: '{{ light_entity }}'
+          state: "on"
+      then:
+        - service: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 69
+          target:
+            entity_id: '{{ light_entity }}'
