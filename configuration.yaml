@@ -1,10 +1,17 @@
 # Loads default set of integrations. Do not remove.
 default_config:
 
-# Text to speech
+# HOME ASSISTANT SYSTEM
+automation: !include_dir_merge_list automations/
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensors.yaml
+
+# TEXT TO SPEECH
 tts:
   - platform: google_translate
 
+# FRONTEND
 # Load frontend themes from the themes folder
 frontend:
   # Default template themes, commented out
@@ -14,20 +21,7 @@ frontend:
     - /local/community/custom-brand-icons/custom-brand-icons.js
     - /local/community/lovelace-card-mod/card-mod.js
 
-automation: !include_dir_merge_list automations/
-script: !include scripts.yaml
-scene: !include scenes.yaml
-sensor: !include sensors.yaml
-
-# Enabling Python-scripts with an Integration is obsolete.
-# Add scripts to <config>/python_scripts. Also add its entry to services.yaml in same folder.
-# The following line enables Python-scripts.
-python_script:
-
-# Enables logging from Python-scripts.
-logger:
-  default: info
-
+# USER INTERFACES
 lovelace:
   mode: storage
   dashboards:
@@ -43,7 +37,16 @@ lovelace:
       title: Tablet Test
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
-      
+
+# PYTHON SCRIPTS
+# Add scripts to <config>/python_scripts. Also add its entry to services.yaml in same folder.
+# Enabling Python-scripts with an Integration is obsolete. This enables Python-scripts:
+python_script:
+# Enables logging from Python-scripts.
+logger:
+  default: info
+
+# ROBOT VACUUM CAMERA
 camera:
   - platform: xiaomi_cloud_map_extractor
     host: !secret xiaomi_vacuum_host
@@ -53,3 +56,11 @@ camera:
     draw: ['all']
     attributes:
       - calibration_points
+
+template:
+  - sensor:
+      - name: "Kitchen lightstrip brightness level"
+        unit_of_measurement: '%'
+        state: >
+          {% set brightness = state_attr('light.lightstrip_undershelf_kitchen', 'brightness') %}
+          {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
