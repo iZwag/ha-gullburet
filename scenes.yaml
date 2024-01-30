@@ -30,11 +30,8 @@
       - brightness
       color_mode:
       brightness:
-      friendly_name: Downlights
+      friendly_name: 'Downlights '
       supported_features: 32
-      state: 'off'
-    switch.mushroom_lamp_bryter:
-      friendly_name: Mushroom lamp Bryter
       state: 'off'
     light.mood_ball:
       min_color_temp_kelvin: 2000
@@ -69,11 +66,8 @@
       - brightness
       color_mode:
       brightness:
-      friendly_name: Pendants, dining
+      friendly_name: 'Pendants, dining '
       supported_features: 32
-      state: 'off'
-    switch.globe_switch_bryter:
-      friendly_name: Globe switch Bryter
       state: 'off'
     remote.the_frame_tv:
       friendly_name: The Frame TV
@@ -91,6 +85,12 @@
       friendly_name: '[TV] The Frame TV'
       supported_features: 0
       state: unavailable
+    switch.lamp_globe_living:
+      friendly_name: Lamp, globe
+      state: 'on'
+    switch.lamp_mushroom_living:
+      friendly_name: Lamp, mushroom
+      state: 'on'
   icon: mdi:lightbulb-group-outline
   metadata: {}
 - id: '1690996655003'
@@ -128,14 +128,14 @@
       friendly_name: Pendants, Flowerpots
       supported_features: 32
       state: 'off'
-    light.lightstrip_kitchen:
+    light.lightstrip_undershelf_kitchen:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
       off_with_transition: false
-      off_brightness: 70
-      friendly_name: Lightstrip, shelf
+      off_brightness: 108
+      friendly_name: Lightstrip, under-shelf
       supported_features: 40
       state: 'off'
   icon: mdi:lightbulb-group-outline
