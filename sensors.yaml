@@ -152,8 +152,17 @@
       value_template: "{{ states('sensor.dim_spottrack_kitchen') }}"
       unit_of_measurement: '%'
 
-    dim_lightstrip_kitchen:
-      friendly_name: "Dining pendants brightness level"
-      value_template: "{{ states('sensor.dim_lightstrip_kitchen') }}"
-      unit_of_measurement: '%'
+    #dim_lightstrip_kitchen:
+    #  friendly_name: "Dining pendants brightness level"
+    #  value_template: "{{ states('sensor.dim_lightstrip_kitchen') }}"
+    #  unit_of_measurement: '%'
     
+    # Attempting something different
+
+    #dim_lightstrip_kitchen:
+    #  friendly_name: "Kitchen lightstrip brightness level"
+    #  unit_of_measurement: '%'
+    #  state: >
+    #    "{{ state_attr('light.lightstrip_undershelf_kitchen', 'brightness') | default(0) }}"
+
+
