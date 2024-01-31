@@ -69,29 +69,13 @@
       friendly_name: 'Pendants, dining '
       supported_features: 32
       state: 'off'
-    remote.the_frame_tv:
-      friendly_name: The Frame TV
-      supported_features: 0
-      state: unknown
-    media_player.the_frame_tv:
-      source_list:
-      - TV
-      - HDMI
-      device_class: tv
-      friendly_name: The Frame TV
-      supported_features: 20413
-      state: 'off'
-    media_player.tv_the_frame_tv:
-      friendly_name: '[TV] The Frame TV'
-      supported_features: 0
-      state: unavailable
-    switch.lamp_globe_living:
-      friendly_name: Lamp, globe
-      state: 'on'
     switch.lamp_mushroom_living:
       friendly_name: Lamp, mushroom
-      state: 'on'
-  icon: mdi:lightbulb-group-outline
+      state: 'off'
+    switch.lamp_globe_living:
+      friendly_name: Lamp, globe
+      state: 'off'
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1690996655003'
   name: 'Kitchen lights: Off'
@@ -282,17 +266,36 @@
 - id: '1691002062131'
   name: 'Bedroom lights: Off'
   entities:
-    light.pendant_3:
+    light.pendant_2_6:
       supported_color_modes:
       - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendant (2)
+      supported_features: 32
+      state: 'off'
+    light.pendant_bedroom:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
       friendly_name: Pendant
       supported_features: 32
       state: 'off'
-    light.pendant_2_2:
+  icon: mdi:lightbulb-group-outline
+  metadata: {}
+- id: '1706691991132'
+  name: 'Veranda lights: Off'
+  entities:
+    light.wall_lantern_veranda:
       supported_color_modes:
       - brightness
-      friendly_name: Pendant  (2)
-      supported_features: 32
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Wall light, lantern
+      supported_features: 40
       state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
