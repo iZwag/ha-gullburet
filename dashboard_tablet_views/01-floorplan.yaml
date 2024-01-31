@@ -408,8 +408,8 @@ cards:
                           z-index: 14
                           '--mdc-icon-size': 25px
                       # STORAGE ROOM CEILING LIGHT
-                      # TODO: display different icon/label depending on state
-                      # TODO: Countdown with label when on
+                      # TODO: Countdown with label when on - 
+                      # It is hard to make a timer-sensor that updates every second in HA :/
                       - type: conditional
                         conditions:
                           - entity: light.ceiling_light_storage
@@ -420,7 +420,9 @@ cards:
                             icon: mdi:lightbulb
                             tap_action:
                               action: call-service
-                              service: script.storage_light_on_manual
+                              service: script.turn_on
+                              data:
+                                entity_id: script.storage_light_on_manual
                             hold_action:
                               action: more-info
                             style:
@@ -434,7 +436,7 @@ cards:
                             state: "on"
                         elements:
                           - type: state-label
-                            entity: sensor.storage_room_time_remaining
+                            entity: sensor.storage_room_light_time_remaining
                             tap_action:
                               action: none
                             hold_action:
@@ -458,19 +460,12 @@ cards:
                           z-index: 14
                           '--mdc-icon-size': 25px
                       # VERANDA STRING LIGHTS
-                      - type: state-icon
-                        entity: switch.plug_switch_string_lights_bryter
-                        icon: mdi:lightbulb
-                        tap_action:
-                          action: toggle
-                        hold_action:
-                          action: more-info
-                        style:
-                          left: 49%
-                          top: 2%
-                          z-index: 14
-                          '--mdc-icon-size': 25px
-                  # DE-SELECT ROOM ICON
+                      # De-clutter floorplan, remove devices that are
+                      # controlled automatically, such as this one
+                      #- type: state-icon
+                      #  entity: switch.plug_switch_string_lights_bryter
+                      #  icon: mdi:lightbulb
+                      #  tap_action:
                   # Adds a clickable icon to not select a room
                   - type: conditional
                     conditions:
@@ -478,7 +473,7 @@ cards:
                         state_not: "none"
                     elements:
                       - type: icon
-                        icon: mdi:close-circle-outline
+                        icon: mdi:window-close
                         tap_action:
                           action: call-service
                           service: script.deselect_floorplan_room
@@ -489,29 +484,11 @@ cards:
                           top: 2%
                           z-index: 14
                           color: '#03A9F4'
-                          '--mdc-icon-size': 35px
+                          '--mdc-icon-size': 30px
                   - type: conditional
                     conditions:
                       - entity: input_boolean.floorplan_show_icons
                         state: "on"
-                    elements:
-                      - type: state-icon
-                        entity: input_boolean.floorplan_show_icons
-                        icon: mdi:eye-off
-                        tap_action:
-                          action: toggle
-                        hold_action:
-                          action: none
-                        style:
-                          left: 5%
-                          top: 2%
-                          z-index: 14
-                          color: white
-                          '--mdc-icon-size': 35px
-                  - type: conditional
-                    conditions:
-                      - entity: input_boolean.floorplan_show_icons
-                        state: "off"
                     elements:
                       - type: state-icon
                         entity: input_boolean.floorplan_show_icons
@@ -525,9 +502,25 @@ cards:
                           top: 2%
                           z-index: 14
                           color: white
-                          '--mdc-icon-size': 35px
-                          '--paper-item-icon-active-color': white
-                  
+                          '--mdc-icon-size': 30px
+                          '--state-active-color': white
+                  - type: conditional
+                    conditions:
+                      - entity: input_boolean.floorplan_show_icons
+                        state: "off"
+                    elements:
+                      - type: state-icon
+                        entity: input_boolean.floorplan_show_icons
+                        icon: mdi:eye-off
+                        tap_action:
+                          action: toggle
+                        hold_action:
+                          action: none
+                        style:
+                          left: 5%
+                          top: 2%
+                          z-index: 14
+                          '--mdc-icon-size': 30px
                   # ###########################################################
                   # OUTLINES HIDDEN SELECT ICONS
                   # Veranda
