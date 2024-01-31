@@ -39,7 +39,10 @@ all_lights_off:
     target:
       entity_id: scene.bedroom_lights_off
     metadata: {}
-# -----------------------------------------------------------------------------
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.veranda_lights_off
 all_lights_on:
   alias: 'All lights: On'
   mode: restart
@@ -51,6 +54,10 @@ all_lights_on:
     target:
       entity_id: light.downlights_entry
   - delay: 00:00:01
+  - service: switch.turn_on
+    data: {}
+    target:
+      entity_id: switch.lamp_globe_living
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
@@ -64,17 +71,13 @@ all_lights_on:
   - service: switch.turn_on
     data: {}
     target:
-      entity_id: switch.mushroom_lamp_bryter
+      entity_id: switch.lamp_mushroom_living
   - service: light.turn_on
     data:
       color_temp: 400
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.mood_ball
-  - service: switch.turn_on
-    data: {}
-    target:
-      entity_id: switch.globe_switch_bryter
   - delay: 00:00:01
   - service: light.turn_on
     data:
@@ -101,7 +104,11 @@ all_lights_on:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlight_toilet
-# -----------------------------------------------------------------------------
+  - service: light.turn_on
+    data:
+      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+    target:
+      entity_id: light.wall_lantern_veranda
 calculate_risenoon:
   alias: Calculates RiseNoon-time
   mode: single
@@ -112,7 +119,6 @@ calculate_risenoon:
       time1: '{{ states(''sensor.sun_next_rising'') }}'
       time2: '{{ states(''sensor.sun_next_noon'') }}'
       entity_id: input_datetime.risenoon
-# -----------------------------------------------------------------------------
 calculate_noonset:
   alias: Calculates NoonSet-time
   mode: single
@@ -123,7 +129,6 @@ calculate_noonset:
       time1: '{{ states(''sensor.sun_next_noon'') }}'
       time2: '{{ states(''sensor.sun_next_setting'') }}'
       entity_id: input_datetime.noonset
-# -----------------------------------------------------------------------------
 bedtime_lights:
   alias: Bedtime-mode (Lights off)
   sequence:
@@ -153,7 +158,6 @@ bedtime_lights:
     metadata: {}
   mode: single
   icon: mdi:bed
-# -----------------------------------------------------------------------------
 select_floorplan_room:
   alias: Select floorplan room
   sequence:
@@ -173,7 +177,6 @@ select_floorplan_room:
       required: true
       name: Room name
       description: The name-ID of the room as text
-# -----------------------------------------------------------------------------
 deselect_floorplan_room:
   alias: De-select floorplan room
   sequence:
@@ -185,7 +188,6 @@ deselect_floorplan_room:
       entity_id: input_text.floorplan_select_state
   mode: single
   icon: mdi:select-remove
-# -----------------------------------------------------------------------------
 storage_room_light_on_auto:
   alias: Storage room - Light on - Auto
   sequence:
@@ -201,7 +203,6 @@ storage_room_light_on_auto:
     domain: light
   mode: single
   icon: mdi:lightbulb-auto
-# -----------------------------------------------------------------------------
 storage_room_light_on_manual:
   alias: Storage room - Light on - Manual
   sequence:
@@ -217,8 +218,6 @@ storage_room_light_on_manual:
     domain: light
   mode: single
   icon: mdi:lightbulb
-# -----------------------------------------------------------------------------
-# This script is work-in-progress and does not work currently
 masterdim_script:
   alias: Masterdim script
   mode: single
@@ -235,14 +234,14 @@ masterdim_script:
           max: 100
       required: true
   sequence:
-    - if:
-        - condition: state
-          entity_id: '{{ light_entity }}'
-          state: "on"
-      then:
-        - service: light.turn_on
-          metadata: {}
-          data:
-            brightness_pct: 69
-          target:
-            entity_id: '{{ light_entity }}'
+  - if:
+    - condition: state
+      entity_id: '{{ light_entity }}'
+      state: 'on'
+    then:
+    - service: light.turn_on
+      metadata: {}
+      data:
+        brightness_pct: 69
+      target:
+        entity_id: '{{ light_entity }}'
