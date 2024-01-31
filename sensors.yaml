@@ -61,11 +61,28 @@
       value_template: "{{ states('sensor.day') }}, {{ now().day }}.  {{ states('sensor.month') }} {{ now().year }}"
     
     # Temperature sensor for Kitchen Heater
-    kitchen_temperature:
-      friendly_name: "Kitchen Heater measured temperature"
+    temperature_kitchen:
+      friendly_name: "Kitchen temperature, measured by panel heater"
       unit_of_measurement: "°C"
-      value_template: "{{ state_attr('climate.kitchen_heater', 'current_temperature') }}"
+      value_template: "{{ state_attr('climate.heater_kitchen', 'current_temperature') }}"
       device_class: temperature
+      icon: mdi:thermometer
+
+    # Temperature sensor for Kitchen Heater
+    temperature_living:
+      friendly_name: "Living room temperature, measured by panel heater"
+      unit_of_measurement: "°C"
+      value_template: "{{ state_attr('climate.heater_living', 'current_temperature') }}"
+      device_class: temperature
+      icon: mdi:thermometer
+  
+    # Temperature sensor for Kitchen Heater
+    temperature_bedroom:
+      friendly_name: "Bedroom temperature, measured by panel heater"
+      unit_of_measurement: "°C"
+      value_template: "{{ state_attr('climate.heater_bedroom', 'current_temperature') }}"
+      device_class: temperature
+      icon: mdi:thermometer
 
     # Temperature sensor for current outdoor weather from weather integration
     outdoor_temperature:
@@ -73,6 +90,7 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
+      icon: mdi:thermometer
 
     # Finds the current setting of the physical remote for the heated sheet
     heated_sheet_setting:
@@ -90,79 +108,3 @@
           On
         {% endif %}
     
-    # FLOORPLAN LIGHT BRIGHTNESS INTERVAL-LEVEL SENSORS
-    # Defined here. Automatically updated by automations.
-    dim_pendant_bedroom:
-      friendly_name: "Bedroom pendant brightness level"
-      value_template: "{{ states('sensor.dim_pendant_bedroom') }}"
-      unit_of_measurement: '%'
-    
-    dim_pendants_office:
-      friendly_name: "Office pendants brightness level"
-      value_template: "{{ states('sensor.dim_pendants_office') }}"
-      unit_of_measurement: '%'
-    
-    dim_pendant_guest:
-      friendly_name: "Guest pendant brightness level"
-      value_template: "{{ states('sensor.dim_pendant_guest') }}"
-      unit_of_measurement: '%'
-    
-    dim_downlight_toilet:
-      friendly_name: " brightness level"
-      value_template: "{{ states('sensor.dim_downlight_toilet') }}"
-      unit_of_measurement: '%'
-
-    dim_downlights_bath:
-      friendly_name: "Guest pendant brightness level"
-      value_template: "{{ states('sensor.dim_downlights_bath') }}"
-      unit_of_measurement: '%'
-
-    dim_lightstrip_bath:
-      friendly_name: "Guest pendant brightness level"
-      value_template: "{{ states('sensor.dim_lightstrip_bath') }}"
-      unit_of_measurement: '%'
-
-    dim_downlights_entry:
-      friendly_name: "Entry downlights brightness level"
-      value_template: "{{ states('sensor.dim_downlights_entry') }}"
-      unit_of_measurement: '%'
-    
-    dim_spottrack_living:
-      friendly_name: "Living room spot-track brightness level"
-      value_template: "{{ states('sensor.dim_spottrack4_living') }}"
-      unit_of_measurement: '%'
-    
-    dim_downlights_living:
-      friendly_name: "Living room downlights brightness level"
-      value_template: "{{ states('sensor.dim_downlights_living') }}"
-      unit_of_measurement: '%'
-    
-    dim_pendants_dining:
-      friendly_name: "Dining pendants brightness level"
-      value_template: "{{ states('sensor.dim_pendants_dining') }}"
-      unit_of_measurement: '%'
-
-    dim_pendants_kitchen:
-      friendly_name: "Dining pendants brightness level"
-      value_template: "{{ states('sensor.dim_pendants_kitchen') }}"
-      unit_of_measurement: '%'
-    
-    dim_spottrack_kitchen:
-      friendly_name: "Dining pendants brightness level"
-      value_template: "{{ states('sensor.dim_spottrack_kitchen') }}"
-      unit_of_measurement: '%'
-
-    #dim_lightstrip_kitchen:
-    #  friendly_name: "Dining pendants brightness level"
-    #  value_template: "{{ states('sensor.dim_lightstrip_kitchen') }}"
-    #  unit_of_measurement: '%'
-    
-    # Attempting something different
-
-    #dim_lightstrip_kitchen:
-    #  friendly_name: "Kitchen lightstrip brightness level"
-    #  unit_of_measurement: '%'
-    #  state: >
-    #    "{{ state_attr('light.lightstrip_undershelf_kitchen', 'brightness') | default(0) }}"
-
-
