@@ -66,7 +66,6 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('climate.heater_kitchen', 'current_temperature') }}"
       device_class: temperature
-      icon: mdi:thermometer
 
     # Temperature sensor for Kitchen Heater
     temperature_living:
@@ -74,7 +73,6 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('climate.heater_living', 'current_temperature') }}"
       device_class: temperature
-      icon: mdi:thermometer
   
     # Temperature sensor for Kitchen Heater
     temperature_bedroom:
@@ -82,7 +80,6 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('climate.heater_bedroom', 'current_temperature') }}"
       device_class: temperature
-      icon: mdi:thermometer
 
     # Temperature sensor for current outdoor weather from weather integration
     outdoor_temperature:
@@ -90,7 +87,6 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
-      icon: mdi:thermometer
 
     # Finds the current setting of the physical remote for the heated sheet
     heated_sheet_setting:
