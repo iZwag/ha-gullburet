@@ -93,15 +93,30 @@
       state: >
         {% set brightness = state_attr('light.wall_lantern_veranda', 'brightness') %}
         {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
-    # -------------------------------------------------------------------------
-    - name: "Storage rom light time remaining"
-      unique_id: storage_room_timer_remaining
-      unit_of_measurement: 'Time'
+    
+- sensor:
+    - name: "Storage room light time remaining"
+      unique_id: storage_room_time_remaining
+      #unit_of_measurement: 'Time'
       icon: mdi:sun-clock
       state: >
-        {% if states('timer.storage_room_light_timer') == 'active' %}
-          {{ (state_attr('timer.storage_room_light_timer', 'duration').total_seconds() - as_timestamp(now()) + as_timestamp(state_attr('timer.storage_room_light_timer', 'finishes_at'))) | timestamp_custom('%M:%S', false) }}
-        {% else %}
-          '00:00'
-        {% endif %}
- 
+          {% set current_time = states('sensor.date_time') %}
+          {% if states('timer.storage_room_light_timer') == 'active' %}
+            {% set finishes_at = as_timestamp(state_attr('timer.storage_room_light_timer', 'finishes_at')) %}
+            {% set now_ts = as_timestamp(now()) %}
+            {% set remaining_seconds = (finishes_at - now_ts) %}
+            {% if remaining_seconds > 0 %}
+              {{ remaining_seconds | timestamp_custom('%M:%S', false) }}
+            {% else %}
+              '00:00'
+            {% endif %}
+          {% else %}
+            '00:00'
+          {% endif %}
+
+- binary_sensor:
+    - name: "Esmeralda Mop Ready"
+      unique_id: esmeralda_mop_ready
+      state: >
+        {{ is_state('binary_sensor.esmeralda_mop_attached', 'on') 
+            and is_state('binary_sensor.esmeralda_water_box_attached', 'on') }}
