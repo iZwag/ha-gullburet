@@ -18,11 +18,11 @@ button_card_templates:
       card:
         - box-shadow: "0px 0.2vw 0.8vw 0px rgba(0,0,0,0.1)"
         - background-color: "rgba(25,25,25,0.25)"
-        - padding: 15px
+        - padding: var(--ha-card-padding)
         - --keep-background: "true"
       icon:
-        - width: 25px
-        - height: 25px
+        - width: 26px
+        - height: 26px
         - color: >
             [[[ 
               if (variables.link_active == "true") return "var(--primary-text-color)";
@@ -56,13 +56,14 @@ button_card_templates:
   # LIGHT MODES: ALL ON, ALL OFF, BEDTIME ETC.
   light_mode:
     show_state: false
-    size: 25px
+    size: 20px
     #aspect_ratio: 3/2
     styles:
       card:
-        - height: "62px"
         - border-radius: var(--button-card-border-radius)
         - background: var(--button-card-background)
+        - margin: "0px !important"
+        - padding: 7px # This makes it match 50px height
       name:
         - font-size: "0.8em"
         - color: var(--secondary-text-color)
@@ -91,10 +92,9 @@ button_card_templates:
         - border-radius: var(--button-card-border-radius)
 
   vacuum_fan_speed:
-    #layout: icon
     variables:
       fan_speed: "Standard"
-    #aspect_ratio: "1/1"
+    size: 26px
     show_name: false
     tap_action:
       action: call-service
@@ -105,9 +105,8 @@ button_card_templates:
         fan_speed: '[[[ return variables.fan_speed ]]]'
     styles:
       card: 
-        #- height: var(--button-card-size)
-        - padding: 12px
-        #- margin: 12px 6px
+        - padding: var(--ha-card-padding)
+        - margin: 0px
         - background-color: >
             [[[
               if (variables.fan_speed == entity.attributes.fan_speed) return "var(--button-card-active-background)";
@@ -115,11 +114,7 @@ button_card_templates:
             ]]]
         - border-radius: var(--button-card-border-radius)
       icon:
-        - height: 26px
         - color: var(--primary-text-color)
-      #grid:
-       # - grid-template-areas: '"n" "i" "s"'
-       # - grid-template-rows: 10% 1fr 10%
   
   vacuum_fan_and_room:
     layout: icon
