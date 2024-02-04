@@ -104,3 +104,24 @@
           On
         {% endif %}
     
+    esmeralda_battery:
+      friendly_name: "Esmeralda battery status"
+      unit_of_measurement: "%"
+      value_template: "{{ state_attr('vacuum.esmeralda', 'battery_level') }}"
+      device_class: battery
+
+    esmeralda_fan_speed:
+      friendly_name: "Esmeralda current fan-speed"
+      value_template: >-
+        {% set fan_speed = state_attr('vacuum.esmeralda', 'fan_speed') %}
+        {% if fan_speed == "Silent" %}
+          Quiet
+        {% elif fan_speed == "Standard" %}
+          Balanced
+        {% elif fan_speed == "Medium" %}
+          Turbo
+        {% elif fan_speed == "Turbo" %}
+          Max
+        {% else %}
+          Unknown
+        {% endif %}
