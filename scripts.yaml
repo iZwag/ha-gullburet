@@ -245,3 +245,42 @@ masterdim_script:
         brightness_pct: 69
       target:
         entity_id: '{{ light_entity }}'
+robot_clean_target_room:
+  alias: Robot clean - Target room
+  sequence:
+  - service: vacuum.set_fan_speed
+    metadata: {}
+    data:
+      fan_speed: '{{ fan_speed }}'
+    target:
+      entity_id: vacuum.esmeralda
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: xiaomi_miio.vacuum_clean_segment
+    target:
+      entity_id: vacuum.esmeralda
+    data:
+      segments: '{{ room_number_id }}'
+  mode: single
+  icon: mdi:robot-vacuum
+  fields:
+    room_number_id:
+      selector:
+        number:
+          min: 16
+          max: 21
+          step: 1
+      name: Room number-ID
+      description: 16 = entry, 17 = kitchen, 18 = living room, 19 = guest room, 20
+        = bedroom, 21 = office
+      default: 16
+      required: true
+    fan_speed:
+      selector:
+        text:
+      name: Fan-speed
+      description: Choose between "SIlent", "Standard", "Medium" and "Turbo"
+      default: balanced
