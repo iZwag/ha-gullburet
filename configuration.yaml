@@ -61,3 +61,18 @@ camera:
 # ROOM MAPPING FROM miiocli
 # [[16, '107001052585'], [17, '107001052584'], [18, '107001074474'], [19, '107001074480'], 
 # [20, '107001052586'], [21, '107001074479']]
+# 21 = office
+# 20 = bedroom
+# 19 = guestroom
+# 18 = living room
+# 17 = kitchen
+
+# Fan options - Xiaomi
+# Silent
+# Standard
+# Medium
+# Turbo
+
+# statuses
+# "Returning home"
+# "Segment cleaning"
