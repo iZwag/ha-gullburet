@@ -136,7 +136,19 @@ cards:
                     - type: custom:mushroom-title-card
                       title: ''
                       subtitle: All lights
-                    - type: horizontal-stack
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: 24px 12px 12px;
+                            color: var(--primary-text-color);
+                          }
+                    - type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
                       cards:
                       - type: "custom:button-card"
                         icon: mdi:lightbulb-group
@@ -184,6 +196,12 @@ cards:
                     - type: custom:mushroom-title-card
                       title: ''
                       subtitle: Clean apartment
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: 24px 12px 12px;
+                            color: var(--primary-text-color);
+                          }
                     - type: custom:mushroom-vacuum-card
                       entity: vacuum.esmeralda
                       icon_animation: true
@@ -206,31 +224,37 @@ cards:
                         layout: horizontal
                         name: Battery
                         card_mod:
-                        style: |
-                          ha-card {
-                            background-color: var(--nested-card-background);
-                          }
+                          style: |
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
                       - type: custom:mushroom-entity-card
                         entity: sensor.esmeralda_fan_speed
                         name: Mode
                         icon: mdi:fan
                         icon_color: brown
                         card_mod:
-                        style: |
-                          ha-card {
-                            background-color: var(--nested-card-background);
-                          }
+                          style: |
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
                       - type: custom:mushroom-entity-card
                         entity: binary_sensor.esmeralda_mop_ready
                         icon_color: pink
                         layout: horizontal
                         name: Mop
                         card_mod:
-                        style: |
-                          ha-card {
-                            background-color: var(--nested-card-background);
-                          }
-                    - type: horizontal-stack
+                          style: |
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
                       cards:
                       - type: custom:button-card
                         entity: vacuum.esmeralda
