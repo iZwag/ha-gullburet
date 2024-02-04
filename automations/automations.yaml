@@ -38,48 +38,47 @@
               data:
                 brightness: "{{ trigger.to_state.attributes.brightness }}"
   mode: single
-- id: "1702586142625"
+- id: '1706688448886'
   alias: Tablet charge-switch ON/OFF
-  description:
-    Turns the tablet charge-switch ON if it is below 20%, and OFF if it
+  description: Turns the tablet charge-switch ON if it is below 20%, and OFF if it
     is above 80%.
   trigger:
-    - alias: Below 20 pcnt
-      platform: numeric_state
-      entity_id:
-        - sensor.lenovo_tab_m10_fhd_plus_batteri
-      below: 20
-      id: below-20-pcnt
-    - alias: Above 80 pcnt
-      platform: numeric_state
-      entity_id:
-        - sensor.lenovo_tab_m10_fhd_plus_batteri
-      above: 80
-      id: above-80-pcnt
+  - alias: Below 20 pcnt
+    platform: numeric_state
+    entity_id:
+    - sensor.lenovo_tab_m10_fhd_plus_batteri
+    below: 20
+    id: below-20-pcnt
+  - alias: Above 80 pcnt
+    platform: numeric_state
+    entity_id:
+    - sensor.lenovo_tab_m10_fhd_plus_batteri
+    above: 80
+    id: above-80-pcnt
   condition: []
   action:
-    - alias: Choose switch ON or OFF
-      choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - below-20-pcnt
-          sequence:
-            - alias: Turn Tablet charge-switch ON
-              type: turn_on
-              device_id: e7edcdcfed58b7cedd57142e4434bc5d
-              entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
-              domain: switch
-        - conditions:
-            - condition: trigger
-              id:
-                - above-80-pcnt
-          sequence:
-            - alias: Turn charge-switch OFF
-              type: turn_off
-              device_id: e7edcdcfed58b7cedd57142e4434bc5d
-              entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
-              domain: switch
+  - alias: Choose switch ON or OFF
+    choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - below-20-pcnt
+      sequence:
+      - alias: Turn Tablet charge-switch ON
+        type: turn_on
+        device_id: e7edcdcfed58b7cedd57142e4434bc5d
+        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id:
+        - above-80-pcnt
+      sequence:
+      - alias: Turn charge-switch OFF
+        type: turn_off
+        device_id: e7edcdcfed58b7cedd57142e4434bc5d
+        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
+        domain: switch
   mode: single
 - id: "1702642524314"
   alias: Tablet motion turns screen ON/OFF
