@@ -115,14 +115,21 @@ ios-dark-mode:
   input-hover-line-color: var(--secondary-text-color)
   # input-hover-line-color: var(--light-primary-color)
 
-  # iZwag's added/changed styles
+  # ###########################################################################
+  # ALL BELOW THIS LINE ARE @iZwag's ADDED/CHANGED STYLES
   # Added to style HA Dashboard HACS interface
   sidebar-background: "#00FF00"
   sidebar-min-width: 100px
   sidebar-max-width: 700px
   sidebar-relative-width: 24%
+
+  ha-card-padding: 12px # My own. It's non-standard
+
   nested-card-background: transparent
-  button-card-border-radius: 10px
+  button-card-border-radius: 8px # ha-card-border-radius MINUS ha-card-padding
   button-card-background: rgba(var(--rgb-primary-text-color), 0.05)
   button-card-active-background: rgba(var(--rgb-primary-text-color), 0.2)
-  button-card-size: 62px
+  button-card-size: 50px
+
+  # For the custom:layout-card
+  masonry-view-card-margin: 0px
