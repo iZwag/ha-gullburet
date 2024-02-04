@@ -1,6 +1,6 @@
 title: "Floorplan control"
 path: "floorplan"
-background: center / cover no-repeat url("/local/ui/bg-6.jpg") fixed
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
 type: "custom:ha-dashboard"
 theme: ios-dark-mode
 badges: []
@@ -95,12 +95,9 @@ sidebar:
               - height: 37.5vh
         - type: custom:mushroom-chips-card
           chips:
-            - type: entity
-              entity: sensor.hall_sensor_temperature
-              icon: mdi:home-thermometer
             #- type: entity
-            #  entity: sensor.electricity_price_tibber
-            #  icon: mdi:lightning-bolt-circle
+            #  entity: sensor.hall_sensor_temperature
+            #  icon: mdi:home-thermometer
             - type: entity
               entity: sensor.outdoor_temperature
               icon: mdi:thermometer
@@ -108,7 +105,7 @@ sidebar:
           card_mod:
             style: |
               ha-card {
-                --chip-background:: rgba(25, 25, 25, 0.2);
+                --chip-background: rgba(25, 25, 25, 0.2);
                 --primary-text-color: var(--secondary-text-color);
               }
 cards:
@@ -125,63 +122,151 @@ cards:
             cards:
             - type: conditional
               conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state: "none"
+              - condition: state
+                entity: input_text.floorplan_select_state
+                state: "none"
               card:
-                  type: custom:stack-in-card
-                  mode: vertical
-                  cards:
+                type: vertical-stack
+                cards:
+                  - type: custom:mushroom-title-card
+                    title: Gullburet
+                  - type: custom:stack-in-card
+                    mode: vertical
+                    cards:
                     - type: custom:mushroom-title-card
-                      title: Gullburet
+                      title: ''
+                      subtitle: All lights
                     - type: horizontal-stack
                       cards:
-                        - type: "custom:button-card"
-                          icon: mdi:lightbulb-group
-                          name: Alle på
-                          template: light_mode
-                          entity: script.all_lights_on
-                          tap_action:
-                            action: call-service
-                            service: script.turn_on
-                            data:
-                              entity_id: script.all_lights_on
-                        - type: "custom:button-card"
-                          icon: mdi:lightbulb-group-off-outline
-                          name: Alle av
-                          entity: script.all_lights_off
-                          template: light_mode
-                          tap_action:
-                            action: call-service
-                            service: script.turn_on
-                            data:
-                              entity_id: script.all_lights_off
-                        - type: "custom:button-card"
-                          icon: mdi:bed
-                          name: Leggetid
-                          template: light_mode
-                          entity: script.bedtime_lights
-                          tap_action:
-                            action: call-service
-                            service: script.turn_on
-                            data:
-                              entity_id: script.bedtime_lights
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb-group
+                        name: "Turn ON"
+                        template: light_mode
+                        entity: script.all_lights_on
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.all_lights_on
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb-group-off-outline
+                        name: "Turn OFF"
+                        entity: script.all_lights_off
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.all_lights_off
+                      - type: "custom:button-card"
+                        icon: mdi:bed
+                        name: Bedtime
+                        template: light_mode
+                        entity: script.bedtime_lights
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.bedtime_lights
                     - type: custom:mushroom-number-card
                       entity: input_number.apartment_dimmer
                       layout: horizontal
-                      name: Dim all lights
+                      name: Brigthness
                       icon_color: accent
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: custom:stack-in-card
+                    mode: vertical
+                    cards:
+                    - type: custom:mushroom-title-card
+                      title: ''
+                      subtitle: Clean apartment
+                    - type: custom:mushroom-vacuum-card
+                      entity: vacuum.esmeralda
+                      icon_animation: true
+                      fill_container: false
+                      commands:
+                        - start_pause
+                        - stop
+                        - return_home
+                        - locate
+                      layout: horizontal
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                    - type: horizontal-stack
+                      cards:
+                      - type: custom:mushroom-entity-card
+                        entity: sensor.esmeralda_battery
+                        layout: horizontal
+                        name: Battery
+                        card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                      - type: custom:mushroom-entity-card
+                        entity: sensor.esmeralda_fan_speed
+                        name: Mode
+                        icon: mdi:fan
+                        icon_color: brown
+                        card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                      - type: custom:mushroom-entity-card
+                        entity: binary_sensor.esmeralda_mop_ready
+                        icon_color: pink
+                        layout: horizontal
+                        name: Mop
+                        card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                    - type: horizontal-stack
+                      cards:
+                      - type: custom:button-card
+                        entity: vacuum.esmeralda
+                        icon: mdi:power-sleep
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Silent"
+                      - type: custom:button-card
+                        icon: mdi:fan
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Standard"
+                      - type: custom:button-card
+                        icon: mdi:fan-plus
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Medium"
+                      - type: custom:button-card
+                        icon: mdi:turbine
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Turbo"
             - type: conditional
               conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state_not: "none"
+              - condition: state
+                entity: input_text.floorplan_select_state
+                state_not: "none"
               card:
-                  type: custom:stack-in-card
-                  mode: vertical
-                  cards:
-                    - type: custom:mushroom-title-card
-                      title: Ikke Gullburet
+                type: custom:stack-in-card
+                mode: vertical
+                cards:
+                - type: custom:mushroom-title-card
+                  title: Ikke Gullburet
           # 3D FLOORPLAN VISUALIZATION COLUMN
           - type: col
             class: "col-md-7 col-xxl-8"
@@ -501,7 +586,7 @@ cards:
                         action: none
                       style:
                         left: 94%
-                        top: 2%
+                        top: 7%
                         z-index: 15
                         color: '#03A9F4'
                         '--mdc-icon-size': 30px
@@ -544,7 +629,7 @@ cards:
                       hold_action:
                         action: none
                       style:
-                        left: 5%
+                        left: 94%
                         top: 2%
                         z-index: 15
                         color: white
@@ -563,7 +648,7 @@ cards:
                       hold_action:
                         action: none
                       style:
-                        left: 5%
+                        left: 94%
                         top: 2%
                         z-index: 15
                         '--mdc-icon-size': 30px
