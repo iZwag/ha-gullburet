@@ -8,91 +8,346 @@
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.pendant_bedroom', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Office pendants brightness level"
       unique_id: pendants_office_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.pendants_office', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Guest pendant brightness level"
       unique_id: pendant_guest_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.pendant_guest', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Entry downlights brightness level"
       unique_id: downlights_entry_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.downlights_entry', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Toilet downlight brightness level"
       unique_id: downlight_toilet_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.downlight_toilet', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Bathroom downlights brightness level"
       unique_id: downlights_bath_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.downlights_bath', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Bathroom lightstrip brightness level"
       unique_id: lightstrip_bath_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.lightstrip_bath', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Living room spottrack brightness level"
       unique_id: spottrack_living_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.spottrack4_living', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Living room downlights brightness level"
       unique_id: downlights_living_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.downlights_living', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Dining pendants brightness level"
       unique_id: pendants_dining_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.pendants_living', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Kitchen pendants brightness level"
       unique_id: pendants_kitchen_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.pendants_kitchen', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Kitchen spottrack brightness level"
       unique_id: spottrack_kitchen_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.spottrack6_kitchen', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }} 
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %} 
     - name: "Kitchen lightstrip brightness level"
       unique_id: lightstrip_undershelf_kitchen_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.lightstrip_undershelf_kitchen', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Storage room ceiling light brightness level"
       unique_id: ceiling_light_storage_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.ceiling_light_storage', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     - name: "Veranda wall lantern brightness level"
       unique_id: wall_lantern_veranda_dim
       unit_of_measurement: '%'
       state: >
         {% set brightness = state_attr('light.wall_lantern_veranda', 'brightness') %}
-        {{ (brightness / 255 * 100) | round(0) if brightness != None else 0 }}
+        {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
+        {% if percent <= 0 %}
+          0
+        {% elif percent <= 5 %}
+          5
+        {% elif percent <= 10 %}
+          10
+        {% elif percent <= 20 %}
+          20
+        {% elif percent <= 30 %}
+          30
+        {% elif percent <= 50 %}
+          50
+        {% elif percent <= 75 %}
+          75
+        {% else %}
+          100
+        {% endif %}
     
 - sensor:
     - name: "Storage room light time remaining"
