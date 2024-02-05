@@ -247,15 +247,6 @@ cards:
                     - type: horizontal-stack
                       cards:
                       - type: custom:mushroom-entity-card
-                        entity: sensor.esmeralda_battery
-                        layout: horizontal
-                        name: Battery
-                        card_mod:
-                          style: |
-                            ha-card {
-                              background-color: var(--nested-card-background);
-                            }
-                      - type: custom:mushroom-entity-card
                         entity: sensor.esmeralda_fan_speed
                         name: Mode
                         icon: mdi:fan
@@ -269,7 +260,7 @@ cards:
                         entity: binary_sensor.esmeralda_mop_ready
                         icon_color: pink
                         layout: horizontal
-                        name: Mop
+                        name: "Mop ready"
                         card_mod:
                           style: |
                             ha-card {
