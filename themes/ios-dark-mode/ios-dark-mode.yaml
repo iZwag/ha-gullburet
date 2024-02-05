@@ -133,3 +133,7 @@ ios-dark-mode:
 
   # For the custom:layout-card
   masonry-view-card-margin: 0px
+
+  # For Mushroom card styling
+  mush-title-padding: 24px var(--ha-card-padding) var(--ha-card-padding)
+  control-border-radius: var(--button-card-border-radius)
