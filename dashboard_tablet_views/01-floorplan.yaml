@@ -951,18 +951,12 @@ cards:
                     z-index: 2
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Office
                 - type: image
@@ -975,18 +969,12 @@ cards:
                     z-index: 2
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Guest
                 - type: image
@@ -999,18 +987,12 @@ cards:
                     z-index: 2
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Toilet
                 - type: image
@@ -1023,18 +1005,12 @@ cards:
                     z-index: 2
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Bathroom downlights
                 - type: image
@@ -1048,18 +1024,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Bathroom lightstrip
                 - type: image
@@ -1072,18 +1042,12 @@ cards:
                     z-index: 2
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Entry 
                 - type: image
@@ -1098,16 +1062,10 @@ cards:
                     "0": opacity(0%)
                     "5": opacity(30%)
                     "10": opacity(40%)
-                    #"15": opacity(36%)
                     "20": opacity(50%)
-                    #"25": opacity(52%)
                     "30": opacity(60%)
-                    #"40": opacity(68%)
                     "50": opacity(70%)
-                    #"60": opacity(80%)
                     "75": opacity(85%)
-                    #"80": opacity(90%)
-                    #"90": opacity(95%)
                     "100": opacity(100%)
                 # Living room spottrack
                 - type: image
@@ -1121,18 +1079,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Living room downlights
                 - type: image
@@ -1146,18 +1098,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Dining pendants
                 - type: image
@@ -1171,18 +1117,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Kitchen pendants
                 - type: image
@@ -1196,18 +1136,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Kitchen spottrack
                 - type: image
@@ -1221,18 +1155,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Kitchen lightstrip
                 - type: image
@@ -1246,18 +1174,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Storage room
                 - type: image
@@ -1271,18 +1193,12 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                 # Veranda
                 - type: image
@@ -1296,19 +1212,11 @@ cards:
                     mix-blend-mode: lighten
                   state_filter:
                     "0": opacity(0%)
-                    "5": opacity(20%)
-                    "10": opacity(28%)
-                    "15": opacity(36%)
-                    "20": opacity(44%)
-                    "25": opacity(52%)
+                    "5": opacity(30%)
+                    "10": opacity(40%)
+                    "20": opacity(50%)
                     "30": opacity(60%)
-                    "40": opacity(68%)
-                    "50": opacity(75%)
-                    "60": opacity(80%)
-                    "70": opacity(85%)
-                    "80": opacity(90%)
-                    "90": opacity(95%)
+                    "50": opacity(70%)
+                    "75": opacity(85%)
                     "100": opacity(100%)
                   
-
-                      #mix-blend-mode: lighten # Test: hard-light, soft-light, luminosity
