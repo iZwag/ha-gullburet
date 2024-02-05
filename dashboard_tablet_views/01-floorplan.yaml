@@ -659,13 +659,6 @@ cards:
                         top: 6.5%
                         z-index: 15
                         '--mdc-icon-size': 25px
-                    # VERANDA STRING LIGHTS
-                    # De-clutter floorplan, remove devices that are
-                    # controlled automatically, such as this one
-                    #- type: state-icon
-                    #  entity: switch.plug_switch_string_lights_bryter
-                    #  icon: mdi:lightbulb
-                    #  tap_action:
                 # Adds a clickable icon and hidden layers on sides to un-select a room
                 - type: conditional
                   conditions:
