@@ -284,3 +284,27 @@ robot_clean_target_room:
       name: Fan-speed
       description: Choose between "SIlent", "Standard", "Medium" and "Turbo"
       default: balanced
+speakers_join_all:
+  alias: Speakers - Join all common-rooms
+  sequence:
+  - service: media_player.join
+    data:
+      group_members:
+      - media_player.sonos_move
+      - media_player.kjokken
+    target:
+      entity_id: media_player.stue
+  mode: restart
+  icon: mdi:speaker-multiple
+speakers_unjoin_all:
+  alias: Speakers - Unjoin all common-rooms
+  sequence:
+  - service: media_player.unjoin
+    target:
+      entity_id:
+      - media_player.stue
+      - media_player.kjokken
+      - media_player.sonos_move
+    data: {}
+  mode: restart
+  icon: mdi:speaker
