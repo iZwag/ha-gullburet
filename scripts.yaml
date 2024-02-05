@@ -308,3 +308,32 @@ speakers_unjoin_all:
     data: {}
   mode: restart
   icon: mdi:speaker
+sun_cycle_set_next_event_text:
+  alias: Sun-cycle - Set next event text
+  sequence:
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.sun_cycle_next_event
+    data:
+      value: "# This script handles both event_time that is in the format  # yyyy-mm-ddTHH:MM:SS+HH:MM
+        # HH:MM:SS {% set ns = namespace(formatted_time='') %}  {% if event_time is
+        string and event_time | length > 8 %}\n  {% set dt = as_datetime(event_time)
+        %}   \n  {% set local_dt = dt.astimezone(now().tzinfo) %}   \n  {% set ns.formatted_time
+        = local_dt.strftime('%H:%M') %} \n{% elif event_time is string %}   \n  {%
+        set ns.formatted_time = event_time.split(':')[0] ~ ':' ~ event_time.split(':')[1]
+        %} \n{% endif %}  \"{{ next_sun_event }} at {{ ns.formatted_time }}\""
+  mode: single
+  fields:
+    next_sun_event:
+      selector:
+        text:
+      name: Next sun event
+      description: A text name for the event, such as Midnight, Dawn, Sunrise, Risenoon,
+        Noon, Noonset, Sunset and Dusk.
+      required: true
+    event_time:
+      selector:
+        text: {}
+      name: Event time
+      description: The time of the next event. Must support hours and minutes
+  icon: mdi:sun-wireless
