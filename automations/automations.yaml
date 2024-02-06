@@ -240,7 +240,7 @@
             duration: -00:10:00
           target:
             entity_id: timer.heated_sheet_timer
-  mode: single
+  mode: queued
 
 # Bedtime: Start Heated Sheet 30 minutes before bedtime, and turn off lights.
 - id: "1705059631645"
