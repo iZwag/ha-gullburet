@@ -116,39 +116,29 @@ button_card_templates:
       icon:
         - color: var(--primary-text-color)
   
+  # TODO: Disable the card from working if Esmeralda is already cleaning
   vacuum_fan_and_room:
-    layout: icon
     variables:
       fan_speed: "Standard"
-      disabled: "false"
-      ative: "false"
-    aspect_ratio: "1/1"
+      target_room: 16
+    size: 26px
+    show_name: false
+    tap_action:
+      action: call-service
+      service: script.robot_clean_target_room
+      data:
+        room_number_id: '[[[ return variables.target_room ]]]'
+        fan_speed: '[[[ return variables.fan_speed ]]]'
     styles:
-      icon:
-        - height: 25px
-        - color: >
-            [[[ 
-              if (variables.disabled == "true") return "rgb(var(--rgb-disabled))";
-              return "var(--primary-text-color)";
-            ]]]
       card: 
-        - background-color: >
-            [[[
-              if (variables.active == "true") return "rgba(var(--rgb-primary-text-color), 0.2)";
-              if (variables.disabled == "true") return "rgba(var(--rgb-disabled), 0.2)";
-              return "var(--button-card-background)";
-            ]]]
-        - border-radius: "10px"
-      grid:
-        - grid-template-areas: '"n" "i" "s"'
-        - grid-template-rows: 10% 1fr 10%
-
-
-
-
+        - padding: var(--ha-card-padding)
+        - margin: 0px
+        - background: var(--button-card-background)
+        - border-radius: var(--button-card-border-radius)
+      icon:
+        - color: var(--primary-text-color)
+  
     # icon color: var(--primary-text-color)
     # icon color disabled: rgb(var(--rgb-disabled))
     # background color: rgba(var(--rgb-primary-text-color), 0.05)
     # bg color disabled: rgba(var(--rgb-disabled), 0.2)
-
-
