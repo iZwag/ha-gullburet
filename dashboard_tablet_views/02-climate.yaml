@@ -94,12 +94,16 @@ sidebar:
               - height: 37.5vh
         - type: custom:mushroom-chips-card
           chips:
-            - type: entity
-              entity: sensor.hall_sensor_temperature
-              icon: mdi:home-thermometer
-            - type: entity
-              entity: sensor.outdoor_temperature
-              icon: mdi:thermometer
+          - type: action
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/0
+            icon: mdi:cog
+          #- type: spacer
+          - type: weather
+            entity: weather.yr_weather_home
+            show_temperature: true
+            show_conditions: true
           alignment: center
           card_mod:
             style: |
