@@ -252,7 +252,7 @@ cards:
                     mode: vertical
                     cards:
                     - type: markdown
-                      content: " ### Cleaning"
+                      content: "### Cleaning"
                       card_mod:
                         style: |
                           ha-markdown {
@@ -303,38 +303,58 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: "custom:layout-card"
-                      layout_type: grid
-                      layout:
-                        grid-gap: "0px var(--ha-card-padding)"
-                        grid-template-columns: 1fr 1fr 1fr 1fr
-                        margin: 0px
-                        padding: var(--ha-card-padding)
-                      cards:
-                      - type: custom:button-card
-                        entity: vacuum.esmeralda
-                        icon: mdi:power-sleep
-                        template: vacuum_fan_speed
-                        variables:
-                          fan_speed: "Silent"
-                      - type: custom:button-card
-                        icon: mdi:fan
-                        entity: vacuum.esmeralda
-                        template: vacuum_fan_speed
-                        variables:
-                          fan_speed: "Standard"
-                      - type: custom:button-card
-                        icon: mdi:fan-plus
-                        entity: vacuum.esmeralda
-                        template: vacuum_fan_speed
-                        variables:
-                          fan_speed: "Medium"
-                      - type: custom:button-card
-                        icon: mdi:turbine
-                        entity: vacuum.esmeralda
-                        template: vacuum_fan_speed
-                        variables:
-                          fan_speed: "Turbo"
+                    - type: conditional
+                      conditions:
+                        - type: state
+                          entity: binary_sensor.esmeralda_mop_ready
+                          state_not: "on"
+                      card:
+                      - type: "custom:layout-card"
+                        layout_type: grid
+                        layout:
+                          grid-gap: "0px var(--ha-card-padding)"
+                          grid-template-columns: 1fr 1fr 1fr 1fr
+                          margin: 0px
+                          padding: var(--ha-card-padding)
+                        cards:
+                        - type: custom:button-card
+                          entity: vacuum.esmeralda
+                          icon: mdi:power-sleep
+                          template: vacuum_fan_speed
+                          variables:
+                            fan_speed: "Silent"
+                        - type: custom:button-card
+                          icon: mdi:fan
+                          entity: vacuum.esmeralda
+                          template: vacuum_fan_speed
+                          variables:
+                            fan_speed: "Standard"
+                        - type: custom:button-card
+                          icon: mdi:fan-plus
+                          entity: vacuum.esmeralda
+                          template: vacuum_fan_speed
+                          variables:
+                            fan_speed: "Medium"
+                        - type: custom:button-card
+                          icon: mdi:fan-speed-3
+                          entity: vacuum.esmeralda
+                          template: vacuum_fan_speed
+                          variables:
+                            fan_speed: "Turbo"
+                    - type: conditional
+                      conditions:
+                        - type: state
+                          entity: binary_sensor.esmeralda_mop_ready
+                          state: "on"
+                      card:
+                      - type: "custom:layout-card"
+                        layout_type: grid
+                        layout:
+                          grid-gap: "0px var(--ha-card-padding)"
+                          grid-template-columns: 1fr 1fr 1fr 1fr
+                          margin: 0px
+                          padding: var(--ha-card-padding)
+
                   # MEDIA SECTION
                   - type: custom:stack-in-card
                     mode: vertical
@@ -499,7 +519,7 @@ cards:
                     cards:
                     - type: markdown
                       content: >
-                        Send Esmeralda to clean only the kitchen.
+                        ###### Send Esmeralda to clean only the kitchen.
 
                         Please lift barstools onto island, and look for debris
                         on the floor before starting.
@@ -533,7 +553,7 @@ cards:
                           fan_speed: "Medium"
                           target_room: 17
                       - type: custom:button-card
-                        icon: mdi:turbine
+                        icon: mdi:fan-speed-3
                         entity: script.robot_clean_target_room
                         template: vacuum_fan_and_room
                         variables:
