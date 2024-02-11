@@ -129,159 +129,161 @@
       light_entity: light.downlights_entry
       brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
 
-- id: "1691932328153"
+- id: '1707168721809'
   alias: Auto masterdim with Sun-cycle
-  description:
-    Automatically adjusts the brightness of all lights in the apartment
-    (masterdim) at 6 times during the suns cycle.
+  description: Automatically adjusts the brightness of all lights in the apartment
+    (masterdim) at 8 times during the suns cycle.
   trigger:
-    - platform: time
-      at: sensor.sun_next_midnight
-      id: midnight
-    - platform: time
-      at: sensor.sun_next_dawn
-      id: dawn
-    - platform: time
-      at: sensor.sun_next_rising
-      id: sunrise
-    - platform: time
-      at: input_datetime.risenoon
-      id: risenoon
-    - platform: time
-      id: noon
-      at: sensor.sun_next_noon
-    - platform: time
-      at: input_datetime.noonset
-      id: noonset
-    - platform: time
-      at: sensor.sun_next_setting
-      id: sunset
-    - platform: time
-      at: sensor.sun_next_dusk
-      id: dusk
-  condition: []
+  - platform: time
+    at: sensor.sun_next_midnight
+    id: midnight
+  - platform: time
+    at: sensor.sun_next_dawn
+    id: dawn
+  - platform: time
+    at: sensor.sun_next_rising
+    id: sunrise
+  - platform: time
+    at: input_datetime.risenoon
+    id: risenoon
+  - platform: time
+    at: sensor.sun_next_noon
+    id: noon
+  - platform: time
+    at: input_datetime.noonset
+    id: noonset
+  - platform: time
+    at: sensor.sun_next_setting
+    id: sunset
+  - platform: time
+    at: sensor.sun_next_dusk
+    id: dusk
+  condition:
+  - condition: state
+    entity_id: input_boolean.auto_suncycle_masterdim
+    state: 'on'
   action:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - midnight
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_lowest') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_dawn') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - dawn
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_low') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_rising') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - sunrise
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_medium') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('input_datetime.risenoon') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - risenoon
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_high') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_noon') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - noon
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_highest') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('input_datetime.noonset') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - noonset
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_high') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_setting') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - sunset
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_medium') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_dusk') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
-        - conditions:
-            - condition: trigger
-              id:
-                - dusk
-          sequence:
-            - service: input_number.set_value
-              data:
-                value: "{{ states('input_number.dimconstant_low') | int }}"
-              target:
-                entity_id: input_number.apartment_dimmer
-            - service: input_datetime.set_datetime
-              data:
-                datetime: "{{ states('sensor.sun_next_midnight') }}"
-              target:
-                entity_id: input_datetime.next_sun_event
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - midnight
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_lowest'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Dawn
+          event_time: '{{ states(''sensor.sun_next_dawn'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - dawn
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_low'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Sunrise
+          event_time: '{{ states(''sensor.sun_next_rising'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - sunrise
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_medium'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Risenoon
+          event_time: '{{ states(''input_datetime.risenoon'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - risenoon
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_high'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Noon
+          event_time: '{{ states(''sensor.sun_next_noon'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - noon
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_highest'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Noonset
+          event_time: '{{ states(''input_datetime.noonset'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - noonset
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_high'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Sunset
+          event_time: '{{ states(''sensor.sun_next_setting'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - sunset
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_medium'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Dusk
+          event_time: '{{ states(''sensor.sun_next_dusk'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - dusk
+      sequence:
+      - service: input_number.set_value
+        data:
+          value: '{{ states(''input_number.dimconstant_low'') | int }}'
+        target:
+          entity_id: input_number.apartment_dimmer
+      - service: script.sun_cycle_set_next_event_text
+        metadata: {}
+        data:
+          next_sun_event: Midnight
+          event_time: '{{ states(''sensor.sun_next_midnight'') }}'
   mode: single
 
 - id: "1703000590222"
