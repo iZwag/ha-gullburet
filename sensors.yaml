@@ -122,6 +122,8 @@
           Turbo
         {% elif fan_speed == "Turbo" %}
           Max
+        {% elif fan_speed == "105" %}
+          Off
         {% else %}
           Unknown
         {% endif %}
