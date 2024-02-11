@@ -138,6 +138,18 @@ button_card_templates:
       icon:
         - color: var(--primary-text-color)
   
+  vacuum_mopping:
+    size: 26px
+    show_name: false
+    styles:
+      card: 
+        - padding: var(--ha-card-padding)
+        - margin: 0px
+        - background-color: var(--button-card-background)
+        - border-radius: var(--button-card-border-radius)
+      icon:
+        - color: var(--primary-text-color)
+  
     # icon color: var(--primary-text-color)
     # icon color disabled: rgb(var(--rgb-disabled))
     # background color: rgba(var(--rgb-primary-text-color), 0.05)
