@@ -309,7 +309,7 @@ cards:
                           entity: binary_sensor.esmeralda_mop_ready
                           state_not: "on"
                       card:
-                      - type: "custom:layout-card"
+                        type: "custom:layout-card"
                         layout_type: grid
                         layout:
                           grid-gap: "0px var(--ha-card-padding)"
@@ -347,14 +347,64 @@ cards:
                           entity: binary_sensor.esmeralda_mop_ready
                           state: "on"
                       card:
-                      - type: "custom:layout-card"
+                        type: "custom:layout-card"
                         layout_type: grid
                         layout:
                           grid-gap: "0px var(--ha-card-padding)"
                           grid-template-columns: 1fr 1fr 1fr 1fr
                           margin: 0px
                           padding: var(--ha-card-padding)
-
+                        cards:
+                        - type: custom:button-card
+                          entity: script.robot_set_mop_mode
+                          icon: mdi:power-sleep
+                          template: vacuum_mopping
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            data:
+                              entity_id: script.robot_set_mop_mode
+                              variables:
+                                mopping_mode: Low
+                                fan_speed: Silent
+                        - type: custom:button-card
+                          entity: script.robot_set_mop_mode
+                          icon: mdi:fan
+                          template: vacuum_mopping
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            data:
+                              entity_id: script.robot_set_mop_mode
+                              variables:
+                                mopping_mode: Medium
+                                fan_speed: Standard
+                        - type: "custom:button-card"
+                          icon: mdi:water
+                          name: "Only"
+                          entity: script.robot_set_mop_mode
+                          template: light_mode
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            data:
+                              entity_id: script.robot_set_mop_mode
+                              variables:
+                                mopping_mode: Medium
+                                mopping_route: Deep
+                        - type: "custom:button-card"
+                          icon: mdi:creation
+                          name: "Deep+"
+                          entity: script.robot_set_mop_mode
+                          template: light_mode
+                          tap_action:
+                            action: call-service
+                            service: script.turn_on
+                            data:
+                              entity_id: script.robot_set_mop_mode
+                              variables:
+                                mopping_mode: High
+                                mopping_route: DeepPlus
                   # MEDIA SECTION
                   - type: custom:stack-in-card
                     mode: vertical
