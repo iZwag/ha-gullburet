@@ -358,30 +358,39 @@ robot_set_mop_mode:
     target:
       entity_id: vacuum.esmeralda
     alias: Send command Mop mode
-  - condition: template
-    value_template: '{{ mopping_route is not none and mopping_route | trim != ''''
-      }}'
-    alias: Check if Mop route has been given (only mop)
-  - service: vacuum.send_command
-    metadata: {}
-    data:
-      command: set_custom_mode
-      params: 105
-    target:
-      entity_id: vacuum.esmeralda
-    alias: Send command Fan-mode OFF
-  - service: vacuum.send_command
-    metadata: {}
-    data:
-      command: set_mop_mode
-      params: "{% if mopping_route == 'Standard' %}\n  [300]\n{% elif mopping_route
-        == 'Deep' %}\n  [301]\n{% elif mopping_route == 'DeepPlus' %}\n  [303]\n{%
-        else %}\n  [300]\n{% endif %}\n"
-    target:
-      entity_id: vacuum.esmeralda
-    alias: Send command Mop route
+  - alias: If Map route has been given
+    if:
+    - condition: template
+      value_template: '{{ mopping_route is not none and mopping_route | trim != ''''
+        }}'
+    then:
+    - service: vacuum.send_command
+      metadata: {}
+      data:
+        command: set_custom_mode
+        params: 105
+      target:
+        entity_id: vacuum.esmeralda
+      alias: Send command Fan-mode OFF
+    - service: vacuum.send_command
+      metadata: {}
+      data:
+        command: set_mop_mode
+        params: "{% if mopping_route == 'Standard' %}\n  [300]\n{% elif mopping_route
+          == 'Deep' %}\n  [301]\n{% elif mopping_route == 'DeepPlus' %}\n  [303]\n{%
+          else %}\n  [300]\n{% endif %}\n"
+      target:
+        entity_id: vacuum.esmeralda
+      alias: Send command Mop route
+    else:
+    - service: vacuum.set_fan_speed
+      metadata: {}
+      data:
+        fan_speed: '{{ fan_speed }}'
+      target:
+        entity_id: vacuum.esmeralda
   mode: restart
-  icon: mdi:spray-bottle
+  icon: mdi:robot-vacuum
   fields:
     mopping_mode:
       selector:
@@ -397,3 +406,10 @@ robot_set_mop_mode:
       name: Mopping route
       description: 'The deeper the route, the slower and more thorough it cleans.
         Values: Standard, Deep, DeepPlus. '
+    fan_speed:
+      selector:
+        text:
+      name: Fan speed
+      description: 'Sets the vacuum fan speed for vacuum & mop. Values: SIlent, Standard,
+        Medium and Turbo'
+      default: Standard
