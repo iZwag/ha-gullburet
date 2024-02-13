@@ -131,12 +131,25 @@ cards:
           - type: col
             class: "col-md-5 col-xxl-4"
             cards:
-            # TITLE SECTION FOR ALL ROOMS
+            # WRAPPER THAT ENABLES TEMPLATING AND CONFIG
             - type: custom:config-template-card
               entities:
               - input_text.floorplan_select_state
+              - input_number.apartment_dimmer
+              - input_text.sun_cycle_next_event
+              - input_boolean.auto_suncycle_masterdim
+              - vacuum.esmeralda
+              - media_player.stue
+              - sensor.esmeralda_fan_speed
+              - binary_sensor.esmeralda_mop_attached
+              - binary_sensor.esmeralda_mop_ready
+              - binary_sensor.esmeralda_water_box_attached
+              - sensor.sensor_temperatur
+              - binary_sensor.sensor_bevegelse
+              - timer.storage_room_light_timer
               variables:
                 selected_room: states['input_text.floorplan_select_state'].state
+                xiaomi_room_id: 0
                 get_room_title: |
                   room => {
                     if (room == "kitchen"){
@@ -171,25 +184,84 @@ cards:
                     }
                     return "Gullburet Home";
                   }
-              card:
-                type: custom:mushroom-title-card
-                title: '${ get_room_title(selected_room) }'
-                card_mod: 
-                  style: |
-                    mushroom-title-card {
-                      margin: 0px !important;
+                display_all_lights: |
+                  room => {
+                    if (room == "none"){
+                      return "none";
                     }
-            # GULLBURET HOME VIEW HANDLER
-            - type: conditional
-              conditions:
-              - condition: state
-                entity: input_text.floorplan_select_state
-                state: "none"
+                    return "false";
+                  }
+                display_cleaning: |
+                  room => {
+                    if (room == "none"){
+                      return "none";
+                    }
+                    if (room == "bedroom"){
+                      xiaomi_room_id = 20;
+                      return "bedroom";
+                    }
+                    if (room == "office"){
+                      xiaomi_room_id = 21;
+                      return "office";
+                    }
+                    if (room == "guest"){
+                      xiaomi_room_id = 19;
+                      return "guest";
+                    }
+                    if (room == "entry"){
+                      xiaomi_room_id = 16;
+                      return "entry";
+                    }
+                    if (room == "living"){
+                      xiaomi_room_id = 18;
+                      return "living";
+                    }
+                    if (room == "kitchen"){
+                      xiaomi_room_id = 17;
+                      return "kitchen";
+                    }
+                    return "false";
+                  }
+                display_audio: |
+                  room => {
+                    if (room == "none") {
+                      return "none";
+                    }
+                    if (room == "bedroom") {
+                      return "bedroom";
+                    }
+                    if (room == "living") {
+                      return "living";
+                    }
+                    if (room == "kitchen") {
+                      return "kitchen";
+                    }
+                    if (room == "toilet") {
+                      return "toilet";
+                    }
+                    return "false";
+                  }
               card:
+              # VERTICAL SECTION FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
                 type: vertical-stack
                 cards:
-                  # ALL LIGHTS SECTION
-                  - type: custom:stack-in-card
+                # TITLE SECTION FOR ALL ROOMS
+                - type: custom:mushroom-title-card
+                  title: '${ get_room_title(selected_room) }'
+                  card_mod: 
+                    style: |
+                      mushroom-title-card {
+                        margin: 0px !important;
+                      }
+                # SHOW ALL LIGHTS SECTION
+                # Applies to only Home-view
+                - type: conditional
+                  conditions:
+                  - condition: state
+                    entity: input_text.floorplan_select_state
+                    state: '${ display_all_lights(selected_room) }'
+                  card:
+                    type: custom:stack-in-card
                     mode: vertical
                     cards:
                     - type: markdown
@@ -279,8 +351,15 @@ cards:
                           ha-card {
                             background-color: var(--nested-card-background);
                           }
-                  # CLEAN APARTMENT SECTION
-                  - type: custom:stack-in-card
+                # SHOW CLEANING SECTION
+                # Applies to Home, Bedroom, Office, Guest, Entry, Living & Kitchen
+                - type: conditional
+                  conditions:
+                  - condition: state
+                    entity: input_text.floorplan_select_state
+                    state: '${ display_cleaning(selected_room) }'
+                  card:
+                    type: custom:stack-in-card
                     mode: vertical
                     cards:
                     - type: custom:layout-card
@@ -440,8 +519,15 @@ cards:
                               variables:
                                 mopping_mode: High
                                 mopping_route: DeepPlus
-                  # MEDIA SECTION
-                  - type: custom:stack-in-card
+                # SHOW AUDIO SECTION
+                # Applies to Home, Bedroom, Living, Kitchen, WC
+                - type: conditional
+                  conditions:
+                  - condition: state
+                    entity: input_text.floorplan_select_state
+                    state: '${ display_audio(selected_room) }'
+                  card:
+                    type: custom:stack-in-card
                     mode: vertical
                     cards:
                     - type: custom:mushroom-media-player-card
