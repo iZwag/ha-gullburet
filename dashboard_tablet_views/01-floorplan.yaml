@@ -131,6 +131,7 @@ cards:
           - type: col
             class: "col-md-5 col-xxl-4"
             cards:
+            # TITLE SECTION FOR ALL ROOMS
             - type: custom:config-template-card
               entities:
               - input_text.floorplan_select_state
@@ -178,6 +179,7 @@ cards:
                     mushroom-title-card {
                       margin: 0px !important;
                     }
+            # GULLBURET HOME VIEW HANDLER
             - type: conditional
               conditions:
               - condition: state
@@ -191,7 +193,7 @@ cards:
                     mode: vertical
                     cards:
                     - type: markdown
-                      content: " ### Lights"
+                      content: " ## Lights"
                       card_mod:
                         style: |
                           ha-markdown {
@@ -281,29 +283,46 @@ cards:
                   - type: custom:stack-in-card
                     mode: vertical
                     cards:
-                    - type: markdown
-                      content: "### Cleaning"
-                      card_mod:
-                        style: |
-                          ha-markdown {
-                            padding: var(--ha-card-padding) !important;
-                          }
-                    - type: custom:mushroom-chips-card
-                      chips:
-                      - type: entity
-                        entity: sensor.esmeralda_fan_speed
-                        icon: mdi:fan
-                      - type: entity
-                        entity: binary_sensor.esmeralda_mop_ready
-                        icon: mdi:spray-bottle
-                      - type: entity
-                        entity: sensor.esmeralda_battery
-                      card_mod:
-                        style: |
-                          ha-card {
-                            padding: var(--ha-card-padding) !important;
-                            --chip-background: var(--button-card-background);
-                          }
+                    - type: custom:layout-card
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px 6px"
+                        grid-template-columns: 3fr 7fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: markdown
+                        content: "## Cleaning"
+                        card_mod:
+                          style: |
+                            ha-markdown {
+                              padding: 0px !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                      - type: custom:mushroom-chips-card
+                        alignment: end
+                        chips:
+                        - type: entity
+                          entity: sensor.esmeralda_fan_speed
+                          icon: mdi:fan
+                        - type: template
+                          content: |-
+                            {% if is_state('binary_sensor.esmeralda_mop_attached', 'off') %}
+                              Mop removed
+                            {% elif is_state('binary_sensor.esmeralda_water_box_attached', 'off') %}
+                              Water tank removed
+                            {% else %}
+                              Mop ready
+                            {% endif %}
+                          icon: mdi:water
+                        # padding-right: var(--ha-card-padding) !important;
+                        card_mod:
+                          style: |
+                            ha-card {
+                              --chip-background: var(--button-card-background);
+                            }
                     - type: custom:mushroom-vacuum-card
                       entity: vacuum.esmeralda
                       icon_animation: true
