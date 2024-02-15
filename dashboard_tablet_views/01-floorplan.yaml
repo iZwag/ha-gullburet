@@ -113,6 +113,8 @@ sidebar:
               action: navigate
               navigation_path: /lovelace/0
             icon: mdi:cog
+          - type: entity
+            entity: sensor.temperature_apartment_avg
           #- type: spacer
           - type: weather
             entity: weather.yr_weather_home
@@ -134,22 +136,40 @@ cards:
             # WRAPPER THAT ENABLES TEMPLATING AND CONFIG
             - type: custom:config-template-card
               entities:
-              - input_text.floorplan_select_state
-              - input_number.apartment_dimmer
-              - input_text.sun_cycle_next_event
-              - input_boolean.auto_suncycle_masterdim
-              - vacuum.esmeralda
-              - media_player.stue
-              - sensor.esmeralda_fan_speed
-              - binary_sensor.esmeralda_mop_attached
-              - binary_sensor.esmeralda_mop_ready
-              - binary_sensor.esmeralda_water_box_attached
-              - sensor.sensor_temperatur
-              - binary_sensor.sensor_bevegelse
-              - timer.storage_room_light_timer
+                - binary_sensor.esmeralda_mop_attached
+                - binary_sensor.esmeralda_mop_ready
+                - binary_sensor.esmeralda_water_box_attached
+                - binary_sensor.sensor_bevegelse              
+                - input_text.floorplan_select_state
+                - input_text.sun_cycle_next_event
+                - input_number.apartment_dimmer
+                - input_boolean.auto_suncycle_masterdim
+                - media_player.sonos_living
+                - media_player.sonos_kitchen
+                - media_player.sonos_bedroom
+                - media_player.sonos_move
+                - sensor.esmeralda_fan_speed
+                - sensor.temperature_bath
+                - sensor.temperature_bedroom
+                - sensor.temperature_entry
+                - sensor.temperature_guest
+                - sensor.temperature_kitchen
+                - sensor.temperature_living
+                - sensor.temperature_office
+                - sensor.temperature_outdoor
+                - sensor.temperature_storage
+                - sensor.temperature_toilet
+                - sensor.humidity_bedroom
+                - sensor.humidity_entry
+                - sensor.humidity_guest
+                - sensor.humidity_kitchen
+                - sensor.humidity_living
+                - sensor.humidity_office
+                - timer.storage_room_light_timer
+                - vacuum.esmeralda
               variables:
                 selected_room: states['input_text.floorplan_select_state'].state
-                xiaomi_room_id: 0
+                #xiaomi_room_id: 0
                 get_room_title: |
                   room => {
                     if (room == "kitchen"){
@@ -197,27 +217,27 @@ cards:
                       return "none";
                     }
                     if (room == "bedroom"){
-                      xiaomi_room_id = 20;
+                      //xiaomi_room_id = 20;
                       return "bedroom";
                     }
                     if (room == "office"){
-                      xiaomi_room_id = 21;
+                      //xiaomi_room_id = 21;
                       return "office";
                     }
                     if (room == "guest"){
-                      xiaomi_room_id = 19;
+                      //xiaomi_room_id = 19;
                       return "guest";
                     }
                     if (room == "entry"){
-                      xiaomi_room_id = 16;
+                      //xiaomi_room_id = 16;
                       return "entry";
                     }
                     if (room == "living"){
-                      xiaomi_room_id = 18;
+                      //xiaomi_room_id = 18;
                       return "living";
                     }
                     if (room == "kitchen"){
-                      xiaomi_room_id = 17;
+                      //xiaomi_room_id = 17;
                       return "kitchen";
                     }
                     return "false";
@@ -240,6 +260,45 @@ cards:
                       return "toilet";
                     }
                     return "false";
+                  }
+                display_humidity: |
+                  room => {
+                    if (room == "kitchen") {
+                      return "kitchen";
+                    }
+                    if (room == "living") {
+                      return "living";
+                    }
+                    if (room == "entry") {
+                      return "entry";
+                    }
+                    if (room == "bedroom") {
+                      return "bedroom";
+                    }
+                    if (room == "office") {
+                      return "office";
+                    }
+                    if (room == "guest") {
+                      return "guest";
+                    }
+                    if (room == "veranda") {
+                      return "veranda";
+                    }
+                    return "false";
+                  }
+                get_temp_sensor_name: |
+                  room => {
+                    if (room == "veranda") {
+                      return "sensor.temperature_outdoor"
+                    }
+                    return "sensor.temperature_" + room;
+                  }
+                get_hmdt_sensor_name: |
+                  room => {
+                    if (room == "veranda") {
+                      return "sensor.humidity_outdoor"
+                    }
+                    return "sensor.humidity_" + room;
                   }
               card:
               # VERTICAL SECTION FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
@@ -351,6 +410,52 @@ cards:
                           ha-card {
                             background-color: var(--nested-card-background);
                           }
+                # SHOW CLIMATE SECTION
+                # Applies to all views, except for Home
+                - type: conditional
+                  conditions:
+                  - condition: state
+                    entity: input_text.floorplan_select_state
+                    state_not: 'none'
+                  card:
+                    type: custom:stack-in-card
+                    mode: vertical
+                    cards:
+                    - type: markdown
+                      content: " ## Climate"
+                      card_mod:
+                        style: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                    - type: horizontal-stack
+                      cards:
+                      - type: tile
+                        name: Temperature
+                        entity: '${ get_temp_sensor_name(selected_room) }'
+                      - type: conditional
+                        conditions:
+                        - condition: state
+                          entity: input_text.floorplan_select_state
+                          state: ${ display_humidity(selected_room) }
+                        card:
+                          type: tile
+                          name: Humidity
+                          entity: '${ get_hmdt_sensor_name(selected_room) }'
+                    #- type: conditional
+                    #  conditions:
+                    #  - condition: state
+                    #    entity: input_text.floorplan_select_state
+                    #    state: '${}'
+                    #  card:
+                    #    type: custom:mushroom-climate-card
+                    #    entity: climate.floor_heat_bath
+                    #    name: "Thermostat"
+                    #    hvac_modes:
+                    #    - 'off'
+                    #    - heat
+                    #    show_temperature_control: true
+                    #    layout: horizontal
                 # SHOW CLEANING SECTION
                 # Applies to Home, Bedroom, Office, Guest, Entry, Living & Kitchen
                 - type: conditional
@@ -531,7 +636,7 @@ cards:
                     mode: vertical
                     cards:
                     - type: custom:mushroom-media-player-card
-                      entity: media_player.stue
+                      entity: media_player.sonos_living
                       media_controls:
                         - previous
                         - play_pause_stop
@@ -602,17 +707,17 @@ cards:
                 type: vertical-stack
                 cards:
                   # TEMPERATURE
-                  - type: custom:mini-graph-card
-                    entities:
-                      - sensor.sensor_temperatur
-                    name: Temperature - 24h history
-                    hours_to_show: 24
-                    animate: true
-                    hour24: true
-                    group_by: hour
-                    align_icon: right
-                    align_state: right
-                    smoothing: true
+                  #- type: custom:mini-graph-card
+                  #  entities:
+                  #    - sensor.sensor_temperatur
+                  #  name: Temperature - 24h history
+                  #  hours_to_show: 24
+                  #  animate: true
+                  #  hour24: true
+                  #  group_by: hour
+                  #  align_icon: right
+                  #  align_state: right
+                  #  smoothing: true
                   # LIGHTS
                   - type: custom:stack-in-card
                     mode: vertical
@@ -659,15 +764,15 @@ cards:
                           data:
                             entity_id: script.storage_room_finish_timer
                   # STORAGE SENSOR SECTION
-                  - type: horizontal-stack
-                    cards:
-                    - type: tile
-                      entity: sensor.sensor_batteri
-                      name: Sensor battery
-                    - type: tile
-                      entity: binary_sensor.sensor_bevegelse
-                      state_content: last-changed
-                      name: Motion detected
+                  #- type: horizontal-stack
+                  #  cards:
+                  #  - type: tile
+                  #    entity: sensor.sensor_batteri
+                  #    name: Sensor battery
+                  #  - type: tile
+                  #    entity: binary_sensor.sensor_bevegelse
+                  #    state_content: last-changed
+                  #    name: Motion detected
             # #################################################################
             # ROOM INFO - KITCHEN
             # #################################################################
