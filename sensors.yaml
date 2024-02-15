@@ -87,6 +87,13 @@
       unit_of_measurement: "°C"
       value_template: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
       device_class: temperature
+    
+    # Humidity sensor for current outdoor humidity
+    humidity_outdoor:
+      friendly_name: "Outdoor current humidity"
+      unit_of_measurement: "%"
+      value_template: "{{ state_attr('weather.yr_weather_home', 'humidity') }}"
+      device_class: humidity
 
     # Finds the current setting of the physical remote for the heated sheet
     heated_sheet_setting:
