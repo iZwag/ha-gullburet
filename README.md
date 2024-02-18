@@ -22,7 +22,7 @@ Asus RT-AC88U
 
 ### Wi-Fi/Network Devices
 - Heating: **Mill Heat** (panel heaters, movable floor-unit)
-- Lights: **Philips Hue** (bulbs, switches, sensors)
+- Lights: **Philips Hue** (bulbs, switches, sensors)(actually Zigbee, but on its own network)
 - Speakers: **Sonos** (Play:1, One, Beam)
 - Robot vacuum: **Roborock** S7 Plus
 - TV: **Samsung** The Frame 55"
@@ -35,6 +35,8 @@ Asus RT-AC88U
 
 ### Zigbee Devices
 - **IKEA** TRÅDFRI: Transformers, lightbulbs, sockets, switches
+- **Aqara** Temperature & Humidity T1 sensors
+- **Namron** Temperature & Humidity sensors. Wall-mounted panel heater.
 
 #### Tips on deploying a Zigbee network
 
