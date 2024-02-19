@@ -117,7 +117,7 @@ sidebar:
           
 cards:
   - type: "custom:bootstrap-grid-card"
-    #container_padding: 10px
+    #container_padding: "0px 6px"
     #use_hass_style_gutter: true
     #hass_style_gutter_size: "10px"
     cards:
@@ -293,7 +293,7 @@ cards:
                         style:
                           ha-markdown$: |
                             h2 {
-                              font-weight: 400;
+                              font-weight: 400 !important;
                             }
                           .: |
                             ha-markdown {
@@ -322,7 +322,6 @@ cards:
                         type: custom:mushroom-climate-card
                         entity: '${ GET_THERMOSTAT_NAME(SELECTED_ROOM) }'
                         name: Thermostat
-                        #name: '${ "Thermostat: " + GET_THERMOSTAT_TARGET(GET_THERMOSTAT_NAME(SELECTED_ROOM)) + "°C" }'
                         hvac_modes:
                         - 'off'
                         - 'heat'
@@ -354,7 +353,7 @@ cards:
                         style:
                           ha-markdown$: |
                             h2 {
-                              font-weight: 400;
+                              font-weight: 400 !important;
                             }
                           .: |
                             ha-markdown {
@@ -474,12 +473,16 @@ cards:
                           style: 
                             ha-markdown$: |
                               h2 {
-                                font-weight: 300;
+                                font-weight: 400 !important;
                               }
                             .: |
+                              ha-markdown {
+                                padding: 0px !important;
+                              }
                               ha-card {
                                 background-color: var(--nested-card-background);
                               }
+                              
                       - type: custom:mushroom-chips-card
                         alignment: end
                         card_mod:
@@ -682,65 +685,64 @@ cards:
                     entity: input_text.floorplan_select_state
                     state: '${ DISPLAY_CLEANING(SELECTED_ROOM) }'
                   card:
-                    type: vertical-stack
+                    type: custom:stack-in-card
+                    mode: vertical
                     cards:
-                    - type: custom:stack-in-card
-                      mode: vertical
-                      cards:
-                      - type: markdown
-                        content: >
-                          ## Cleaning
+                    - type: markdown
+                      content: >
+                        ## Cleaning
 
-                          Immediately send Esmeralda to clean this room **only**.
-                        card_mod:
-                          style: 
-                            ha-markdown$: |
-                              h2 {
-                                font-weight: 300;
-                              }
-                            .: |
-                              ha-markdown {
-                                padding: var(--ha-card-padding) !important;
-                              }
-                              ha-card {
-                                background-color: var(--nested-card-background);
-                              }
-                      - type: "custom:layout-card"
-                        layout_type: grid
-                        layout:
-                          grid-gap: "0px var(--ha-card-padding)"
-                          grid-template-columns: 1fr 1fr 1fr 1fr
-                          margin: 0px
-                          padding: var(--ha-card-padding)
-                        cards:
-                        - type: custom:button-card
-                          entity: script.robot_clean_target_room
-                          icon: mdi:power-sleep
-                          template: vacuum_fan_and_room
-                          variables:
-                            fan_speed: "Silent"
-                            target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
-                        - type: custom:button-card
-                          icon: mdi:fan
-                          entity: script.robot_clean_target_room
-                          template: vacuum_fan_and_room
-                          variables:
-                            fan_speed: "Standard"
-                            target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
-                        - type: custom:button-card
-                          icon: mdi:fan-plus
-                          entity: script.robot_clean_target_room
-                          template: vacuum_fan_and_room
-                          variables:
-                            fan_speed: "Medium"
-                            target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
-                        - type: custom:button-card
-                          icon: mdi:fan-speed-3
-                          entity: script.robot_clean_target_room
-                          template: vacuum_fan_and_room
-                          variables:
-                            fan_speed: "Turbo"
-                            target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                        Immediately send Esmeralda to clean this room **only**.
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: 0px !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                              padding: var(--ha-card-padding) !important;
+                            }
+                    - type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        entity: script.robot_clean_target_room
+                        icon: mdi:power-sleep
+                        template: vacuum_fan_and_room
+                        variables:
+                          fan_speed: "Silent"
+                          target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                      - type: custom:button-card
+                        icon: mdi:fan
+                        entity: script.robot_clean_target_room
+                        template: vacuum_fan_and_room
+                        variables:
+                          fan_speed: "Standard"
+                          target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                      - type: custom:button-card
+                        icon: mdi:fan-plus
+                        entity: script.robot_clean_target_room
+                        template: vacuum_fan_and_room
+                        variables:
+                          fan_speed: "Medium"
+                          target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                      - type: custom:button-card
+                        icon: mdi:fan-speed-3
+                        entity: script.robot_clean_target_room
+                        template: vacuum_fan_and_room
+                        variables:
+                          fan_speed: "Turbo"
+                          target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
               # ###############################################################
               # Starting point for config-template before refactor
               # WRAPPER THAT ENABLES TEMPLATING
