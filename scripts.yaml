@@ -235,14 +235,13 @@ masterdim_script:
       required: true
   sequence:
   - if:
-    - condition: state
-      entity_id: '{{ light_entity }}'
-      state: 'on'
+    - condition: template
+      value_template: '{{ is_state(light_entity, ''on'' )}}'
     then:
     - service: light.turn_on
       metadata: {}
       data:
-        brightness_pct: 69
+        brightness_pct: '{{ brightness }}'
       target:
         entity_id: '{{ light_entity }}'
 robot_clean_target_room:
@@ -413,3 +412,57 @@ robot_set_mop_mode:
       description: 'Sets the vacuum fan speed for vacuum & mop. Values: SIlent, Standard,
         Medium and Turbo'
       default: Standard
+heating_set_thermostat_mode:
+  alias: Heating - Set thermostat mode
+  sequence:
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: '{{ mode }}'
+    target:
+      entity_id: '{{ control_mode_entity }}'
+  mode: queued
+  icon: mdi:thermostat
+  fields:
+    mode:
+      selector:
+        select:
+          multiple: false
+          options:
+          - Manual
+          - Away
+          - Sleep
+          - Comfort
+      name: Mode
+      description: Select
+      default: Away
+      required: true
+    control_mode_entity:
+      selector:
+        entity: {}
+      name: Control mode entity
+heating_mode_sets_temperature:
+  alias: Heating - Mode change sets temperature
+  sequence:
+  - service: climate.set_temperature
+    metadata: {}
+    data:
+      hvac_mode: heat
+      temperature: '{{ temperature }}'
+    target:
+      entity_id: '{{ thermostat_entity }}'
+  mode: queued
+  icon: mdi:thermostat
+  fields:
+    thermostat_entity:
+      selector:
+        entity: {}
+      name: Thermostat entity
+      required: true
+    temperature:
+      selector:
+        number:
+          min: 1
+          max: 100
+      name: temperature
+      required: true

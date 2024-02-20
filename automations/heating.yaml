@@ -1,0 +1,75 @@
+- id: '1708426169372'
+  alias: Heating - Bath - Thermostat mode on schedule triggers
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - schedule.heating_sleep_bath
+    from: 'off'
+    to: 'on'
+    id: sleep-on
+  - platform: state
+    entity_id:
+    - schedule.heating_sleep_bath
+    from: 'on'
+    to: 'off'
+    id: sleep-off
+  - platform: state
+    entity_id:
+    - schedule.heating_comfort_bath
+    from: 'off'
+    to: 'on'
+    id: comfort-on
+  - platform: state
+    entity_id:
+    - schedule.heating_comfort_bath
+    from: 'on'
+    to: 'off'
+    id: comfort-off
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.heating_mode_bath
+      state: Manual
+    alias: If Bath control mode is not Manual
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - sleep-on
+      sequence:
+      - service: script.heating_set_thermostat_mode
+        metadata: {}
+        data:
+          mode: Sleep
+          thermostat_entity: climate.floor_heat_bath
+          control_mode_entity: input_select.heating_mode_bath
+          temperature: '{{ states(''input_number.temperature_sleep_bath'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - comfort-on
+      sequence:
+      - service: script.heating_set_thermostat_mode
+        metadata: {}
+        data:
+          mode: Comfort
+          thermostat_entity: climate.floor_heat_bath
+          control_mode_entity: input_select.heating_mode_bath
+          temperature: '{{ states(''input_number.temperature_comfort_bath'') }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - sleep-off
+        - comfort-off
+      sequence:
+      - service: script.heating_set_thermostat_mode
+        metadata: {}
+        data:
+          mode: Away
+          thermostat_entity: climate.floor_heat_bath
+          control_mode_entity: input_select.heating_mode_bath
+          temperature: '{{ states(''input_number.temperature_away_bath'') }}'
+  mode: single
