@@ -91,7 +91,7 @@
       light_entity: light.downlight_toilet
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Toilet downlight
-  mode: queued
+  mode: restart
 
 - id: '1707168721809'
   alias: Auto masterdim with Sun-cycle
