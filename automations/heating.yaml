@@ -1,5 +1,5 @@
 - id: '1708426169372'
-  alias: Heating - Bath - Thermostat mode on schedule triggers
+  alias: Heating - Bath - Update mode on schedule triggers
   description: ''
   trigger:
   - platform: state
@@ -44,9 +44,7 @@
         metadata: {}
         data:
           mode: Sleep
-          thermostat_entity: climate.floor_heat_bath
           control_mode_entity: input_select.heating_mode_bath
-          temperature: '{{ states(''input_number.temperature_sleep_bath'') }}'
     - conditions:
       - condition: trigger
         id:
@@ -56,9 +54,7 @@
         metadata: {}
         data:
           mode: Comfort
-          thermostat_entity: climate.floor_heat_bath
           control_mode_entity: input_select.heating_mode_bath
-          temperature: '{{ states(''input_number.temperature_comfort_bath'') }}'
     - conditions:
       - condition: trigger
         id:
@@ -69,7 +65,165 @@
         metadata: {}
         data:
           mode: Away
-          thermostat_entity: climate.floor_heat_bath
           control_mode_entity: input_select.heating_mode_bath
-          temperature: '{{ states(''input_number.temperature_away_bath'') }}'
-  mode: single
+  mode: restart
+
+- id: '1708532169850'
+  alias: Heating - Bath - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_bath
+      thermostat_entity: climate.floor_heat_bath
+      away_temperature_entity: input_number.temperature_away_bath
+      sleep_temperature_entity: input_number.temperature_sleep_bath
+      comfort_temperature_entity: input_number.temperature_comfort_bath
+      vacation_temperature_entity: input_number.temperature_vacation_bathrooms
+
+- id: 'heating_toilet_update_on_mode_change'
+  alias: Heating - Toilet - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_toilet
+      thermostat_entity: climate.floor_heat_toilet
+      away_temperature_entity: input_number.temperature_away_toilet
+      sleep_temperature_entity: input_number.temperature_sleep_bath
+      comfort_temperature_entity: input_number.temperature_comfort_toilet
+      vacation_temperature_entity: input_number.temperature_vacation_bathrooms
+
+- id: 'heating_bedroom_update_on_mode_change'
+  alias: Heating - Bedroom - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_bedroom
+      thermostat_entity: climate.heater_bedroom
+      away_temperature_entity: input_number.temperature_away_bedroom
+      sleep_temperature_entity: input_number.temperature_sleep_bedroom
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
+
+- id: 'heating_guest_update_on_mode_change'
+  alias: Heating - Guest - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_guest
+      thermostat_entity: climate.heater_guest
+      away_temperature_entity: input_number.temperature_away_guest
+      sleep_temperature_entity: input_number.temperature_sleep_guest
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
+
+- id: 'heating_living_update_on_mode_change'
+  alias: Heating - Living - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_living
+      thermostat_entity: climate.heater_living
+      away_temperature_entity: input_number.temperature_away_living
+      sleep_temperature_entity: input_number.temperature_sleep_living
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_commons
+
+- id: 'heating_kitchen_update_on_mode_change'
+  alias: Heating - Kitchen - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_kitchen
+      thermostat_entity: climate.heater_kitchen
+      away_temperature_entity: input_number.temperature_away_living
+      sleep_temperature_entity: input_number.temperature_sleep_living
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_commons
+
+- id: '1708541836387'
+  alias: Heating - Bath - Comfort/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_comfort_bath
+      schedule_type: Comfort
+      select_entity: input_select.heating_mode_bath
+
+- id: 'heating_bath_sleep_schedule_triggers'
+  alias: Heating - Bath - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_bath
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_bath
+
+- id: 'heating_toilet_comfort_schedule_triggers'
+  alias: Heating - Toilet - Comfort/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_comfort_toilet
+      schedule_type: Comfort
+      select_entity: input_select.heating_mode_toilet
+
+- id: 'heating_bedroom_sleep_schedule_triggers'
+  alias: Heating - Bedroom - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_bedroom
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_bedroom
+
+- id: 'heating_living_sleep_schedule_triggers'
+  alias: Heating - Living - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_living
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_living
+
+- id: 'heating_living_comfort_schedule_triggers'
+  alias: Heating - Living - Comfort/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_comfort_living
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_living
+
+- id: 'heating_kitchen_sleep_schedule_triggers'
+  alias: Heating - Kitchen - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_living
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_kitchen
+
+- id: 'heating_kitchen_comfort_schedule_triggers'
+  alias: Heating - Kitchen - Comfort/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_comfort_living
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_kitchen
+
+### TODO: GUEST ROOM SCHEDULE TRIGGERS - Needs an on/off-input for "guest-mode"
