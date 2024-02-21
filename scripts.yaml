@@ -452,7 +452,7 @@ heating_mode_sets_temperature:
     metadata: {}
     data:
       hvac_mode: heat
-      temperature: '{{ temperature }}'
+      temperature: '{{ states( temperature_entity ) }}'
     target:
       entity_id: '{{ thermostat_entity }}'
   mode: queued
@@ -463,12 +463,10 @@ heating_mode_sets_temperature:
         entity: {}
       name: Thermostat entity
       required: true
-    temperature:
+    temperature_entity:
       selector:
-        number:
-          min: 1
-          max: 100
-      name: temperature
+        entity: {}
+      name: Temperature entity
       required: true
 lights_reset_overrides:
   alias: Lights - Reset manual overrides
