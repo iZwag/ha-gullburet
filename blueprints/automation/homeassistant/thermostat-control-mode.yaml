@@ -1,0 +1,99 @@
+blueprint:
+  name: Update thermostat settings on mode change
+  description: Takes an input_select for a thermostat that holds the state of its control mode. Changes to this triggers this automation to implement the actual update.
+  domain: automation
+  #mode: restart
+  input:
+    select_entity:
+      name: Select entity
+      description: The input_select to react to.
+      selector:
+        entity:
+          filter:
+            domain: input_select
+    thermostat_entity:
+      name: Thermostat entity
+      description: The climate-entity that should have its settings updated
+      selector:
+        entity:
+          filter:
+            domain: climate
+    away_temperature_entity:
+      name: Away temperature entity
+      description: The input_number-entity holding the Away temperature.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    sleep_temperature_entity:
+      name: Sleep temperature entity
+      description: The input_number-entity holding the Sleep temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    comfort_temperature_entity:
+      name: Comfort temperature entity
+      description: The input_number-entity holding the Comfort temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    vacation_temperature_entity:
+      name: Vacation temperature entity
+      description: The input_number-entity holding the Vacation temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+trigger:
+- platform: state
+  entity_id: !input select_entity
+  to: "Away"
+  id: away
+- platform: state
+  entity_id: !input select_entity
+  to: "Sleep"
+  id: sleep
+- platform: state
+  entity_id: !input select_entity
+  to: "Comfort"
+  id: comfort
+- platform: state
+  entity_id: !input select_entity
+  to: "Vacation"
+  id: vacation
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id: away
+    sequence:
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input away_temperature_entity
+  - conditions:
+    - condition: trigger
+      id: sleep
+    sequence:
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input sleep_temperature_entity
+  - conditions:
+    - condition: trigger
+      id: comfort
+    sequence:
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input comfort_temperature_entity
+  - conditions:
+    - condition: trigger
+      id: vacation
+    sequence:
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input vacation_temperature_entity
