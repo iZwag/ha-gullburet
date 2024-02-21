@@ -1,5 +1,5 @@
 all_lights_off:
-  alias: 'All lights: Off'
+  alias: 'Lights - All lights: Off'
   mode: single
   icon: mdi:lightbulb-group-outline
   sequence:
@@ -44,7 +44,7 @@ all_lights_off:
     target:
       entity_id: scene.veranda_lights_off
 all_lights_on:
-  alias: 'All lights: On'
+  alias: 'Lights - All lights: On'
   mode: restart
   icon: mdi:lightbulb-group
   sequence:
@@ -130,7 +130,7 @@ calculate_noonset:
       time2: '{{ states(''sensor.sun_next_setting'') }}'
       entity_id: input_datetime.noonset
 bedtime_lights:
-  alias: Bedtime-mode (Lights off)
+  alias: Lights - Bedtime-mode (Lights off)
   sequence:
   - service: scene.turn_on
     target:
@@ -203,24 +203,9 @@ storage_room_light_on_auto:
     domain: light
   mode: single
   icon: mdi:lightbulb-auto
-storage_room_light_on_manual:
-  alias: Storage room - Light on - Manual
-  sequence:
-  - service: timer.start
-    metadata: {}
-    data:
-      duration: 00:10:00
-    target:
-      entity_id: timer.storage_room_light_timer
-  - type: turn_on
-    device_id: 0f0cf256bc675de29f236888b06ff677
-    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
-    domain: light
-  mode: single
-  icon: mdi:lightbulb
 masterdim_script:
-  alias: Masterdim script
-  mode: single
+  alias: Lights - Masterdim light
+  mode: queued
   icon: mdi:brightness-7
   fields:
     light_entity:
@@ -233,10 +218,24 @@ masterdim_script:
           min: 1
           max: 100
       required: true
+    manual_override:
+      selector:
+        boolean: {}
+      name: Manual override
+      default: true
+      required: true
+      description: Default is false. Is true when a scene or other manual setting
+        has been configured
   sequence:
   - if:
-    - condition: template
-      value_template: '{{ is_state(light_entity, ''on'' )}}'
+    - condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ manual_override == false }}'
+        alias: If Manual override is false
+      - condition: template
+        value_template: '{{ is_state(light_entity, ''on'' )}}'
+        alias: If light entity is on
     then:
     - service: light.turn_on
       metadata: {}
@@ -244,6 +243,7 @@ masterdim_script:
         brightness_pct: '{{ brightness }}'
       target:
         entity_id: '{{ light_entity }}'
+  max: 25
 robot_clean_target_room:
   alias: Robot clean - Target room
   sequence:
@@ -342,6 +342,10 @@ storage_room_light_off_finish_timer:
     target:
       entity_id: timer.storage_room_light_timer
     data: {}
+  - type: turn_off
+    device_id: 0f0cf256bc675de29f236888b06ff677
+    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
+    domain: light
   mode: single
   icon: mdi:lightbulb-off
 robot_set_mop_mode:
@@ -466,3 +470,19 @@ heating_mode_sets_temperature:
           max: 100
       name: temperature
       required: true
+lights_reset_overrides:
+  alias: Lights - Reset manual overrides
+  sequence:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.lights_override_bath
+      - input_boolean.lights_override_entry
+      - input_boolean.lights_override_kitchen
+      - input_boolean.lights_override_living
+      - input_boolean.lights_override_office
+      - input_boolean.lights_override_veranda
+  mode: single
+  icon: mdi:restart
