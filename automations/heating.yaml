@@ -1,73 +1,7 @@
-- id: '1708426169372'
-  alias: Heating - Bath - Update mode on schedule triggers
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - schedule.heating_sleep_bath
-    from: 'off'
-    to: 'on'
-    id: sleep-on
-  - platform: state
-    entity_id:
-    - schedule.heating_sleep_bath
-    from: 'on'
-    to: 'off'
-    id: sleep-off
-  - platform: state
-    entity_id:
-    - schedule.heating_comfort_bath
-    from: 'off'
-    to: 'on'
-    id: comfort-on
-  - platform: state
-    entity_id:
-    - schedule.heating_comfort_bath
-    from: 'on'
-    to: 'off'
-    id: comfort-off
-  condition:
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: input_select.heating_mode_bath
-      state: Manual
-    alias: If Bath control mode is not Manual
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - sleep-on
-      sequence:
-      - service: script.heating_set_thermostat_mode
-        metadata: {}
-        data:
-          mode: Sleep
-          control_mode_entity: input_select.heating_mode_bath
-    - conditions:
-      - condition: trigger
-        id:
-        - comfort-on
-      sequence:
-      - service: script.heating_set_thermostat_mode
-        metadata: {}
-        data:
-          mode: Comfort
-          control_mode_entity: input_select.heating_mode_bath
-    - conditions:
-      - condition: trigger
-        id:
-        - sleep-off
-        - comfort-off
-      sequence:
-      - service: script.heating_set_thermostat_mode
-        metadata: {}
-        data:
-          mode: Away
-          control_mode_entity: input_select.heating_mode_bath
-  mode: restart
-
+# #############################################################################
+# CONTROL MODE INPUT_SELECT CHANGE HANDLERS
+# All thermostats have an input_select-helper that keeps track of its current
+# control mode. These automations handles changes and sets temperature.
 - id: '1708532169850'
   alias: Heating - Bath - Update thermostat on mode change
   description: ''
@@ -145,7 +79,10 @@
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
       vacation_temperature_entity: input_number.temperature_vacation_commons
-
+# #############################################################################
+# THERMOSTAT PROGRAM SCHEDULE TRIGGERS HANDLERS
+# Automations that listens to changes in the thermostat schedules
+# and sets the control modes of those thermostats accordingly
 - id: '1708541836387'
   alias: Heating - Bath - Comfort/away on schedule triggers
   description: ''
@@ -203,7 +140,7 @@
     path: homeassistant/thermostat-schedule-triggers.yaml
     input:
       schedule_entity: schedule.heating_comfort_living
-      schedule_type: Sleep
+      schedule_type: Comfort
       select_entity: input_select.heating_mode_living
 
 - id: 'heating_kitchen_sleep_schedule_triggers'
@@ -223,7 +160,7 @@
     path: homeassistant/thermostat-schedule-triggers.yaml
     input:
       schedule_entity: schedule.heating_comfort_living
-      schedule_type: Sleep
+      schedule_type: Comfort
       select_entity: input_select.heating_mode_kitchen
 
 ### TODO: GUEST ROOM SCHEDULE TRIGGERS - Needs an on/off-input for "guest-mode"
