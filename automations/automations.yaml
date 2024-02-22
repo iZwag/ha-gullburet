@@ -384,3 +384,140 @@
     metadata: {}
     data: {}
   mode: single
+
+- id: '1708597925586'
+  alias: Special - Handle vacation mode ON/OFF
+  description: Reacts to changes of the input_boolean.vacation_mode_enable, handling
+    both when it is turned ON (enabled) and OFF (disabled).
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.vacation_mode_enable
+    from: 'off'
+    to: 'on'
+    id: enabled
+  - platform: state
+    entity_id:
+    - input_boolean.vacation_mode_enable
+    from: 'on'
+    to: 'off'
+    id: disabled
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - enabled
+      sequence:
+      - service: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.lightstrip_closet_bedroom
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.guest_mode_enable
+      - service: script.heating_set_mode_all_thermostats
+        metadata: {}
+        data:
+          control_mode: Vacation
+    - conditions:
+      - condition: trigger
+        id:
+        - disabled
+      sequence:
+      - service: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.lightstrip_closet_bedroom
+      - if:
+        - condition: template
+          value_template: "{{ is_state('input_select.climate_season_select', 'Cold') }}"
+        then:
+        - service: script.heating_set_warmest_mode_all_thermostats
+          metadata: {}
+          data: {}
+      - if:
+        - condition: time
+          after: 09:00:00
+          before: '21:30:00'
+        then:
+        - service: script.set_fan_speed_roborock_wrapper
+          metadata: {}
+          data:
+            fan_speed: Max
+        else:
+        - service: script.set_fan_speed_roborock_wrapper
+          metadata: {}
+          data:
+            fan_speed: Quiet
+      - service: vacuum.start
+        metadata: {}
+        data: {}
+        target:
+          entity_id: vacuum.esmeralda
+  mode: single
+  
+- id: '1708602051833'
+  alias: Special - Handle Vacation return time
+  description: Disables vacation mode 6 hours before the set return time, starting
+    thermostats and vacuum cleaning so that it is ready for return.
+  trigger:
+  - platform: template
+    value_template: "{{ now().timestamp() >= (as_timestamp(states('input_datetime.vacation_return_time')) - (6 * 3600)) }}"
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.vacation_mode_enable
+  mode: single
+
+- id: '1708616104405'
+  alias: Special - Handle Guest mode ON/OFF
+  description: Reacts to changes in the state of input_boolean-helper Guest mode.
+    If it gets turned on (enabled) or turned off (disabled).
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.guest_mode_enable
+    from: 'off'
+    to: 'on'
+    id: enabled
+  - platform: state
+    entity_id:
+    - input_boolean.guest_mode_enable
+    from: 'on'
+    to: 'off'
+    id: disabled
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - enabled
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Sleep
+        target:
+          entity_id: input_select.heating_mode_guest
+    - conditions:
+      - condition: trigger
+        id:
+        - disabled
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Away
+        target:
+          entity_id: input_select.heating_mode_guest
+  mode: single
