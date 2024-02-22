@@ -22,7 +22,7 @@ Asus RT-AC88U
 
 ### Wi-Fi/Network Devices
 - Heating: **Mill Heat** (panel heaters, movable floor-unit)
-- Lights: **Philips Hue** (bulbs, switches, sensors)
+- Lights: **Philips Hue** (bulbs, switches, sensors)(actually Zigbee, but on its own network)
 - Speakers: **Sonos** (Play:1, One, Beam)
 - Robot vacuum: **Roborock** S7 Plus
 - TV: **Samsung** The Frame 55"
@@ -35,6 +35,8 @@ Asus RT-AC88U
 
 ### Zigbee Devices
 - **IKEA** TRÅDFRI: Transformers, lightbulbs, sockets, switches
+- **Aqara** Temperature & Humidity T1 sensors
+- **Namron** Temperature & Humidity sensors. Wall-mounted panel heater.
 
 #### Tips on deploying a Zigbee network
 
@@ -73,3 +75,8 @@ The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a 
 11. Crop all images into the same desired size.
 12. Use Free-select tool to mark areas of each image/layer that is affected by that image light source, clearing everything else and making the other parts of image transparent.
 13. Export a base, dark image and each light source as their own indpendent PNG.
+
+## Learnings
+
+- Displaying time-left for a `timer`-helper in the Floorplan `picture-elements` rig does not as easily as I'd hoped. Just displaying it as an entity is pointless because it updates only once every 30-40s.
+- Using HA's native `conditional`-card to conditionally show certain cards (in this case the very reactive room-info column left of the Floorplan) leaves empty 12px transparent boxes if the cards are left out. This might be a weird interaction between the the `bootstrap`-card I use for laying out the columns.

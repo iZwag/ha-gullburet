@@ -263,14 +263,6 @@
       entity_id: input_boolean.bedtime_alarm_active
       state: "on"
   action:
-    #- if:
-    #    - condition: trigger
-    #      id:
-    #        - alarm
-    #  then:
-    #    - service: script.bedtime_lights
-    #      metadata: {}
-    #      data: {}
     - if:
         - condition: trigger
           id:
@@ -377,4 +369,18 @@
       device_id: 0f0cf256bc675de29f236888b06ff677
       entity_id: fad54750e7aefa1a6178fdf5e8714bcc
       domain: light
+  mode: single
+
+- id: '1708513182967'
+  alias: System - Daily reset & maintenance tasks
+  description: Performs resets, upgrades and maintenance at a daily time set by the
+    provided time-helper.
+  trigger:
+  - platform: time
+    at: input_datetime.system_daily_reset_time
+  condition: []
+  action:
+  - service: script.lights_reset_overrides
+    metadata: {}
+    data: {}
   mode: single

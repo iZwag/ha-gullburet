@@ -1,133 +1,96 @@
-# MDB = MasterDim Brigthness
-- id: 646aaad9d27041feb9f5017a5e4c65d6
-  alias: Masterdim Brigthness ALL Lights
-  description: Masterdims the brightness of ALL lights
+- id: '1708515045819'
+  alias: Lights - Masterdim ALL lights
+  description: Masterdims the brightness of lights in all the activity-rooms. The exceptions are Bedroom, Guest room and Storage-room. Only applied to lights with adjustable brightness.
   trigger:
-    - platform: state
-      entity_id: input_number.apartment_dimmer
+  - platform: state
+    entity_id: input_number.apartment_dimmer
+  condition: []
   action:
-    - service: automation.trigger
-      data:
-        skip_condition: false
-      target:
-        entity_id:
-          - automation.mdb_office_3_pendants
-          #- automation.mdb_bedroom_pendant
-          #- automation.mdb_bedroom_closet
-          #- automation.mdb_guestroom_cloud
-          - automation.mdb_bathroom_downlights
-          - automation.mdb_bathroom_strip
-          - automation.mdb_toilet_downlight
-          - automation.mdb_kitchen_6_track
-          - automation.mdb_kitchen_flowerpots
-          - automation.mdb_kitchen_pendants
-          - automation.mdb_livingroom_4_track
-          - automation.mdb_livingroom_downlights
-          - automation.mdb_entry_downlights
-- id: mdb201
-  alias: MDB Office 3-pendants
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.pendants_office
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb202
-  alias: MDB Bedroom Pendant
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.pendant_bedroom
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb203
-  alias: MDB Bedroom Closet
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.closet_lights_lys
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb204
-  alias: MDB Guestroom Cloud
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.pendant_guest
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb301
-  alias: MDB Bathroom Downlights
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.downlights_bath
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb302
-  alias: MDB Bathroom Strip
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.lightstrip_bath
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb303
-  alias: MDB Toilet Downlight
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.downlight_toilet
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb101
-  alias: MDB Kitchen 6-track
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_veranda', 'on') }}"
+      light_entity: light.wall_lantern_veranda
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Veranda wall lantern
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.spottrack6_kitchen
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb102
-  alias: MDB Kitchen Flowerpots
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Kitchen 6-track
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.pendants_kitchen
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb103
-  alias: MDB Kitchen Pendants
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Kitchen pendants
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.pendants_living
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb104
-  alias: MDB Livingroom 4-track
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
-      light_entity: light.spottrack4_living
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb105
-  alias: MDB Livingroom Downlights
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Living pendants
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.downlights_living
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
-- id: mdb106
-  alias: MDB Entry downlights
-  description: Masterdim brightness
-  use_blueprint:
-    path: homeassistant/masterdim_light.yaml
-    input:
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Living downlights
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
+      light_entity: light.spottrack4_living
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Living 4-track
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
+      light_entity: light.mood_ball
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Living mood ball
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_entry', 'on') }}"
       light_entity: light.downlights_entry
-      brightness_value: "{{ states('input_number.apartment_dimmer') | int }}"
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Entry downlights
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_office', 'on') }}"
+      light_entity: light.pendants_office
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Office pendants
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
+      light_entity: light.lightstrip_bath
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Bath lightstrip
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
+      light_entity: light.downlights_bath
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Bath downlights
+  - service: script.masterdim_script
+    metadata: {}
+    data:
+      manual_override: false
+      light_entity: light.downlight_toilet
+      brightness: "{{ states('input_number.apartment_dimmer') }}"
+    alias: Masterdim Toilet downlight
+  mode: restart
 
 - id: '1707168721809'
   alias: Auto masterdim with Sun-cycle
