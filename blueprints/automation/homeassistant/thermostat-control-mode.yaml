@@ -2,7 +2,6 @@ blueprint:
   name: Update thermostat settings on mode change
   description: Takes an input_select for a thermostat that holds the state of its control mode. Changes to this triggers this automation to implement the actual update.
   domain: automation
-  #mode: restart
   input:
     select_entity:
       name: Select entity

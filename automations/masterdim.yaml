@@ -1,4 +1,3 @@
-# MDB = MasterDim Brigthness
 - id: '1708515045819'
   alias: Lights - Masterdim ALL lights
   description: Masterdims the brightness of lights in all the activity-rooms. The exceptions are Bedroom, Guest room and Storage-room. Only applied to lights with adjustable brightness.

@@ -2,7 +2,6 @@ blueprint:
   name: Update thermostat control mode on schedule triggers
   description: Takes a schedule input that triggers when certain sleep/comfort modes activate. Off-state of the schedule means Away. Also takes input of which input_select to change control mode of.
   domain: automation
-  #mode: restart
   input:
     schedule_entity:
       name: Schedule entity
