@@ -446,7 +446,7 @@ heating_set_thermostat_mode:
         entity: {}
       name: Control mode entity
 heating_mode_sets_temperature:
-  alias: Heating - Mode change sets temperature
+  alias: Heating - Set thermostat target temperature
   sequence:
   - service: climate.set_temperature
     metadata: {}
@@ -468,6 +468,7 @@ heating_mode_sets_temperature:
         entity: {}
       name: Temperature entity
       required: true
+  max: 10
 lights_reset_overrides:
   alias: Lights - Reset manual overrides
   sequence:
@@ -484,3 +485,113 @@ lights_reset_overrides:
       - input_boolean.lights_override_veranda
   mode: single
   icon: mdi:restart
+heating_set_mode_all_thermostats:
+  alias: Heating - Set dynamic mode of all thermostats
+  sequence:
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: '{{ control_mode }}'
+    target:
+      entity_id:
+      - input_select.heating_mode_bath
+      - input_select.heating_mode_bedroom
+      - input_select.heating_mode_guest
+      - input_select.heating_mode_kitchen
+      - input_select.heating_mode_living
+      - input_select.heating_mode_toilet
+  mode: single
+  icon: mdi:thermostat
+  fields:
+    control_mode:
+      selector:
+        select:
+          options:
+          - Away
+          - Vacation
+          - Manual
+      name: Control mode
+      description: Mode that all thermostats will be set to. Only supports the ones
+        they can all be set to.
+heating_set_warmest_mode_all_thermostats:
+  alias: Heating - Set warmest mode of all thermostats
+  sequence:
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: Comfort
+    target:
+      entity_id:
+      - input_select.heating_mode_bath
+      - input_select.heating_mode_kitchen
+      - input_select.heating_mode_toilet
+      - input_select.heating_mode_living
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: Sleep
+    target:
+      entity_id: input_select.heating_mode_bedroom
+  mode: single
+  icon: mdi:thermostat
+set_fan_speed_roborock_wrapper:
+  alias: Robot clean - Set fan speed Roborock wrapper
+  sequence:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ fan_speed == ''Quiet'' }}'
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Silent
+        target:
+          entity_id: vacuum.esmeralda
+      alias: If Quiet, set Silent
+    - conditions:
+      - condition: template
+        value_template: '{{ fan_speed == ''Balanced'' }}'
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Standard
+        target:
+          entity_id: vacuum.esmeralda
+      alias: If Balanced, set Standard
+    - conditions:
+      - condition: template
+        value_template: '{{ fan_speed == ''Turbo'' }}'
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Medium
+        target:
+          entity_id: vacuum.esmeralda
+      alias: If Turbo, set Medium
+    - conditions:
+      - condition: template
+        value_template: '{{ fan_speed == ''Max'' }}'
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Turbo
+        target:
+          entity_id: vacuum.esmeralda
+      alias: If Max, set Turbo
+  mode: queued
+  icon: mdi:robot-vacuum
+  fields:
+    fan_speed:
+      selector:
+        select:
+          options:
+          - Quiet
+          - Balanced
+          - Turbo
+          - Max
+      name: Fan speed
+      description: Accepts the inputs in the terminology of the Roborock-app.
