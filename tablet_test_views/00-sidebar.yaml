@@ -1,4 +1,4 @@
-#background: center / cover no-repeat url("/local/ui/sidebarBG2.png") fixed
+path: main
 type: sidebar
 theme: ios-dark-mode
 cards:
@@ -10,7 +10,7 @@ cards:
       link_active: "true"
     tap_action:
       action: navigate
-      navigation_path: /tablet-test
+      navigation_path: /tablet-test/main/dashboard
     view_layout:
       position: sidebar
   - type: "custom:button-card"

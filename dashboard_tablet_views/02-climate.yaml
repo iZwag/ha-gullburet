@@ -1,6 +1,6 @@
 title: Climate control
 path: climate
-background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
 type: "custom:ha-dashboard"
 theme: ios-dark-mode
 badges: []

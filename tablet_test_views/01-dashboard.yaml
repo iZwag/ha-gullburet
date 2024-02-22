@@ -1,5 +1,5 @@
 title: Dashboard
-path: dashboard
+path: main/dashboard
 background: center / cover no-repeat url("/local/ui/homekit-bg-4-cropped.jpg") fixed
 type: masonry
 theme: ios-dark-mode

@@ -1,6 +1,6 @@
 title: Bedtime & wakeup
 path: sleep
-background: center / cover no-repeat url("/local/ui/bg-1.jpg") fixed
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
 type: "custom:ha-dashboard"
 theme: ios-dark-mode
 badges: []

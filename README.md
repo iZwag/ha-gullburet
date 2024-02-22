@@ -57,7 +57,7 @@ To display relevant info about life in Oslo and Norway, here are some public API
 
 Here is how the main view of the wall-mounted tablet dashboard looks like.
 
-![Wall-mounted tablet dashboard main view](./www/overview-dashboard.png)
+![Wall-mounted tablet dashboard main view](./www/docs/overview-dashboard.png)
 
 ### Floorplan
 
