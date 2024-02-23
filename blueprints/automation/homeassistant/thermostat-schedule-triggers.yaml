@@ -2,6 +2,7 @@ blueprint:
   name: Update thermostat control mode on schedule triggers
   description: Takes a schedule input that triggers when certain sleep/comfort modes activate. Off-state of the schedule means Away. Also takes input of which input_select to change control mode of.
   domain: automation
+  author: 'github.com/izwag'
   input:
     schedule_entity:
       name: Schedule entity
@@ -22,6 +23,13 @@ blueprint:
         entity:
           filter:
             domain: input_select
+    enabled_if:
+      name: Enabled if
+      description: A condition that must be true for the schedule trigger to take effect. Example used for guest room that checks guest-mode.
+      default: true
+      selector:
+        boolean:
+mode: restart
 trigger:
 - platform: state
   entity_id: !input schedule_entity
@@ -46,6 +54,8 @@ condition:
     - condition: state
       entity_id: !input select_entity
       state: Vacation
+  - condition: template
+    value_template: !input enabled_if
 action:
 - choose:
   - conditions:
