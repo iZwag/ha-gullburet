@@ -92,6 +92,7 @@
       schedule_entity: schedule.heating_comfort_bath
       schedule_type: Comfort
       select_entity: input_select.heating_mode_bath
+      enabled_if: true
 
 - id: 'heating_bath_sleep_schedule_triggers'
   alias: Heating - Bath - Sleep/away on schedule triggers
@@ -102,6 +103,7 @@
       schedule_entity: schedule.heating_sleep_bath
       schedule_type: Sleep
       select_entity: input_select.heating_mode_bath
+      enabled_if: true
 
 - id: 'heating_toilet_comfort_schedule_triggers'
   alias: Heating - Toilet - Comfort/away on schedule triggers
@@ -112,6 +114,7 @@
       schedule_entity: schedule.heating_comfort_toilet
       schedule_type: Comfort
       select_entity: input_select.heating_mode_toilet
+      enabled_if: true
 
 - id: 'heating_bedroom_sleep_schedule_triggers'
   alias: Heating - Bedroom - Sleep/away on schedule triggers
@@ -122,6 +125,7 @@
       schedule_entity: schedule.heating_sleep_bedroom
       schedule_type: Sleep
       select_entity: input_select.heating_mode_bedroom
+      enabled_if: true
 
 - id: 'heating_living_sleep_schedule_triggers'
   alias: Heating - Living - Sleep/away on schedule triggers
@@ -132,6 +136,7 @@
       schedule_entity: schedule.heating_sleep_living
       schedule_type: Sleep
       select_entity: input_select.heating_mode_living
+      enabled_if: true
 
 - id: 'heating_living_comfort_schedule_triggers'
   alias: Heating - Living - Comfort/away on schedule triggers
@@ -142,6 +147,7 @@
       schedule_entity: schedule.heating_comfort_living
       schedule_type: Comfort
       select_entity: input_select.heating_mode_living
+      enabled_if: true
 
 - id: 'heating_kitchen_sleep_schedule_triggers'
   alias: Heating - Kitchen - Sleep/away on schedule triggers
@@ -152,6 +158,7 @@
       schedule_entity: schedule.heating_sleep_living
       schedule_type: Sleep
       select_entity: input_select.heating_mode_kitchen
+      enabled_if: true
 
 - id: 'heating_kitchen_comfort_schedule_triggers'
   alias: Heating - Kitchen - Comfort/away on schedule triggers
@@ -162,5 +169,15 @@
       schedule_entity: schedule.heating_comfort_living
       schedule_type: Comfort
       select_entity: input_select.heating_mode_kitchen
+      enabled_if: true
 
-### TODO: GUEST ROOM SCHEDULE TRIGGERS - Needs an on/off-input for "guest-mode"
+- id: 'heating_guest_sleep_schedule_triggers'
+  alias: Heating - Guest - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_guest
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_guest
+      enabled_if: "{{ is_state('input_boolean.guest_mode_enable', 'on') }}"

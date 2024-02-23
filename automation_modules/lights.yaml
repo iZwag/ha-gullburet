@@ -7,84 +7,72 @@
   condition: []
   action:
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_veranda', 'on') }}"
       light_entity: light.wall_lantern_veranda
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Veranda wall lantern
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.spottrack6_kitchen
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen 6-track
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.pendants_kitchen
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen pendants
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.pendants_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living pendants
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.downlights_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living downlights
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.spottrack4_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living 4-track
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.mood_ball
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living mood ball
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_entry', 'on') }}"
       light_entity: light.downlights_entry
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Entry downlights
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_office', 'on') }}"
       light_entity: light.pendants_office
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Office pendants
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
       light_entity: light.lightstrip_bath
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath lightstrip
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
       light_entity: light.downlights_bath
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath downlights
   - service: script.masterdim_script
-    metadata: {}
     data:
       manual_override: false
       light_entity: light.downlight_toilet
@@ -138,7 +126,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Dawn
           event_time: '{{ states(''sensor.sun_next_dawn'') }}'
@@ -153,7 +140,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Sunrise
           event_time: '{{ states(''sensor.sun_next_rising'') }}'
@@ -168,7 +154,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Risenoon
           event_time: '{{ states(''input_datetime.risenoon'') }}'
@@ -183,7 +168,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Noon
           event_time: '{{ states(''sensor.sun_next_noon'') }}'
@@ -198,7 +182,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Noonset
           event_time: '{{ states(''input_datetime.noonset'') }}'
@@ -213,7 +196,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Sunset
           event_time: '{{ states(''sensor.sun_next_setting'') }}'
@@ -228,7 +210,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Dusk
           event_time: '{{ states(''sensor.sun_next_dusk'') }}'
@@ -243,7 +224,6 @@
         target:
           entity_id: input_number.apartment_dimmer
       - service: script.sun_cycle_set_next_event_text
-        metadata: {}
         data:
           next_sun_event: Midnight
           event_time: '{{ states(''sensor.sun_next_midnight'') }}'
@@ -260,7 +240,5 @@
   condition: []
   action:
     - service: script.calculate_risenoon
-      data: {}
     - service: script.calculate_noonset
-      data: {}
   mode: single

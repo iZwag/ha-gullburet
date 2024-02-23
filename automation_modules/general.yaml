@@ -26,7 +26,6 @@
             - service: light.turn_off
               target:
                 entity_id: light.lightstrip_undershelf_kitchen
-              data: {}
         - conditions:
             - condition: trigger
               id:
@@ -106,7 +105,6 @@
           sequence:
             - alias: Turn Tablet screen ON
               service: switch.turn_on
-              data: {}
               target:
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
         - conditions:
@@ -116,7 +114,6 @@
           sequence:
             - alias: Turn tablet screen OFF
               service: switch.turn_off
-              data: {}
               target:
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
   mode: single
@@ -204,7 +201,6 @@
           entity_id: 9b7ec62590734746bf02741e11be30ba
           domain: switch
         - service: timer.start
-          metadata: {}
           data:
             duration: 00:30:00
           target:
@@ -235,7 +231,6 @@
             - down
       then:
         - service: timer.change
-          metadata: {}
           data:
             duration: -00:10:00
           target:
@@ -273,7 +268,6 @@
           entity_id: 9b7ec62590734746bf02741e11be30ba
           domain: switch
         - service: timer.start
-          metadata: {}
           data:
             duration: 01:00:00
           target:
@@ -310,7 +304,6 @@
             - 10min-before
       then:
         - service: light.turn_on
-          metadata: {}
           data:
             brightness_pct: 3
           target:
@@ -327,7 +320,6 @@
             - 30min-after
       then:
         - service: light.turn_on
-          metadata: {}
           data:
             brightness_pct: 100
           target:
@@ -358,8 +350,6 @@
       - motion
     then:
     - service: script.storage_room_light_on_auto
-      metadata: {}
-      data: {}
   - if:
     - condition: trigger
       id:
@@ -381,8 +371,6 @@
   condition: []
   action:
   - service: script.lights_reset_overrides
-    metadata: {}
-    data: {}
   mode: single
 
 - id: '1708597925586'
@@ -411,17 +399,18 @@
         - enabled
       sequence:
       - service: light.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id: light.lightstrip_closet_bedroom
       - service: input_boolean.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id: input_boolean.guest_mode_enable
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.bedtime_alarm_active
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.wakeup_alarm_active
       - service: script.heating_set_mode_all_thermostats
-        metadata: {}
         data:
           control_mode: Vacation
     - conditions:
@@ -429,9 +418,13 @@
         id:
         - disabled
       sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.bedtime_alarm_active
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.wakeup_alarm_active
       - service: light.turn_on
-        metadata: {}
-        data: {}
         target:
           entity_id: light.lightstrip_closet_bedroom
       - if:
@@ -439,25 +432,19 @@
           value_template: "{{ is_state('input_select.climate_season_select', 'Cold') }}"
         then:
         - service: script.heating_set_warmest_mode_all_thermostats
-          metadata: {}
-          data: {}
       - if:
         - condition: time
           after: 09:00:00
           before: '21:30:00'
         then:
         - service: script.set_fan_speed_roborock_wrapper
-          metadata: {}
           data:
             fan_speed: Max
         else:
         - service: script.set_fan_speed_roborock_wrapper
-          metadata: {}
           data:
             fan_speed: Quiet
       - service: vacuum.start
-        metadata: {}
-        data: {}
         target:
           entity_id: vacuum.esmeralda
   mode: single
@@ -472,8 +459,6 @@
   condition: []
   action:
   - service: input_boolean.turn_off
-    metadata: {}
-    data: {}
     target:
       entity_id: input_boolean.vacation_mode_enable
   mode: single
@@ -504,7 +489,6 @@
         - enabled
       sequence:
       - service: input_select.select_option
-        metadata: {}
         data:
           option: Sleep
         target:
@@ -515,7 +499,6 @@
         - disabled
       sequence:
       - service: input_select.select_option
-        metadata: {}
         data:
           option: Away
         target:
