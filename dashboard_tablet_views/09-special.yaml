@@ -179,6 +179,11 @@ cards:
               features:
                 - type: numeric-input
                   style: buttons
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
             - type: tile
               entity: input_number.temperature_away_guest
               hide_state: true
@@ -187,6 +192,11 @@ cards:
               features:
                 - type: numeric-input
                   style: buttons
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
           - type: tile
             entity: input_boolean.party_mode_enable
             color: pink
