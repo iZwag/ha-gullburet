@@ -371,6 +371,9 @@
   condition: []
   action:
   - service: script.lights_reset_overrides
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.party_mode_enable
   mode: single
 
 - id: '1708597925586'
