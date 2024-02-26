@@ -6,41 +6,32 @@ all_lights_off:
   - service: scene.turn_on
     target:
       entity_id: scene.kitchen_lights_off
-    metadata: {}
   - delay: 00:00:01
   - service: scene.turn_on
     target:
       entity_id: scene.living_room_lights_off
-    metadata: {}
   - delay: 00:00:01
   - service: scene.turn_on
     target:
       entity_id: scene.entry_lights_off
-    metadata: {}
   - delay: 00:00:01
   - service: scene.turn_on
     target:
       entity_id: scene.bathroom_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.toilet_lights_off
-    metadata: {}
   - delay: 00:00:01
   - service: scene.turn_on
     target:
       entity_id: scene.guestroom_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.office_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.bedroom_lights_off
-    metadata: {}
   - service: scene.turn_on
-    metadata: {}
     target:
       entity_id: scene.veranda_lights_off
 all_lights_on:
@@ -55,7 +46,6 @@ all_lights_on:
       entity_id: light.downlights_entry
   - delay: 00:00:01
   - service: switch.turn_on
-    data: {}
     target:
       entity_id: switch.lamp_globe_living
   - service: light.turn_on
@@ -69,7 +59,6 @@ all_lights_on:
     target:
       entity_id: light.spottrack4_living
   - service: switch.turn_on
-    data: {}
     target:
       entity_id: switch.lamp_mushroom_living
   - service: light.turn_on
@@ -135,34 +124,27 @@ bedtime_lights:
   - service: scene.turn_on
     target:
       entity_id: scene.toilet_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.bathroom_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.office_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.entry_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.living_room_lights_off
-    metadata: {}
   - service: scene.turn_on
     target:
       entity_id: scene.kitchen_lights_off
-    metadata: {}
   mode: single
   icon: mdi:bed
 select_floorplan_room:
   alias: Floorplan - Select room
   sequence:
   - service: input_text.set_value
-    metadata: {}
     data:
       value: '{{ room_name }}'
     target:
@@ -181,7 +163,6 @@ deselect_floorplan_room:
   alias: Floorplan - Unselect room
   sequence:
   - service: input_text.set_value
-    metadata: {}
     data:
       value: none
     target:
@@ -192,7 +173,6 @@ storage_room_light_on_auto:
   alias: Storage room - Light on - Auto
   sequence:
   - service: timer.start
-    metadata: {}
     data:
       duration: 00:03:00
     target:
@@ -238,7 +218,6 @@ masterdim_script:
         alias: If light entity is on
     then:
     - service: light.turn_on
-      metadata: {}
       data:
         brightness_pct: '{{ brightness }}'
       target:
@@ -248,7 +227,6 @@ robot_clean_target_room:
   alias: Robot clean - Target room
   sequence:
   - service: vacuum.set_fan_speed
-    metadata: {}
     data:
       fan_speed: '{{ fan_speed }}'
     target:
@@ -304,7 +282,6 @@ speakers_unjoin_all:
       - media_player.stue
       - media_player.kjokken
       - media_player.sonos_move
-    data: {}
   mode: restart
   icon: mdi:speaker
 sun_cycle_set_next_event_text:
@@ -341,7 +318,6 @@ storage_room_light_off_finish_timer:
   - service: timer.finish
     target:
       entity_id: timer.storage_room_light_timer
-    data: {}
   - type: turn_off
     device_id: 0f0cf256bc675de29f236888b06ff677
     entity_id: fad54750e7aefa1a6178fdf5e8714bcc
@@ -352,7 +328,6 @@ robot_set_mop_mode:
   alias: Robot clean - Set mop mode
   sequence:
   - service: vacuum.send_command
-    metadata: {}
     data:
       command: set_water_box_custom_mode
       params: "{% if mopping_mode == 'Off' %}\n  [200]\n{% elif mopping_mode == 'Low'
@@ -368,7 +343,6 @@ robot_set_mop_mode:
         }}'
     then:
     - service: vacuum.send_command
-      metadata: {}
       data:
         command: set_custom_mode
         params: 105
@@ -376,7 +350,6 @@ robot_set_mop_mode:
         entity_id: vacuum.esmeralda
       alias: Send command Fan-mode OFF
     - service: vacuum.send_command
-      metadata: {}
       data:
         command: set_mop_mode
         params: "{% if mopping_route == 'Standard' %}\n  [300]\n{% elif mopping_route
@@ -387,7 +360,6 @@ robot_set_mop_mode:
       alias: Send command Mop route
     else:
     - service: vacuum.set_fan_speed
-      metadata: {}
       data:
         fan_speed: '{{ fan_speed }}'
       target:
@@ -420,7 +392,6 @@ heating_set_thermostat_mode:
   alias: Heating - Set thermostat mode
   sequence:
   - service: input_select.select_option
-    metadata: {}
     data:
       option: '{{ mode }}'
     target:
@@ -449,7 +420,6 @@ heating_mode_sets_temperature:
   alias: Heating - Set thermostat target temperature
   sequence:
   - service: climate.set_temperature
-    metadata: {}
     data:
       hvac_mode: heat
       temperature: '{{ states( temperature_entity ) }}'
@@ -473,8 +443,6 @@ lights_reset_overrides:
   alias: Lights - Reset manual overrides
   sequence:
   - service: input_boolean.turn_off
-    metadata: {}
-    data: {}
     target:
       entity_id:
       - input_boolean.lights_override_bath
@@ -489,7 +457,6 @@ heating_set_mode_all_thermostats:
   alias: Heating - Set dynamic mode of all thermostats
   sequence:
   - service: input_select.select_option
-    metadata: {}
     data:
       option: '{{ control_mode }}'
     target:
@@ -517,7 +484,6 @@ heating_set_warmest_mode_all_thermostats:
   alias: Heating - Set warmest mode of all thermostats
   sequence:
   - service: input_select.select_option
-    metadata: {}
     data:
       option: Comfort
     target:
@@ -527,11 +493,15 @@ heating_set_warmest_mode_all_thermostats:
       - input_select.heating_mode_toilet
       - input_select.heating_mode_living
   - service: input_select.select_option
-    metadata: {}
     data:
       option: Sleep
     target:
       entity_id: input_select.heating_mode_bedroom
+  - service: input_select.select_option
+    data:
+      option: Away
+    target:
+      entity_id: input_select.heating_mode_guest
   mode: single
   icon: mdi:thermostat
 set_fan_speed_roborock_wrapper:
@@ -543,7 +513,6 @@ set_fan_speed_roborock_wrapper:
         value_template: '{{ fan_speed == ''Quiet'' }}'
       sequence:
       - service: vacuum.set_fan_speed
-        metadata: {}
         data:
           fan_speed: Silent
         target:
@@ -554,7 +523,6 @@ set_fan_speed_roborock_wrapper:
         value_template: '{{ fan_speed == ''Balanced'' }}'
       sequence:
       - service: vacuum.set_fan_speed
-        metadata: {}
         data:
           fan_speed: Standard
         target:
@@ -565,7 +533,6 @@ set_fan_speed_roborock_wrapper:
         value_template: '{{ fan_speed == ''Turbo'' }}'
       sequence:
       - service: vacuum.set_fan_speed
-        metadata: {}
         data:
           fan_speed: Medium
         target:
@@ -576,7 +543,6 @@ set_fan_speed_roborock_wrapper:
         value_template: '{{ fan_speed == ''Max'' }}'
       sequence:
       - service: vacuum.set_fan_speed
-        metadata: {}
         data:
           fan_speed: Turbo
         target:
