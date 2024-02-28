@@ -1,0 +1,180 @@
+title: Consumption
+path: consumption
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+type: "custom:ha-dashboard"
+theme: ios-dark-mode
+badges: []
+usePanel: true
+sidebar:
+  screenMinWidth: 828
+  buttons: []
+  stickyCards:
+    - type: picture-elements
+      image: "/local/ui/clck-background.png"
+      elements:
+        - type: state-label
+          entity: sensor.time
+          hold_action:
+            action: none
+          style:
+            color: var(--primary-text-color)
+            font-size: 5.41vw
+            font-weight: 200
+            left: 16%
+            letter-spacing: "-0.05vw"
+            max-width: 1px
+            top: 37.5%
+            pointer-events: none
+          tap_action:
+            action: none
+        - type: state-label
+          entity: sensor.date_string
+          hold_action:
+            action: none
+          style:
+            color: var(--secondary-text-color)
+            font-size: 1.3vw
+            font-weight: 300
+            left: 31.5%
+            letter-spacing: "-0.05vw"
+            text-align: left
+            top: 65%
+            width: 30%
+            pointer-events: none
+          tap_action:
+            action: none
+  cards:
+    - type: custom:stack-in-card
+      mode: vertical
+      keep:
+        border_radius: true
+        margin: true
+        box_shadow: true
+        background: true
+      card_mod:
+        style: |
+          ha-card {
+            padding: 0% 1% 0% 1%;
+          }
+      cards:
+        - type: "custom:button-card"
+          icon: mdi:home
+          name: Dashboard
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/dashboard
+        - type: "custom:button-card"
+          icon: mdi:floor-plan
+          name: Floorplan control
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/floorplan
+        - type: "custom:button-card"
+          icon: mdi:bed
+          name: Bedtime & wake-up
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/sleep
+        - type: "custom:button-card"
+          icon: mdi:star
+          name: Special
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/special
+        - type: "custom:button-card"
+          icon: mdi:chart-bar
+          name: Consumption
+          template: navbar_button
+          variables:
+            link_active: "true"
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/consumption
+        # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
+        - type: "custom:button-card"
+          color_type: blank_card
+          styles:
+            card:
+              - height: 31.5vh
+        - type: custom:mushroom-chips-card
+          alignment: center
+          card_mod:
+            style: |
+              ha-card {
+                --chip-background: rgba(25, 25, 25, 0.2);
+                --primary-text-color: var(--secondary-text-color);
+              }
+          chips:
+          - type: action
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/0
+            icon: mdi:cog
+          - type: entity
+            entity: sensor.temperature_apartment_avg
+          - type: weather
+            entity: weather.yr_weather_home
+            show_temperature: true
+            show_conditions: true
+cards:
+  - type: "custom:bootstrap-grid-card"
+    #container_padding: 10px
+    #use_hass_style_gutter: true
+    #hass_style_gutter_size: "10px"
+    cards:
+    - type: row
+      cards:
+      - type: vertical-stack
+        class: "col-md-12"
+        cards:
+        - type: markdown
+          content: "# Battery statuses"
+          card_mod:
+            style:
+              ha-markdown$: |
+                h1 {
+                  font-weight: 300;
+                }
+              .: |
+                ha-card {
+                  background-color: var(--nested-card-background);
+                }
+                ha-markdown {
+                  padding: var(--ha-card-padding) !important;
+                }
+        - type: horizontal-stack
+          cards:
+          - type: entities
+            entities:
+              - entity: sensor.temperature_battery_bedroom
+                name: Temperature sensor, bedroom
+              - entity: sensor.temperature_battery_guest
+                name: Temperature sensor, guest room
+              - entity: sensor.temperature_battery_entry
+                name: Temperature sensor, entry
+              - entity: sensor.temperature_battery_kitchen
+                name: Temperature sensor, kitchen
+              - entity: sensor.temperature_battery_office
+                name: Temperature sensor, office
+              - entity: sensor.temperature_battery_living
+                name: Temperature sensor, living room
+              - entity: sensor.motion_battery_storage
+                name: Motion sensor, storage
+            state_color: true
+          - type: entities
+            entities:
+              - entity: sensor.heatsheet_remote_battery
+                name: Heated sheet remote
+              - entity: sensor.esmeralda_battery
+                name: Esmeralda
+              - entity: sensor.lenovo_tab_m10_battery
+                name: Lenovo Tab M10
+              - entity: sensor.iphone_jon_battery
+                name: "Jon's iPhone"
+            state_color: true
+
+        
