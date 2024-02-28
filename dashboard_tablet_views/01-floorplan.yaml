@@ -124,7 +124,7 @@ cards:
         cards:
           # HOME/ROOM/DEVICE DATA & CONTROL COLUMN
           - type: col
-            class: "col-md-5 col-xxl-4"
+            class: "col-md-6 col-xxl-4"
             cards:
             # VERTICAL STACK FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
             - type: vertical-stack
@@ -984,20 +984,14 @@ cards:
           # 3D FLOORPLAN VISUALIZATION COLUMN
           # ###################################################################
           - type: col
-            class: "col-md-7 col-xxl-8"
-            card_mod:
-              style: |
-                div.col-md-7 {
-                  align-items: center !important;
-                  padding: 0px;
-                }
+            class: "col-md-6 col-xxl-8"
             cards:
             - type: picture-elements
               image: /local/floorplan/base-dark-v3.png
               card_mod:
                 style: |
                   ha-card {
-                    width: 89%;
+                    width: 104%;
                     background-color: transparent;
                   }
               elements:
@@ -1823,5 +1817,3 @@ cards:
                     "50": opacity(70%)
                     "75": opacity(85%)
                     "100": opacity(100%)
-
-
