@@ -111,7 +111,7 @@
           On
         {% endif %}
     
-    battery_esmeralda:
+    esmeralda_battery:
       friendly_name: "Esmeralda battery status"
       unit_of_measurement: "%"
       value_template: "{{ state_attr('vacuum.esmeralda', 'battery_level') }}"
