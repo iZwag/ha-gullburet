@@ -256,4 +256,27 @@ cards:
             - entity: input_datetime.vacation_return_time
               name: 'Return from vacation time'
               icon: mdi:home-import-outline
-              secondary_info: none
+    - type: row
+      cards:
+      - type: vertical-stack
+        class: "col-md-6"
+        cards:
+        - type: markdown
+          content: "# Seasonal"
+          card_mod:
+            style:
+              ha-markdown$: |
+                h1 {
+                  font-weight: 300;
+                }
+              .: |
+                ha-card {
+                  background-color: var(--nested-card-background);
+                }
+                ha-markdown {
+                  padding: var(--ha-card-padding) !important;
+                }
+        - type: entities
+          entities:
+            - entity: input_select.climate_season_select
+              name: Cold/warm season select
