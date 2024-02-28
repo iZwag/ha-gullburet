@@ -45,13 +45,13 @@
   - alias: Below 20 pcnt
     platform: numeric_state
     entity_id:
-    - sensor.lenovo_tab_m10_fhd_plus_batteri
+    - sensor.lenovo_tab_m10_battery
     below: 20
     id: below-20-pcnt
   - alias: Above 80 pcnt
     platform: numeric_state
     entity_id:
-    - sensor.lenovo_tab_m10_fhd_plus_batteri
+    - sensor.lenovo_tab_m10_battery
     above: 80
     id: above-80-pcnt
   condition: []
