@@ -79,13 +79,6 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/sleep
         - type: "custom:button-card"
-          icon: mdi:star
-          name: Special
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/special
-        - type: "custom:button-card"
           icon: mdi:chart-bar
           name: Consumption
           template: navbar_button
@@ -94,12 +87,19 @@ sidebar:
           tap_action:
             action: navigate
             navigation_path: /dashboard-tablet/consumption
+        - type: "custom:button-card"
+          icon: mdi:star
+          name: Special
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/special
         # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
         - type: "custom:button-card"
           color_type: blank_card
           styles:
             card:
-              - height: 31.5vh
+              - height: 32vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
