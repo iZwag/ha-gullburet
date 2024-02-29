@@ -79,6 +79,13 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/sleep
         - type: "custom:button-card"
+          icon: mdi:chart-bar
+          name: Consumption
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/consumption
+        - type: "custom:button-card"
           icon: mdi:star
           name: Special
           template: navbar_button
@@ -92,7 +99,7 @@ sidebar:
           color_type: blank_card
           styles:
             card:
-              - height: 37.5vh
+              - height: 32vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
@@ -251,11 +258,11 @@ cards:
                 ha-card {
                   background-color: var(--nested-card-background);
                 }
-          - type: entities
-            entities:
-            - entity: input_datetime.vacation_return_time
-              name: 'Return from vacation time'
-              icon: mdi:home-import-outline
+        - type: entities
+          entities:
+          - entity: input_datetime.vacation_return_time
+            name: 'Return from vacation time'
+            icon: mdi:home-import-outline
     - type: row
       cards:
       - type: vertical-stack
