@@ -81,6 +81,13 @@ sidebar:
             action: navigate
             navigation_path: /dashboard-tablet/sleep
         - type: "custom:button-card"
+          icon: mdi:chart-bar
+          name: Consumption
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/consumption
+        - type: "custom:button-card"
           icon: mdi:star
           name: Special
           template: navbar_button
@@ -92,7 +99,7 @@ sidebar:
           color_type: blank_card
           styles:
             card:
-              - height: 37.5vh
+              - height: 32vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
@@ -122,98 +129,132 @@ cards:
       - type: row
         cards:
           # Bedtime column
-          - type: custom:stack-in-card
-            mode: vertical
+          - type: vertical-stack
             class: "col-md-6"
-            card_mod:
-              style: |
-                hui-horizontal-stack-card #root: { 
-                  align-items: center;
-                  justify-content: center;
-                }
             cards:
               # Title card: Bedtime
-              - type: custom:mushroom-title-card
-                title: Bedtime
-              # Horizontal stack: Automatic on/off + time picker
-              - type: horizontal-stack
+              - type: markdown
+                content: "# Bedtime"
+                card_mod:
+                  style:
+                    ha-markdown$: |
+                      h1 {
+                        font-weight: 300;
+                      }
+                    .: |
+                      ha-card {
+                        background-color: var(--nested-card-background);
+                      }
+                      ha-markdown {
+                        padding: var(--ha-card-padding) !important;
+                      }
+              - type: custom:stack-in-card
+                mode: vertical
                 cards:
-                  - type: custom:mushroom-entity-card
-                    entity: input_boolean.bedtime_alarm_active
-                    name: Automatic bedtime
-                    icon: mdi:power
-                    tap_action:
-                      action: toggle
-                  - type: custom:time-picker-card
-                    entity: input_datetime.bedtime_alarm
-                    hour_mode: 24
-                    hour_step: 1
-                    minute_step: 1
-                    layout:
-                      hour_mode: double
-                      align_controls: center
-                      name: header
-                      embedded: false
-                      thin: true
-                    hide:
-                      seconds: true
-                      icon: true
-                      name: true
-              # Chips relevant bedtime info
-              - type: custom:mushroom-chips-card
-                alignment: center
-                chips:
-                  - type: entity
-                    entity: switch.heated_sheet_switch
-                    content_info: state
-                    name: Varmelaken
-                    icon: mdi:heating-coil
-                    use_entity_picture: false
-                  - type: entity
-                    entity: sensor.heated_sheet_setting
-                    icon: mdi:heating-coil
-                  - type: entity
-                    entity: input_number.apartment_dimmer
-                    icon: mdi:lightbulb-group
-                  - type: light
-                    entity: light.pendant_bedroom
-                    icon: mdi:ceiling-light
-
+                - type: custom:mushroom-entity-card
+                  entity: input_boolean.bedtime_alarm_active
+                  name: Automatic bedtime
+                  icon: mdi:power
+                  tap_action:
+                    action: toggle
+                - type: custom:time-picker-card
+                  entity: input_datetime.bedtime_alarm
+                  hour_mode: 24
+                  hour_step: 1
+                  minute_step: 1
+                  layout:
+                    hour_mode: double
+                    align_controls: left
+                    name: header
+                    embedded: false
+                    thin: true
+                  hide:
+                    seconds: true
+                    icon: true
+                    name: true
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --tpc-elements-background-color: transparent !important;
+                        padding: var(--ha-card-padding) !important;
+                      }
+                # Chips relevant bedtime info
+                - type: custom:mushroom-chips-card
+                  alignment: center
+                  chips:
+                    - type: entity
+                      entity: switch.heated_sheet_switch
+                      content_info: state
+                      name: Varmelaken
+                      icon: mdi:heating-coil
+                      use_entity_picture: false
+                    - type: entity
+                      entity: sensor.heated_sheet_setting
+                      icon: mdi:heating-coil
+                    - type: entity
+                      entity: input_number.apartment_dimmer
+                      icon: mdi:lightbulb-group
+                    - type: light
+                      entity: light.pendant_bedroom
+                      icon: mdi:ceiling-light
+                  card_mod: 
+                    style: |
+                      ha-card {
+                        padding: var(--ha-card-padding) !important;
+                        --chip-background: var(--button-card-background);
+                      }
           # Wake-up column
-          - type: custom:stack-in-card
-            mode: vertical
+          - type: vertical-stack
             class: "col-md-6"
             cards:
-              - type: custom:mushroom-title-card
-                title: Wake-up
-              - type: horizontal-stack
+              - type: markdown
+                content: "# Wake-up"
+                card_mod:
+                  style:
+                    ha-markdown$: |
+                      h1 {
+                        font-weight: 300;
+                      }
+                    .: |
+                      ha-card {
+                        background-color: var(--nested-card-background);
+                      }
+                      ha-markdown {
+                        padding: var(--ha-card-padding) !important;
+                      }
+              - type: custom:stack-in-card
+                mode: vertical
                 cards:
-                  - type: custom:mushroom-entity-card
-                    entity: input_boolean.wakeup_alarm_active
-                    name: Wake-up alarm for tomorrow
-                    icon: mdi:power
-                    tap_action:
-                      action: toggle
-                  - type: custom:time-picker-card
-                    entity: input_datetime.wakeup_alarm
-                    hour_mode: 24
-                    hour_step: 1
-                    minute_step: 1
-                    layout:
-                      hour_mode: double
-                      align_controls: center
-                      name: header
-                      embedded: false
-                      thin: true
-                    hide:
-                      seconds: true
-                      icon: true
-                      name: true
-              - type: custom:numberbox-card
-                border: false
-                entity: input_number.wakeup_alarm_volume
-                name: Alarm volume
-                icon: mdi:alarm-note
-                min: 1
-                max: 30
-                step: 1
+                - type: custom:mushroom-entity-card
+                  entity: input_boolean.wakeup_alarm_active
+                  name: Wake-up alarm for tomorrow
+                  icon: mdi:power
+                  tap_action:
+                    action: toggle
+                - type: custom:time-picker-card
+                  entity: input_datetime.wakeup_alarm
+                  hour_mode: 24
+                  hour_step: 1
+                  minute_step: 1
+                  layout:
+                    hour_mode: double
+                    align_controls: left
+                    name: header
+                    embedded: false
+                    thin: true
+                  hide:
+                    seconds: true
+                    icon: true
+                    name: true
+                  card_mod:
+                    style:
+                      time_unit$: |
+                        input {
+                          border: 1px solid white !important;
+                        }
+                      .: |
+                        ha-card {
+                          --tpc-elements-background-color: transparent !important;
+                          --tpc-icon-color: var(--secondary-text-color);
+                          padding: var(--ha-card-padding) !important;
+                        }
