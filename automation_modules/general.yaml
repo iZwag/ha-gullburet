@@ -319,11 +319,11 @@
           id:
             - 30min-after
       then:
-        - service: light.turn_on
+        - service: script.masterdim_script
           data:
-            brightness_pct: 100
-          target:
-            device_id: 2b7ecd61051d91604909dd749cb5cbc8
+            manual_override: "{{ is_state('input_boolean.wakeup_alarm_active', 'on') }}"
+            light_entity: light.pendant_bedroom
+            brightness: 100
   mode: single
   
 - id: '1706625904243'
