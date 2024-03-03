@@ -180,14 +180,14 @@ class RuterStopInfo extends LitElement {
         flex-direction: column;
         font-size: 18px;
         color: white;
-        padding: 10px;
+        padding: 8px 12px 4px 12px;
       }
       .board-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 0 0 5px 0;
+        padding: 4px 0;
       }
       .header-title {
         text-align: left;
@@ -214,13 +214,13 @@ class RuterStopInfo extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 3px 0;
+        padding: 4px 0;
         gap: 8px;
       }
       .route-number {
         background-color: #E60000;
         color: white;
-        border-radius: 5px;
+        border-radius: 8px;
         padding: 5px;
         font-weight: bold;
         font-size: 0.9em;
