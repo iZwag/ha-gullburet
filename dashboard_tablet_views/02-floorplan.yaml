@@ -1,0 +1,1817 @@
+title: "Floorplan control"
+path: "floorplan"
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+type: "custom:ha-dashboard"
+theme: ios-dark-mode
+badges: []
+usePanel: true
+sidebar:
+  screenMinWidth: 828
+  buttons: []
+  stickyCards:
+  - type: picture-elements
+    image: "/local/ui/clck-background.png"
+    elements:
+    - type: state-label
+      entity: sensor.time
+      tap_action:
+        action: none
+      hold_action:
+        action: none
+      style:
+        color: var(--primary-text-color)
+        font-size: 5.41vw
+        font-weight: 200
+        left: 16%
+        letter-spacing: "-0.05vw"
+        max-width: 1px
+        top: 37.5%
+        pointer-events: none
+    - type: state-label
+      entity: sensor.date_string
+      hold_action:
+        action: none
+      style:
+        color: var(--secondary-text-color)
+        font-size: 1.3vw
+        font-weight: 300
+        left: 31.5%
+        letter-spacing: "-0.05vw"
+        text-align: left
+        top: 65%
+        width: 30%
+        pointer-events: none
+      tap_action:
+        action: none
+  cards:
+    - type: custom:stack-in-card
+      mode: vertical
+      keep:
+        border_radius: true
+        margin: true
+        box_shadow: true
+        background: true
+      card_mod:
+        style: |
+          ha-card {
+            padding: 0% 1% 0% 1%;
+          }
+      cards:
+        - type: "custom:button-card"
+          icon: mdi:home
+          name: Dashboard
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/dashboard
+        - type: "custom:button-card"
+          icon: mdi:floor-plan
+          name: Floorplan control
+          template: navbar_button
+          variables:
+            link_active: "true"
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/floorplan
+        - type: "custom:button-card"
+          icon: mdi:bed
+          name: Bedtime & wake-up
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/sleep
+        - type: "custom:button-card"
+          icon: mdi:chart-bar
+          name: Consumption
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/consumption
+        - type: "custom:button-card"
+          icon: mdi:star
+          name: Special
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/special
+        # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
+        - type: "custom:button-card"
+          color_type: blank_card
+          styles:
+            card:
+              - height: 32vh
+        - type: custom:mushroom-chips-card
+          alignment: center
+          card_mod:
+            style: |
+              ha-card {
+                --chip-background: rgba(25, 25, 25, 0.2);
+                --primary-text-color: var(--secondary-text-color);
+              }
+          chips:
+          - type: action
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/0
+            icon: mdi:cog
+          - type: entity
+            entity: sensor.temperature_apartment_avg
+          - type: weather
+            entity: weather.yr_weather_home
+            show_temperature: true
+            show_conditions: true
+          
+cards:
+  - type: "custom:bootstrap-grid-card"
+    #container_padding: "0px 6px"
+    #use_hass_style_gutter: true
+    #hass_style_gutter_size: "10px"
+    cards:
+      - type: row
+        cards:
+          - type: vertical-stack
+            class: "col-md-1"
+            cards:
+            - type: custom:button-card
+              color_type: blank_card
+              styles:
+                card:
+                - background-color: transparent
+          # HOME/ROOM/DEVICE DATA & CONTROL COLUMN
+            # VERTICAL STACK FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
+          - type: vertical-stack
+            class: "col-md-5 col-xxl-4"
+            cards:
+            # ###############################################################
+            # TITLE SECTION 
+            # Applies to all rooms
+            - type: custom:config-template-card
+              entities:
+              - input_text.floorplan_select_state
+              variables:
+                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
+                GET_ROOM_TITLE: |
+                  room => {
+                    if (room == "kitchen"){
+                      return "Kitchen";
+                    }
+                    if (room == "storage"){
+                      return "Storage";
+                    }
+                    if (room == "veranda"){
+                      return "Veranda";
+                    }
+                    if (room == "living"){
+                      return "Living room";
+                    }
+                    if (room == "entry"){
+                      return "Entry hall";
+                    }
+                    if (room == "bath"){
+                      return "Bathroom";
+                    }
+                    if (room == "toilet"){
+                      return "Toilet room";
+                    }
+                    if (room == "guest"){
+                      return "Guest room";
+                    }
+                    if (room == "office"){
+                      return "Office";
+                    }
+                    if (room == "bedroom"){
+                      return "Bedroom";
+                    }
+                    return "Gullburet Home";
+                  }
+              style:
+                margin: 0px
+              card:      
+                type: markdown
+                content: '${ "# " + GET_ROOM_TITLE(SELECTED_ROOM) }'
+                card_mod:
+                  style:
+                    ha-markdown$: |
+                      h1 {
+                        font-weight: 300;
+                      }
+                    .: |
+                      ha-card {
+                        background-color: var(--nested-card-background);
+                      }
+                      ha-markdown {
+                        padding: var(--ha-card-padding) !important;
+                      }
+            # ###############################################################
+            # CLIMATE SECTION
+            # Applies to all views, except for Home
+            - type: custom:config-template-card
+              entities:
+                - input_text.floorplan_select_state
+                - sensor.temperature_bath
+                - sensor.temperature_bedroom
+                - sensor.temperature_entry
+                - sensor.temperature_guest
+                - sensor.temperature_kitchen
+                - sensor.temperature_living
+                - sensor.temperature_office
+                - sensor.temperature_outdoor
+                - sensor.temperature_storage
+                - sensor.temperature_toilet
+                - sensor.humidity_bedroom
+                - sensor.humidity_entry
+                - sensor.humidity_guest
+                - sensor.humidity_kitchen
+                - sensor.humidity_living
+                - sensor.humidity_office
+                - sensor.humidity_outdoor
+                - climate.floor_heat_bath
+                - climate.floor_heat_toilet
+                - climate.heater_bedroom
+                - climate.heater_guest
+                - climate.heater_living
+                - climate.heater_kitchen
+                - input_select.heating_mode_bath
+                - input_select.heating_mode_bedroom
+                - input_select.heating_mode_guest
+                - input_select.heating_mode_kitchen
+                - input_select.heating_mode_living
+                - input_select.heating_mode_toilet
+              variables:
+                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
+                DISPLAY_HUMIDITY: |
+                  room => {
+                    if (room == "kitchen") {
+                      return "kitchen";
+                    }
+                    if (room == "living") {
+                      return "living";
+                    }
+                    if (room == "entry") {
+                      return "entry";
+                    }
+                    if (room == "bedroom") {
+                      return "bedroom";
+                    }
+                    if (room == "office") {
+                      return "office";
+                    }
+                    if (room == "guest") {
+                      return "guest";
+                    }
+                    if (room == "veranda") {
+                      return "veranda";
+                    }
+                    return "false";
+                  }
+                DISPLAY_THERMOSTAT: |
+                  room => {
+                    if (room == "bath") {
+                      return "bath";
+                    }
+                    if (room == "toilet") {
+                      return "toilet";
+                    }
+                    if (room == "bedroom") {
+                      return "bedroom";
+                    }
+                    if (room == "guest") {
+                      return "guest";
+                    }
+                    if (room == "living") {
+                      return "living";
+                    }
+                    if (room == "kitchen") {
+                      return "kitchen";
+                    }
+                    return "false";
+                  }
+                GET_TEMP_SENSOR_NAME: |
+                  room => {
+                    if (room == "veranda") {
+                      return "sensor.temperature_outdoor"
+                    }
+                    return "sensor.temperature_" + room;
+                  }
+                GET_HMDT_SENSOR_NAME: |
+                  room => {
+                    if (room == "veranda") {
+                      return "sensor.humidity_outdoor"
+                    }
+                    return "sensor.humidity_" + room;
+                  }
+                GET_MODE_ENTITY: |
+                  room => {
+                    return "input_select.heating_mode_" + room;
+                  }
+                GET_THERMOSTAT_NAME: |
+                  room => {
+                    if (room == "bath" || room == "toilet") {
+                      return "climate.floor_heat_" + room;
+                    } 
+                    return "climate.heater_" + room;
+                  }
+                GET_MODE_ICON: | 
+                  mode => {
+                    if (mode == "Manual") {
+                      return "mdi:gesture-tap-hold";
+                    }
+                    if (mode == "Sleep") {
+                      return "mdi:power-sleep";
+                    }
+                    if (mode == "Comfort") {
+                      return "mdi:emoticon-outline";
+                    }
+                    if (mode == "Vacation") {
+                      return "mdi:palm-tree";
+                    }
+                    return "mdi:home-export-outline";
+                  }
+              card:
+                type: conditional
+                conditions:
+                - condition: state
+                  entity: input_text.floorplan_select_state
+                  state_not: 'none'
+                card:
+                  type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  #- type: custom:layout-card
+                  #  layout_type: grid
+                  #  layout:
+                  #    grid-gap: "0px 6px"
+                  #    grid-template-columns: "${ SELECTED_ROOM === DISPLAY_THERMOSTAT(SELECTED_ROOM) ? '1fr 1fr' : '1fr' }"
+                  #    margin: 0px
+                  #    padding: var(--ha-card-padding)
+                  #  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: conditional
+                      conditions:
+                      - condition: state
+                        entity: input_text.floorplan_select_state
+                        state: '${ DISPLAY_THERMOSTAT(SELECTED_ROOM) }'
+                      card:       
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: '${ GET_MODE_ICON( states[GET_MODE_ENTITY(SELECTED_ROOM)].state ) }'
+                          entity: '${ GET_MODE_ENTITY(SELECTED_ROOM) }'
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: '${ GET_TEMP_SENSOR_NAME(SELECTED_ROOM) }'
+                    - type: conditional
+                      conditions:
+                      - condition: state
+                        entity: input_text.floorplan_select_state
+                        state: '${ DISPLAY_HUMIDITY(SELECTED_ROOM) }'
+                      card:
+                        type: tile
+                        name: Humidity
+                        entity: '${ GET_HMDT_SENSOR_NAME(SELECTED_ROOM) }'
+                  - type: conditional
+                    conditions:
+                    - condition: state
+                      entity: input_text.floorplan_select_state
+                      state: '${ DISPLAY_THERMOSTAT(SELECTED_ROOM) }'
+                    card:
+                      type: custom:mushroom-climate-card
+                      entity: '${ GET_THERMOSTAT_NAME(SELECTED_ROOM) }'
+                      name: Thermostat
+                      hvac_modes:
+                      - 'off'
+                      - 'heat'
+                      show_temperature_control: true
+                      layout: horizontal
+                      secondary_info: none
+            # ###############################################################
+            # ALL LIGHTS SECTION
+            # Applies only for Home-view
+            - type: custom:config-template-card
+              entities:
+              - input_text.floorplan_select_state
+              - input_boolean.auto_suncycle_masterdim
+              - input_text.sun_cycle_next_event
+              - input_number.apartment_dimmer
+              card:
+                type: conditional
+                conditions:
+                - condition: state
+                  entity: input_text.floorplan_select_state
+                  state: 'none'
+                card:
+                  type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Lights"
+                    card_mod:
+                      style:
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: "custom:button-card"
+                      icon: mdi:lightbulb-group
+                      name: "Turn ON"
+                      template: light_mode
+                      entity: script.all_lights_on
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.all_lights_on
+                    - type: "custom:button-card"
+                      icon: mdi:lightbulb-group-off-outline
+                      name: "Turn OFF"
+                      entity: script.all_lights_off
+                      template: light_mode
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.all_lights_off
+                    - type: "custom:button-card"
+                      icon: mdi:bed
+                      name: Bedtime
+                      template: light_mode
+                      entity: script.bedtime_lights
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.bedtime_lights
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      entity: input_boolean.auto_suncycle_masterdim
+                      name: Automatic dim
+                      icon: mdi:lightbulb-auto
+                      color: accent
+                      tap_action:
+                        action: toggle
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            border: none;
+                          }
+                    - type: conditional
+                      conditions:
+                      - condition: state
+                        entity: input_boolean.auto_suncycle_masterdim
+                        state: "on"
+                      card:
+                        type: tile
+                        entity: input_text.sun_cycle_next_event
+                        name: "Next event"
+                        icon: mdi:theme-light-dark
+                        color: grey
+                        card_mod:
+                          style: |
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                              border: none;
+                            }
+                  - type: custom:mushroom-number-card
+                    entity: input_number.apartment_dimmer
+                    layout: horizontal
+                    name: Brigthness
+                    icon_color: accent
+                    card_mod:
+                      style: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+            # ################################################################
+            # HOME CLEANING SECTION
+            - type: custom:config-template-card
+              entities:
+              - input_text.floorplan_select_state
+              - binary_sensor.esmeralda_mop_attached
+              - binary_sensor.esmeralda_mop_ready
+              - binary_sensor.esmeralda_water_box_attached
+              - sensor.esmeralda_fan_speed
+              - vacuum.esmeralda
+              card:
+                type: conditional
+                conditions:
+                - condition: state
+                  entity: input_text.floorplan_select_state
+                  state: 'none'
+                card:
+                  type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: custom:layout-card
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px 6px"
+                      grid-template-columns: 3fr 7fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: markdown
+                      content: "## Cleaning"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: 0px !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                            
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            --chip-background: var(--button-card-background);
+                          }
+                      chips:
+                      - type: entity
+                        icon: mdi:fan
+                        entity: sensor.esmeralda_fan_speed
+                      - type: template
+                        icon: mdi:water
+                        content: |-
+                          {% if is_state('binary_sensor.esmeralda_mop_attached', 'off') %}
+                            Mop removed
+                          {% elif is_state('binary_sensor.esmeralda_water_box_attached', 'off') %}
+                            Water tank removed
+                          {% else %}
+                            Mop ready
+                          {% endif %}
+                  - type: custom:mushroom-vacuum-card
+                    entity: vacuum.esmeralda
+                    icon_animation: true
+                    icon_color: accent
+                    commands:
+                      - start_pause
+                      - stop
+                      - return_home
+                      - locate
+                    layout: horizontal
+                    card_mod:
+                      style: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                  - type: conditional
+                    conditions:
+                      - type: state
+                        entity: binary_sensor.esmeralda_mop_ready
+                        state_not: "on"
+                    card:
+                      type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        entity: vacuum.esmeralda
+                        icon: mdi:power-sleep
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Silent"
+                      - type: custom:button-card
+                        icon: mdi:fan
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Standard"
+                      - type: custom:button-card
+                        icon: mdi:fan-plus
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Medium"
+                      - type: custom:button-card
+                        icon: mdi:fan-speed-3
+                        entity: vacuum.esmeralda
+                        template: vacuum_fan_speed
+                        variables:
+                          fan_speed: "Turbo"
+                  - type: conditional
+                    conditions:
+                    - type: state
+                      entity: binary_sensor.esmeralda_mop_ready
+                      state: "on"
+                    card:
+                      type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        entity: script.robot_set_mop_mode
+                        icon: mdi:power-sleep
+                        template: vacuum_mopping
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.robot_set_mop_mode
+                            variables:
+                              mopping_mode: Low
+                              fan_speed: Silent
+                      - type: custom:button-card
+                        entity: script.robot_set_mop_mode
+                        icon: mdi:fan
+                        template: vacuum_mopping
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.robot_set_mop_mode
+                            variables:
+                              mopping_mode: Medium
+                              fan_speed: Standard
+                      - type: "custom:button-card"
+                        icon: mdi:water
+                        name: "Only"
+                        entity: script.robot_set_mop_mode
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.robot_set_mop_mode
+                            variables:
+                              mopping_mode: Medium
+                              mopping_route: Deep
+                      - type: "custom:button-card"
+                        icon: mdi:creation
+                        name: "Deep+"
+                        entity: script.robot_set_mop_mode
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.robot_set_mop_mode
+                            variables:
+                              mopping_mode: High
+                              mopping_route: DeepPlus
+            # ################################################################
+            # INDIVIDUAL ROOMS CLEANING SECTION
+            # Applies to Bedroom, Office, Guest, Entry, Living & Kitchen
+            - type: custom:config-template-card
+              entities:
+              - input_text.floorplan_select_state
+              - binary_sensor.esmeralda_mop_attached
+              - binary_sensor.esmeralda_mop_ready
+              - binary_sensor.esmeralda_water_box_attached
+              - sensor.esmeralda_fan_speed
+              - vacuum.esmeralda
+              variables:
+                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
+                DISPLAY_CLEANING: |
+                  room => {
+                    if (room == "bedroom"){
+                      return "bedroom";
+                    }
+                    if (room == "office"){
+                      return "office";
+                    }
+                    if (room == "guest"){
+                      return "guest";
+                    }
+                    if (room == "entry"){
+                      return "entry";
+                    }
+                    if (room == "living"){
+                      return "living";
+                    }
+                    if (room == "kitchen"){
+                      return "kitchen";
+                    }
+                    return "false";
+                  }
+                GET_ROOM_ID: |
+                  room => {
+                    if (room == "office"){
+                      return 21;
+                    }
+                    if (room == "bedroom"){
+                      return 20;
+                    }
+                    if (room == "guest"){
+                      return 19;
+                    }
+                    if (room == "living"){
+                      return 18;
+                    }
+                    if (room == "kitchen"){
+                      return 17;
+                    }
+                    if (room == "entry"){
+                      return 16;
+                    }
+                    return 0;
+                  }
+              card:
+                type: conditional
+                conditions:
+                - condition: state
+                  entity: input_text.floorplan_select_state
+                  state: '${ DISPLAY_CLEANING(SELECTED_ROOM) }'
+                card:
+                  type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean this room **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+            # ###############################################################
+            # Starting point for config-template before refactor
+            # WRAPPER THAT ENABLES TEMPLATING
+            - type: custom:config-template-card
+              entities:
+                - binary_sensor.sensor_bevegelse              
+                - input_text.floorplan_select_state
+                - media_player.sonos_living
+                - media_player.sonos_kitchen
+                - media_player.sonos_bedroom
+                - media_player.sonos_move
+                - timer.storage_room_light_timer
+              variables:
+                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
+                display_all_lights: |
+                  room => {
+                    if (room == "none"){
+                      return "none";
+                    }
+                    return "false";
+                  }
+                display_audio: |
+                  room => {
+                    if (room == "none") {
+                      return "none";
+                    }
+                    if (room == "bedroom") {
+                      return "bedroom";
+                    }
+                    if (room == "living") {
+                      return "living";
+                    }
+                    if (room == "kitchen") {
+                      return "kitchen";
+                    }
+                    if (room == "toilet") {
+                      return "toilet";
+                    }
+                    return "false";
+                  }
+              card:
+                type: vertical-stack
+                cards:
+                # SHOW AUDIO SECTION
+                # Applies to Home, Bedroom, Living, Kitchen, WC
+                - type: conditional
+                  conditions:
+                  - condition: state
+                    entity: input_text.floorplan_select_state
+                    state: '${ display_audio(SELECTED_ROOM) }'
+                  card:
+                    type: custom:stack-in-card
+                    mode: vertical
+                    cards:
+                    - type: custom:mushroom-media-player-card
+                      entity: media_player.sonos_living
+                      layout: horizontal
+                      name: Common-rooms
+                      volume_controls:
+                        - volume_set
+                      media_controls:
+                        - previous
+                        - next
+                        - play_pause_stop
+                      icon_type: icon
+                      primary_info: name
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                    - type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: "custom:button-card"
+                        icon: mdi:speaker-multiple
+                        name: "Group"
+                        entity: script.speakers_join_all
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.speakers_join_all
+                      - type: "custom:button-card"
+                        icon: mdi:speaker
+                        name: "Ungroup"
+                        entity: script.speakers_unjoin_all
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.speakers_unjoin_all
+            # #################################################################
+            # ROOM INFO - STORAGE ROOM
+            # #################################################################
+            - type: conditional
+              conditions:
+              - condition: state
+                entity: input_text.floorplan_select_state
+                state: "storage"
+              card:
+                type: vertical-stack
+                cards:
+                  # LIGHTS
+                  - type: custom:stack-in-card
+                    mode: vertical
+                    cards:
+                    - type: custom:timer-bar-card
+                      entity: timer.storage_room_light_timer
+                      name: "Light timer"
+                      invert: true
+                      bar_direction: rtl
+                      mushroom:
+                        layout: horizontal
+                        color: primary
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                    - type: "custom:layout-card"
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr
+                        margin: 0px
+                        padding: var(--ha-card-padding)
+                      cards:
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb
+                        name: "Turn ON"
+                        template: light_mode
+                        entity: script.storage_light_on_auto
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.storage_light_on_auto
+                      - type: "custom:button-card"
+                        icon: mdi:lightbulb-off-outline
+                        name: "Turn OFF"
+                        entity: script.storage_room_finish_timer
+                        template: light_mode
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          data:
+                            entity_id: script.storage_room_finish_timer
+          # ------------------------------------------------- END OF ROOM INFOS
+          # ###################################################################
+          # 3D FLOORPLAN VISUALIZATION COLUMN
+          # ###################################################################
+          - type: picture-elements
+            class: "col-md-6 col-xxl-8"
+            image: /local/floorplan/base-dark-v3.png
+            card_mod:
+              style: |
+                ha-card {
+                  width: 104%;
+                  background-color: transparent;
+                }
+            elements:
+              # Z-INDEX ORDER:
+              # base: 0, 1
+              # light-renders: 2 - 9
+              # outlines: 10
+              # outlines, hidden: 11, 12, 13, 14
+              # device icons: 15
+              # ###########################################################
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.floorplan_show_icons
+                    state: "on"
+                elements:
+                  # BEDROOM PENDANT ICON
+                  - type: state-icon
+                    entity: light.pendant_bedroom
+                    icon: mdi:lightbulb
+                    #icon: mdi:ceiling-light
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 27%
+                      top: 80%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # OFFICE PENDANTS ICON
+                  - type: state-icon
+                    entity: light.pendants_office
+                    icon: mdi:lightbulb
+                    #icon: mdi:ceiling-light-multiple
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 54%
+                      top: 80%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # GUEST PENDANT ICON
+                  - type: state-icon
+                    entity: light.pendant_guest
+                    icon: mdi:lightbulb
+                    #icon: mdi:ceiling-light
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 75%
+                      top: 80%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # ENTRY DOWNLIGHTS ICON
+                  - type: state-icon
+                    entity: light.downlights_entry
+                    icon: mdi:lightbulb
+                    #icon: mdi:light-recessed
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 71.75%
+                      top: 64%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # TOILET DOWNLIGHT ICON
+                  - type: state-icon
+                    entity: light.downlight_toilet
+                    icon: mdi:lightbulb
+                    #icon: mdi:light-recessed
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 85%
+                      top: 52%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # BATH DOWNLIGHTS ICON
+                  - type: state-icon
+                    entity: light.downlights_bath
+                    icon: mdi:lightbulb
+                    #icon: mdi:light-recessed
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 63%
+                      top: 46%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # BATH LIGHTSTRIP ICON
+                  - type: state-icon
+                    entity: light.lightstrip_bath
+                    icon: mdi:lightbulb
+                    #icon: mdi:led-strip-variant
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 87%
+                      top: 41%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # LIVING ROOM SPOTTRACK ICON
+                  - type: state-icon
+                    entity: light.spottrack4_living
+                    icon: mdi:lightbulb
+                    #icon: mdi:track-light
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 41%
+                      top: 44%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # LIVING ROOM DOWNLIGHTS ICON
+                  - type: state-icon
+                    entity: light.downlights_living
+                    icon: mdi:lightbulb
+                    #icon: mdi:light-recessed
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 16%
+                      top: 44%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # LIVING ROOM MUSHROOM LAMP
+                  - type: state-icon
+                    entity: switch.lamp_mushroom_living
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 50%
+                      top: 50%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # LIVING ROOM MOOD BALL
+                  - type: state-icon
+                    entity: light.mood_ball
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 50%
+                      top: 41%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # LIVING ROOM GLOBE LAMP
+                  - type: state-icon
+                    entity: switch.lamp_globe_living
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 18%
+                      top: 67%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # DINING PENDANTS ICON
+                  - type: state-icon
+                    entity: light.pendants_living
+                    icon: mdi:lightbulb
+                    #icon: mdi:globe-light
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 34.5%
+                      top: 20%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # KITCHEN PENDANTS ICON
+                  - type: state-icon
+                    entity: light.pendants_kitchen
+                    icon: mdi:lightbulb
+                    #icon: mdi:ceiling-light-multiple
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 61%
+                      top: 20%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # KITCHEN SPOTTRACK ICON
+                  - type: state-icon
+                    entity: light.spottrack6_kitchen
+                    icon: mdi:lightbulb
+                    #icon: mdi:track-light
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 74%
+                      top: 20%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # KITCHEN LIGHTSTRIP UNDER-SHELF
+                  - type: state-icon
+                    entity: light.lightstrip_undershelf_kitchen
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 85%
+                      top: 32%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                  # STORAGE ROOM CEILING LIGHT
+                  # Countdown with MM:SS-label when on:
+                  # - COMMENTED OUT BECAUSE IT UPDATES TOO SLOWLY, ABOUT 30-40S
+                  # It is hard to make a timer-sensor that updates every second in HA
+                  #- type: conditional
+                  #  conditions:
+                  #    - entity: light.ceiling_light_storage
+                  #      state: "off"
+                  #  elements:
+                  #    - type: state-icon
+                  #      entity: light.ceiling_light_storage
+                  #      icon: mdi:lightbulb
+                  #      tap_action:
+                  #        action: call-service
+                  #        service: script.turn_on
+                  #        data:
+                  #          entity_id: script.storage_light_on_auto
+                  #      hold_action:
+                  #        action: more-info
+                  #      style:
+                  #        left: 80%
+                  #        top: 4%
+                  #        z-index: 15
+                  #        '--mdc-icon-size': 25px
+                  # VERANDA WALL LANTERN
+                  - type: state-icon
+                    entity: light.wall_lantern_veranda
+                    icon: mdi:lightbulb
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 53.5%
+                      top: 6.5%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+              # Adds a clickable icon and hidden layers on sides to un-select a room
+              - type: conditional
+                conditions:
+                  - entity: input_text.floorplan_select_state
+                    state_not: "none"
+                elements:
+                  - type: icon
+                    icon: mdi:window-close
+                    tap_action:
+                      action: call-service
+                      service: script.deselect_floorplan_room
+                    hold_action:
+                      action: none
+                    style:
+                      left: 94%
+                      top: 7%
+                      z-index: 15
+                      color: '#03A9F4'
+                      '--mdc-icon-size': 30px
+                  - type: icon
+                    icon: mdi:selection
+                    tap_action:
+                      action: call-service
+                      service: script.deselect_floorplan_room
+                    style:
+                      left: 0%
+                      top: 46%
+                      opacity: 0
+                      z-index: 11
+                      color: white
+                      '--mdc-icon-size': 100px
+                      transform: 'scaleX(1) scaleY(8.3)'
+                  - type: icon
+                    icon: mdi:selection
+                    tap_action:
+                      action: call-service
+                      service: script.deselect_floorplan_room
+                    style:
+                      left: 88%
+                      top: 42%
+                      opacity: 0
+                      z-index: 11
+                      color: white
+                      '--mdc-icon-size': 135px
+                      transform: 'scaleX(1) scaleY(6.3)'
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.floorplan_show_icons
+                    state: "on"
+                elements:
+                  - type: state-icon
+                    entity: input_boolean.floorplan_show_icons
+                    icon: mdi:eye
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: none
+                    style:
+                      left: 94%
+                      top: 2%
+                      z-index: 15
+                      color: white
+                      '--mdc-icon-size': 30px
+                      '--state-active-color': white
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.floorplan_show_icons
+                    state: "off"
+                elements:
+                  - type: state-icon
+                    entity: input_boolean.floorplan_show_icons
+                    icon: mdi:eye-off
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: none
+                    style:
+                      left: 94%
+                      top: 2%
+                      z-index: 15
+                      '--mdc-icon-size': 30px
+              # ###########################################################
+              # OUTLINES HIDDEN SELECT ICONS
+              # Veranda
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: veranda
+                style:
+                  left: 34.5%
+                  top: 0%
+                  opacity: 0
+                  z-index: 13
+                  color: grey
+                  '--mdc-icon-size': 65px
+                  transform: 'scaleX(4.5) scaleY(1)'
+              # Storage
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: storage
+                style:
+                  left: 73.2%
+                  top: 0%
+                  opacity: 0
+                  z-index: 14
+                  color: purple
+                  '--mdc-icon-size': 66px
+                  transform: 'scaleX(1.3) scaleY(1)'
+              # Kitchen
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: kitchen
+                style:
+                  left: 53.3%
+                  top: 10%
+                  opacity: 0
+                  z-index: 13
+                  color: green
+                  '--mdc-icon-size': 177px
+                  transform: 'scaleX(1) scaleY(1.2)'
+              # Living room
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: living
+                style:
+                  left: 5%
+                  top: 24%
+                  opacity: 0
+                  z-index: 12
+                  color: red
+                  '--mdc-icon-size': 250px
+                  transform: 'scaleX(0.9) scaleY(2.03)'
+              # Bath
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: bath
+                style:
+                  left: 53%
+                  top: 34%
+                  opacity: 0
+                  z-index: 13
+                  color: yellow
+                  '--mdc-icon-size': 185px
+                  transform: 'scaleX(1) scaleY(1)'
+              # Toilet
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: toilet
+                style:
+                  left: 76.5%
+                  top: 46.75%
+                  opacity: 0
+                  z-index: 14
+                  color: teal
+                  '--mdc-icon-size': 80px
+                  transform: 'scaleX(1) scaleY(1.15)'
+              # Entry
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: entry
+                style:
+                  left: 61%
+                  top: 57%
+                  opacity: 0
+                  z-index: 13
+                  color: pink
+                  '--mdc-icon-size': 120px
+                  transform: 'scaleX(1.6) scaleY(1)'
+              # Bedroom
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: bedroom
+                style:
+                  left: 2%
+                  top: 73%
+                  opacity: 0
+                  z-index: 13
+                  color: blue
+                  '--mdc-icon-size': 209px
+                  transform: 'scaleX(0.85) scaleY(1.1)'
+              # Office
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: office
+                style:
+                  left: 37%
+                  top: 75%
+                  opacity: 0
+                  z-index: 14
+                  color: violet
+                  '--mdc-icon-size': 170px
+                  transform: 'scaleX(0.75) scaleY(1.3)'
+              # Guest
+              - type: icon
+                icon: mdi:selection
+                tap_action:
+                  action: call-service
+                  service: script.select_floorplan_room
+                  data:
+                    room_name: guest
+                style:
+                  left: 61%
+                  top: 74%
+                  opacity: 0
+                  z-index: 12
+                  color: orange
+                  '--mdc-icon-size': 190px
+                  transform: 'scaleX(0.7) scaleY(1.2)'
+              # ###########################################################
+              # OUTLINES HANDLER
+              # Marks the outline of the room in floorplan_select_state
+              - type: image
+                entity: input_text.floorplan_select_state
+                state_image:
+                  "bath": "/local/floorplan/outline-bath.png"
+                  "bedroom": "/local/floorplan/outline-bedroom.png"
+                  "commons": "/local/floorplan/outline-commons.png"
+                  "entry": "/local/floorplan/outline-entry.png"
+                  "guest": "/local/floorplan/outline-guest.png"
+                  "kitchen": "/local/floorplan/outline-kitchen.png"
+                  "living": "/local/floorplan/outline-living.png"
+                  "office": "/local/floorplan/outline-office.png"
+                  "storage": "/local/floorplan/outline-storage.png"
+                  "toilet": "/local/floorplan/outline-toilet.png"
+                  "veranda": "/local/floorplan/outline-veranda.png"
+                  "none": "/local/floorplan/base-empty.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 10
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              # -----------------------------------------------------------
+              # LIGHT LAYERS
+              # Bedroom
+              - type: image
+                entity: sensor.pendant_bedroom_dim
+                image: "/local/floorplan/bedroom-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Office
+              - type: image
+                entity: sensor.pendants_office_dim
+                image: "/local/floorplan/office-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Guest
+              - type: image
+                entity: sensor.pendant_guest_dim
+                image: "/local/floorplan/guest-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Toilet
+              - type: image
+                entity: sensor.downlight_toilet_dim
+                image: "/local/floorplan/toilet-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Bathroom downlights
+              - type: image
+                entity: sensor.downlights_bath_dim
+                image: "/local/floorplan/bath-downlights-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 3
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Bathroom lightstrip
+              - type: image
+                entity: sensor.lightstrip_bath_dim
+                image: "/local/floorplan/bath-lightstrip-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Entry 
+              - type: image
+                entity: sensor.downlights_entry_dim
+                image: "/local/floorplan/common-entry-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Living room spottrack
+              - type: image
+                entity: sensor.spottrack_living_dim
+                image: "/local/floorplan/common-4track-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 3
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Living room downlights
+              - type: image
+                entity: sensor.downlights_living_dim
+                image: "/local/floorplan/common-downlights-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 4
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Dining pendants
+              - type: image
+                entity: sensor.pendants_dining_dim
+                image: "/local/floorplan/common-dining-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 5
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Kitchen pendants
+              - type: image
+                entity: sensor.pendants_kitchen_dim
+                image: "/local/floorplan/common-flowerpots-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 6
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Kitchen spottrack
+              - type: image
+                entity: sensor.spottrack_kitchen_dim
+                image: "/local/floorplan/common-6track-v2.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 7
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Kitchen lightstrip
+              - type: image
+                entity: sensor.lightstrip_undershelf_kitchen_dim
+                image: "/local/floorplan/common-shelfstrip.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 8
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Storage room
+              - type: image
+                entity: sensor.ceiling_light_storage_dim
+                image: "/local/floorplan/storage.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 2
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
+              # Veranda
+              - type: image
+                entity: sensor.wall_lantern_veranda_dim
+                image: "/local/floorplan/common-veranda.png"
+                style:
+                  left: 50%
+                  top: 50%
+                  width: 100%
+                  z-index: 9
+                  mix-blend-mode: lighten
+                state_filter:
+                  "0": opacity(0%)
+                  "5": opacity(30%)
+                  "10": opacity(40%)
+                  "20": opacity(50%)
+                  "30": opacity(60%)
+                  "50": opacity(70%)
+                  "75": opacity(85%)
+                  "100": opacity(100%)
