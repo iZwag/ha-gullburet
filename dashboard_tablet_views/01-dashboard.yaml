@@ -126,29 +126,96 @@ cards:
     #use_hass_style_gutter: true
     #hass_style_gutter_size: "10px"
     cards:
+        # #####################################################################
+        # PUBLIC TRANSPORT SECTION
+        # Row with 2x Ruter public transport departure boards
       - type: row
         cards:
-          - type: "custom:ruter-stop-info"
-            entities:
-              - sensor.ruter_sandaker_senter_platform_11752
-              - sensor.ruter_sandaker_senter_platform_11755
-            show_departures: 3
-            walking_distance: 4
-            class: "col-xs-4 col-md-4 col-xxl-3"
-          - type: "custom:ruter-stop-info"
-            entities:
-              - sensor.ruter_torshov_platform_11734
-              - sensor.ruter_torshov_platform_11733
-            show_departures: 3
-            walking_distance: 7
-            class: "col-xs-4 col-md-4 col-xxl-3"
-          - type: custom:ruter-stop-info
-            entities:
-              - sensor.ruter_storo_platform_1
-              - sensor.ruter_storo_platform_2
-            show_departures: 3
-            walking_distance: 7
-            class: "col-xs-4 col-md-4 col-xxl-3"
+          # 1st column departures
+        - type: col
+          class: "col-xs-4 col-md-6 col-xxl-6"
+          cards:
+            # Swipe-carousel for tram and subway
+          - type: custom:swipe-card
+            start_card: 1
+            reset_after: 600
+            cards:
+            # Sandaker Senter, trikk
+            - type: custom:ruter-stop-info
+              entities:
+                - sensor.ruter_sandaker_senter_platform_11752
+                - sensor.ruter_sandaker_senter_platform_11755
+              show_departures: 3
+              walking_distance: 4
+            # Storo, t-bane
+            - type: custom:ruter-stop-info
+              entities:
+                - sensor.ruter_storo_platform_1
+                - sensor.ruter_storo_platform_2
+              show_departures: 3
+              walking_distance: 7
+            - type: map
+              entities:
+                - entity: sensor.ruter_sandaker_senter_platform_11752
+                  name: SandakerS.
+                - entity: zone.home
+                  label_mode: state
+              default_zoom: 16
+              aspect_ratio: 68%
+              fit_zones: true
+            - type: map
+              entities:
+                - entity: sensor.ruter_storo_platform_2
+                  name: Storo
+                - entity: zone.home
+                  label_mode: state
+              default_zoom: 14
+              dark_mode: true
+              aspect_ratio: 68%
+              fit_zones: true
+          # 2nd column departures
+        - type: col
+          class: "col-xs-4 col-md-6 col-xxl-6"
+          cards:
+            # Swipe-carousel for buses
+          - type: custom:swipe-card
+            start_card: 1
+            reset_after: 600
+            cards:
+              # Torshov, buss
+            - type: "custom:ruter-stop-info"
+              entities:
+                - sensor.ruter_torshov_platform_11734
+                - sensor.ruter_torshov_platform_11733
+              show_departures: 3
+              walking_distance: 7
+              # Haarklous plass, buss
+            - type: "custom:ruter-stop-info"
+              entities:
+                - sensor.ruter_haarklous_plass_platform_11766
+                - sensor.ruter_haarklous_plass_platform_11768
+              show_departures: 3
+              walking_distance: 5
+            - type: map
+              entities:
+                - entity: sensor.ruter_torshov_platform_11734
+                  name: Torshov
+                - entity: zone.home
+                  label_mode: state
+              default_zoom: 16
+              aspect_ratio: 68%
+              fit_zones: true
+            - type: map
+              entities:
+                - entity: sensor.ruter_haarklous_plass_platform_11766
+                  name: Haarklous
+                - entity: zone.home
+                  label_mode: state
+              default_zoom: 16
+              aspect_ratio: 68%
+              fit_zones: true
+        # #####################################################################
+        # FORECAST SECTION
       - type: row
         cards:
           - type: col
