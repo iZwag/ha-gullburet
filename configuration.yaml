@@ -14,8 +14,8 @@ tts:
   - platform: google_translate
 
 # FRONTEND
-# Load frontend themes from the themes folder
 frontend:
+  # Load frontend themes from the themes folder
   themes: !include_dir_merge_named themes
   extra_module_url:
     - /local/community/lovelace-card-mod/card-mod.js
@@ -45,6 +45,18 @@ python_script:
 logger:
   default: info
 
+spotcast:
+  sp_dc: !secret spotify_sp_dc
+  sp_key: !secret spotify_sp_key
+  country: 'NO'
+
+zone:
+  - name: Home
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+    radius: 20
+    icon: mdi:home
+
 # ROBOT VACUUM CAMERA
 camera:
   - platform: xiaomi_cloud_map_extractor
@@ -66,12 +78,9 @@ camera:
 # 17 = kitchen
 # 16 = entry
 
-# Fan options - Xiaomi
-# Silent
-# Standard
-# Medium
-# Turbo
-
-# statuses
-# "Returning home"
-# "Segment cleaning"
+## Fan options - Xiaomi
+# Silent, Standard, Medium, Turbo
+## Fan options - Roborock equivalent
+# Quiet, Balanced, Turbo, Max
+## Statuses
+# "Returning home", "Segment cleaning"
