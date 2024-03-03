@@ -129,7 +129,15 @@ cards:
     - type: row
       cards:
       - type: vertical-stack
-        class: "col-md-12"
+        class: "col-md-1"
+        cards:
+        - type: custom:button-card
+          color_type: blank_card
+          styles:
+            card:
+            - background-color: transparent
+      - type: vertical-stack
+        class: "col-md-10"
         cards:
         - type: markdown
           content: "# Battery statuses"
@@ -176,5 +184,11 @@ cards:
               - entity: sensor.iphone_jon_battery
                 name: "Jon's iPhone"
             state_color: true
-
-        
+      - type: vertical-stack
+        class: "col-md-1"
+        cards:
+        - type: custom:button-card
+          color_type: blank_card
+          styles:
+            card:
+            - background-color: transparent
