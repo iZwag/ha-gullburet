@@ -94,12 +94,19 @@ sidebar:
           tap_action:
             action: navigate
             navigation_path: /dashboard-tablet/special
+        - type: "custom:button-card"
+          icon: mdi:speaker
+          name: Listen
+          template: navbar_button
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-tablet/audio
         # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
         - type: "custom:button-card"
           color_type: blank_card
           styles:
             card:
-              - height: 32vh
+              - height: 25vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
