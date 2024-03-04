@@ -94,7 +94,7 @@ sidebar:
             navigation_path: /dashboard-tablet/special
         - type: "custom:button-card"
           icon: mdi:speaker
-          name: Audio
+          name: Listen
           template: navbar_button
           variables:
             link_active: "true"
@@ -106,7 +106,7 @@ sidebar:
           color_type: blank_card
           styles:
             card:
-              - height: 32vh
+              - height: 25vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
@@ -158,30 +158,105 @@ cards:
             entity: media_player.sonos_living
             name: Sonos living room
             artwork: full-cover # cover, full-cover, material, full-cover-fit
-            source: icon
-            sound_mode: icon
-            info: scroll # default, short, scroll
+            icon: mdi:spotify
+            #source: icon
+            #sound_mode: icon
+            info: short  # default, short, scroll
             volume_stateless: false
             volume_step: 1
             max_volume: 50
             jump_amount: 15
             toggle_power: false
+            background: "center / cover no-repeat url('/local/ui/sonos_living') fixed"
+            idle_view:
+              when_idle: false
+              when_paused: false
+              when_standby: false
             hide:
               name: true
               power: true
               group: false
-              source: false
+              source: true
               mute: true
-              progress: false
+              progress: true
               runtime: true
               runtime_remaining: true
               shuffle: false
-              state_label: false
-          - type: 'custom:spotify-card'
-            spotify_entity: media_player.spotify_gullburet
-            country_code: 'NO'
-            filter_devices:
-            - .*bedroom
+              state_label: true
+              volume: true
+          - type: custom:sonos-card
+            heightPercentage: 75
+            title: ''
+            sections:
+            - media browser
+            - grouping
+            - volumes
+            entityId: media_player.sonos_living
+            entities:
+            - media_player.sonos_living
+            - media_player.sonos_move
+            - media_player.sonos_kitchen
+            predefinedGroups:
+            - name: 'Fellesrom, rolig'
+              volume: 15
+              entities:
+              - media_player.sonos_living
+              - media_player.sonos_move
+              - media_player.sonos_kitchen
+            - name: 'Stue og kjøkken'
+              volume: 15
+              entities:
+              - media_player.sonos_living
+              - media_player.sonos_kitchen
+
+          #- type: custom:spotify-card
+          #  spotify_entity: media_player.spotify_gullburet
+          #  always_play_random_song: true
+          #  country_code: 'NO'
+          #  default_device: 'Stue'
+          #  known_connect_devices:
+          #  - id: !secret spotify_id_sonos_living
+          #    name: 'Sonos: Living room'
+          #  - id: !secret spotify_id_sonos_move
+          #    name: 'Sonos: Move'
+          #  - id: !secret spotify_id_sonos_kitchen
+          #    name: 'Sonos: Kitchen'
+          #  filter_devices:
+          #  - .*bedroom
+          #  - GULLBURET.*
+          #  - Web.*
+          #  card_mod:
+          #    style: |
+          #      :host {
+          #        border-radius: 1vw;
+          #      }
+          #      #header {
+          #        display: none !important;
+          #      }
+          #      #content {
+          #        border: none !important;
+          #      }
+          #      .playback-controls {
+          #        display: none !important;
+          #      }
+          #      #header-track {
+          #        display: none;
+          #      }
+          #      .list-item > p {
+          #        white-space: nowrap;
+          #        overflow: hidden;
+          #        font-family: var(--primary-font-family) !important;
+          #      }
+          #      .list-item {
+          #          border-radius: 0.2vw;
+          #          overflow: hidden;
+          #          border: none !important;
+          #          margin-bottom: 4px;
+          #      }
+          #      ha-card {
+          #        padding: var(--ha-card-padding) !important;
+          #      }
+                         
       - type: vertical-stack
         class: "col-md-1"
         cards:
