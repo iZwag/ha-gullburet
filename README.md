@@ -10,10 +10,11 @@ The system is compromised of many hardware devices, obviously.
 
 ### Host system
 - Raspberry Pi 4 model B 2GB
-- OS: Home Assistant OS
+- OS: Raspbian Lite 64-bit
+- Home Assistant is running as Container, in a stack with `zwave-js-ui` (previously zwave2mqtt) and `vscode` in Docker
 - PSU: 5V/3A USB-C
 - Storage: Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
-- Network: CAT-6 network cable and Wi-Fi to router
+- Network: CAT-6 network to router
 - USB: ConBee II Stick (as Zigbee-controller)
 - USB: Aeotec Z-Stick 7 (as Z-Wave-controller)
 
@@ -47,8 +48,15 @@ Asus RT-AC88U
 
 ## Software 
 
+### Containers in Docker
+
+The host system for Home Assistant incorporates the following services running as containers:
+- Home Assistant Container
+- VSCode
+- Z-Wave JS UI
+
 ### Dashboard services
-To display relevant info about life in Oslo and Norway, here are some public APIs we are consuming:
+To display relevant info about life in Oslo and Norway, here are some public APIs that are being consumed:
 - Entur (Ruter): Public transportation
 - Met.no (Yr): Weather
 - Tibber: Local electricity ratings, including fees
