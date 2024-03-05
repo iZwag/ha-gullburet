@@ -106,7 +106,7 @@ sidebar:
           color_type: blank_card
           styles:
             card:
-              - height: 25.5vh
+              - height: 25vh
         - type: custom:mushroom-chips-card
           alignment: center
           card_mod:
