@@ -158,7 +158,7 @@ cards:
             entity: media_player.sonos_living
             name: Sonos living room
             artwork: full-cover # cover, full-cover, material, full-cover-fit
-            icon: mdi:spotify
+            #icon: mdi:spotify
             #source: icon
             #sound_mode: icon
             info: short  # default, short, scroll
@@ -167,7 +167,7 @@ cards:
             max_volume: 50
             jump_amount: 15
             toggle_power: false
-            background: "center / cover no-repeat url('/local/ui/sonos_living') fixed"
+            background: /local/ui/sonos_living.jpg
             idle_view:
               when_idle: false
               when_paused: false
@@ -185,7 +185,9 @@ cards:
               state_label: true
               volume: true
           - type: custom:sonos-card
-            heightPercentage: 75
+            heightPercentage: 68.75
+            # 75% = 420px
+            # 70% = 392px
             title: ''
             sections:
             - media browser
@@ -197,7 +199,7 @@ cards:
             - media_player.sonos_move
             - media_player.sonos_kitchen
             predefinedGroups:
-            - name: 'Fellesrom, rolig'
+            - name: 'Fellesrom'
               volume: 15
               entities:
               - media_player.sonos_living
@@ -208,7 +210,21 @@ cards:
               entities:
               - media_player.sonos_living
               - media_player.sonos_kitchen
-
+            mediaBrowserTitle: ''
+            hideBrowseMediaButton: true
+            mediaBrowserItemsPerRow: 5
+            favoritesToIgnore:
+            - 'Wake Up Happy'
+            topFavorites:
+            - 'NRK P1'
+            - 'NRK P3'
+            - 'NRK P3X'
+            - 'NRK Urørt'
+            - 'NRK mP3'
+            - 'Discover Weekly'
+            - '31 PÅ 31'
+            - 'Electronic Chill'
+            - 'MEGALOMAN'
           #- type: custom:spotify-card
           #  spotify_entity: media_player.spotify_gullburet
           #  always_play_random_song: true
