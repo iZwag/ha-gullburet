@@ -201,24 +201,6 @@
       friendly_name: Downlights
       supported_features: 32
       state: 'off'
-    media_player.lenovo_tab_m10_fhd_plus:
-      assumed_state: true
-      friendly_name: Lenovo Tab M10 FHD Plus
-      supported_features: 135684
-      state: idle
-    number.lenovo_tab_m10_fhd_plus_screen_brightness:
-      min: 0
-      max: 255
-      step: 1
-      mode: auto
-      friendly_name: Lenovo Tab M10 FHD Plus Screen brightness
-      state: '43'
-    switch.lenovo_tab_m10_fhd_plus_screensaver:
-      friendly_name: Lenovo Tab M10 FHD Plus Screensaver
-      state: 'off'
-    switch.lenovo_tab_m10_fhd_plus_screen:
-      friendly_name: Lenovo Tab M10 FHD Plus Screen
-      state: 'off'
   icon: mdi:lightbulb-group-outline
   metadata: {}
 - id: '1691001208430'
