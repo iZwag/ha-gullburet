@@ -136,6 +136,7 @@ cards:
     cards:
       - type: row
         cards:
+        
         - type: vertical-stack
           class: "col-md-1"
           cards:
@@ -146,315 +147,87 @@ cards:
               - background-color: transparent
           # HOME/ROOM/DEVICE DATA & CONTROL COLUMN
             # VERTICAL STACK FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
+        # ###################################################################
+        # ROOM INFO & CONTROL COLUMN
+        # ###################################################################
         - type: custom:mod-card
           card_mod:
             style: |
               ha-card {
                 padding-right: 12%;
               }
-          card:   
-            type: vertical-stack
+          card:
+            type: custom:state-switch
             class: "col-md-5 col-xxl-4"
-            cards:
-            # ###############################################################
-            # TITLE SECTION 
-            # Applies to all rooms
-            - type: custom:config-template-card
-              entities:
-              - input_text.floorplan_select_state
-              variables:
-                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
-                GET_ROOM_TITLE: |
-                  room => {
-                    if (room == "kitchen"){
-                      return "Kitchen";
-                    }
-                    if (room == "storage"){
-                      return "Storage";
-                    }
-                    if (room == "veranda"){
-                      return "Veranda";
-                    }
-                    if (room == "living"){
-                      return "Living room";
-                    }
-                    if (room == "entry"){
-                      return "Entry hall";
-                    }
-                    if (room == "bath"){
-                      return "Bathroom";
-                    }
-                    if (room == "toilet"){
-                      return "Toilet room";
-                    }
-                    if (room == "guest"){
-                      return "Guest room";
-                    }
-                    if (room == "office"){
-                      return "Office";
-                    }
-                    if (room == "bedroom"){
-                      return "Bedroom";
-                    }
-                    return "Gullburet Home";
-                  }
-              style:
-                margin: 0px
-              card:      
-                type: markdown
-                content: '${ "# " + GET_ROOM_TITLE(SELECTED_ROOM) }'
-                card_mod:
-                  style:
-                    ha-markdown$: |
-                      h1 {
-                        font-weight: 300;
-                      }
-                    .: |
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-            # ###############################################################
-            # CLIMATE SECTION
-            # Applies to all views, except for Home
-            - type: custom:config-template-card
-              entities:
-                - input_text.floorplan_select_state
-                - sensor.temperature_bath
-                - sensor.temperature_bedroom
-                - sensor.temperature_entry
-                - sensor.temperature_guest
-                - sensor.temperature_kitchen
-                - sensor.temperature_living
-                - sensor.temperature_office
-                - sensor.temperature_outdoor
-                - sensor.temperature_storage
-                - sensor.temperature_toilet
-                - sensor.humidity_bedroom
-                - sensor.humidity_entry
-                - sensor.humidity_guest
-                - sensor.humidity_kitchen
-                - sensor.humidity_living
-                - sensor.humidity_office
-                - sensor.humidity_outdoor
-                - climate.floor_heat_bath
-                - climate.floor_heat_toilet
-                - climate.heater_bedroom
-                - climate.heater_guest
-                - climate.heater_living
-                - climate.heater_kitchen
-                - input_select.heating_mode_bath
-                - input_select.heating_mode_bedroom
-                - input_select.heating_mode_guest
-                - input_select.heating_mode_kitchen
-                - input_select.heating_mode_living
-                - input_select.heating_mode_toilet
-              variables:
-                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
-                DISPLAY_HUMIDITY: |
-                  room => {
-                    if (room == "kitchen") {
-                      return "kitchen";
-                    }
-                    if (room == "living") {
-                      return "living";
-                    }
-                    if (room == "entry") {
-                      return "entry";
-                    }
-                    if (room == "bedroom") {
-                      return "bedroom";
-                    }
-                    if (room == "office") {
-                      return "office";
-                    }
-                    if (room == "guest") {
-                      return "guest";
-                    }
-                    if (room == "veranda") {
-                      return "veranda";
-                    }
-                    return "false";
-                  }
-                DISPLAY_THERMOSTAT: |
-                  room => {
-                    if (room == "bath") {
-                      return "bath";
-                    }
-                    if (room == "toilet") {
-                      return "toilet";
-                    }
-                    if (room == "bedroom") {
-                      return "bedroom";
-                    }
-                    if (room == "guest") {
-                      return "guest";
-                    }
-                    if (room == "living") {
-                      return "living";
-                    }
-                    if (room == "kitchen") {
-                      return "kitchen";
-                    }
-                    return "false";
-                  }
-                GET_TEMP_SENSOR_NAME: |
-                  room => {
-                    if (room == "veranda") {
-                      return "sensor.temperature_outdoor"
-                    }
-                    return "sensor.temperature_" + room;
-                  }
-                GET_HMDT_SENSOR_NAME: |
-                  room => {
-                    if (room == "veranda") {
-                      return "sensor.humidity_outdoor"
-                    }
-                    return "sensor.humidity_" + room;
-                  }
-                GET_MODE_ENTITY: |
-                  room => {
-                    return "input_select.heating_mode_" + room;
-                  }
-                GET_THERMOSTAT_NAME: |
-                  room => {
-                    if (room == "bath" || room == "toilet") {
-                      return "climate.floor_heat_" + room;
-                    } 
-                    return "climate.heater_" + room;
-                  }
-                GET_MODE_ICON: | 
-                  mode => {
-                    if (mode == "Manual") {
-                      return "mdi:gesture-tap-hold";
-                    }
-                    if (mode == "Sleep") {
-                      return "mdi:power-sleep";
-                    }
-                    if (mode == "Comfort") {
-                      return "mdi:emoticon-outline";
-                    }
-                    if (mode == "Vacation") {
-                      return "mdi:palm-tree";
-                    }
-                    return "mdi:home-export-outline";
-                  }
-              card:
-                type: conditional
-                conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state_not: 'none'
-                card:
-                  type: custom:stack-in-card
+            entity: input_select.floorplan_select_state
+            default: 'none'
+            states:
+              # ###############################################################
+              # HOME VIEW ("NONE" SELECTED)
+              none:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Gullburet Home"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # HOME-VIEW ALL LIGHTS
+                - type: custom:stack-in-card
                   mode: vertical
                   cards:
-                  #- type: custom:layout-card
-                  #  layout_type: grid
-                  #  layout:
-                  #    grid-gap: "0px 6px"
-                  #    grid-template-columns: "${ SELECTED_ROOM === DISPLAY_THERMOSTAT(SELECTED_ROOM) ? '1fr 1fr' : '1fr' }"
-                  #    margin: 0px
-                  #    padding: var(--ha-card-padding)
-                  #  cards:
-                  - type: horizontal-stack
+                  - type: custom:layout-card
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px 6px"
+                      grid-template-columns: 3fr 7fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
                     cards:
                     - type: markdown
-                      content: "## Climate"
+                      content: "## Lights"
                       card_mod:
-                        style: 
+                        style:
                           ha-markdown$: |
                             h2 {
                               font-weight: 400 !important;
                             }
                           .: |
                             ha-markdown {
-                              padding: var(--ha-card-padding) !important;
+                              padding: 0px !important;
                             }
                             ha-card {
                               background-color: var(--nested-card-background);
-                            }
-                    - type: conditional
-                      conditions:
-                      - condition: state
-                        entity: input_text.floorplan_select_state
-                        state: '${ DISPLAY_THERMOSTAT(SELECTED_ROOM) }'
-                      card:       
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: '${ GET_MODE_ICON( states[GET_MODE_ENTITY(SELECTED_ROOM)].state ) }'
-                          entity: '${ GET_MODE_ENTITY(SELECTED_ROOM) }'
-                  - type: horizontal-stack
-                    cards:
-                    - type: tile
-                      name: Temperature
-                      entity: '${ GET_TEMP_SENSOR_NAME(SELECTED_ROOM) }'
-                    - type: conditional
-                      conditions:
-                      - condition: state
-                        entity: input_text.floorplan_select_state
-                        state: '${ DISPLAY_HUMIDITY(SELECTED_ROOM) }'
-                      card:
-                        type: tile
-                        name: Humidity
-                        entity: '${ GET_HMDT_SENSOR_NAME(SELECTED_ROOM) }'
-                  - type: conditional
-                    conditions:
-                    - condition: state
-                      entity: input_text.floorplan_select_state
-                      state: '${ DISPLAY_THERMOSTAT(SELECTED_ROOM) }'
-                    card:
-                      type: custom:mushroom-climate-card
-                      entity: '${ GET_THERMOSTAT_NAME(SELECTED_ROOM) }'
-                      name: Thermostat
-                      hvac_modes:
-                      - 'off'
-                      - 'heat'
-                      show_temperature_control: true
-                      layout: horizontal
-                      secondary_info: none
-            # ###############################################################
-            # ALL LIGHTS SECTION
-            # Applies only for Home-view
-            - type: custom:config-template-card
-              entities:
-              - input_text.floorplan_select_state
-              - input_boolean.auto_suncycle_masterdim
-              - input_text.sun_cycle_next_event
-              - input_number.apartment_dimmer
-              card:
-                type: conditional
-                conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state: 'none'
-                card:
-                  type: custom:stack-in-card
-                  mode: vertical
-                  cards:
-                  - type: markdown
-                    content: "## Lights"
-                    card_mod:
-                      style:
-                        ha-markdown$: |
-                          h2 {
-                            font-weight: 400 !important;
+                            } 
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            --chip-background: var(--button-card-background);
                           }
-                        .: |
-                          ha-markdown {
-                            padding: var(--ha-card-padding) !important;
-                          }
-                  - type: "custom:layout-card"
+                      chips:
+                      - type: entity
+                        icon: mdi:brightness-7
+                        entity: input_number.apartment_dimmer
+                      - type: entity
+                        icon: mdi:brightness-auto
+                        entity: input_boolean.auto_suncycle_masterdim
+                  - type: custom:layout-card
                     layout_type: grid
                     layout:
                       grid-gap: "0px var(--ha-card-padding)"
@@ -492,66 +265,37 @@ cards:
                         service: script.turn_on
                         data:
                           entity_id: script.bedtime_lights
-                  - type: horizontal-stack
-                    cards:
-                    - type: tile
+                  - type: conditional
+                    conditions:
+                    - condition: state
                       entity: input_boolean.auto_suncycle_masterdim
-                      name: Automatic dim
-                      icon: mdi:lightbulb-auto
-                      color: accent
-                      tap_action:
-                        action: toggle
+                      state: "on"
+                    card:
+                      type: tile
+                      entity: input_text.sun_cycle_next_event
+                      name: "Next event"
+                      icon: mdi:brightness-auto
+                      color: grey
                       card_mod:
                         style: |
                           ha-card {
                             background-color: var(--nested-card-background);
                             border: none;
                           }
-                    - type: conditional
-                      conditions:
-                      - condition: state
-                        entity: input_boolean.auto_suncycle_masterdim
-                        state: "on"
-                      card:
-                        type: tile
-                        entity: input_text.sun_cycle_next_event
-                        name: "Next event"
-                        icon: mdi:theme-light-dark
-                        color: grey
-                        card_mod:
-                          style: |
-                            ha-card {
-                              background-color: var(--nested-card-background);
-                              border: none;
-                            }
                   - type: custom:mushroom-number-card
                     entity: input_number.apartment_dimmer
                     layout: horizontal
-                    name: Brigthness
-                    icon_color: accent
+                    icon_color: grey
+                    icon_type: none
+                    primary_info: none
+                    secondary_info: none
                     card_mod:
                       style: |
                         ha-card {
                           background-color: var(--nested-card-background);
                         }
-            # ################################################################
-            # HOME CLEANING SECTION
-            - type: custom:config-template-card
-              entities:
-              - input_text.floorplan_select_state
-              - binary_sensor.esmeralda_mop_attached
-              - binary_sensor.esmeralda_mop_ready
-              - binary_sensor.esmeralda_water_box_attached
-              - sensor.esmeralda_fan_speed
-              - vacuum.esmeralda
-              card:
-                type: conditional
-                conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state: 'none'
-                card:
-                  type: custom:stack-in-card
+                # HOME-VIEW CLEANING
+                - type: custom:stack-in-card
                   mode: vertical
                   cards:
                   - type: custom:layout-card
@@ -576,8 +320,7 @@ cards:
                             }
                             ha-card {
                               background-color: var(--nested-card-background);
-                            }
-                            
+                            }    
                     - type: custom:mushroom-chips-card
                       alignment: end
                       card_mod:
@@ -595,7 +338,7 @@ cards:
                           {% if is_state('binary_sensor.esmeralda_mop_attached', 'off') %}
                             Mop removed
                           {% elif is_state('binary_sensor.esmeralda_water_box_attached', 'off') %}
-                            Water tank removed
+                            Tank removed
                           {% else %}
                             Mop ready
                           {% endif %}
@@ -716,78 +459,252 @@ cards:
                             variables:
                               mopping_mode: High
                               mopping_route: DeepPlus
-            # ################################################################
-            # INDIVIDUAL ROOMS CLEANING SECTION
-            # Applies to Bedroom, Office, Guest, Entry, Living & Kitchen
-            - type: custom:config-template-card
-              entities:
-              - input_text.floorplan_select_state
-              - binary_sensor.esmeralda_mop_attached
-              - binary_sensor.esmeralda_mop_ready
-              - binary_sensor.esmeralda_water_box_attached
-              - sensor.esmeralda_fan_speed
-              - vacuum.esmeralda
-              variables:
-                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
-                DISPLAY_CLEANING: |
-                  room => {
-                    if (room == "bedroom"){
-                      return "bedroom";
-                    }
-                    if (room == "office"){
-                      return "office";
-                    }
-                    if (room == "guest"){
-                      return "guest";
-                    }
-                    if (room == "entry"){
-                      return "entry";
-                    }
-                    if (room == "living"){
-                      return "living";
-                    }
-                    if (room == "kitchen"){
-                      return "kitchen";
-                    }
-                    return "false";
-                  }
-                GET_ROOM_ID: |
-                  room => {
-                    if (room == "office"){
-                      return 21;
-                    }
-                    if (room == "bedroom"){
-                      return 20;
-                    }
-                    if (room == "guest"){
-                      return 19;
-                    }
-                    if (room == "living"){
-                      return 18;
-                    }
-                    if (room == "kitchen"){
-                      return 17;
-                    }
-                    if (room == "entry"){
-                      return 16;
-                    }
-                    return 0;
-                  }
-              card:
-                type: conditional
-                conditions:
-                - condition: state
-                  entity: input_text.floorplan_select_state
-                  state: '${ DISPLAY_CLEANING(SELECTED_ROOM) }'
-                card:
-                  type: custom:stack-in-card
+                # AUDIO
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: custom:mushroom-media-player-card
+                    entity: media_player.sonos_living
+                    layout: horizontal
+                    name: Common-rooms
+                    volume_controls:
+                      - volume_set
+                    media_controls:
+                      - previous
+                      - next
+                      - play_pause_stop
+                    icon_type: icon
+                    primary_info: name
+                    card_mod:
+                      style: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: "custom:button-card"
+                      icon: mdi:speaker-multiple
+                      name: "Group"
+                      entity: script.speakers_join_all
+                      template: light_mode
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.speakers_join_all
+                    - type: "custom:button-card"
+                      icon: mdi:speaker
+                      name: "Ungroup"
+                      entity: script.speakers_unjoin_all
+                      template: light_mode
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.speakers_unjoin_all     
+              # ###############################################################
+              # BATHROOM VIEW
+              bath:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Bathroom"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_bath
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_bath'].state ) }"
+                          entity: input_select.heating_mode_bath
+                  - type: tile
+                    name: Temperature
+                    entity: sensor.temperature_bath
+                  - type: custom:mushroom-climate-card
+                    entity: climate.floor_heat_bath
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+              # ###############################################################
+              # BEDROOM VIEW
+              bedroom: 
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Bedroom"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_bedroom
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_bedroom'].state ) }"
+                          entity: input_select.heating_mode_bedroom
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_bedroom
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_bedroom
+                  - type: custom:mushroom-climate-card
+                    entity: climate.heater_bedroom
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+                # CLEANING SECTION
+                # Bedroom Xiaomi id = 20
+                - type: custom:stack-in-card
                   mode: vertical
                   cards:
                   - type: markdown
                     content: >
                       ## Cleaning
 
-                      Immediately send Esmeralda to clean this room **only**.
+                      Immediately send Esmeralda to clean the bedroom **only**.
                     card_mod:
                       style: 
                         ha-markdown$: |
@@ -816,189 +733,965 @@ cards:
                       template: vacuum_fan_and_room
                       variables:
                         fan_speed: "Silent"
-                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                        target_room: 20
                     - type: custom:button-card
                       icon: mdi:fan
                       entity: script.robot_clean_target_room
                       template: vacuum_fan_and_room
                       variables:
                         fan_speed: "Standard"
-                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                        target_room: 20
                     - type: custom:button-card
                       icon: mdi:fan-plus
                       entity: script.robot_clean_target_room
                       template: vacuum_fan_and_room
                       variables:
                         fan_speed: "Medium"
-                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
+                        target_room: 20
                     - type: custom:button-card
                       icon: mdi:fan-speed-3
                       entity: script.robot_clean_target_room
                       template: vacuum_fan_and_room
                       variables:
                         fan_speed: "Turbo"
-                        target_room: '${ GET_ROOM_ID(SELECTED_ROOM) }'
-            # ###############################################################
-            # Starting point for config-template before refactor
-            # WRAPPER THAT ENABLES TEMPLATING
-            - type: custom:config-template-card
-              entities:
-                - binary_sensor.sensor_bevegelse              
-                - input_text.floorplan_select_state
-                - media_player.sonos_living
-                - media_player.sonos_kitchen
-                - media_player.sonos_bedroom
-                - media_player.sonos_move
-                - timer.storage_room_light_timer
-              variables:
-                SELECTED_ROOM: states['input_text.floorplan_select_state'].state
-                display_all_lights: |
-                  room => {
-                    if (room == "none"){
-                      return "none";
-                    }
-                    return "false";
-                  }
-                display_audio: |
-                  room => {
-                    if (room == "none") {
-                      return "none";
-                    }
-                    if (room == "bedroom") {
-                      return "bedroom";
-                    }
-                    if (room == "living") {
-                      return "living";
-                    }
-                    if (room == "kitchen") {
-                      return "kitchen";
-                    }
-                    if (room == "toilet") {
-                      return "toilet";
-                    }
-                    return "false";
-                  }
-              card:
+                        target_room: 20
+              # ###############################################################
+              # ENTRY VIEW
+              entry:
                 type: vertical-stack
                 cards:
-                # SHOW AUDIO SECTION
-                # Applies to Home, Bedroom, Living, Kitchen, WC
-                - type: conditional
-                  conditions:
-                  - condition: state
-                    entity: input_text.floorplan_select_state
-                    state: '${ display_audio(SELECTED_ROOM) }'
-                  card:
-                    type: custom:stack-in-card
-                    mode: vertical
+                # TITLE
+                - type: markdown
+                  content: "# Entry hall"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Climate"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: horizontal-stack
                     cards:
-                    - type: custom:mushroom-media-player-card
-                      entity: media_player.sonos_living
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_entry
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_entry
+                # CLEANING SECTION
+                # Entry Xiaomi id = 16
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean the bedroom **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: 16
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: 16
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: 16
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: 16
+              # ###############################################################
+              # GUEST VIEW
+              guest:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Guest room"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_guest
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_guest'].state ) }"
+                          entity: input_select.heating_mode_guest
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_guest
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_guest
+                  - type: custom:mushroom-climate-card
+                    entity: climate.heater_guest
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+                # CLEANING SECTION
+                # Guest room Xiaomi id = 19
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean the guest room **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: 19
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: 19
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: 19
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: 19
+              # ###############################################################
+              # KITCHEN VIEW
+              kitchen:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Kitchen"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_kitchen
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_kitchen'].state ) }"
+                          entity: input_select.heating_mode_kitchen
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_kitchen
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_kitchen
+                  - type: custom:mushroom-climate-card
+                    entity: climate.heater_kitchen
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+                # CLEANING SECTION
+                # Kitchen Xiaomi id = 17
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean the kitchen **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: 17
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: 17
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: 17
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: 17
+              # ###############################################################
+              # LIVING VIEW
+              living:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Living room"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
+                    cards:
+                    - type: markdown
+                      content: "## Climate"
+                      card_mod:
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_living
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_living'].state ) }"
+                          entity: input_select.heating_mode_living
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_living
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_living
+                  - type: custom:mushroom-climate-card
+                    entity: climate.heater_living
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+                # CLEANING SECTION
+                # Living room Xiaomi id = 18
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean the living room **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: 18
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: 18
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: 18
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: 18
+              # ###############################################################
+              # OFFICE VIEW
+              office:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Office"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Climate"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_office
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_office
+                # CLEANING SECTION
+                # Office Xiaomi id = 21
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: >
+                      ## Cleaning
+
+                      Immediately send Esmeralda to clean the bedroom **only**.
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: 0px !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            padding: var(--ha-card-padding) !important;
+                          }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: script.robot_clean_target_room
+                      icon: mdi:power-sleep
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Silent"
+                        target_room: 21
+                    - type: custom:button-card
+                      icon: mdi:fan
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Standard"
+                        target_room: 21
+                    - type: custom:button-card
+                      icon: mdi:fan-plus
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Medium"
+                        target_room: 21
+                    - type: custom:button-card
+                      icon: mdi:fan-speed-3
+                      entity: script.robot_clean_target_room
+                      template: vacuum_fan_and_room
+                      variables:
+                        fan_speed: "Turbo"
+                        target_room: 21
+              # ###############################################################
+              # STORAGE VIEW
+              storage:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Storage room"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Climate"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: tile
+                    name: Temperature
+                    entity: sensor.temperature_storage
+                # LIGHTS
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: custom:timer-bar-card
+                    entity: timer.storage_room_light_timer
+                    name: "Light timer"
+                    invert: true
+                    bar_direction: rtl
+                    mushroom:
                       layout: horizontal
-                      name: Common-rooms
-                      volume_controls:
-                        - volume_set
-                      media_controls:
-                        - previous
-                        - next
-                        - play_pause_stop
-                      icon_type: icon
-                      primary_info: name
-                      card_mod:
-                        style: |
-                          ha-card {
-                            background-color: var(--nested-card-background);
-                          }
-                    - type: "custom:layout-card"
-                      layout_type: grid
-                      layout:
-                        grid-gap: "0px var(--ha-card-padding)"
-                        grid-template-columns: 1fr 1fr
-                        margin: 0px
-                        padding: var(--ha-card-padding)
-                      cards:
-                      - type: "custom:button-card"
-                        icon: mdi:speaker-multiple
-                        name: "Group"
-                        entity: script.speakers_join_all
-                        template: light_mode
-                        tap_action:
-                          action: call-service
-                          service: script.turn_on
-                          data:
-                            entity_id: script.speakers_join_all
-                      - type: "custom:button-card"
-                        icon: mdi:speaker
-                        name: "Ungroup"
-                        entity: script.speakers_unjoin_all
-                        template: light_mode
-                        tap_action:
-                          action: call-service
-                          service: script.turn_on
-                          data:
-                            entity_id: script.speakers_unjoin_all
-            # #################################################################
-            # ROOM INFO - STORAGE ROOM
-            # #################################################################
-            - type: conditional
-              conditions:
-              - condition: state
-                entity: input_text.floorplan_select_state
-                state: "storage"
-              card:
+                      color: primary
+                    card_mod:
+                      style: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: "custom:button-card"
+                      icon: mdi:lightbulb
+                      name: "Turn ON"
+                      template: light_mode
+                      entity: script.storage_light_on_auto
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.storage_light_on_auto
+                    - type: "custom:button-card"
+                      icon: mdi:lightbulb-off-outline
+                      name: "Turn OFF"
+                      entity: script.storage_room_finish_timer
+                      template: light_mode
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.storage_room_finish_timer                   
+              # ###############################################################
+              # TOILET ROOM VIEW
+              toilet:
                 type: vertical-stack
                 cards:
-                  # LIGHTS
-                  - type: custom:stack-in-card
-                    mode: vertical
+                # TITLE
+                - type: markdown
+                  content: "# Toilet room"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: horizontal-stack
                     cards:
-                    - type: custom:timer-bar-card
-                      entity: timer.storage_room_light_timer
-                      name: "Light timer"
-                      invert: true
-                      bar_direction: rtl
-                      mushroom:
-                        layout: horizontal
-                        color: primary
+                    - type: markdown
+                      content: "## Climate"
                       card_mod:
-                        style: |
+                        style: 
+                          ha-markdown$: |
+                            h2 {
+                              font-weight: 400 !important;
+                            }
+                          .: |
+                            ha-markdown {
+                              padding: var(--ha-card-padding) !important;
+                            }
+                            ha-card {
+                              background-color: var(--nested-card-background);
+                            }
+                    - type: custom:config-template-card
+                      entities:
+                      - input_select.heating_mode_toilet
+                      variables:
+                        GET_MODE_ICON: | 
+                          mode => {
+                            if (mode == "Manual") {
+                              return "mdi:gesture-tap-hold";
+                            }
+                            if (mode == "Sleep") {
+                              return "mdi:power-sleep";
+                            }
+                            if (mode == "Comfort") {
+                              return "mdi:emoticon-outline";
+                            }
+                            if (mode == "Vacation") {
+                              return "mdi:palm-tree";
+                            }
+                            // Away-icon
+                            return "mdi:home-export-outline";
+                          }
+                      card:
+                        type: custom:mushroom-chips-card
+                        alignment: end
+                        card_mod:
+                          style: |
+                            ha-card {
+                              padding: var(--ha-card-padding) !important;
+                              --chip-background: var(--button-card-background);
+                            }
+                        chips:
+                        - type: entity
+                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_toilet'].state ) }"
+                          entity: input_select.heating_mode_toilet
+                  - type: tile
+                    name: Temperature
+                    entity: sensor.temperature_toilet
+                  - type: custom:mushroom-climate-card
+                    entity: climate.floor_heat_toilet
+                    name: Thermostat
+                    hvac_modes:
+                    - 'off'
+                    - 'heat'
+                    show_temperature_control: true
+                    layout: horizontal
+                    secondary_info: none
+              # ###############################################################
+              # VERANDA VIEW
+              veranda:
+                type: vertical-stack
+                cards:
+                # TITLE
+                - type: markdown
+                  content: "# Veranda"
+                  # In the first version, this was applied in the config-template-card:
+                  # style:
+                  #   margin: 0px
+                  card_mod:
+                    style:
+                      ha-markdown$: |
+                        h1 {
+                          font-weight: 300;
+                        }
+                      .: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                        ha-markdown {
+                          padding: var(--ha-card-padding) !important;
+                        }
+                # CLIMATE SECTION
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Climate"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
                           ha-card {
                             background-color: var(--nested-card-background);
                           }
-                    - type: "custom:layout-card"
-                      layout_type: grid
-                      layout:
-                        grid-gap: "0px var(--ha-card-padding)"
-                        grid-template-columns: 1fr 1fr
-                        margin: 0px
-                        padding: var(--ha-card-padding)
-                      cards:
-                      - type: "custom:button-card"
-                        icon: mdi:lightbulb
-                        name: "Turn ON"
-                        template: light_mode
-                        entity: script.storage_light_on_auto
-                        tap_action:
-                          action: call-service
-                          service: script.turn_on
-                          data:
-                            entity_id: script.storage_light_on_auto
-                      - type: "custom:button-card"
-                        icon: mdi:lightbulb-off-outline
-                        name: "Turn OFF"
-                        entity: script.storage_room_finish_timer
-                        template: light_mode
-                        tap_action:
-                          action: call-service
-                          service: script.turn_on
-                          data:
-                            entity_id: script.storage_room_finish_timer
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      name: Temperature
+                      entity: sensor.temperature_outdoor
+                    - type: tile
+                      name: Humidity
+                      entity: sensor.humidity_outdoor
         # ------------------------------------------------- END OF ROOM INFOS
+        
         # ###################################################################
         # 3D FLOORPLAN VISUALIZATION COLUMN
+        # Z-index layer hierarchy:
+        # dark base: 0 or 1 (?)
+        # light-effect renders: 2 -> 9
+        # room-outline display: 10
+        # invisible room-outline trigger areas (as icons): 11 -> 14
+        # device icons: 15
         # ###################################################################
         - type: picture-elements
           class: "col-md-6 col-xxl-8"
+          # DARK, BASE-LAYER OF FLOORPLAN DEFINED HERE:
           image: /local/floorplan/base-dark-v3.png
           card_mod:
             style: |
@@ -1007,13 +1700,8 @@ cards:
                 background-color: transparent;
               }
           elements:
-            # Z-INDEX ORDER:
-            # base: 0, 1
-            # light-renders: 2 - 9
-            # outlines: 10
-            # outlines, hidden: 11, 12, 13, 14
-            # device icons: 15
             # ###########################################################
+            # DEVICE ICONS - Z-index: 15
             - type: conditional
               conditions:
                 - entity: input_boolean.floorplan_show_icons
@@ -1276,10 +1964,11 @@ cards:
                     top: 6.5%
                     z-index: 15
                     '--mdc-icon-size': 25px
-            # Adds a clickable icon and hidden layers on sides to un-select a room
+            # ###########################################################
+            # HIDE ICON / LAYERS + UNSELECT ICON - Z-index: 15
             - type: conditional
               conditions:
-                - entity: input_text.floorplan_select_state
+                - entity: input_select.floorplan_select_state
                   state_not: "none"
               elements:
                 - type: icon
@@ -1358,7 +2047,7 @@ cards:
                     z-index: 15
                     '--mdc-icon-size': 30px
             # ###########################################################
-            # OUTLINES HIDDEN SELECT ICONS
+            # OUTLINES HIDDEN SELECT ICONS - Z-index: 11 -> 14
             # Veranda
             - type: icon
               icon: mdi:selection
@@ -1520,10 +2209,9 @@ cards:
                 '--mdc-icon-size': 190px
                 transform: 'scaleX(0.7) scaleY(1.2)'
             # ###########################################################
-            # OUTLINES HANDLER
-            # Marks the outline of the room in floorplan_select_state
+            # SELECTED ROOM OUTLINES - Z-index: 10 
             - type: image
-              entity: input_text.floorplan_select_state
+              entity: input_select.floorplan_select_state
               state_image:
                 "bath": "/local/floorplan/outline-bath.png"
                 "bedroom": "/local/floorplan/outline-bedroom.png"
@@ -1548,8 +2236,8 @@ cards:
                 action: none
               double_tap_action:
                 action: none
-            # -----------------------------------------------------------
-            # LIGHT LAYERS
+            # ###########################################################
+            # LIGHT EFFECT LAYERS - Z-index: 2 -> 9
             # Bedroom
             - type: image
               entity: sensor.pendant_bedroom_dim
@@ -1829,3 +2517,4 @@ cards:
                 "50": opacity(70%)
                 "75": opacity(85%)
                 "100": opacity(100%)
+        # ----------------------------------------------- END OF 3D FLOORPLAN
