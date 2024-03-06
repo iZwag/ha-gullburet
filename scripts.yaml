@@ -144,11 +144,12 @@ bedtime_lights:
 select_floorplan_room:
   alias: Floorplan - Select room
   sequence:
-  - service: input_text.set_value
+  - service: input_select.select_option
+    metadata: {}
     data:
-      value: '{{ room_name }}'
+      option: '{{ room_name }}'
     target:
-      entity_id: input_text.floorplan_select_state
+      entity_id: input_select.floorplan_select_state
   mode: restart
   icon: mdi:gesture-tap-button
   fields:
@@ -162,11 +163,12 @@ select_floorplan_room:
 deselect_floorplan_room:
   alias: Floorplan - Unselect room
   sequence:
-  - service: input_text.set_value
+  - service: input_select.select_option
+    metadata: {}
     data:
-      value: none
+      option: none
     target:
-      entity_id: input_text.floorplan_select_state
+      entity_id: input_select.floorplan_select_state
   mode: single
   icon: mdi:select-remove
 storage_room_light_on_auto:
