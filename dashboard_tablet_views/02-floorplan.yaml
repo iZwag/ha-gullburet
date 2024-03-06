@@ -136,7 +136,7 @@ cards:
     cards:
       - type: row
         cards:
-        
+        # Whitespace of col-1 to match other views
         - type: vertical-stack
           class: "col-md-1"
           cards:
@@ -275,7 +275,7 @@ cards:
                       entity: input_text.sun_cycle_next_event
                       name: "Next event"
                       icon: mdi:brightness-auto
-                      color: grey
+                      color: white
                       card_mod:
                         style: |
                           ha-card {
@@ -290,10 +290,18 @@ cards:
                     primary_info: none
                     secondary_info: none
                     card_mod:
-                      style: |
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
+                      style:
+                        mushroom-number-value-control$: |
+                          mushroom-slider {
+                            --main-color: var(--button-card-active-background) !important;
+                            --bg-color: var(--button-card-background) !important;
+                          }
+                        .: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                   
+                        
                 # HOME-VIEW CLEANING
                 - type: custom:stack-in-card
                   mode: vertical
