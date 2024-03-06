@@ -70,8 +70,7 @@ action:
   - conditions:
     - condition: trigger
       id:
-      - sleep-off
-      - comfort-off
+      - schedule-off
     sequence:
     - service: script.heating_set_thermostat_mode
       metadata: {}
