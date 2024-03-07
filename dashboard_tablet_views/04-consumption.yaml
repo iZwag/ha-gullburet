@@ -146,6 +146,44 @@ cards:
       - type: vertical-stack
         class: "col-md-10"
         cards:
+        - type: horizontal-stack
+          cards:
+          - type: gauge
+            entity: sensor.power_asengata_6a
+            min: 0
+            max: 8800
+            needle: false
+            severity:
+              green: 1
+              yellow: 2500
+              red: 5000
+            name: Power consumption (realtime)
+            card_mod:
+              style:
+                ha-gauge $ svg.gauge: |
+                  .dial {
+                    stroke: var(--ha-card-background) !important;
+                  }
+                .: | 
+                  ha-card {
+                    background-color: transparent;
+                    padding: var(--ha-card-padding) !important;
+                  }
+          - type: entities
+            title: So far this month
+            entities:
+              - entity: sensor.monthly_cost_asengata_6a
+                name: 'Electricity bill (Tibber)'
+                icon: mdi:currency-usd
+              - entity: sensor.monthly_net_consumption_asengata_6a
+                name: Power consumption
+            show_header_toggle: false
+            state_color: true
+            card_mod:
+              style: | 
+                ha-card {
+                  background-color: transparent;
+                }
         - type: markdown
           content: "# Battery statuses"
           card_mod:
@@ -166,19 +204,19 @@ cards:
           - type: entities
             entities:
               - entity: sensor.temperature_battery_bedroom
-                name: Temperature sensor, bedroom
+                name: Sensor, bedroom
               - entity: sensor.temperature_battery_guest
-                name: Temperature sensor, guest room
+                name: Sensor, guest room
               - entity: sensor.temperature_battery_entry
-                name: Temperature sensor, entry
+                name: Sensor, entry
               - entity: sensor.temperature_battery_kitchen
-                name: Temperature sensor, kitchen
+                name: Sensor, kitchen
               - entity: sensor.temperature_battery_office
-                name: Temperature sensor, office
+                name: Sensor, office
               - entity: sensor.temperature_battery_living
-                name: Temperature sensor, living room
+                name: Sensor, living room
               - entity: sensor.motion_battery_storage
-                name: Motion sensor, storage
+                name: Sensor, storage
             state_color: true
           - type: entities
             entities:
@@ -186,6 +224,8 @@ cards:
                 name: Heated sheet remote
               - entity: sensor.esmeralda_battery
                 name: Esmeralda
+              - entity: sensor.sonos_move_battery
+                name: Sonos Move
               - entity: sensor.lenovo_tab_m10_battery
                 name: Lenovo Tab M10
               - entity: sensor.iphone_jon_battery
