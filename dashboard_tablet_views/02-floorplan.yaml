@@ -199,7 +199,7 @@ cards:
                       padding: var(--ha-card-padding)
                     cards:
                     - type: markdown
-                      content: "## Lights"
+                      content: "## All lights"
                       card_mod:
                         style:
                           ha-markdown$: |
@@ -222,19 +222,51 @@ cards:
                           }
                       chips:
                       - type: entity
-                        icon: mdi:brightness-7
-                        entity: input_number.apartment_dimmer
-                      - type: entity
                         icon: mdi:brightness-auto
                         entity: input_boolean.auto_suncycle_masterdim
+                      - type: entity
+                        icon: mdi:ceiling-light-multiple
+                        entity: sensor.lights_on_count
+                      - type: entity
+                        icon: mdi:brightness-7
+                        entity: input_number.apartment_dimmer
+                  - type: conditional
+                    conditions:
+                    - condition: state
+                      entity: input_boolean.auto_suncycle_masterdim
+                      state: "on"
+                    card:
+                      type: tile
+                      entity: input_text.sun_cycle_next_event
+                      name: "Next automatic dim event"
+                      icon: mdi:brightness-auto
+                      color: white
+                      tap_action:
+                        action: call-service
+                        service: input_boolean.toggle
+                        target:
+                          entity_id: input_boolean.auto_suncycle_masterdim
+                      icon_tap_action:
+                        action: call-service
+                        service: input_boolean.toggle
+                        target:
+                          entity_id: input_boolean.auto_suncycle_masterdim
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            border: none;
+                            --tile-icon-color: var(--primary-text-color) !important;
+                          }
                   - type: custom:layout-card
                     layout_type: grid
                     layout:
-                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-gap: "var(--ha-card-padding) var(--ha-card-padding)"
                       grid-template-columns: 1fr 1fr 1fr
                       margin: 0px
                       padding: var(--ha-card-padding)
                     cards:
+                    # 1st row
                     - type: "custom:button-card"
                       icon: mdi:lightbulb-group
                       name: "Turn ON"
@@ -265,23 +297,37 @@ cards:
                         service: script.turn_on
                         data:
                           entity_id: script.bedtime_lights
-                  - type: conditional
-                    conditions:
-                    - condition: state
-                      entity: input_boolean.auto_suncycle_masterdim
-                      state: "on"
-                    card:
-                      type: tile
-                      entity: input_text.sun_cycle_next_event
-                      name: "Next event"
-                      icon: mdi:brightness-auto
-                      color: white
-                      card_mod:
-                        style: |
-                          ha-card {
-                            background-color: var(--nested-card-background);
-                            border: none;
-                          }
+                    # 2nd row
+                    - type: "custom:button-card"
+                      icon: mdi:silverware-variant
+                      name: "Dinner"
+                      template: light_mode
+                      entity: script.lights_dinner_mood
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.lights_dinner_mood
+                    - type: "custom:button-card"
+                      icon: mdi:pot-steam
+                      name: "Cooking"
+                      template: light_mode
+                      entity: script.lights_cooking_mood
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.lights_cooking_mood
+                    - type: "custom:button-card"
+                      icon: mdi:video-vintage
+                      name: "Movie"
+                      template: light_mode
+                      entity: script.lights_tv_mood
+                      tap_action:
+                        action: call-service
+                        service: script.turn_on
+                        data:
+                          entity_id: script.lights_tv_mood
                   - type: custom:mushroom-number-card
                     entity: input_number.apartment_dimmer
                     layout: horizontal
@@ -296,12 +342,16 @@ cards:
                             --main-color: var(--button-card-active-background) !important;
                             --bg-color: var(--button-card-background) !important;
                           }
+                        .:
+                        mushroom-fan-percentage-control$:
+                          mushroom-slider$: |
+                            .slider {
+                              border-radius: 8px !important;
+                            }
                         .: |
                           ha-card {
                             background-color: var(--nested-card-background);
-                          }
-                   
-                        
+                          }  
                 # HOME-VIEW CLEANING
                 - type: custom:stack-in-card
                   mode: vertical
@@ -358,7 +408,6 @@ cards:
                       - start_pause
                       - stop
                       - return_home
-                      - locate
                     layout: horizontal
                     card_mod:
                       style: |
@@ -467,55 +516,55 @@ cards:
                             variables:
                               mopping_mode: High
                               mopping_route: DeepPlus
-                # AUDIO
-                - type: custom:stack-in-card
-                  mode: vertical
-                  cards:
-                  - type: custom:mushroom-media-player-card
-                    entity: media_player.sonos_living
-                    layout: horizontal
-                    name: Common-rooms
-                    volume_controls:
-                      - volume_set
-                    media_controls:
-                      - previous
-                      - next
-                      - play_pause_stop
-                    icon_type: icon
-                    primary_info: name
-                    card_mod:
-                      style: |
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                  - type: "custom:layout-card"
-                    layout_type: grid
-                    layout:
-                      grid-gap: "0px var(--ha-card-padding)"
-                      grid-template-columns: 1fr 1fr
-                      margin: 0px
-                      padding: var(--ha-card-padding)
-                    cards:
-                    - type: "custom:button-card"
-                      icon: mdi:speaker-multiple
-                      name: "Group"
-                      entity: script.speakers_join_all
-                      template: light_mode
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.speakers_join_all
-                    - type: "custom:button-card"
-                      icon: mdi:speaker
-                      name: "Ungroup"
-                      entity: script.speakers_unjoin_all
-                      template: light_mode
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.speakers_unjoin_all     
+                  # AUDIO
+                  #- type: custom:stack-in-card
+                  #  mode: vertical
+                  #  cards:
+                  #  - type: custom:mushroom-media-player-card
+                  #    entity: media_player.sonos_living
+                  #    layout: horizontal
+                  #    name: Common-rooms
+                  #    volume_controls:
+                  #      - volume_set
+                  #    media_controls:
+                  #      - previous
+                  #      - next
+                  #      - play_pause_stop
+                  #    icon_type: icon
+                  #    primary_info: name
+                  #    card_mod:
+                  #      style: |
+                  #        ha-card {
+                  #          background-color: var(--nested-card-background);
+                  #        }
+                  #  - type: "custom:layout-card"
+                  #    layout_type: grid
+                  #    layout:
+                  #      grid-gap: "0px var(--ha-card-padding)"
+                  #      grid-template-columns: 1fr 1fr
+                  #      margin: 0px
+                  #      padding: var(--ha-card-padding)
+                  #    cards:
+                  #    - type: "custom:button-card"
+                  #      icon: mdi:speaker-multiple
+                  #      name: "Group"
+                  #      entity: script.speakers_join_all
+                  #      template: light_mode
+                  #      tap_action:
+                  #        action: call-service
+                  #        service: script.turn_on
+                  #        data:
+                  #          entity_id: script.speakers_join_all
+                  #    - type: "custom:button-card"
+                  #      icon: mdi:speaker
+                  #      name: "Ungroup"
+                  #      entity: script.speakers_unjoin_all
+                  #      template: light_mode
+                  #      tap_action:
+                  #        action: call-service
+                  #        service: script.turn_on
+                  #        data:
+                  #          entity_id: script.speakers_unjoin_all     
               # ###############################################################
               # BATHROOM VIEW
               bath:
@@ -703,6 +752,37 @@ cards:
                     show_temperature_control: true
                     layout: horizontal
                     secondary_info: none
+                # LIGHTS
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Lights"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      entity: light.lightstrip_closet_bedroom
+                      name: Wardrobe light
+                      icon: mdi:hanger
+                      color: white
+                    - type: tile
+                      entity: light.pendant_bedroom
+                      icon: mdi:ceiling-light
+                      color: white
+                      name: Pendant lamp
                 # CLEANING SECTION
                 # Bedroom Xiaomi id = 20
                 - type: custom:stack-in-card
@@ -712,7 +792,7 @@ cards:
                     content: >
                       ## Cleaning
 
-                      Immediately send Esmeralda to clean the bedroom **only**.
+                      Immediately send Esmeralda to clean the bedroom **only**. Remember: Open the door.
                     card_mod:
                       style: 
                         ha-markdown$: |
@@ -1503,6 +1583,21 @@ cards:
                 - type: custom:stack-in-card
                   mode: vertical
                   cards:
+                  - type: markdown
+                    content: "## Lights"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
                   - type: custom:timer-bar-card
                     entity: timer.storage_room_light_timer
                     name: "Light timer"
@@ -1510,40 +1605,28 @@ cards:
                     bar_direction: rtl
                     mushroom:
                       layout: horizontal
-                      color: primary
+                      color: white
                     card_mod:
                       style: |
                         ha-card {
                           background-color: var(--nested-card-background);
                         }
-                  - type: "custom:layout-card"
-                    layout_type: grid
-                    layout:
-                      grid-gap: "0px var(--ha-card-padding)"
-                      grid-template-columns: 1fr 1fr
-                      margin: 0px
-                      padding: var(--ha-card-padding)
-                    cards:
-                    - type: "custom:button-card"
-                      icon: mdi:lightbulb
-                      name: "Turn ON"
-                      template: light_mode
-                      entity: script.storage_light_on_auto
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.storage_light_on_auto
-                    - type: "custom:button-card"
-                      icon: mdi:lightbulb-off-outline
-                      name: "Turn OFF"
-                      entity: script.storage_room_finish_timer
-                      template: light_mode
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.storage_room_finish_timer                   
+                  - type: tile
+                    entity: script.storage_room_finish_timer
+                    hide_state: true
+                    name: Turn off
+                    vertical: false
+                    color: white
+                    tap_action:
+                      action: call-service
+                      service: script.turn_on
+                      target:
+                        entity_id: script.storage_room_finish_timer
+                    icon_tap_action:
+                      action: call-service
+                      service: script.turn_on
+                      target:
+                        entity_id: script.storage_room_finish_timer                  
               # ###############################################################
               # TOILET ROOM VIEW
               toilet:
@@ -1686,6 +1769,37 @@ cards:
                     - type: tile
                       name: Humidity
                       entity: sensor.humidity_outdoor
+                # LIGHTS
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Lights"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      entity: switch.plug_switch_string_lights_bryter
+                      icon: mdi:string-lights
+                      name: String lights
+                      color: white
+                    - type: tile
+                      entity: light.wall_lantern_veranda
+                      icon: mdi:coach-lamp
+                      name: Wall lantern
+                      color: white                   
         # ------------------------------------------------- END OF ROOM INFOS
         
         # ###################################################################
