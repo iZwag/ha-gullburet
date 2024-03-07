@@ -281,3 +281,338 @@
       state: 'off'
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
+- id: '1709804779112'
+  name: Lights - Kitchen - Cooking mood
+  entities:
+    light.spot_track_6_2_4:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack6_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 203
+      friendly_name: Spot-track 6
+      supported_features: 32
+      state: 'on'
+    light.pendants_flowerpots_2_5:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, Flowerpots (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Pendants, Flowerpots
+      supported_features: 32
+      state: 'on'
+    light.lightstrip_undershelf_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 203
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Lightstrip, under-shelf
+      supported_features: 40
+      state: 'on'
+    input_boolean.lights_override_kitchen:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Kitchen - Manual override
+      state: 'on'
+  icon: mdi:pot-steam
+  metadata:
+    input_boolean.lights_override_kitchen:
+      entity_only: true
+- id: '1709807061998'
+  name: Lights - Living - Dinner mood
+  entities:
+    light.pendants_2:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, dining (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_living:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 39
+      friendly_name: 'Pendants, dining '
+      supported_features: 32
+      state: 'on'
+    light.dimmer_2_2_2:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
+      supported_features: 32
+      state: 'off'
+    light.downlights_living:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 52
+      friendly_name: 'Downlights '
+      supported_features: 32
+      state: 'on'
+    switch.lamp_mushroom_living:
+      friendly_name: Lamp, mushroom
+      state: 'on'
+    switch.lamp_globe_living:
+      friendly_name: Lamp, globe
+      state: 'on'
+    light.spot_track_4_2_3:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 4 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack4_living:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 39
+      friendly_name: Spot-track 4
+      supported_features: 32
+      state: 'on'
+    light.wall_lantern_veranda:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 64
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Wall light, lantern
+      supported_features: 40
+      state: 'on'
+    switch.plug_switch_string_lights_bryter:
+      friendly_name: Plug switch, string lights Bryter
+      state: 'on'
+    input_boolean.lights_override_living:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Living room - Manual override
+      state: 'on'
+  icon: mdi:silverware-variant
+  metadata:
+    input_boolean.lights_override_living:
+      entity_only: true
+- id: '1709808039058'
+  name: Lights - Kitchen - Dinner mood
+  entities:
+    light.spot_track_6_2_4:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack6_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 39
+      friendly_name: Spot-track 6
+      supported_features: 32
+      state: 'on'
+    light.pendants_flowerpots_2_5:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, Flowerpots (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 64
+      friendly_name: Pendants, Flowerpots
+      supported_features: 32
+      state: 'on'
+    light.lightstrip_undershelf_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 39
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Lightstrip, under-shelf
+      supported_features: 40
+      state: 'on'
+    input_boolean.lights_override_kitchen:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Kitchen - Manual override
+      state: 'on'
+  icon: mdi:silverware-variant
+  metadata:
+    input_boolean.lights_override_kitchen:
+      entity_only: true
+- id: '1709809921116'
+  name: Lights - Living - TV Mood
+  entities:
+    light.pendants_2:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, dining (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Pendants, dining '
+      supported_features: 32
+      state: 'off'
+    light.dimmer_2_2_2:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
+      supported_features: 32
+      state: 'off'
+    light.downlights_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Downlights '
+      supported_features: 32
+      state: 'off'
+    light.spot_track_4_2_3:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 4 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack4_living:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 4
+      supported_features: 32
+      state: 'off'
+    switch.lamp_mushroom_living:
+      friendly_name: Lamp, mushroom
+      state: 'off'
+    switch.lamp_globe_living:
+      friendly_name: Lamp, globe
+      state: 'on'
+    input_boolean.lights_override_living:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Living room - Manual override
+      state: 'on'
+  icon: mdi:video-vintage
+  metadata:
+    input_boolean.lights_override_living:
+      entity_only: true
+- id: '1709810005831'
+  name: Lights - Kitchen - TV Mood
+  entities:
+    light.spot_track_6_2_4:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6 (2)
+      supported_features: 32
+      state: 'off'
+    light.spottrack6_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Spot-track 6
+      supported_features: 32
+      state: 'off'
+    light.lightstrip_undershelf_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 203
+      friendly_name: Lightstrip, under-shelf
+      supported_features: 40
+      state: 'off'
+    light.pendants_flowerpots_2_5:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Pendants, Flowerpots (2)
+      supported_features: 32
+      state: 'off'
+    light.pendants_kitchen:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 39
+      friendly_name: Pendants, Flowerpots
+      supported_features: 32
+      state: 'on'
+    input_boolean.lights_override_kitchen:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Kitchen - Manual override
+      state: 'on'
+  icon: mdi:video-vintage
+  metadata:
+    input_boolean.lights_override_kitchen:
+      entity_only: true
+- id: '1709810042813'
+  name: Lights - Entry - TV Mood
+  entities:
+    light.downlights_2_9:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Downlights (2)
+      supported_features: 32
+      state: 'off'
+    light.downlights_entry:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Downlights
+      supported_features: 32
+      state: 'off'
+    input_boolean.lights_override_entry:
+      editable: true
+      icon: mdi:gesture-tap-hold
+      friendly_name: Lights - Entry hall - Manual override
+      state: 'on'
+  icon: mdi:video-vintage
+  metadata:
+    input_boolean.lights_override_entry:
+      entity_only: true
