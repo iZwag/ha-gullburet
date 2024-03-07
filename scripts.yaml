@@ -563,3 +563,50 @@ set_fan_speed_roborock_wrapper:
           - Max
       name: Fan speed
       description: Accepts the inputs in the terminology of the Roborock-app.
+lights_kitchen_cooking_mood:
+  alias: Lights - Kitchen Cooking mood
+  sequence:
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_kitchen_cooking
+  mode: single
+  icon: mdi:pot-steam
+lights_dinner_mood:
+  alias: Lights - Dinner mood
+  sequence:
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_kitchen_dinner_mood
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_dinner_mood
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.hue_control_room_solnedgang_pa_savannen
+  mode: single
+  icon: mdi:silverware-variant
+lights_tv_mood:
+  alias: Lights - TV Mood
+  sequence:
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_entry_tv_mood
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_kitchen_tv_mood
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.lights_living_tv_mood
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.hue_control_room_soho
+  mode: single
+  icon: mdi:video-vintage
