@@ -350,28 +350,51 @@
         {% endif %}
     
 - sensor:
-    - name: "Storage room light time remaining"
-      unique_id: storage_room_time_remaining
-      #unit_of_measurement: 'Time'
-      icon: mdi:sun-clock
-      state: >
-          {% set current_time = states('sensor.date_time') %}
-          {% if states('timer.storage_room_light_timer') == 'active' %}
-            {% set finishes_at = as_timestamp(state_attr('timer.storage_room_light_timer', 'finishes_at')) %}
-            {% set now_ts = as_timestamp(now()) %}
-            {% set remaining_seconds = (finishes_at - now_ts) %}
-            {% if remaining_seconds > 0 %}
-              {{ remaining_seconds | timestamp_custom('%M:%S', false) }}
-            {% else %}
-              '00:00'
-            {% endif %}
+  - name: "Storage room light time remaining"
+    unique_id: storage_room_time_remaining
+    icon: mdi:sun-clock
+    state: >
+        {% set current_time = states('sensor.date_time') %}
+        {% if states('timer.storage_room_light_timer') == 'active' %}
+          {% set finishes_at = as_timestamp(state_attr('timer.storage_room_light_timer', 'finishes_at')) %}
+          {% set now_ts = as_timestamp(now()) %}
+          {% set remaining_seconds = (finishes_at - now_ts) %}
+          {% if remaining_seconds > 0 %}
+            {{ remaining_seconds | timestamp_custom('%M:%S', false) }}
           {% else %}
             '00:00'
           {% endif %}
+        {% else %}
+          '00:00'
+        {% endif %}
 
 - binary_sensor:
-    - name: "Esmeralda Mop Ready"
-      unique_id: esmeralda_mop_ready
-      state: >
-        {{ is_state('binary_sensor.esmeralda_mop_attached', 'on') 
-            and is_state('binary_sensor.esmeralda_water_box_attached', 'on') }}
+  - name: "Esmeralda Mop Ready"
+    unique_id: esmeralda_mop_ready
+    state: >
+      {{ is_state('binary_sensor.esmeralda_mop_attached', 'on') 
+          and is_state('binary_sensor.esmeralda_water_box_attached', 'on') }}
+
+- sensor:
+  - name: "Lights On Count"
+    unique_id: lights_on_count
+    unit_of_measurement: ''
+    state: >
+      {{ [states('light.ceiling_light_storage'), 
+          states('light.downlight_toilet'),
+          states('light.downlights_bath'),
+          states('light.downlights_entry'),
+          states('light.downlights_living'),
+          states('light.lightstrip_bath'),
+          states('light.lightstrip_undershelf_kitchen'),
+          states('light.mood_ball'),
+          states('light.pendant_bedroom'),
+          states('light.pendant_guest'),
+          states('light.pendants_kitchen'),
+          states('light.pendants_living'),
+          states('light.pendants_office'),
+          states('light.spottrack4_living'),
+          states('light.spottrack6_kitchen'),
+          states('light.wall_lantern_veranda'),
+          states('switch.lamp_globe_living'),
+          states('switch.lamp_mushroom_living')] | select('eq', 'on') | list | count }}
