@@ -29,6 +29,7 @@ Asus RT-AC88U
 - TV: **Samsung** The Frame 55"
 - Tablet, wall-mounted dashboard: **Lenovo** Tab M10 FHD Plus
 - **Shelly** Plug Plus S
+- Tibber Pulse - Realtime apartment power consumption meter. Uses the HAN-port.
 
 ### Z-Wave Devices
 - **Fibaro** Dimmer Switch 2, Switch 2
@@ -89,3 +90,4 @@ The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a 
 - Displaying time-left for a `timer`-helper in the Floorplan `picture-elements` rig does not as easily as I'd hoped. Just displaying it as an entity is pointless because it updates only once every 30-40s.
 - Using HA's native `conditional`-card to conditionally show certain cards (in this case the very reactive room-info column left of the Floorplan) leaves empty 12px transparent boxes if the cards are left out. This might be a weird interaction between the the `bootstrap`-card I use for laying out the columns.
 - I tried configuring a `custom:swipe-card` inside another `custom:swipe-card` (it's from HACS), where I attempted to swipe between different public transportation stops horizontally, and swiping vertical at each stop would show the map of the stop. After configuring this in the most minimal and efficient way, it just kept breaking the UI even though the intended functionality worked. Implemented in a different way.
+- It might be trivial to some, but the way I mentally separate concerns of *Automations* and *Scripts* is that Scripts are responsible for performing sequences that can be triggered by something explicitly defined, while Automations are more orchestrations that listen to changing/triggered entities and then run Scripts or other services.
