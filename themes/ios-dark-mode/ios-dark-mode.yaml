@@ -55,7 +55,7 @@ ios-dark-mode:
   paper-listbox-background-color: var(--primary-background-color)
   ha-card-header-color: var(--primary-text-color)
   ha-card-border-radius: 20px
-  # ha-card-background: rgba(10, 10, 10, 0.4) # Changed below
+  ha-card-background: var(--card-background-color) # Changed below
   paper-card-background-color: var(--ha-card-background)
   code-editor-background-color: var(--disabled-text-color)
   ha-card-border-width: 0 # from https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/82
@@ -129,7 +129,7 @@ ios-dark-mode:
   button-card-border-radius: 8px # ha-card-border-radius MINUS ha-card-padding
   button-card-background: rgba(var(--rgb-primary-text-color), 0.05)
   button-card-active-background: rgba(var(--rgb-primary-text-color), 0.2)
-  button-card-size: 50px
+  button-card-size: 50px # height
 
   # For the custom:layout-card
   masonry-view-card-margin: 0px
@@ -137,3 +137,6 @@ ios-dark-mode:
   # For Mushroom card styling
   mush-title-padding: 24px var(--ha-card-padding) var(--ha-card-padding)
   control-border-radius: var(--button-card-border-radius)
+
+  # For the custom:mini-media-player
+  # mini-media-player-scale: 1.25
