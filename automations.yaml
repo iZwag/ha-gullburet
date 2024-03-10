@@ -1,0 +1,49 @@
+- id: '1709814409323'
+  alias: Lights - Handle Auto suncycle masterdim ON/OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.auto_suncycle_masterdim
+    from: 'off'
+    to: 'on'
+    id: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.auto_suncycle_masterdim
+    from: 'on'
+    to: 'off'
+    id: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - service: script.lights_reset_overrides
+        metadata: {}
+        data: {}
+  mode: single
+- id: '1710100627159'
+  alias: Power - Store last hour consumption
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: '59'
+    seconds: '52'
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    metadata: {}
+    data:
+      entity_id: input_datetime.power_last_hour_consumed
+      datetime: '{{ now().strftime(''%Y-%m-%d %H:00:00'') }}'
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: '{{states(''sensor.accumulated_consumption_current_hour_asengata_6a'')}}'
+    target:
+      entity_id: input_number.power_last_hour_consumed
+  mode: single
