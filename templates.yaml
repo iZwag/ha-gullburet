@@ -398,3 +398,12 @@
           states('light.wall_lantern_veranda'),
           states('switch.lamp_globe_living'),
           states('switch.lamp_mushroom_living')] | select('eq', 'on') | list | count }}
+
+
+- sensor:
+  - name: "Power consumption last hour"
+    unique_id: power_consumption_last_hour
+    unit_of_measurement: "kWh"
+    state: "{{ states('input_number.power_last_hour_consumed') }}"
+    attributes:
+      start_time: "{{ states('input_datetime.power_last_hour_consumed') }}"
