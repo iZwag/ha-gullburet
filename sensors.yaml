@@ -10,7 +10,7 @@
     - "NSR:StopPlace:6404" # Haarklous plass
     - "NSR:StopPlace:58195" # Storo
 
-# Tibber future prices
+# Tibber future prices - Electricity provider
 - platform: rest
   name: Tibber Prices
   resource: https://api.tibber.com/v1-beta/gql
@@ -27,6 +27,42 @@
     Content-Type: application/json
     User-Agent: REST
   unit_of_measurement: NOK/kWh
+
+# Elvia grid company - "Fastledd" ("fixedPrice") limits and prices
+# Requests should not exceed 200/hour
+# Questions for Are:
+# - is version "1.0" the latest?
+# - 
+- platform: rest
+  name: Elvia fixed (fastprisledd) limits and prices for today
+  unique_id: elvia_fixed_prices
+  icon: mdi:transmission-tower
+  scan_interval: 15
+  # availability: 
+  # force_update: true
+  # Request
+  resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
+  method: GET
+  headers:
+    X-API-Key: !secret elvia_api_key
+  params:
+    TariffKey: standard
+    Range: today
+  # Response
+  json_attributes_path: "$.gridTariff.tariffPrice.priceInfo.fixedPrices[0].priceLevels"
+  json_attributes:
+  - priceLevels
+  #- valueMax
+  #- valueUnitOfMeasure
+  #- monthlyTotal
+  #- monthlyUnitOfMeasure
+  value_template: >
+    {{ value_json.gridTariff.tariffPrice.priceInfo.fixedPrices[0].startDate }}
+
+  #- hourPrices[0].numberOfDaysInMonth
+  #scan_interval: 15
+  #availability: 
+  #force_update: true
 
 # Time and date as sensors
 - platform: time_date
