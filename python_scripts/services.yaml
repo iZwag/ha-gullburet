@@ -22,3 +22,32 @@ brightness_interval:
     entity_id:
       description: The sensor entity that should store the result
       example: sensor.dim_pendants_office
+
+power_compare_maxhours:
+  name: Compare new hour to top 3 maxhours this month
+  description: Takes a newly recorded hour power consumption and compares it to the top 3 maxhours of this month
+  fields:
+    newhour_value:
+      description: Power consumption of the newly recorded hour, in kWh
+      example: 1.23
+    newhour_time:
+      description: Date and time for when the recorded hour started
+      example: "2023-01-23T12:00:00"
+    top_maxhour_val_1:
+      description: Power consumption entity of the top 1 max-hour this month, in kWh
+      example: input_number.power_monthly_highest_max_hour_1
+    top_maxhour_time_1:
+      description: Date and time entity for when the top 1 max-hour this month started
+      example: input_datetime.power_monthly_highest_max_hour_1
+    top_maxhour_val_2:
+      description: Power consumption entity of the top 2 max-hour this month, in kWh
+      example: input_number.power_monthly_highest_max_hour_2
+    top_maxhour_time_2:
+      description: Date and time entity for when the top 2 max-hour this month started
+      example: input_datetime.power_monthly_highest_max_hour_2
+    top_maxhour_val_3:
+      description: Power consumption entity of the top 3 max-hour this month, in kWh
+      example: input_number.power_monthly_highest_max_hour_3
+    top_maxhour_time_3:
+      description: Date and time entity for when the top 3 max-hour this month started
+      example: input_datetime.power_monthly_highest_max_hour_3
