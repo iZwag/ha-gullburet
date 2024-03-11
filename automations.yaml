@@ -47,3 +47,25 @@
     target:
       entity_id: input_number.power_last_hour_consumed
   mode: single
+- id: '1710166485878'
+  alias: Power - Compare new hour with max-hours
+  description: Takes a newly updated hourly power consumption in kWh and compares
+    to the current month top 3 max-hours. If it is among them, it is inserted at the
+    correct level
+  trigger:
+  - platform: state
+    entity_id:
+    - input_number.power_last_hour_consumed
+  condition: []
+  action:
+  - service: python_script.power_compare_maxhours
+    data:
+      newhour_value: '{{ states(''input_number.power_last_hour_consumed'') }}'
+      newhour_time: '{{ states(''input_datetime.power_last_hour_consumed'') }}'
+      top_maxhour_val_1: input_number.power_monthly_highest_max_hour_1
+      top_maxhour_time_1: input_datetime.power_monthly_highest_max_hour_1
+      top_maxhour_val_2: input_number.power_monthly_highest_max_hour_2
+      top_maxhour_time_2: input_datetime.power_monthly_highest_max_hour_2
+      top_maxhour_val_3: input_number.power_monthly_highest_max_hour_3
+      top_maxhour_time_3: input_datetime.power_monthly_highest_max_hour_3
+  mode: single
