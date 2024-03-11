@@ -32,14 +32,12 @@
 # Requests should not exceed 200/hour
 # Questions for Are:
 # - is version "1.0" the latest?
-# - 
+# - 2024-03-11T15:00:00 - 2024-03-11T16:00:00 fungerer som StartTime - EndTime, men da får jeg tilbake 16-17
+# 2024-03-11T15:00:00+01:00 - 2024-03-11T16:00:00+01:00 derimot gir errors. "is not valid for EndTime."
 - platform: rest
   name: Elvia fixed (fastprisledd) limits and prices for today
   unique_id: elvia_fixed_prices
   icon: mdi:transmission-tower
-  scan_interval: 15
-  # availability: 
-  # force_update: true
   # Request
   resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
   method: GET
@@ -49,20 +47,53 @@
     TariffKey: standard
     Range: today
   # Response
-  json_attributes_path: "$.gridTariff.tariffPrice.priceInfo.fixedPrices[0].priceLevels"
-  json_attributes:
-  - priceLevels
-  #- valueMax
-  #- valueUnitOfMeasure
-  #- monthlyTotal
-  #- monthlyUnitOfMeasure
   value_template: >
     {{ value_json.gridTariff.tariffPrice.priceInfo.fixedPrices[0].startDate }}
+  json_attributes_path: "$.gridTariff.tariffPrice.priceInfo.fixedPrices[0]"
+  json_attributes:
+  - priceLevels[0]
+  - priceLevels[1]
+  - priceLevels[2]
+  - priceLevels[3]
+  - priceLevels[4]
 
-  #- hourPrices[0].numberOfDaysInMonth
-  #scan_interval: 15
-  #availability: 
-  #force_update: true
+# Elvia hourly, flat variable pricing (energiledd) - NOK/kWh
+# As of initial configuration (11.03.2024), valid for Jan.-March 2024 there are two pricings:
+# - 0.3959 NOK/kWh 0600-2200 on weekdays
+# - 0.3209 NOK/kWh 2200-0600 on weekdays. Also for entire weekends and public holidays.
+# The price is including tax and fees.
+# This API request fetches the price dynamically for the current hour
+# It will automatically get new prices when the original model is outdated.
+- platform: rest
+  name: Elvia variable kWh pricing, current hour
+  unique_id: elvia_hourly_variable_price
+  icon: mdi:transmission-tower
+  #scan_interval: 30
+  resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
+  method: GET
+  headers:
+    X-API-Key: !secret elvia_api_key
+  params:
+    TariffKey: standard
+    # This calculation handles subtracting TZ-info from the target datetimes
+    # Accepted format: yyyy-mm-ddTHH:MM:SS. Adding TZ-info is not supported (+HH:MM)
+    # However, the returned time is adjusted for timezone.
+    StartTime: >
+      {% set tz_hours = now().isoformat().split('+')[1].split(':')[0] | int %}
+      {{ ( now() + timedelta(hours=(0-tz_hours)) ).strftime('%Y-%m-%dT%H:00:00') }}
+    EndTime: >
+      {% set tz_hours = now().isoformat().split('+')[1].split(':')[0] | int %}
+      {{ ( now() + timedelta(hours=(1-tz_hours )) ).strftime('%Y-%m-%dT%H:00:00') }}
+  # Response
+  value_template: >
+    {{ value_json.gridTariff.tariffPrice.hours[0].energyPrice.total }}
+  json_attributes_path: "$.gridTariff.tariffPrice.hours[0]"
+  json_attributes:
+  - shortName
+  - startTime
+  - expiredAt
+  - isPublicHoliday
+  
 
 # Time and date as sensors
 - platform: time_date
