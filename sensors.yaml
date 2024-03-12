@@ -38,6 +38,7 @@
   name: Elvia fixed (fastprisledd) limits and prices for today
   unique_id: elvia_fixed_prices
   icon: mdi:transmission-tower
+  scan_interval: 60
   # Request
   resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
   method: GET
@@ -51,11 +52,7 @@
     {{ value_json.gridTariff.tariffPrice.priceInfo.fixedPrices[0].startDate }}
   json_attributes_path: "$.gridTariff.tariffPrice.priceInfo.fixedPrices[0]"
   json_attributes:
-  - priceLevels[0]
-  - priceLevels[1]
-  - priceLevels[2]
-  - priceLevels[3]
-  - priceLevels[4]
+    - priceLevels
 
 # Elvia hourly, flat variable pricing (energiledd) - NOK/kWh
 # As of initial configuration (11.03.2024), valid for Jan.-March 2024 there are two pricings:
@@ -68,7 +65,8 @@
   name: Elvia variable kWh pricing, current hour
   unique_id: elvia_hourly_variable_price
   icon: mdi:transmission-tower
-  #scan_interval: 30
+  scan_interval: 60
+  # Request
   resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
   method: GET
   headers:
@@ -178,12 +176,14 @@
           On
         {% endif %}
     
+    # Dedicated sensor for robot vacuum battery status
     esmeralda_battery:
       friendly_name: "Esmeralda battery status"
       unit_of_measurement: "%"
       value_template: "{{ state_attr('vacuum.esmeralda', 'battery_level') }}"
       device_class: battery
 
+    # Translates the robot vacuum fan-speed from default Xiaomi to Roborock terminology
     esmeralda_fan_speed:
       friendly_name: "Esmeralda current fan-speed"
       value_template: >-
@@ -201,3 +201,12 @@
         {% else %}
           Unknown
         {% endif %}
+    
+    # Total cost this month for electric grid usage. Billed to Elvia
+    elvia_monthly_total:
+      friendly_name: "Current monthly total, Elvia grid usage"
+      unit_of_measurement: kr
+      value_template: >
+        {{ (states('sensor.elvia_active_fixed_price_level') | float) + (states('input_number.power_grid_monthly_variable_price') | float) }}
+    
+    
