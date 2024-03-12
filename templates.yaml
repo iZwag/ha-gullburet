@@ -1,3 +1,11 @@
+# #############################################################################
+# SETTING UP TEMPLATES IN A NEW ENVIRONMENT OR BACKING UP FROM OLD:
+# Some of the unique_ids might not work immediately as entity_ids.
+# In those cases they are typically found with their names formatted
+#  with underscores. In the HA UI, go to Settings > Devices & services
+#  > Entities, and search up the entity, and rename it to its unique_id
+#  in there. Then icon can also be configured, as desired.
+# #############################################################################
 - sensor:
     # =========================================================================
     # Floor Plan brightness levels. Linked to opacity-levels for PNG layers
@@ -349,25 +357,6 @@
           100
         {% endif %}
     
-- sensor:
-  - name: "Storage room light time remaining"
-    unique_id: storage_room_time_remaining
-    icon: mdi:sun-clock
-    state: >
-        {% set current_time = states('sensor.date_time') %}
-        {% if states('timer.storage_room_light_timer') == 'active' %}
-          {% set finishes_at = as_timestamp(state_attr('timer.storage_room_light_timer', 'finishes_at')) %}
-          {% set now_ts = as_timestamp(now()) %}
-          {% set remaining_seconds = (finishes_at - now_ts) %}
-          {% if remaining_seconds > 0 %}
-            {{ remaining_seconds | timestamp_custom('%M:%S', false) }}
-          {% else %}
-            '00:00'
-          {% endif %}
-        {% else %}
-          '00:00'
-        {% endif %}
-
 - binary_sensor:
   - name: "Esmeralda Mop Ready"
     unique_id: esmeralda_mop_ready
@@ -399,11 +388,111 @@
           states('switch.lamp_globe_living'),
           states('switch.lamp_mushroom_living')] | select('eq', 'on') | list | count }}
 
+- sensor:
+  - unique_id: elvia_fixed_price_level_1
+    name: Elvia fixed month price level 1
+    unit_of_measurement: "kr"
+    state: >
+      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['monthlyTotal'] }}
+    attributes:
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['nextIdDown'] }}"
 
 - sensor:
-  - name: "Power consumption last hour"
-    unique_id: power_consumption_last_hour
-    unit_of_measurement: "kWh"
-    state: "{{ states('input_number.power_last_hour_consumed') }}"
+  - unique_id: elvia_fixed_price_level_2
+    name: Elvia fixed month price level 2
+    unit_of_measurement: "kr"
+    state: >
+      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['monthlyTotal'] }}
     attributes:
-      start_time: "{{ states('input_datetime.power_last_hour_consumed') }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['nextIdDown'] }}"
+
+- sensor:
+  - unique_id: elvia_fixed_price_level_3
+    name: Elvia fixed month price level 3
+    unit_of_measurement: "kr"
+    state: >
+      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['monthlyTotal'] }}
+    attributes:
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['nextIdDown'] }}"
+
+- sensor:
+  - unique_id: elvia_fixed_price_level_4
+    name: Elvia fixed month price level 4
+    unit_of_measurement: "kr"
+    state: >
+      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['monthlyTotal'] }}
+    attributes:
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['nextIdDown'] }}"
+
+- sensor:
+  - unique_id: elvia_fixed_price_level_5 
+    name: Elvia fixed month price level 5
+    unit_of_measurement: "kr"
+    state: >
+      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['monthlyTotal'] }}
+    attributes:
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['nextIdDown'] }}"
+
+- sensor:
+  - unique_id: elvia_active_fixed_price_level
+    name: Elvia active fixed price level 
+    unit_of_measurement: "kr"
+    state: >
+      {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+      {% for i in range(1, 6) %}
+        {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
+        {% set value_min = state_attr(sensor_id, 'value_min') | float %}
+        {% set value_max = state_attr(sensor_id, 'value_max') | float %}
+          {% if value_min <= current_value < value_max %}
+            {{ states(sensor_id) }}
+            {% break %}
+          {% endif %}
+      {% endfor %}
+    attributes:
+      level_max: >
+        {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+        {% for i in range(1, 6) %}
+          {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
+          {% set value_min = state_attr(sensor_id, 'value_min') | float %}
+          {% set value_max = state_attr(sensor_id, 'value_max') | float %}
+            {% if value_min <= current_value < value_max %}
+              {{ state_attr(sensor_id, 'value_max') | float | round(1) }}
+              {% break %}
+            {% endif %}
+        {% endfor %}
+      prev_max: >
+        {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+        {% for i in range(1, 6) %}
+          {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
+          {% set value_min = state_attr(sensor_id, 'value_min') | float %}
+          {% set value_max = state_attr(sensor_id, 'value_max') | float %}
+            {% if value_min <= current_value < value_max %}
+              {{ state_attr(sensor_id, 'value_min') | float | round(1) }}
+              {% break %}
+            {% endif %}
+        {% endfor %}
