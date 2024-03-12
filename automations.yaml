@@ -32,7 +32,7 @@
   trigger:
   - platform: time_pattern
     minutes: '59'
-    seconds: '52'
+    seconds: '56'
   condition: []
   action:
   - service: input_datetime.set_datetime
@@ -48,7 +48,7 @@
       entity_id: input_number.power_last_hour_consumed
   mode: single
 - id: '1710166485878'
-  alias: Power - Compare new hour with max-hours
+  alias: Power - Handle new hour consumption recorded
   description: Takes a newly updated hourly power consumption in kWh and compares
     to the current month top 3 max-hours. If it is among them, it is inserted at the
     correct level
@@ -58,6 +58,16 @@
     - input_number.power_last_hour_consumed
   condition: []
   action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.power_grid_monthly_variable_price
+    data:
+      value: '{% set last_hour = (states(''input_number.power_last_hour_consumed'')
+        | float) * ( states(''sensor.elvia_variable_kwh_pricing_current_hour'') |
+        float) %} {{ ((states(''input_number.power_grid_monthly_variable_price'')
+        | float) + last_hour) | round(2) }}
+
+        '
   - service: python_script.power_compare_maxhours
     data:
       newhour_value: '{{ states(''input_number.power_last_hour_consumed'') }}'
