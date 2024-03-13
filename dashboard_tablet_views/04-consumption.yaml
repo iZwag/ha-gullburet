@@ -175,6 +175,9 @@ cards:
               - entity: sensor.monthly_cost_asengata_6a
                 name: 'Electricity bill (Tibber)'
                 icon: mdi:currency-usd
+              - entity: sensor.elvia_monthly_total
+                name: 'Grid company bill (Elvia)'
+                icon: mdi:currency-usd
               - entity: sensor.monthly_net_consumption_asengata_6a
                 name: Power consumption
             show_header_toggle: false
