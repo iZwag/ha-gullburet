@@ -80,6 +80,33 @@
     alias: Masterdim Toilet downlight
   mode: restart
 
+- id: '1709814409323'
+  alias: Lights - Handle Auto suncycle masterdim ON/OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.auto_suncycle_masterdim
+    from: 'off'
+    to: 'on'
+    id: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.auto_suncycle_masterdim
+    from: 'on'
+    to: 'off'
+    id: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - service: script.lights_reset_overrides
+  mode: single
+
 - id: '1707168721809'
   alias: Auto masterdim with Sun-cycle
   description: Automatically adjusts the brightness of all lights in the apartment
@@ -242,3 +269,176 @@
     - service: script.calculate_risenoon
     - service: script.calculate_noonset
   mode: single
+
+- id: '1710428595542'
+  alias: Lights - Handle light-mode toggles ON/OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.lights_cooking_mode
+    id: cooking-on
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.lights_cooking_mode
+    id: cooking-off
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id:
+    - input_boolean.lights_dining_mode
+    id: dining-on
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.lights_dining_mode
+    id: dining-off
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id:
+    - input_boolean.lights_movie_mode
+    id: movie-off
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id:
+    - input_boolean.lights_movie_mode
+    id: movie-on
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - cooking-on
+      sequence:
+      - service: script.lights_kitchen_cooking_mood
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - cooking-off
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_override_kitchen
+    - conditions:
+      - condition: trigger
+        id:
+        - dining-on
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.lights_movie_mode
+          - input_boolean.lights_cooking_mode
+      - service: script.lights_dinner_mood
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - dining-off
+        - movie-off
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.lights_override_entry
+          - input_boolean.lights_override_kitchen
+          - input_boolean.lights_override_living
+          - input_boolean.lights_override_veranda
+    - conditions:
+      - condition: trigger
+        id:
+        - movie-on
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.lights_cooking_mode
+          - input_boolean.lights_dining_mode
+      - service: script.lights_tv_mood
+        metadata: {}
+        data: {}
+  mode: queued
+
+- id: '1710423415819'
+  alias: Lights - Handle Fibaro Dimmer double-clicks
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 11
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: entry-double-click
+    alias: Listen for Fibaro Dimmer entry double-clicked
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 5
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: kitchen-double-click
+    alias: Listen for Fibaro Dimmer kitchen double-clicked
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 7
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: dining-double-click
+    alias: Listen for Fibaro Dimmer dining double-clicked
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - entry-double-click
+      sequence:
+      - service: script.all_lights_off
+        metadata: {}
+        data: {}
+      alias: Entry double-click
+    - conditions:
+      - condition: trigger
+        id:
+        - kitchen-double-click
+      sequence:
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_cooking_mode
+    - conditions:
+      - condition: trigger
+        id:
+        - dining-double-click
+      sequence:
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_dining_mode
+  mode: restart

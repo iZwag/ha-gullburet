@@ -507,3 +507,58 @@
         target:
           entity_id: input_select.heating_mode_guest
   mode: single
+
+- service: python_script.power_compare_maxhours
+  data:
+    newhour_value: '{{ states(''input_number.power_last_hour_consumed'') }}'
+    newhour_time: '{{ states(''input_datetime.power_last_hour_consumed'') }}'
+    top_maxhour_val_1: input_number.power_monthly_highest_max_hour_1
+    top_maxhour_time_1: input_datetime.power_monthly_highest_max_hour_1
+    top_maxhour_val_2: input_number.power_monthly_highest_max_hour_2
+    top_maxhour_time_2: input_datetime.power_monthly_highest_max_hour_2
+    top_maxhour_val_3: input_number.power_monthly_highest_max_hour_3
+    top_maxhour_time_3: input_datetime.power_monthly_highest_max_hour_3
+  mode: single
+
+- id: '1710166485878'
+  alias: Power - Handle new hour consumption recorded
+  description: Takes a newly updated hourly power consumption in kWh and compares
+    to the current month top 3 max-hours. If it is among them, it is inserted at the
+    correct level
+  trigger:
+  - platform: state
+    entity_id:
+    - input_number.power_last_hour_consumed
+  condition: []
+  action:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.power_grid_monthly_variable_price
+    data:
+      value: '{% set last_hour = (states(''input_number.power_last_hour_consumed'')
+        | float) * ( states(''sensor.elvia_variable_kwh_pricing_current_hour'') |
+        float) %} {{ ((states(''input_number.power_grid_monthly_variable_price'')
+        | float) + last_hour) | round(2) }}
+        '
+
+- id: '1710100627159'
+  alias: Power - Store last hour consumption
+  description: ''
+  trigger:
+  - platform: time_pattern
+    minutes: '59'
+    seconds: '56'
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    metadata: {}
+    data:
+      entity_id: input_datetime.power_last_hour_consumed
+      datetime: '{{ now().strftime(''%Y-%m-%d %H:00:00'') }}'
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: '{{states(''sensor.accumulated_consumption_current_hour_asengata_6a'')}}'
+    target:
+      entity_id: input_number.power_last_hour_consumed
+  mode: single
