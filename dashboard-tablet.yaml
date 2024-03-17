@@ -68,6 +68,26 @@ button_card_templates:
         - font-size: "0.8em"
         - color: var(--secondary-text-color)
 
+  light_mode_toggle:
+    show_state: false
+    size: 20px
+    #aspect_ratio: 3/2
+    styles:
+      card:
+        - border-radius: var(--button-card-border-radius)
+        - background: >
+            [[[
+              if (entity.state == "on") return "var(--button-card-active-background)";
+              return "var(--button-card-background)";
+            ]]]
+        - margin: "0px !important"
+        - padding: 7px # This makes it match 50px height
+      name:
+        - font-size: "0.8em"
+        - color: var(--secondary-text-color)
+    tap_action:
+      action: toggle
+
   # THERMOSTAT PROGRAM/MANUAL TOGGLE SWITCH
   thermostat_program:
     layout: icon_name
