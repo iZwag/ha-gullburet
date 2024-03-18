@@ -148,62 +148,158 @@ cards:
         cards:
         - type: horizontal-stack
           cards:
-          - type: gauge
-            entity: sensor.power_asengata_6a
-            min: 0
-            max: 8800
-            needle: false
-            severity:
-              green: 1
-              yellow: 2500
-              red: 5000
-            name: Power consumption (realtime)
-            card_mod:
-              style:
-                ha-gauge $ svg.gauge: |
-                  .dial {
-                    stroke: var(--ha-card-background) !important;
-                  }
-                .: | 
+          - type: vertical-stack
+            cards:
+            - type: gauge
+              entity: sensor.power_asengata_6a
+              min: 0
+              max: 8800
+              needle: false
+              severity:
+                green: 1
+                yellow: 2500
+                red: 5000
+              name: Power consumption (realtime)
+              card_mod:
+                style:
+                  ha-gauge $ svg.gauge: |
+                    .dial {
+                      stroke: var(--ha-card-background) !important;
+                    }
+                  .: | 
+                    ha-card {
+                      background-color: transparent;
+                      padding: var(--ha-card-padding) !important;
+                    }
+            - type: entities
+              title: So far this month
+              show_header_toggle: false
+              state_color: true
+              card_mod:
+                style: | 
                   ha-card {
                     background-color: transparent;
-                    padding: var(--ha-card-padding) !important;
                   }
-          - type: entities
-            title: So far this month
-            entities:
-              - entity: sensor.monthly_cost_asengata_6a
-                name: 'Electricity bill (Tibber)'
-                icon: mdi:currency-usd
-              - entity: sensor.elvia_monthly_total
-                name: 'Grid company bill (Elvia)'
-                icon: mdi:currency-usd
-              - entity: sensor.monthly_net_consumption_asengata_6a
-                name: Power consumption
-            show_header_toggle: false
-            state_color: true
+              entities:
+                - entity: sensor.monthly_cost_asengata_6a
+                  name: 'Electricity bill (Tibber)'
+                  icon: mdi:cash
+                - entity: sensor.elvia_monthly_total
+                  name: 'Grid company bill (Elvia)'
+                  icon: mdi:cash
+                - entity: sensor.monthly_net_consumption_asengata_6a
+                  name: Power consumption
+          - type: custom:apexcharts-card
             card_mod:
-              style: | 
+              style: |
                 ha-card {
                   background-color: transparent;
                 }
-        - type: markdown
-          content: "# Battery statuses"
-          card_mod:
-            style:
-              ha-markdown$: |
-                h1 {
-                  font-weight: 300;
-                }
-              .: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-                ha-markdown {
-                  padding: var(--ha-card-padding) !important;
-                }
+            chart_type: radialBar
+            experimental:
+              color_threshold: true
+            apex_config:
+              legend:
+                show: false
+            header:
+              show: true
+              title: "This month max-hours vs. current hour"
+              show_states: true
+              colorize_states: true
+            series:
+              - entity: input_number.power_monthly_highest_max_hour_1
+                name: Max-hour 1
+                show:
+                  in_header: false
+                color: '#1AC8ED'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+              - entity: input_number.power_monthly_highest_max_hour_2
+                name: Max-hour 2
+                show:
+                  in_header: false
+                color: '#1AC8ED'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+              - entity: input_number.power_monthly_highest_max_hour_3
+                name: Max-hour 3
+                show:
+                  in_header: false
+                color: '#1AC8ED'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+              - entity: sensor.power_monthly_max_hour_average
+                name: Average
+                unit: ' %'
+                color: '#9B59B6'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+              - entity: sensor.elvia_active_fixed_price_level
+                name: Price level limit
+                show:
+                  in_chart: false
+                unit: ' kWh'
+                color: red
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.attributes.level_max);
+                  return [[new Date().getTime(), sensorValueKWh]];
+              - entity: sensor.accumulated_consumption_current_hour_asengata_6a
+                name: Current hour
+                unit: ' %'
+                color_threshold:
+                  - value: 0
+                    color: '#4CAF50'
+                  - value: 25
+                    color: '#7CB342'
+                  - value: 45
+                    color: '#FBC02D'
+                  - value: 60
+                    color: '#EF6C00'
+                  - value: 85
+                    color: '#B71C1C'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+        #- type: markdown
+        #  content: "# Battery statuses"
+        #  card_mod:
+        #    style:
+        #      ha-markdown$: |
+        #        h1 {
+        #          font-weight: 300;
+        #        }
+        #      .: |
+        #        ha-card {
+        #          background-color: var(--nested-card-background);
+        #        }
+        #        ha-markdown {
+        #          padding: var(--ha-card-padding) !important;
+        #        }
         - type: horizontal-stack
           cards:
+          - type: entities
+            title: Battery status
+            entities:
+              - entity: sensor.heatsheet_remote_battery
+                name: Heated sheet remote
+              - entity: sensor.esmeralda_battery
+                name: Esmeralda
+              - entity: sensor.sonos_move_battery
+                name: Sonos Move
+              - entity: sensor.lenovo_tab_m10_battery
+                name: Lenovo Tab M10
+              - entity: sensor.iphone_jon_battery
+                name: "Jon's iPhone"
+            state_color: true
           - type: entities
             entities:
               - entity: sensor.temperature_battery_bedroom
@@ -220,19 +316,6 @@ cards:
                 name: Sensor, living room
               - entity: sensor.motion_battery_storage
                 name: Sensor, storage
-            state_color: true
-          - type: entities
-            entities:
-              - entity: sensor.heatsheet_remote_battery
-                name: Heated sheet remote
-              - entity: sensor.esmeralda_battery
-                name: Esmeralda
-              - entity: sensor.sonos_move_battery
-                name: Sonos Move
-              - entity: sensor.lenovo_tab_m10_battery
-                name: Lenovo Tab M10
-              - entity: sensor.iphone_jon_battery
-                name: "Jon's iPhone"
             state_color: true
       - type: vertical-stack
         class: "col-md-1"
