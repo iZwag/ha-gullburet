@@ -496,3 +496,22 @@
               {% break %}
             {% endif %}
         {% endfor %}
+
+- trigger:
+  - platform: time_pattern
+    #hours: /1
+    minutes: /30
+  action:
+    service: weather.get_forecasts
+    data:
+      type: hourly
+    target:
+      entity_id: weather.yr_weather_home
+    response_variable: forecast_data
+  sensor:
+    name: YR Weather forecast, hourly
+    unique_id: yr_weather_forecast_hourly
+    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float }}"
+    attributes:
+      forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
+      updatedAt: "{{ now().isoformat() }}"
