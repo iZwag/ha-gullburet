@@ -182,7 +182,7 @@ cards:
                         hour: HH
                   plotOptions:
                     bar:
-                      columnWidth: 75%
+                      columnWidth: 80%
                 header:
                   show: true
                   title: 'Forecast - Electricity price & Weather'
@@ -191,7 +191,7 @@ cards:
                 now:
                   show: true
                   #color: white
-                  label: Now
+                  label: 'NOW'
                   color: '#9E9E9E'
                 # TODO:
                 # config-template-card this into '24h' before 13:00, '48h' after?
@@ -217,7 +217,6 @@ cards:
                     min: 0
                     max: ~5
                 all_series_config:
-                  extend_to: false
                   show:
                     name_in_header: false
                 series:
@@ -225,6 +224,7 @@ cards:
                     name: Tibber
                     show:
                       in_header: before_now
+                    extend_to: false
                     type: line
                     unit: ' øre/kWh'
                     curve: stepline
@@ -256,6 +256,7 @@ cards:
                     #- value: 40
                     #  color: B71C1C
                   - entity: sensor.yr_weather_forecast_hourly
+                    extend_to: false
                     name: Nedbør
                     yaxis_id: precip
                     type: column
@@ -268,12 +269,13 @@ cards:
                   - entity: sensor.yr_weather_forecast_hourly
                     show:
                       in_header: raw
+                    extend_to: false
                     name: Temperatur, spådd
                     yaxis_id: temp
                     type: line
                     curve: smooth
                     unit: ' °C'
-                    stroke_width: 5
+                    stroke_width: 4
                     float_precision: 1
                     color: '#9b59b6'
                     data_generator: |
