@@ -200,13 +200,13 @@ cards:
             - media_player.sonos_kitchen
             predefinedGroups:
             - name: 'Fellesrom'
-              volume: 15
+              volume: 10
               entities:
               - media_player.sonos_living
               - media_player.sonos_move
               - media_player.sonos_kitchen
             - name: 'Stue og kjøkken'
-              volume: 15
+              volume: 10
               entities:
               - media_player.sonos_living
               - media_player.sonos_kitchen
