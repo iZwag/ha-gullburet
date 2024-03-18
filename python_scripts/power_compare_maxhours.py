@@ -57,6 +57,8 @@ for i in range(len(maxhours)):
         new_date = False
         break
 
+# If its a new date, add the new entry, sort the maxhours
+#  and remove the last element to end up with 3 entries again.
 if new_date:
     maxhours.append({'power': newhour_value, 'time': newhour_time})
     maxhours.sort(key=lambda x: x['power'], reverse=True)
