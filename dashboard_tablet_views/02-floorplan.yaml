@@ -258,6 +258,34 @@ cards:
                             border: none;
                             --tile-icon-color: var(--primary-text-color) !important;
                           }
+                  - type: conditional
+                    conditions:
+                    - condition: state
+                      entity: input_boolean.auto_suncycle_masterdim
+                      state: "off"
+                    card:
+                      type: tile
+                      entity: input_boolean.auto_suncycle_masterdim
+                      name: "Next automatic dim event"
+                      icon: mdi:brightness-auto
+                      color: white
+                      tap_action:
+                        action: call-service
+                        service: input_boolean.toggle
+                        target:
+                          entity_id: input_boolean.auto_suncycle_masterdim
+                      icon_tap_action:
+                        action: call-service
+                        service: input_boolean.toggle
+                        target:
+                          entity_id: input_boolean.auto_suncycle_masterdim
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                            border: none;
+                            --tile-icon-color: var(--primary-text-color) !important;
+                          }
                   - type: custom:layout-card
                     layout_type: grid
                     layout:
@@ -301,33 +329,18 @@ cards:
                     - type: "custom:button-card"
                       icon: mdi:silverware-variant
                       name: "Dinner"
-                      template: light_mode
-                      entity: script.lights_dinner_mood
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.lights_dinner_mood
+                      template: light_mode_toggle
+                      entity: input_boolean.lights_dining_mode
                     - type: "custom:button-card"
                       icon: mdi:pot-steam
                       name: "Cooking"
-                      template: light_mode
-                      entity: script.lights_cooking_mood
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.lights_cooking_mood
+                      template: light_mode_toggle
+                      entity: input_boolean.lights_cooking_mode
                     - type: "custom:button-card"
                       icon: mdi:video-vintage
                       name: "Movie"
-                      template: light_mode
-                      entity: script.lights_tv_mood
-                      tap_action:
-                        action: call-service
-                        service: script.turn_on
-                        data:
-                          entity_id: script.lights_tv_mood
+                      template: light_mode_toggle
+                      entity: input_boolean.lights_movie_mode
                   - type: custom:mushroom-number-card
                     entity: input_number.apartment_dimmer
                     layout: horizontal
@@ -342,7 +355,6 @@ cards:
                             --main-color: var(--button-card-active-background) !important;
                             --bg-color: var(--button-card-background) !important;
                           }
-                        .:
                         mushroom-fan-percentage-control$:
                           mushroom-slider$: |
                             .slider {
