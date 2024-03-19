@@ -16,7 +16,7 @@ def set_time(entity: str, time_str: str):
     hass.services.call(domain="input_datetime", service="set_datetime", service_data=service_data)
 
 # Import inputs
-newhour_value = data.get("newhour_value")
+newhour_value = float(data.get("newhour_value"))
 newhour_time = data.get("newhour_time")
 
 maxhour_1_entity = data.get("top_maxhour_val_1")
@@ -48,13 +48,16 @@ new_date = True
 for i in range(len(maxhours)):
     # Check if on the same date
     if (get_date(maxhours[i]['time']) == get_date(newhour_time)):
+        # Existing date among maxhours gets handled here, skip next section
+        new_date = False
+        # Check if the new value is not higher than that date's value, break early
+        if (newhour_value <= maxhours[i]['power']):
+            break
         # Set the new time and power
         maxhours[i]['time'] = newhour_time
         maxhours[i]['power'] = newhour_value
         # Sort the top maxhours by power-value in descending order
         maxhours.sort(key=lambda x: x['power'], reverse=True)
-        # New-hour is added and handled, skip the next section
-        new_date = False
         break
 
 # If its a new date, add the new entry, sort the maxhours
