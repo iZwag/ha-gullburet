@@ -201,13 +201,13 @@
         {% else %}
           Unknown
         {% endif %}
-    
+
     # Total cost this month for electric grid usage. Billed to Elvia
     elvia_monthly_total:
       friendly_name: "Current monthly total, Elvia grid usage"
       device_class: monetary
       unit_of_measurement: NOK
       value_template: >
-        {{ (states('sensor.elvia_active_fixed_price_level') | float) + (states('input_number.power_grid_monthly_variable_price') | float) }}
+        {{ (states('sensor.elvia_active_fixed_price_level') | float(default=0)) + (states('input_number.power_grid_monthly_variable_price') | float(default=0)) }}
     
     

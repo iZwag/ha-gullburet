@@ -391,7 +391,8 @@
 - sensor:
   - unique_id: elvia_fixed_price_level_1
     name: Elvia fixed month price level 1
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
       {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['monthlyTotal'] }}
     attributes:
@@ -405,7 +406,8 @@
 - sensor:
   - unique_id: elvia_fixed_price_level_2
     name: Elvia fixed month price level 2
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
       {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['monthlyTotal'] }}
     attributes:
@@ -419,7 +421,8 @@
 - sensor:
   - unique_id: elvia_fixed_price_level_3
     name: Elvia fixed month price level 3
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
       {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['monthlyTotal'] }}
     attributes:
@@ -433,7 +436,8 @@
 - sensor:
   - unique_id: elvia_fixed_price_level_4
     name: Elvia fixed month price level 4
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
       {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['monthlyTotal'] }}
     attributes:
@@ -447,7 +451,8 @@
 - sensor:
   - unique_id: elvia_fixed_price_level_5 
     name: Elvia fixed month price level 5
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
       {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['monthlyTotal'] }}
     attributes:
@@ -461,41 +466,105 @@
 - sensor:
   - unique_id: elvia_active_fixed_price_level
     name: Elvia active fixed price level 
-    unit_of_measurement: "kr"
+    device_class: monetary
+    unit_of_measurement: NOK
     state: >
-      {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+      {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
       {% for i in range(1, 6) %}
         {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
-        {% set value_min = state_attr(sensor_id, 'value_min') | float %}
-        {% set value_max = state_attr(sensor_id, 'value_max') | float %}
-          {% if value_min <= current_value < value_max %}
+        {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
+        {% set value_max = state_attr(sensor_id, 'value_max') | float(default=2) %}
+          {% if value_min <= current_average < value_max %}
             {{ states(sensor_id) }}
             {% break %}
           {% endif %}
       {% endfor %}
     attributes:
       level_max: >
-        {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+        {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
         {% for i in range(1, 6) %}
           {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
-          {% set value_min = state_attr(sensor_id, 'value_min') | float %}
-          {% set value_max = state_attr(sensor_id, 'value_max') | float %}
-            {% if value_min <= current_value < value_max %}
+          {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
+          {% set value_max = state_attr(sensor_id, 'value_max') | float(default=2) %}
+            {% if value_min <= current_average < value_max %}
               {{ state_attr(sensor_id, 'value_max') | float | round(1) }}
               {% break %}
             {% endif %}
         {% endfor %}
       prev_max: >
-        {% set current_value = states('sensor.power_monthly_max_hour_average') | float %}
+        {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
         {% for i in range(1, 6) %}
           {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
-          {% set value_min = state_attr(sensor_id, 'value_min') | float %}
-          {% set value_max = state_attr(sensor_id, 'value_max') | float %}
-            {% if value_min <= current_value < value_max %}
+          {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
+          {% set value_max = state_attr(sensor_id, 'value_max') | float(default=2) %}
+            {% if value_min <= current_average < value_max %}
               {{ state_attr(sensor_id, 'value_min') | float | round(1) }}
               {% break %}
             {% endif %}
         {% endfor %}
+
+  - unique_id: power_monthly_maxhour_1
+    name: Monthly top max-hour 1 power consumption 
+    device_class: energy
+    unit_of_measurement: kWh
+    state: "{{ states('input_number.power_monthly_highest_max_hour_1') | round(2) }}"
+    attributes:
+      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_1') }}"
+      prcnt_of_limit: >
+        {% set maxhour = states('input_number.power_monthly_highest_max_hour_1') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+        {% if limit > 0 %}
+          {{ ((maxhour / limit) * 100 ) | round(2) }}
+        {% else %}
+          {{ ((maxhour / 2) * 100 ) | round(2) }}
+        {% endif %}
+
+  - unique_id: power_monthly_maxhour_2
+    name: Monthly top max-hour 2 power consumption 
+    device_class: energy
+    unit_of_measurement: kWh
+    state: "{{ states('input_number.power_monthly_highest_max_hour_2') | round(2) }}"
+    attributes:
+      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_2') }}"
+      prcnt_of_limit: >
+        {% set maxhour = states('input_number.power_monthly_highest_max_hour_2') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+        {% if limit > 0 %}
+          {{ ((maxhour / limit) * 100 ) | round(2) }}
+        {% else %}
+          {{ ((maxhour / 2) * 100 ) | round(2) }}
+        {% endif %}
+
+  - unique_id: power_monthly_maxhour_3
+    name: Monthly top max-hour 3 power consumption 
+    device_class: energy
+    unit_of_measurement: kWh
+    state: "{{ states('input_number.power_monthly_highest_max_hour_3') | round(2) }}"
+    attributes:
+      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_3') }}"
+      prcnt_of_limit: >
+        {% set maxhour = states('input_number.power_monthly_highest_max_hour_3') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+        {% if limit > 0 %}
+          {{ ((maxhour / limit) * 100 ) | round(2) }}
+        {% else %}
+          {{ ((maxhour / 2) * 100 ) | round(2) }}
+        {% endif %}
+  
+  - unique_id: power_monthly_maxhour_average
+    name: Monthly top max-hour average power consumption 
+    device_class: energy
+    unit_of_measurement: kWh
+    state: >
+      {% set maxhour1 = states('input_number.power_monthly_highest_max_hour_1') | float(default=0) %}
+      {% set maxhour2 = states('input_number.power_monthly_highest_max_hour_2') | float(default=0) %}
+      {% set maxhour3 = states('input_number.power_monthly_highest_max_hour_3') | float(default=0) %}
+      {{ ((maxhour1 + maxhour2 + maxhour3) / 3) | round(2) }}
+    attributes:
+      prcnt_of_limit: >
+        {% set maxhour = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=1) %}
+        {{ ((maxhour / limit) * 100 ) | round(2) }}
 
 - trigger:
   - platform: time_pattern
@@ -511,7 +580,7 @@
   sensor:
     name: YR Weather forecast, hourly
     unique_id: yr_weather_forecast_hourly
-    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float }}"
+    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
     attributes:
       forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
       updatedAt: "{{ now().isoformat() }}"
