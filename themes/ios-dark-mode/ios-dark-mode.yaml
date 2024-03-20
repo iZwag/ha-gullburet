@@ -23,7 +23,7 @@ ios-dark-mode:
   primary-text-color: "#FFFFFF"
   secondary-text-color: "#d3d3d3"
   text-primary-color: "#FFF"
-  disabled-text-color: "#555" # XXX: https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/2
+  disabled-text-color: "#555"
   text-dark-color: "#FFF"
   # Sidebar Menu
   sidebar-background-color: var(--primary-background-color)
