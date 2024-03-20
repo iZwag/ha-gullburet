@@ -133,270 +133,344 @@ cards:
     #use_hass_style_gutter: true
     #hass_style_gutter_size: "10px"
     cards:
-      # #####################################################################
-      # FORECAST SECTION
       - type: row
         cards:
-          - type: vertical-stack
-            class: "col-xs-8 col-md-6 col-xxl-3"
-            cards:
-              - type: custom:weather-card
-                entity: weather.yr_weather_home
-                name: Oslo
-                details: false
-                hide_precipitation: false
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: var(--ha-card-padding) var(--ha-card-padding) 0 !important;
-                      background-color: transparent;
-                    }
-              - type: custom:apexcharts-card
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: 0 var(--ha-card-padding) !important;
-                      background-color: transparent;
-                    }
-                apex_config:
-                  legend:
-                    show: false
-                  chart:
-                    height: 160px
-                  markers:
-                    size: 3
-                    strokeColors: '#000'
-                    strokeOpacity: 0
-                  grid:
-                    show: false
-                graph_span: 23h
-                #layout: minimal
-                span:
-                  start: hour
-                header:
-                  show: false
-                  title: 'Weather forecast next 24hours'
-                  show_states: false
-                yaxis:
-                - id: temp
-                  decimals: 1
-                  apex_config:
-                    tickAmount: 4
-                  min: ~0
-                - id: precip
-                  decimals: 1
-                  opposite: true
-                  show: false
-                  min: 0
-                  max: ~2
-                  apex_config:
-                    tickAmount: 4
-                series:
-                  - entity: sensor.yr_weather_forecast_hourly
-                    name: Temperatur
-                    yaxis_id: temp
-                    unit: ' °C'
-                    stroke_width: 3
-                    float_precision: 1
-                    data_generator: |
-                      return entity.attributes.forecast.map((entry) => {
-                        return [new Date(entry.datetime).getTime(), entry.temperature];
-                      });
-                  - entity: sensor.yr_weather_forecast_hourly
-                    name: Nedbør
-                    yaxis_id: precip
-                    type: column
-                    unit: ' mm'
-                    float_precision: 1
-                    data_generator: |
-                      return entity.attributes.forecast.map((entry) => {
-                        return [new Date(entry.datetime).getTime(), entry.precipitation];
-                      });
-          - type: vertical-stack
-            class: "col-xs-8 col-md-6 col-xxl-3"
-            cards:
-              - type: custom:apexcharts-card
-                card_mod:
-                  style: |
-                    ha-card {
-                      padding: var(--ha-card-padding) !important;
-                      background-color: transparent;
-                    }
-                    #header {
-                      padding: 0 16px !important;
-                    }
-                    #header__title {
-                      font-size: 1em !important;
-                      font-weight: regular !important;
-                      color: var(--primary-text-color) !important;
-                    }
-                apex_config:
-                  legend:
-                    show: false
-                  grid:
-                    show: false
-                    #borderColor: '#E0E0E0'
-                  chart:
-                    height: 200px
-                  tooltip:
-                    enabled: true
-                    shared: true
-                    hideEmptySeries: true
-                    followCursor: true
-                    intersect: false
-                    x:
-                      show: false
-                  xaxis:
-                    labels:
-                      datetimeFormatter:
-                        hour: HH
-                header:
-                  show: true
-                  title: 'Energy prices today & tomorrow'
-                  show_states: true
-                  colorize_states: true
-                now:
-                  show: true
-                  #color: white
-                  label: 'Now'
-                  color: '#9E9E9E'
-                # TODO:
-                # config-template-card this into '24h' before 13:00, '48h' after?
-                graph_span: 24h 
-                span:
-                  start: day
-                yaxis:
-                  - id: kwh
-                    decimals: 0
-                    apex_config:
-                      tickAmount: 5
-                    min: ~25
-                all_series_config:
-                  show:
-                    name_in_header: false
-                series:
-                  - entity: sensor.tibber_prices
-                    name: Tibber
-                    show:
-                      in_header: before_now
-                    extend_to: false
-                    type: line
-                    unit: ' øre/kWh'
-                    curve: stepline
-                    yaxis_id: kwh
-                    stroke_width: 4
-                    float_precision: 0
-                    data_generator: |
-                      const noon = new Date()
-                      noon.setHours(0, 0, 0, 0)
-                      const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
-                      const data = [];
-                      for(let i = 0; i < prices.length; i++) {
-                        data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
-                      }
-                      return data;
-                    #color_threshold:
-                    #- value: 0
-                    #  color: 4DD0E1
-                    #- value: 10
-                    #  color: 26A69A
-                    #- value: 15
-                    #  color: 4CAF50
-                    #- value: 20
-                    #  color: 7CB342
-                    #- value: 25
-                    #  color: FBC02D
-                    #- value: 30
-                    #  color: EF6C00
-                    #- value: 40
-                    #  color: B71C1C
-                #experimental:
-                #  color_threshold: true
-      # #####################################################################
-      # PUBLIC TRANSPORT SECTION
-      # Row with 2x Ruter public transport departure boards
-      - type: row
-        cards:
-          # 1st column departures
+        # #####################################################################
+        # WEATHER FORECAST SECTION
         - type: vertical-stack
-          class: "col-xs-4 col-md-6 col-xxl-6"
+          class: "col-xs-8 col-md-6 col-xxl-3"
           cards:
-            # Swipe-carousel for tram and subway
-          - type: custom:swipe-card
-            start_card: 1
-            reset_after: 600
-            cards:
-            # Sandaker Senter, trikk
-            - type: custom:ruter-stop-info
-              entities:
-                - sensor.ruter_sandaker_senter_platform_11752
-                - sensor.ruter_sandaker_senter_platform_11755
-              show_departures: 3
-              walking_distance: 4
-            # Storo, t-bane
-            - type: custom:ruter-stop-info
-              entities:
-                - sensor.ruter_storo_platform_1
-                - sensor.ruter_storo_platform_2
-              show_departures: 3
-              walking_distance: 7
-            - type: map
-              entities:
-                - entity: sensor.ruter_sandaker_senter_platform_11752
-                  name: SandakerS.
-                - entity: zone.home
-                  label_mode: state
-              default_zoom: 16
-              aspect_ratio: 68%
-              fit_zones: true
-            - type: map
-              entities:
-                - entity: sensor.ruter_storo_platform_2
-                  name: Storo
-                - entity: zone.home
-                  label_mode: state
-              default_zoom: 14
-              dark_mode: true
-              aspect_ratio: 68%
-              fit_zones: true
-          # 2nd column departures
-        - type: vertical-stack
-          class: "col-xs-4 col-md-6 col-xxl-6"
-          cards:
-            # Swipe-carousel for buses
-          - type: custom:swipe-card
-            start_card: 1
-            reset_after: 600
-            cards:
+            - type: custom:weather-card
+              entity: weather.yr_weather_home
+              name: Oslo
+              details: false
+              hide_precipitation: false
+              card_mod:
+                style: |
+                  ha-card {
+                    padding: var(--ha-card-padding) var(--ha-card-padding) 0 !important;
+                    background-color: transparent;
+                  }
+            - type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  ha-card {
+                    padding: 0 var(--ha-card-padding) !important;
+                    background-color: transparent;
+                  }
+              apex_config:
+                legend:
+                  show: false
+                chart:
+                  height: 160px
+                markers:
+                  size: 3
+                  strokeColors: '#000'
+                  strokeOpacity: 0
+                grid:
+                  show: false
+              graph_span: 23h
+              #layout: minimal
+              span:
+                start: hour
+              header:
+                show: false
+                title: 'Weather forecast next 24hours'
+                show_states: false
+              yaxis:
+              - id: temp
+                decimals: 1
+                apex_config:
+                  tickAmount: 4
+                min: ~0
+              - id: precip
+                decimals: 1
+                opposite: true
+                show: false
+                min: 0
+                max: ~2
+                apex_config:
+                  tickAmount: 4
+              series:
+                - entity: sensor.yr_weather_forecast_hourly
+                  name: Temperatur
+                  yaxis_id: temp
+                  unit: ' °C'
+                  stroke_width: 3
+                  float_precision: 1
+                  data_generator: |
+                    return entity.attributes.forecast.map((entry) => {
+                      return [new Date(entry.datetime).getTime(), entry.temperature];
+                    });
+                - entity: sensor.yr_weather_forecast_hourly
+                  name: Nedbør
+                  yaxis_id: precip
+                  type: column
+                  unit: ' mm'
+                  float_precision: 1
+                  data_generator: |
+                    return entity.attributes.forecast.map((entry) => {
+                      return [new Date(entry.datetime).getTime(), entry.precipitation];
+                    });
+            # #################################################################
+            # PUBLIC TRANSPORT SECTION
+            # Swipe-carousel
+            - type: custom:swipe-card
+              start_card: 1
+              reset_after: 600
+              cards:
+              # Sandaker Senter, trikk
+              - type: custom:ruter-stop-info
+                entities:
+                  - sensor.ruter_sandaker_senter_platform_11752
+                  - sensor.ruter_sandaker_senter_platform_11755
+                show_departures: 3
+                walking_distance: 4
               # Torshov, buss
-            - type: "custom:ruter-stop-info"
-              entities:
-                - sensor.ruter_torshov_platform_11734
-                - sensor.ruter_torshov_platform_11733
-              show_departures: 3
-              walking_distance: 7
+              - type: "custom:ruter-stop-info"
+                entities:
+                  - sensor.ruter_torshov_platform_11734
+                  - sensor.ruter_torshov_platform_11733
+                show_departures: 3
+                walking_distance: 7
+              # Storo, t-bane
+              - type: custom:ruter-stop-info
+                entities:
+                  - sensor.ruter_storo_platform_1
+                  - sensor.ruter_storo_platform_2
+                show_departures: 3
+                walking_distance: 7
               # Haarklous plass, buss
-            - type: "custom:ruter-stop-info"
-              entities:
-                - sensor.ruter_haarklous_plass_platform_11766
-                - sensor.ruter_haarklous_plass_platform_11768
-              show_departures: 3
-              walking_distance: 5
-            - type: map
-              entities:
-                - entity: sensor.ruter_torshov_platform_11734
-                  name: Torshov
-                - entity: zone.home
-                  label_mode: state
-              default_zoom: 16
-              aspect_ratio: 68%
-              fit_zones: true
-            - type: map
-              entities:
-                - entity: sensor.ruter_haarklous_plass_platform_11766
-                  name: Haarklous
-                - entity: zone.home
-                  label_mode: state
-              default_zoom: 16
-              aspect_ratio: 68%
-              fit_zones: true
+              - type: "custom:ruter-stop-info"
+                entities:
+                  - sensor.ruter_haarklous_plass_platform_11766
+                  - sensor.ruter_haarklous_plass_platform_11768
+                show_departures: 3
+                walking_distance: 5
+        # #####################################################################
+        # ENERGY SECTION
+        - type: custom:stack-in-card
+          mode: vertical
+          class: "col-xs-8 col-md-6 col-xxl-3"
+          card_mod:
+            style: |
+              ha-card {
+                height: 100%;
+                background: transparent;
+                border: 1px solid var(--divider-color);
+              }
+          cards:
+          - type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding: var(--ha-card-padding) !important;
+                  background-color: transparent;
+                }
+                #header {
+                  padding: 0 16px !important;
+                }
+                #header__title {
+                  font-size: 1em !important;
+                  font-weight: regular !important;
+                  color: var(--primary-text-color) !important;
+                }
+            apex_config:
+              legend:
+                show: false
+              grid:
+                show: false
+                #borderColor: '#E0E0E0'
+              chart:
+                height: 200px
+                stacked: true
+              tooltip:
+                enabled: true
+                shared: true
+                hideEmptySeries: true
+                followCursor: true
+                intersect: false
+                x:
+                  show: false
+              xaxis:
+                labels:
+                  datetimeFormatter:
+                    hour: HH
+            header:
+              show: true
+              title: 'Energy prices today & tomorrow'
+              show_states: true
+              colorize_states: true
+            now:
+              show: true
+              #color: white
+              #label: 'Now'
+              color: '#d24dff'
+            # TODO:
+            # config-template-card this into '24h' before 13:00, '48h' after?
+            graph_span: 48h 
+            span:
+              start: day
+            yaxis:
+              - id: kwh
+                decimals: 0
+                apex_config:
+                  tickAmount: 5
+                min: 0
+            all_series_config:
+              show:
+                name_in_header: false
+            series:
+              - entity: sensor.elvia_variable_pricing
+                name: Elvia
+                show:
+                  in_header: false
+                  #in_header: before_now
+                type: line
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 4
+                float_precision: 0
+                data_generator: |
+                  const midnight = new Date()
+                  midnight.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.hours
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
+                  }
+                  return data;
+              - entity: sensor.tibber_prices
+                name: Tibber
+                show:
+                  in_header: false
+                type: line
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 4
+                float_precision: 0
+                data_generator: |
+                  const noon = new Date()
+                  noon.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                  }
+                  return data;
+              - entity: sensor.power_hourly_total
+                name: Hour total
+                show:
+                  in_chart: false
+                unit: ' øre/kWh'
+                float_precision: 0
+                color: '#d24dff'
+                data_generator: |
+                  const total_nok = parseFloat(entity.state);
+                  return [[new Date().getTime(), total_nok*100]];
+                #color_threshold:
+                #- value: 0
+                #  color: 4DD0E1
+                #- value: 10
+                #  color: 26A69A
+                #- value: 15
+                #  color: 4CAF50
+                #- value: 20
+                #  color: 7CB342
+                #- value: 25
+                #  color: FBC02D
+                #- value: 30
+                #  color: EF6C00
+                #- value: 40
+                #  color: B71C1C
+            #experimental:
+            #  color_threshold: true
+          - type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding: 0 var(--ha-card-padding) !important;
+                  background-color: transparent;
+                }
+                #header {
+                  padding: 0 16px !important;
+                }
+                #header__title {
+                  font-size: 1em !important;
+                  font-weight: regular !important;
+                  color: var(--primary-text-color) !important;
+                }
+            chart_type: radialBar
+            apex_config:
+              legend:
+                show: false
+              chart:
+                height: 250px
+            header:
+              show: true
+              title: 'This month max-hour consumption vs. current hour'
+              show_states: true
+              colorize_states: true
+            series:
+              - entity: sensor.elvia_active_fixed_price_level
+                name: Price level limit
+                show:
+                  in_chart: false
+                unit: ' kWh'
+                color: red
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.attributes.level_max);
+                  return [[new Date().getTime(), sensorValueKWh]];
+              - entity: sensor.power_monthly_maxhour_average
+                name: Average
+                show:
+                  in_header: false
+                unit: ' %'
+                color: '#d24dff'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.attributes.prcnt_of_limit);
+                  return [[new Date().getTime(), sensor_percent]];
+              - entity: sensor.power_monthly_maxhour_average
+                name: Average
+                show:
+                  in_chart: false
+                unit: ' kWh'
+                color: '#d24dff'
+              - entity: sensor.accumulated_consumption_current_hour_asengata_6a
+                name: Current hour
+                show:
+                  in_header: false
+                color: '#1aff66'
+                data_generator: |
+                  const sensorValueKWh = parseFloat(entity.state);
+                  const percentageOfTotal = (sensorValueKWh / 5) * 100;
+                  return [[new Date().getTime(), percentageOfTotal]];
+              - entity: sensor.accumulated_consumption_current_hour_asengata_6a
+                name: Current hour
+                show:
+                  in_chart: false
+                unit: ' kWh'
+                color: '#1aff66'
+          - type: gauge
+            entity: sensor.power_asengata_6a
+            min: 0
+            max: 8800
+            needle: false
+            severity:
+              green: 1
+              yellow: 2000
+              red: 5000
+            name: Realtime energy consumption
+            card_mod:
+              style:
+                ha-gauge $ svg.gauge: |
+                  .dial {
+                    stroke: var(--ha-card-background) !important;
+                  }
+                .: | 
+                  ha-card {
+                    background-color: transparent;
+                    padding: var(--ha-card-padding) !important;
+                  }
