@@ -142,32 +142,102 @@ cards:
             cards:
               - type: custom:weather-card
                 entity: weather.yr_weather_home
-                details: true
+                name: Oslo
+                details: false
                 hide_precipitation: false
                 card_mod:
                   style: |
                     ha-card {
+                      padding: var(--ha-card-padding) var(--ha-card-padding) 0 !important;
                       background-color: transparent;
                     }
-          - type: vertical-stack
-            class: "col-xs-8 col-md-6 col-xxl-3"
-            #experimental:
-            #  color_threshold: true
-            cards:
               - type: custom:apexcharts-card
                 card_mod:
                   style: |
                     ha-card {
+                      padding: 0 var(--ha-card-padding) !important;
                       background-color: transparent;
                     }
                 apex_config:
                   legend:
                     show: false
-                  grid:
-                    show: true
-                    borderColor: '#E0E0E0'
                   chart:
-                    height: 350px
+                    height: 160px
+                  markers:
+                    size: 3
+                    strokeColors: '#000'
+                    strokeOpacity: 0
+                  grid:
+                    show: false
+                graph_span: 23h
+                #layout: minimal
+                span:
+                  start: hour
+                header:
+                  show: false
+                  title: 'Weather forecast next 24hours'
+                  show_states: false
+                yaxis:
+                - id: temp
+                  decimals: 1
+                  apex_config:
+                    tickAmount: 4
+                  min: ~0
+                - id: precip
+                  decimals: 1
+                  opposite: true
+                  show: false
+                  min: 0
+                  max: ~2
+                  apex_config:
+                    tickAmount: 4
+                series:
+                  - entity: sensor.yr_weather_forecast_hourly
+                    name: Temperatur
+                    yaxis_id: temp
+                    unit: ' °C'
+                    stroke_width: 3
+                    float_precision: 1
+                    data_generator: |
+                      return entity.attributes.forecast.map((entry) => {
+                        return [new Date(entry.datetime).getTime(), entry.temperature];
+                      });
+                  - entity: sensor.yr_weather_forecast_hourly
+                    name: Nedbør
+                    yaxis_id: precip
+                    type: column
+                    unit: ' mm'
+                    float_precision: 1
+                    data_generator: |
+                      return entity.attributes.forecast.map((entry) => {
+                        return [new Date(entry.datetime).getTime(), entry.precipitation];
+                      });
+          - type: vertical-stack
+            class: "col-xs-8 col-md-6 col-xxl-3"
+            cards:
+              - type: custom:apexcharts-card
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding: var(--ha-card-padding) !important;
+                      background-color: transparent;
+                    }
+                    #header {
+                      padding: 0 16px !important;
+                    }
+                    #header__title {
+                      font-size: 1em !important;
+                      font-weight: regular !important;
+                      color: var(--primary-text-color) !important;
+                    }
+                apex_config:
+                  legend:
+                    show: false
+                  grid:
+                    show: false
+                    #borderColor: '#E0E0E0'
+                  chart:
+                    height: 200px
                   tooltip:
                     enabled: true
                     shared: true
@@ -180,22 +250,19 @@ cards:
                     labels:
                       datetimeFormatter:
                         hour: HH
-                  plotOptions:
-                    bar:
-                      columnWidth: 80%
                 header:
                   show: true
-                  title: 'Forecast - Electricity price & Weather'
+                  title: 'Energy prices today & tomorrow'
                   show_states: true
                   colorize_states: true
                 now:
                   show: true
                   #color: white
-                  label: 'NOW'
+                  label: 'Now'
                   color: '#9E9E9E'
                 # TODO:
                 # config-template-card this into '24h' before 13:00, '48h' after?
-                graph_span: 48h 
+                graph_span: 24h 
                 span:
                   start: day
                 yaxis:
@@ -203,19 +270,7 @@ cards:
                     decimals: 0
                     apex_config:
                       tickAmount: 5
-                    min: ~20
-                  - id: temp
-                    opposite: true
-                    decimals: 1
-                    apex_config:
-                      tickAmount: 5
-                    min: ~0
-                  - id: precip
-                    opposite: true
-                    decimals: 1
-                    show: false
-                    min: 0
-                    max: ~5
+                    min: ~25
                 all_series_config:
                   show:
                     name_in_header: false
@@ -255,44 +310,8 @@ cards:
                     #  color: EF6C00
                     #- value: 40
                     #  color: B71C1C
-                  - entity: sensor.yr_weather_forecast_hourly
-                    extend_to: false
-                    name: Nedbør
-                    yaxis_id: precip
-                    type: column
-                    unit: ' mm'
-                    float_precision: 1
-                    data_generator: |
-                      return entity.attributes.forecast.map((entry) => {
-                        return [new Date(entry.datetime).getTime(), entry.precipitation];
-                      });
-                  - entity: sensor.yr_weather_forecast_hourly
-                    show:
-                      in_header: raw
-                    extend_to: false
-                    name: Temperatur, spådd
-                    yaxis_id: temp
-                    type: line
-                    curve: smooth
-                    unit: ' °C'
-                    stroke_width: 4
-                    float_precision: 1
-                    color: '#9b59b6'
-                    data_generator: |
-                      return entity.attributes.forecast.map((entry) => {
-                        return [new Date(entry.datetime).getTime(), entry.temperature];
-                      });
-                  - entity: sensor.temperature_outdoor
-                    show:
-                      in_header: false
-                    extend_to: now
-                    name: Temperatur
-                    yaxis_id: temp
-                    type: line
-                    curve: smooth
-                    unit: ' °C'
-                    color: '#9b59b6'
-                    float_precision: 1
+                #experimental:
+                #  color_threshold: true
       # #####################################################################
       # PUBLIC TRANSPORT SECTION
       # Row with 2x Ruter public transport departure boards
