@@ -91,8 +91,36 @@
   - startTime
   - expiredAt
   - isPublicHoliday
-  
 
+# Elvia variable prices 48h forecast: Today & tomorrow
+- platform: rest
+  name: 'Elvia variable kWh pricing: Now, today and tomorrow'
+  unique_id: elvia_variable_price
+  icon: mdi:transmission-tower
+  scan_interval: 60
+  # Request
+  resource: https://elvia.azure-api.net/grid-tariff/digin/api/1.0/tariffquery
+  method: GET
+  headers:
+    X-API-Key: !secret elvia_api_key
+  params:
+    TariffKey: standard
+    StartTime: >
+      {% set tz_hours = now().isoformat().split('+')[1].split(':')[0] | int %}
+      {% set today_start = now().replace(hour=0, minute=0, second=0, microsecond=0) %}
+      {{ ( today_start + timedelta(hours=(0-tz_hours)) ).strftime('%Y-%m-%dT%H:00:00') }}
+    EndTime: >
+      {% set tz_hours = now().isoformat().split('+')[1].split(':')[0] | int %}
+      {% set tomorrow_end = (now() + timedelta(days=2)).replace(hour=0, minute=0, second=0, microsecond=0) %}
+      {{ ( tomorrow_end + timedelta(hours=(0-tz_hours)) ).strftime('%Y-%m-%dT%H:00:00') }}
+  # Response
+  value_template: >
+    {% set hour = now().hour %}
+    {{ value_json.gridTariff.tariffPrice.hours[hour].energyPrice.total }}
+  json_attributes_path: "$.gridTariff.tariffPrice"
+  json_attributes:
+  - hours
+  
 # Time and date as sensors
 - platform: time_date
   display_options:
@@ -210,4 +238,12 @@
       value_template: >
         {{ (states('sensor.elvia_active_fixed_price_level') | float(default=0)) + (states('input_number.power_grid_monthly_variable_price') | float(default=0)) }}
     
-    
+    # Total cost for power (Tibber and Elvia) for the current hour
+    power_hourly_total:
+      friendly_name: "Current hour power total, Elvia and Tibber"
+      device_class: monetary
+      unit_of_measurement: NOK
+      value_template: >
+        {% set energy = states('sensor.tibber_prices') | float(default=0) %}
+        {% set grid = states('sensor.elvia_variable_pricing') | float(default=0) %}
+        {{ energy + grid }}

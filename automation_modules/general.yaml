@@ -525,7 +525,7 @@
     data:
       value: >
         {% set last_hour = states('input_number.power_last_hour_consumed') | float %}
-        {% set hour_price = states('sensor.elvia_variable_kwh_pricing_current_hour') | float %}
+        {% set hour_price = states('sensor.elvia_variable_pricing') | float %}
         {% set month_price = states('input_number.power_grid_monthly_variable_price') | float %}
         {{ ( (last_hour * hour_price) + month_price ) | round(2) }}
   - service: python_script.power_compare_maxhours
