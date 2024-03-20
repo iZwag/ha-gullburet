@@ -61,6 +61,7 @@ To display relevant info about life in Oslo and Norway, here are some public API
 - Entur (Ruter): Public transportation
 - Met.no (Yr): Weather
 - Tibber: Local electricity ratings, including fees
+- Elvia: Electrical grid usage, variable and fixed price rating, including fees
 
 ### Dashboard preview
 
@@ -92,3 +93,4 @@ The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a 
 - I tried configuring a `custom:swipe-card` inside another `custom:swipe-card` (it's from HACS), where I attempted to swipe between different public transportation stops horizontally, and swiping vertical at each stop would show the map of the stop. After configuring this in the most minimal and efficient way, it just kept breaking the UI even though the intended functionality worked. Implemented in a different way.
 - It might be trivial to some, but the way I mentally separate concerns of *Automations* and *Scripts* is that Scripts are responsible for performing sequences that can be triggered by something explicitly defined, while Automations are more orchestrations that listen to changing/triggered entities and then run Scripts or other services.
 - In Template sensor (and other related Jinja-template instances), add default-values when casting string as floats to avoid issues if the value is `unknown` for some reason. Example: `"{{ states('sensor.temperature') | float(default=0) }}"`
+- The ApexCharts HACS-card is brilliant for timeseries data graphs, but does for some reason not support bar-graphs with categories (March 2024). There is support for column-timeseries, but I was unsuccessful in making discrete categories as bars. I wanted to display the entity-state of my top 3 monthly energy consumption "max-hours", and how rank between the fixed-price levels from the grid company. I instead went with a `radialBar` type chart instead.
