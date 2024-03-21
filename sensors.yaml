@@ -138,20 +138,40 @@
   sensors:
     # Readable string for week-day, as sensor
     day:
+      friendly_name: "Weekday name"
+      value_template: >
+        {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+        {{ days[now().weekday()] }}
+
+    day_nor:
+      friendly_name: "Weekday name, Norwegian"
       value_template: >
         {% set days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"] %}
         {{ days[now().weekday()] }}
     
     # Readable string for month, as sensor
     month:
+      friendly_name: "Month name"
+      value_template: >
+        {% set months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+        {{ months[now().month-1] }} 
+
+    month_nor:
+      friendly_name: "Month name, Norwegian"
       value_template: >
         {% set months = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"] %}
         {{ months[now().month-1] }}
     
     # Formats the week-day and date into a humanly readable sentence for UI, as sensor
     date_string:
-      friendly_name: "Full Date"
-      value_template: "{{ states('sensor.day') }}, {{ now().day }}.  {{ states('sensor.month') }} {{ now().year }}"
+      value_template: >
+        {% set day = now().day %}
+        {% set ordinal = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th') %}
+        {{ states('sensor.day') ~ ', ' ~ states('sensor.month') ~ ' ' ~ day ~ ordinal ~ now().strftime(' %Y') }}
+
+    date_string_nor:
+      friendly_name: "Full date, Norwegian"
+      value_template: "{{ states('sensor.day_nor') }}, {{ now().day }}.  {{ states('sensor.month_nor') }} {{ now().year }}"
     
     # Temperature sensor for Kitchen Heater
     panel_temperature_kitchen:
