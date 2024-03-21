@@ -565,6 +565,15 @@
         {% set maxhour = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=1) %}
         {{ ((maxhour / limit) * 100 ) | round(2) }}
+  
+  - unique_id: power_price_chart_show_hours
+    name: Power - Price chart show hours state
+    state: >
+      {% if now().hour < 13 %}
+        24h
+      {% else %}
+        48h
+      {% endif %}
 
 - trigger:
   - platform: time_pattern
