@@ -214,7 +214,7 @@ cards:
                   in_chart: false
                 unit: ' kWh'
                 color: '#d24dff'
-              - entity: sensor.accumulated_consumption_current_hour_asengata_6a
+              - entity: sensor.tibber_energy_consumption_current_hour
                 name: Current hour
                 show:
                   in_header: false
@@ -223,29 +223,16 @@ cards:
                   const sensorValueKWh = parseFloat(entity.state);
                   const percentageOfTotal = (sensorValueKWh / 5) * 100;
                   return [[new Date().getTime(), percentageOfTotal]];
-              - entity: sensor.accumulated_consumption_current_hour_asengata_6a
+              - entity: sensor.tibber_energy_consumption_current_hour
                 name: Current hour
                 show:
                   in_chart: false
                 unit: ' kWh'
                 color: '#1aff66'
-                #color_threshold:
-                #  - value: 0
-                #    color: '#4CAF50'
-                #  - value: 25
-                #    color: '#7CB342'
-                #  - value: 45
-                #    color: '#FBC02D'
-                #  - value: 60
-                #    color: '#EF6C00'
-                #  - value: 85
-                #    color: '#B71C1C'
-            #experimental:
-              #color_threshold: true
           - type: vertical-stack
             cards:
             - type: gauge
-              entity: sensor.power_asengata_6a
+              entity: sensor.tibber_power_consumption_realtime
               min: 0
               max: 8800
               needle: false
@@ -275,13 +262,13 @@ cards:
                     background-color: transparent;
                   }
               entities:
-                - entity: sensor.monthly_cost_asengata_6a
+                - entity: sensor.tibber_monthly_cost
                   name: 'Electricity bill (Tibber)'
                   icon: mdi:cash
                 - entity: sensor.elvia_monthly_total
                   name: 'Grid company bill (Elvia)'
                   icon: mdi:cash
-                - entity: sensor.monthly_net_consumption_asengata_6a
+                - entity: sensor.tibber_energy_consumption_this_month
                   name: Power consumption
         #- type: markdown
         #  content: "# Battery statuses"
