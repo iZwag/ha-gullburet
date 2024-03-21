@@ -555,7 +555,7 @@
       datetime: "{{ now().strftime('%Y-%m-%d %H:00:00') }}"
   - service: input_number.set_value
     data:
-      value: "{{states('sensor.accumulated_consumption_current_hour_asengata_6a')}}"
+      value: "{{states('sensor.tibber_energy_consumption_current_hour')}}"
     target:
       entity_id: input_number.power_last_hour_consumed
   mode: single
