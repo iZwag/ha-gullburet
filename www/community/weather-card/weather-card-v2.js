@@ -149,6 +149,7 @@ class WeatherCard extends LitElement {
     return html`
       <ha-card @click="${this._handleClick}">
         ${this._config.current !== false ? this.renderCurrent(stateObj) : ""}
+        ${this.renderWeatherText(stateObj)}
         ${this._config.details !== false ? this.renderDetails(stateObj) : ""}
         ${this._config.forecast !== false
           ? this.renderForecast(stateObj.attributes.forecast)
@@ -181,6 +182,24 @@ class WeatherCard extends LitElement {
         <span class="tempc"> ${this.getUnit("temperature")}</span>
       </div>
     `;
+  }
+
+  // Added by @iZwag
+  // + reference to this in the render()-function
+  // + CSS for .weather-text and .weather-state below
+  renderWeatherText(stateObj) {
+    return html`
+      <div class="weather-text">
+        <span class="weather-state"> 
+          ${this.capitalize(stateObj.state)}
+        </span>
+      </div>
+    `;
+  }
+
+  // Added by @iZwag
+  capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
   renderDetails(stateObj) {
@@ -369,12 +388,20 @@ class WeatherCard extends LitElement {
         color: var(--primary-text-color);
       }
 
+      .weather-state {
+        font-size: 1em;
+        position: absolute;
+        left: 9.2em;
+        font-weight: 300;
+        color: var(--primary-text-color);
+      }
+
       .temp {
         font-weight: 300;
-        font-size: 4em;
+        font-size: 3em;
         color: var(--primary-text-color);
         position: absolute;
-        right: 1em;
+        right: 1.3em;
       }
 
       .tempc {
@@ -401,9 +428,13 @@ class WeatherCard extends LitElement {
         }
       }
 
+      .weather-text {
+        margin-bottom: 1.5em;
+        padding: 1em;
+      }
+
       .current {
         padding: 1.2em 0;
-        margin-bottom: 3.5em;
       }
 
       .variations {
