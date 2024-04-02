@@ -51,6 +51,7 @@ all_lights_off:
       - input_boolean.lights_cooking_mode
       - input_boolean.lights_movie_mode
       - input_boolean.lights_dining_mode
+      - input_boolean.party_mode_enable
 all_lights_on:
   alias: 'Lights - All lights: On'
   mode: restart
@@ -627,3 +628,193 @@ lights_tv_mood:
       entity_id: scene.hue_control_room_soho
   mode: single
   icon: mdi:video-vintage
+bedroom_heated_sheet_control:
+  alias: Bedroom - Heated sheet control
+  sequence:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ command == "on" }}'
+      sequence:
+      - service: switch.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: switch.heated_sheet_switch
+      - service: timer.start
+        data:
+          duration: '{{ increase }}'
+        target:
+          entity_id: timer.heated_sheet_timer
+      alias: 'ON'
+    - conditions:
+      - condition: template
+        value_template: '{{ command == "off" }}'
+      sequence:
+      - service: switch.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: switch.heated_sheet_switch
+      - service: timer.finish
+        metadata: {}
+        data: {}
+        target:
+          entity_id: timer.heated_sheet_timer
+      alias: 'OFF'
+    - conditions:
+      - condition: template
+        value_template: '{{ command == "up" }}'
+      sequence:
+      - if:
+        - condition: or
+          conditions:
+          - condition: state
+            entity_id: timer.heated_sheet_timer
+            state: idle
+          - condition: state
+            entity_id: timer.heated_sheet_timer
+            state: paused
+        then:
+        - service: timer.start
+          data:
+            duration: '{{ increase }}'
+          target:
+            entity_id: timer.heated_sheet_timer
+        else:
+        - if:
+          - condition: template
+            value_template: '{% set remaining = state_attr(''timer.heated_sheet_timer'',
+              ''remaining'').split('':'') %}
+
+              {% set duration = state_attr(''timer.heated_sheet_timer'', ''duration'').split('':'')
+              %}
+
+              {% set add_time = increase.split('':'') %}
+
+
+              {% set remaining_td = timedelta(hours=remaining[0]|int, minutes=remaining[1]|int,
+              seconds=remaining[2]|int) %}
+
+              {% set duration_td = timedelta(hours=duration[0]|int, minutes=duration[1]|int,
+              seconds=duration[2]|int) %}
+
+              {% set increase_td = timedelta(hours=add_time[0]|int, minutes=add_time[1]|int,
+              seconds=add_time[2]|int) %}
+
+
+              {{ (remaining_td + increase_td) > duration_td }}'
+          then:
+          - service: timer.start
+            target:
+              entity_id: timer.heated_sheet_timer
+            data:
+              duration: '{% set duration = state_attr(''timer.heated_sheet_timer'',
+                ''duration'').split('':'') %} {% set duration_sec = (duration[0]|int)
+                * 3600 + (duration[1]|int) * 60 + (duration[2]|int) %}
+
+                {% set add = increase.split('':'') %} {% set add_sec = (add[0]|int)
+                * 3600 + (add[1]|int) * 60 + (add[2]|int) %}
+
+                {% set total = duration_sec + add_sec %}
+
+                {% set hours = (total // 3600) %} {% set minutes = ((total % 3600)
+                // 60) %} {% set seconds = total % 60 %}
+
+                {{ ''{:02}:{:02}:{:02}''.format(hours, minutes, seconds) }}
+
+                '
+          else:
+          - service: timer.change
+            data:
+              duration: '{{ increase }}'
+            target:
+              entity_id: timer.heated_sheet_timer
+      alias: UP
+    - conditions:
+      - condition: template
+        value_template: '{{ command == "down" }}'
+      sequence:
+      - if:
+        - condition: template
+          value_template: "{% if is_state('timer.heated_sheet_timer', 'idle') %}\n
+            \ {{ false }}\n{% else %}\n  {% set remaining = state_attr('timer.heated_sheet_timer',
+            'remaining').split(':') %}\n  {% set remaining_seconds = (remaining[0]|int)
+            * 3600 + (remaining[1]|int) * 60 + (remaining[2]|int) %}\n  {% set target_seconds
+            = 10 * 60 + 1 %}\n  {{ remaining_seconds > target_seconds }}\n{% endif
+            %}"
+        then:
+        - service: timer.change
+          metadata: {}
+          data:
+            duration: -00:10:00
+          target:
+            entity_id: timer.heated_sheet_timer
+        else:
+        - service: timer.finish
+          metadata: {}
+          data: {}
+          target:
+            entity_id: timer.heated_sheet_timer
+      alias: DOWN
+    - conditions:
+      - condition: template
+        value_template: '{{ command == "toggle" }}'
+      sequence:
+      - if:
+        - condition: state
+          entity_id: switch.heated_sheet_switch
+          state: 'on'
+        then:
+        - service: switch.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: switch.heated_sheet_switch
+        - service: timer.finish
+          metadata: {}
+          data: {}
+          target:
+            entity_id: timer.heated_sheet_timer
+        alias: IF ON
+      - if:
+        - condition: state
+          entity_id: switch.heated_sheet_switch
+          state: 'off'
+        then:
+        - service: switch.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: switch.heated_sheet_switch
+        - service: timer.start
+          data:
+            duration: 00:30:00
+        alias: IF OFF
+      alias: TOGGLE
+  mode: queued
+  icon: mdi:heating-coil
+  fields:
+    command:
+      selector:
+        select:
+          options:
+          - 'on'
+          - 'off'
+          - up
+          - down
+          - toggle
+      name: Command
+      description: Controls the behavior of the script. Turn sheet ON, OFF, increase
+        duration (UP), decrease duration (DOWN)
+      required: true
+    increase:
+      selector:
+        time: {}
+      name: increase
+      default: 00:30:00
+    decrease:
+      selector:
+        time: {}
+      name: decrease
+      default: 00:10:00
