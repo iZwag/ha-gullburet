@@ -135,6 +135,7 @@ cards:
     cards:
       - type: row
         cards:
+        # Whitespace left
         - type: vertical-stack
           class: "col-md-1"
           cards:
@@ -144,6 +145,7 @@ cards:
               card:
               - background-color: transparent
           # Bedtime column
+        # Bedtime column
         - type: vertical-stack
           class: "col-md-5"
           cards:
@@ -163,6 +165,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
+            # Enable bedtime and set time
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -194,30 +197,85 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
               # Chips relevant bedtime info
-              - type: custom:mushroom-chips-card
-                alignment: center
-                chips:
-                  - type: entity
-                    entity: switch.heated_sheet_switch
-                    content_info: state
-                    name: Varmelaken
-                    icon: mdi:heating-coil
-                    use_entity_picture: false
-                  - type: entity
-                    entity: sensor.heated_sheet_setting
-                    icon: mdi:heating-coil
-                  - type: entity
-                    entity: input_number.apartment_dimmer
-                    icon: mdi:lightbulb-group
-                  - type: light
-                    entity: light.pendant_bedroom
-                    icon: mdi:ceiling-light
-                card_mod: 
+              #- type: custom:mushroom-chips-card
+              #  alignment: center
+              #  chips:
+              #    - type: entity
+              #      entity: switch.heated_sheet_switch
+              #      content_info: state
+              #      name: Varmelaken
+              #      icon: mdi:heating-coil
+              #      use_entity_picture: false
+              #    - type: entity
+              #      entity: sensor.heated_sheet_setting
+              #      icon: mdi:heating-coil
+              #    - type: entity
+              #      entity: input_number.apartment_dimmer
+              #      icon: mdi:lightbulb-group
+              #    - type: light
+              #      entity: light.pendant_bedroom
+              #      icon: mdi:ceiling-light
+              #  card_mod: 
+              #    style: |
+              #      ha-card {
+              #        padding: var(--ha-card-padding) !important;
+              #        --chip-background: var(--button-card-background);
+              #      }
+            # Control heated sheet
+            - type: custom:stack-in-card
+              mode: vertical
+              cards:
+              - type: custom:timer-bar-card
+                entity: timer.heated_sheet_timer
+                name: "Heated sheet timer"
+                invert: true
+                bar_direction: rtl
+                mushroom:
+                  layout: horizontal
+                  color: deep-orange
+                card_mod:
                   style: |
                     ha-card {
-                      padding: var(--ha-card-padding) !important;
-                      --chip-background: var(--button-card-background);
+                      background-color: var(--nested-card-background);
                     }
+              - type: horizontal-stack
+                cards:
+                - type: tile
+                  entity: script.bedroom_heated_sheet_control
+                  color: white
+                  icon: mdi:chevron-up
+                  hide_state: true
+                  name: Timer +30min
+                  tap_action:
+                    action: call-service
+                    service: script.bedroom_heated_sheet_control
+                    data:
+                      command: up
+                      increase: 00:30:00
+                  icon_tap_action:
+                    action: call-service
+                    service: script.bedroom_heated_sheet_control
+                    data:
+                      command: up
+                      increase: 00:30:00
+                - type: tile
+                  entity: script.bedroom_heated_sheet_control
+                  color: white
+                  icon: mdi:chevron-down
+                  hide_state: true
+                  name: Timer -10min
+                  tap_action:
+                    action: call-service
+                    service: script.bedroom_heated_sheet_control
+                    data:
+                      command: down
+                      decrease: 00:10:00
+                  icon_tap_action:
+                    action: call-service
+                    service: script.bedroom_heated_sheet_control
+                    data:
+                      command: down
+                      decrease: 00:10:00
         # Wake-up column
         - type: vertical-stack
           class: "col-md-5"
@@ -273,6 +331,7 @@ cards:
                         --tpc-icon-color: var(--secondary-text-color);
                         padding: var(--ha-card-padding) !important;
                       }
+        # Whitespace right
         - type: vertical-stack
           class: "col-md-1"
           cards:
