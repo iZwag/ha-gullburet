@@ -191,15 +191,63 @@ class WeatherCard extends LitElement {
     return html`
       <div class="weather-text">
         <span class="weather-state"> 
-          ${this.capitalize(stateObj.state)}
+          ${this.formatWeatherText(stateObj.state)}
         </span>
       </div>
     `;
   }
 
   // Added by @iZwag
-  capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+  formatWeatherText(text) {
+    if (text === "clear") {
+      return "Clear day";
+    }
+    if (text === "clear-night") {
+      return "Clear night";
+    }
+    if (text === "cloudy") {
+      return "Cloudy";
+    }
+    if (text === "fog") {
+      return "Foggy";
+    }
+    if (text === "hail") {
+      return "Hail";
+    }
+    if (text === "lightning") {
+      return "Thunder & lightning";
+    }
+    if (text === "lightning-rainy") {
+      return "Rain, thunder & lightning";
+    }
+    if (text === "partlycloudy") {
+      return "Partly cloudy";
+    }
+    if (text === "pouring") {
+      return "Pouring rain";
+    }
+    if (text === "rainy") {
+      return "Rainy";
+    }
+    if (text === "snowy") {
+      return "Snowing";
+    }
+    if (text === "snowy-rainy") {
+      return "Snow & rain (sleet)";
+    }
+    if (text === "sunny") {
+      return "Sunny";
+    }
+    if (text === "windy") {
+      return "Windy";
+    }
+    if (text === "windy-variant") {
+      return "Cloudy & windy";
+    }
+    if (text === "exceptional") {
+      return "Extreme weather";
+    }
+    return "Unknown";
   }
 
   renderDetails(stateObj) {
