@@ -174,3 +174,188 @@ button_card_templates:
     # icon color disabled: rgb(var(--rgb-disabled))
     # background color: rgba(var(--rgb-primary-text-color), 0.05)
     # bg color disabled: rgba(var(--rgb-disabled), 0.2)
+
+  #################################################
+  #                                               #
+  #                  MAIN CSS                     #
+  #                                               #
+  #################################################
+  icon_main:
+    styles:
+      icon:
+        - display: flex
+    extra_styles: |
+      .ha-card.button-card-main{
+          padding: 0 !important;
+      }
+      @media
+      only screen and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (   min--moz-device-pixel-ratio: 2),
+      only screen and (     -o-min-device-pixel-ratio: 2/1),
+      only screen and (        min-device-pixel-ratio: 2),
+      only screen and (                min-resolution: 192dpi),
+      only screen and (                min-resolution: 2dppx) {
+
+        /* Retina-specific screens */
+        .ha-card.button-card-main{
+            padding: 0 !important;
+          }
+
+      }
+
+  #################################################
+  #                                               #
+  #                    CIRCLE                     #
+  #                                               #
+  #################################################
+  circle:
+    custom_fields:
+      circle: >
+        [[[
+          if (entity.state === 'on') {
+            const input = variables.circle_input;
+            const radius = 23;
+            const circumference = radius * 2 * Math.PI;
+            return `
+              <svg width="100%" viewBox="0 0 50 50">
+                <style>
+                  circle {
+                    transform: rotate(-90deg);
+                    transform-origin: 50% 50%;
+                    stroke-dasharray: ${circumference};
+                    stroke-dashoffset: ${circumference - input / 100 * circumference};
+                  }
+                  tspan {
+                    font-size: 10px;
+                  }
+                </style>
+                <circle cx="25" cy="25" r="${radius}" stroke="${variables.circle_color}" stroke-width="2" fill="none" />
+              </svg>
+            `;
+          }
+        ]]]
+    styles:
+      custom_fields:
+        circle:
+          - top: 0%
+          - left: 0%
+          - width: 3vw
+          - position: absolute
+          - letter-spacing: 0.03vw
+
+  #################################################
+  #                                               #
+  #                   LIGHT                       #
+  #                                               #
+  #################################################
+  light:
+    template:
+     - icon_main
+     - circle
+    show_state: false
+    show_icon: true
+    show_name: false
+    show_label: false
+    size: 55%
+    color: auto
+    color_type: icon
+    tap_action:
+      action: toggle
+      haptic: light
+    styles:
+      card:
+        - width: 3vw
+        - height: 3vw
+        - borderRadius: 8vw
+        - background-color: >
+            [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
+    variables:
+      circle_input: >
+        [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+      circle_color: var(--button-card-light-color)
+    hold_action:
+      action: more-info 
+
+  #################################################
+  #                                               #
+  #                White Light                    #
+  #                                               #
+  #################################################
+  light_white:
+    template:
+     - icon_main
+     - circle
+    show_state: false
+    show_icon: true
+    show_name: false
+    show_label: false
+    size: 55%
+    color_type: icon
+    color: rgb(255, 159, 0)
+    color_off: rgb(255, 255, 255)
+    tap_action:
+      action: toggle
+      haptic: light
+    styles:
+      card:
+        - width: 3vw
+        - height: 3vw
+        - borderRadius: 8vw
+        - background-color: >
+            [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
+    variables:
+      circle_input: >
+        [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+
+  
+  #############################################################################
+  # HEAT DEVICE ICON
+  #############################################################################
+
+  heat_device:
+    template:
+     - icon_main
+    show_state: false
+    show_icon: true
+    show_name: false
+    show_label: false
+    size: 55%
+    color: auto
+    color_type: icon
+    tap_action:
+      action: none
+    styles:
+      icon:
+        - color: >
+            [[[ 
+              if (entity.state === 'on') {
+                return 'rgba(255, 111, 0, 1.0)';
+              }
+              if (entity.state === 'heat') {
+                if (entity.attributes.hvac_action === 'heating' ) {
+                  return 'rgba(255, 111, 0, 1.0)';
+                }
+              }
+              return 'rgba(255, 255, 255, 1.0)';
+            ]]]
+        - animation:
+          - blink 3s linear infinite
+      card:
+        - width: 3vw
+        - height: 3vw
+        - borderRadius: 8vw
+        - background-color: >
+            [[[ 
+              if (entity.state === 'on') {
+                return 'rgba(255, 111, 0, 0.5)';
+              }
+              if (entity.state === 'heat') {
+                if (entity.attributes.hvac_action === 'heating' ) {
+                  return 'rgba(255, 111, 0, 0.5)';
+                }
+              }
+              return 'rgba(115, 115, 115, 0.6)';
+            ]]]
+    hold_action:
+      action: more-info 
+    
