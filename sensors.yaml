@@ -131,7 +131,6 @@
     - "date_time_iso"
     - "time_date"
     - "time_utc"
-    - "beat"
 
 # All template sensors
 - platform: template
@@ -259,10 +258,10 @@
         {{ (states('sensor.elvia_active_fixed_price_level') | float(default=0)) + (states('input_number.power_grid_monthly_variable_price') | float(default=0)) }}
     
     # Total cost for power (Tibber and Elvia) for the current hour
-    power_hourly_total:
-      friendly_name: "Current hour power total, Elvia and Tibber"
+    energy_price_hourly_total:
+      friendly_name: "Current hour energy price total, Elvia and Tibber"
       device_class: monetary
-      unit_of_measurement: NOK
+      unit_of_measurement: NOK/kWh
       value_template: >
         {% set energy = states('sensor.tibber_prices') | float(default=0) %}
         {% set grid = states('sensor.elvia_variable_pricing') | float(default=0) %}
