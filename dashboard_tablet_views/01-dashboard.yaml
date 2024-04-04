@@ -326,7 +326,7 @@ cards:
                           data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                         }
                         return data;
-                    - entity: sensor.power_hourly_total
+                    - entity: sensor.energy_price_hourly_total
                       name: 'Right now'
                       show:
                         in_chart: false
@@ -426,7 +426,7 @@ cards:
                           data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                         }
                         return data;
-                    - entity: sensor.power_hourly_total
+                    - entity: sensor.energy_price_hourly_total
                       name: 'Right now'
                       show:
                         in_chart: false
