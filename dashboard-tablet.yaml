@@ -111,6 +111,38 @@ button_card_templates:
         - background: var(--button-card-background)
         - border-radius: var(--button-card-border-radius)
 
+  # Button template that represents one option of an input_select entity
+  # Give entity as part of card definition, and also set variable to the
+  #  target option, such that if its active it gets highlighted.
+  input_select_buttons:
+    variables:
+      select_option: "off"
+    size: 26px
+    show_name: false
+    tap_action:
+      action: call-service
+      service: input_select.select_option
+      target:
+        entity_id: '[[[ return entity.entity_id ]]]'
+      data:
+        option: >
+          [[[
+            if (variables.select_option == entity.state) return "off";
+            return variables.select_option;
+          ]]]
+    styles:
+      card: 
+        - padding: var(--ha-card-padding)
+        - margin: 0px
+        - background-color: >
+            [[[
+              if (variables.select_option == entity.state) return "var(--button-card-active-background)";
+              return "var(--button-card-background)";
+            ]]]
+        - border-radius: var(--button-card-border-radius)
+      icon:
+        - color: var(--primary-text-color)
+
   vacuum_fan_speed:
     variables:
       fan_speed: "Standard"
