@@ -127,16 +127,13 @@ sidebar:
             entity: weather.yr_weather_home
             show_temperature: true
             show_conditions: true
-          
+# Main section of view     
 cards:
   - type: "custom:bootstrap-grid-card"
-    #container_padding: "0px 6px"
-    #use_hass_style_gutter: true
-    #hass_style_gutter_size: "10px"
     cards:
       - type: row
         cards:
-        # Whitespace of col-1 to match other views
+        # Whitespace left
         - type: vertical-stack
           class: "col-md-1"
           cards:
@@ -148,7 +145,9 @@ cards:
           # HOME/ROOM/DEVICE DATA & CONTROL COLUMN
             # VERTICAL STACK FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
         # ###################################################################
+        #
         # ROOM INFO & CONTROL COLUMN
+        #
         # ###################################################################
         - type: custom:mod-card
           card_mod:
@@ -764,12 +763,12 @@ cards:
                     show_temperature_control: true
                     layout: horizontal
                     secondary_info: none
-                # LIGHTS
+                # DEVICES
                 - type: custom:stack-in-card
                   mode: vertical
                   cards:
                   - type: markdown
-                    content: "## Lights"
+                    content: "## Devices"
                     card_mod:
                       style: 
                         ha-markdown$: |
@@ -795,6 +794,57 @@ cards:
                       icon: mdi:ceiling-light
                       color: white
                       name: Pendant lamp
+                  - type: custom:timer-bar-card
+                    entity: timer.heated_sheet_timer
+                    name: "Heated sheet timer"
+                    invert: true
+                    bar_direction: rtl
+                    mushroom:
+                      layout: horizontal
+                      color: deep-orange
+                    card_mod:
+                      style: |
+                        ha-card {
+                          background-color: var(--nested-card-background);
+                        }
+                  - type: horizontal-stack
+                    cards:
+                    - type: tile
+                      entity: script.bedroom_heated_sheet_control
+                      color: white
+                      icon: mdi:chevron-up
+                      hide_state: true
+                      name: Timer +30min
+                      tap_action:
+                        action: call-service
+                        service: script.bedroom_heated_sheet_control
+                        data:
+                          command: up
+                          increase: 00:30:00
+                      icon_tap_action:
+                        action: call-service
+                        service: script.bedroom_heated_sheet_control
+                        data:
+                          command: up
+                          increase: 00:30:00
+                    - type: tile
+                      entity: script.bedroom_heated_sheet_control
+                      color: white
+                      icon: mdi:chevron-down
+                      hide_state: true
+                      name: Timer -10min
+                      tap_action:
+                        action: call-service
+                        service: script.bedroom_heated_sheet_control
+                        data:
+                          command: down
+                          decrease: 00:10:00
+                      icon_tap_action:
+                        action: call-service
+                        service: script.bedroom_heated_sheet_control
+                        data:
+                          command: down
+                          decrease: 00:10:00
                 # CLEANING SECTION
                 # Bedroom Xiaomi id = 20
                 - type: custom:stack-in-card
@@ -1442,9 +1492,6 @@ cards:
                 # TITLE
                 - type: markdown
                   content: "# Office"
-                  # In the first version, this was applied in the config-template-card:
-                  # style:
-                  #   margin: 0px
                   card_mod:
                     style:
                       ha-markdown$: |
@@ -1485,6 +1532,44 @@ cards:
                     - type: tile
                       name: Humidity
                       entity: sensor.humidity_office
+                - type: custom:stack-in-card
+                  mode: vertical
+                  cards:
+                  - type: markdown
+                    content: "## Light modes"
+                    card_mod:
+                      style: 
+                        ha-markdown$: |
+                          h2 {
+                            font-weight: 400 !important;
+                          }
+                        .: |
+                          ha-markdown {
+                            padding: var(--ha-card-padding) !important;
+                          }
+                          ha-card {
+                            background-color: var(--nested-card-background);
+                          }  
+                  - type: "custom:layout-card"
+                    layout_type: grid
+                    layout:
+                      grid-gap: "0px var(--ha-card-padding)"
+                      grid-template-columns: 1fr 1fr
+                      margin: 0px
+                      padding: var(--ha-card-padding)
+                    cards:
+                    - type: custom:button-card
+                      entity: input_select.office_mode_select
+                      icon: mdi:desk-lamp-on
+                      template: input_select_buttons
+                      variables:
+                        select_option: "focus"
+                    - type: custom:button-card
+                      entity: input_select.office_mode_select
+                      icon: mdi:controller
+                      template: input_select_buttons
+                      variables:
+                        select_option: "gaming"
                 # CLEANING SECTION
                 # Office Xiaomi id = 21
                 - type: custom:stack-in-card
@@ -1815,7 +1900,9 @@ cards:
         # ------------------------------------------------- END OF ROOM INFOS
         
         # ###################################################################
+        #
         # 3D FLOORPLAN VISUALIZATION COLUMN
+        #
         # Z-index layer hierarchy:
         # dark base: 0 or 1 (?)
         # light-effect renders: 2 -> 9
@@ -1827,6 +1914,12 @@ cards:
           class: "col-md-6 col-xxl-8"
           # DARK, BASE-LAYER OF FLOORPLAN DEFINED HERE:
           image: /local/floorplan/base-dark-v3.png
+          style: |
+            @keyframes blink-animation {
+              0% {opacity: 0;}
+              50% {opacity: 100;}
+              100% {opacity: 0;}
+            }
           card_mod:
             style: |
               ha-card {
@@ -1856,19 +1949,43 @@ cards:
                     z-index: 15
                     '--mdc-icon-size': 25px
                 # OFFICE PENDANTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  #type: state-icon
                   entity: light.pendants_office
-                  icon: mdi:lightbulb
-                  #icon: mdi:ceiling-light-multiple
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
+                  template:
+                    - light
                   style:
                     left: 54%
                     top: 80%
                     z-index: 15
-                    '--mdc-icon-size': 25px
+                  #  '--mdc-icon-size': 25px
+                  #icon: mdi:lightbulb
+                  #icon: mdi:ceiling-light-multiple
+                  #tap_action:
+                  #  action: toggle
+                  #hold_action:
+                  #  action: more-info
+                # BEDROOM HEATED SHEET ICON
+                - type: conditional
+                  conditions:
+                    - entity: switch.heated_sheet_switch
+                      state: "on"
+                  elements:
+                  - type: state-icon
+                    entity: switch.heated_sheet_switch
+                    icon: mdi:heating-coil
+                    #template: heat_device
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: more-info
+                    style:
+                      left: 31%
+                      top: 86%
+                      z-index: 15
+                      '--mdc-icon-size': 25px
+                      color: rgb(255, 111, 0)
+                      #animation: blink-animation 2s linear infinite
                 # GUEST PENDANT ICON
                 - type: state-icon
                   entity: light.pendant_guest
