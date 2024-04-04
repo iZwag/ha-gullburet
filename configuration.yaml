@@ -45,10 +45,10 @@ python_script:
 logger:
   default: info
 
-spotcast:
-  sp_dc: !secret spotify_sp_dc
-  sp_key: !secret spotify_sp_key
-  country: 'NO'
+#spotcast:
+#  sp_dc: !secret spotify_sp_dc
+#  sp_key: !secret spotify_sp_key
+#  country: 'NO'
 
 zone:
   - name: Home
@@ -57,30 +57,40 @@ zone:
     radius: 20
     icon: mdi:home
 
-# ROBOT VACUUM CAMERA
-camera:
-  - platform: xiaomi_cloud_map_extractor
-    host: !secret xiaomi_vacuum_host
-    token: !secret xiaomi_vacuum_token
-    username: !secret xiaomi_cloud_username
-    password: !secret xiaomi_cloud_password
-    draw: ['all']
-    attributes:
-      - calibration_points
+rest_command:
+  ledring_off:
+    url: !secret homey_ledring_off
+    method: POST
+  ledring_focus:
+    url: !secret homey_ledring_focus
+    method: POST
+  ledring_gaming:
+    url: !secret homey_ledring_gaming
+    method: POST
+  ledring_attention:
+    url: !secret homey_ledring_attention
+    method: POST
+  ledring_state:
+    url: !secret homey_ledring_state
+    method: GET
 
-# ROOM MAPPING FROM miiocli
-# [[16, '107001052585'], [17, '107001052584'], [18, '107001074474'], [19, '107001074480'], 
-# [20, '107001052586'], [21, '107001074479']]
-# 21 = office
-# 20 = bedroom
-# 19 = guestroom
-# 18 = living room
-# 17 = kitchen
-# 16 = entry
-
+# --- 
+# ROBOROCK ROOM MAPPING FROM miiocli
+# Roborock = Xiaomi . miiocli is a Xiaomi tool.
+# If room mappings change, search around how to do it again.
+# Custom integration such as 'xiaomi_cloud_map_extractor' has been removed
+# ROOMS:
+# Entry: 16, '107001052585' 
+# Kitchen: 17, '107001052584'
+# Living room: 18, '107001074474'
+# Guest room: 19, '107001074480' 
+# Bedroom: 20, '107001052586'
+# Office: 21, '107001074479'
+# ---
 ## Fan options - Xiaomi
 # Silent, Standard, Medium, Turbo
 ## Fan options - Roborock equivalent
 # Quiet, Balanced, Turbo, Max
 ## Statuses
 # "Returning home", "Segment cleaning"
+# ---
