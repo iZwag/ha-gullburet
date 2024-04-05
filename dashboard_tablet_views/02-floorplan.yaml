@@ -697,18 +697,21 @@ cards:
                     - type: custom:button-card
                       entity: input_select.bathroom_mode_select
                       icon: mdi:brightness-7
+                      name: Bright
                       template: input_select_buttons
                       variables:
                         select_option: "bright"
                     - type: custom:button-card
                       entity: input_select.bathroom_mode_select
                       icon: mdi:power-sleep
+                      name: Night
                       template: input_select_buttons
                       variables:
                         select_option: "night"
                     - type: custom:button-card
                       entity: input_select.bathroom_mode_select
                       icon: mdi:spa
+                      name: Spa
                       template: input_select_buttons
                       variables:
                         select_option: "spa"
@@ -1607,12 +1610,14 @@ cards:
                     - type: custom:button-card
                       entity: input_select.office_mode_select
                       icon: mdi:desk-lamp-on
+                      name: Focus
                       template: input_select_buttons
                       variables:
                         select_option: "focus"
                     - type: custom:button-card
                       entity: input_select.office_mode_select
                       icon: mdi:controller
+                      name: Gaming
                       template: input_select_buttons
                       variables:
                         select_option: "gaming"
