@@ -52,6 +52,12 @@ all_lights_off:
       - input_boolean.lights_movie_mode
       - input_boolean.lights_dining_mode
       - input_boolean.party_mode_enable
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: 'off'
+    target:
+      entity_id: input_select.office_mode_select
 all_lights_on:
   alias: 'Lights - All lights: On'
   mode: restart
@@ -818,3 +824,113 @@ bedroom_heated_sheet_control:
         time: {}
       name: decrease
       default: 00:10:00
+office_control_homey_ledring:
+  alias: Office - Control Homey Ledring
+  sequence:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''off'' }}'
+      sequence:
+      - service: rest_command.ledring_off
+        data: {}
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''focus'' }}'
+      sequence:
+      - service: rest_command.ledring_focus
+        data: {}
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''gaming'' }}'
+      sequence:
+      - service: rest_command.ledring_gaming
+        data: {}
+  mode: restart
+  icon: mdi:dots-circle
+  fields:
+    setting:
+      selector:
+        select:
+          options:
+          - 'off'
+          - focus
+          - gaming
+          - rainbow
+          - weather
+      name: Setting
+      default: 'off'
+bathroom_control_light_mode:
+  alias: Bathroom - Control light mode
+  sequence:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''off'' }}'
+      sequence:
+      - service: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.bathroom_lights_off
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_override_bath
+      alias: 'off'
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''bright'' }}'
+      sequence:
+      - service: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.bathroom_bright_mode
+      - service: input_boolean.turn_on
+        target:
+          entity_id:
+          - input_boolean.lights_override_bath
+        data: {}
+      alias: bright
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''spa'' }}'
+      sequence:
+      - service: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.bathroom_spa_mode
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_override_bath
+      alias: spa
+    - conditions:
+      - condition: template
+        value_template: '{{ setting == ''night'' }}'
+      sequence:
+      - service: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.bathroom_night_mode
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.lights_override_bath
+      alias: night
+  mode: restart
+  icon: mdi:lightbulb-multiple
+  fields:
+    setting:
+      selector:
+        select:
+          options:
+          - 'off'
+          - focus
+          - gaming
+          - rainbow
+          - weather
+      name: Setting
+      default: 'off'
