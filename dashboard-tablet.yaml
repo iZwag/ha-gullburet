@@ -117,8 +117,9 @@ button_card_templates:
   input_select_buttons:
     variables:
       select_option: "off"
-    size: 26px
-    show_name: false
+    size: 20px
+    #show_name: false
+    show_state: false
     tap_action:
       action: call-service
       service: input_select.select_option
@@ -132,7 +133,7 @@ button_card_templates:
           ]]]
     styles:
       card: 
-        - padding: var(--ha-card-padding)
+        - padding: 7px # This makes it match 50px height
         - margin: 0px
         - background-color: >
             [[[
@@ -142,6 +143,9 @@ button_card_templates:
         - border-radius: var(--button-card-border-radius)
       icon:
         - color: var(--primary-text-color)
+      name:
+        - font-size: "0.8em"
+        - color: var(--secondary-text-color)
 
   vacuum_fan_speed:
     variables:
