@@ -135,6 +135,7 @@ cards:
     cards:
     - type: row
       cards:
+      # LEFT COLUMN SPACER
       - type: vertical-stack
         class: "col-md-1"
         cards:
@@ -142,30 +143,64 @@ cards:
           color_type: blank_card
           styles:
             card:
-            - background-color: transparent
+            - background-color: transparent  
+      # MAIN COLUMN CONTENT
       - type: vertical-stack
         class: "col-md-10"
         cards:
+        # TOP VERTICAL SPACER
         - type: custom:button-card
           color_type: blank_card
           styles:
             card:
             - background-color: transparent
-            - height: 20vh
+            - height: 10vh
+        # SPEAKER + USER SELECT SECTION
+        #- type: custom:stack-in-card
+        #  mode: horizontal
+        #  cards:
+        #  - type: entities
+        #    show_header_toggle: false
+        #    entities:
+        #      - entity: input_select.audio_speaker_select
+        #        name: Speaker
+        #        secondary_info: none
+        #  - type: entities
+        #    show_header_toggle: false
+        #    entities:
+        #      - entity: input_select.audio_user_select
+        #        name: User content
+            #card_mod:
+            #  style: |
+            #    ha-card {
+            #      background-color: transparent !important;
+            #    }
+        - type: horizontal-stack
+          cards: 
+          - type: custom:mushroom-select-card
+            entity: input_select.audio_speaker_select
+            layout: horizontal
+            icon_type: icon
+            secondary_info: none
+            primary_info: name
+            name: Speaker
+            icon_color: grey
+          - type: custom:mushroom-select-card
+            entity: input_select.audio_user_select
+            layout: horizontal
+            icon_type: icon
+            secondary_info: none
+            primary_info: name
+            icon_color: grey
+            name: User
+        # MEDIA IMAGE + PLAYLIST SELECT SECTION
         - type: horizontal-stack
           cards:
           - type: custom:mini-media-player
             entity: media_player.sonos_living
             name: Sonos living room
             artwork: full-cover # cover, full-cover, material, full-cover-fit
-            #icon: mdi:spotify
-            #source: icon
-            #sound_mode: icon
             info: short  # default, short, scroll
-            volume_stateless: false
-            volume_step: 1
-            max_volume: 50
-            jump_amount: 15
             toggle_power: false
             background: /local/ui/sonos_living.jpg
             idle_view:
@@ -174,16 +209,22 @@ cards:
               when_standby: false
             hide:
               name: true
-              power: true
-              group: false
+              icon: true
+              info: true 
+              power: true # No Sonos support. Always hide this.
               source: true
+              sound_mode: true
+              group_button: true
+              controls: true
+              jump: true
+              volume: true
+              volume_level: true
               mute: true
               progress: true
               runtime: true
               runtime_remaining: true
-              shuffle: false
+              artwork_border: false
               state_label: true
-              volume: true
           - type: custom:sonos-card
             heightPercentage: 68.75
             # 75% = 420px
@@ -225,54 +266,68 @@ cards:
             - '31 PÅ 31'
             - 'Electronic Chill'
             - 'MEGALOMAN'
-          #- type: custom:spotify-card
-          #  spotify_entity: media_player.spotify_gullburet
-          #  always_play_random_song: true
-          #  country_code: 'NO'
-          #  default_device: 'Stue'
-          #  known_connect_devices:
-          #  - id: !secret spotify_id_sonos_living
-          #    name: 'Sonos: Living room'
-          #  - id: !secret spotify_id_sonos_move
-          #    name: 'Sonos: Move'
-          #  - id: !secret spotify_id_sonos_kitchen
-          #    name: 'Sonos: Kitchen'
-          #  filter_devices:
-          #  - .*bedroom
-          #  - GULLBURET.*
-          #  - Web.*
-          #  card_mod:
-          #    style: |
-          #      :host {
-          #        border-radius: 1vw;
-          #      }
-          #      #header {
-          #        display: none !important;
-          #      }
-          #      #content {
-          #        border: none !important;
-          #      }
-          #      .playback-controls {
-          #        display: none !important;
-          #      }
-          #      #header-track {
-          #        display: none;
-          #      }
-          #      .list-item > p {
-          #        white-space: nowrap;
-          #        overflow: hidden;
-          #        font-family: var(--primary-font-family) !important;
-          #      }
-          #      .list-item {
-          #          border-radius: 0.2vw;
-          #          overflow: hidden;
-          #          border: none !important;
-          #          margin-bottom: 4px;
-          #      }
-          #      ha-card {
-          #        padding: var(--ha-card-padding) !important;
-          #      }
-                         
+        - type: horizontal-stack
+          cards:
+          # AUDIO INFO, CONTROLS
+          - type: custom:mini-media-player
+            entity: media_player.sonos_living
+            name: Sonos living room
+            artwork: material # cover, full-cover, material, full-cover-fit
+            volume_stateless: false
+            #volume_step: 1
+            #max_volume: 50
+            #jump_amount: 15
+            toggle_power: false
+            idle_view:
+              when_idle: false
+              when_paused: false
+              when_standby: false
+            hide:
+              name: true
+              icon: true
+              power: true # No Sonos support. Always hide this.
+              group: true
+              source: true
+              mute: true
+              progress: false
+              runtime: true
+              runtime_remaining: true
+              shuffle: false
+              state_label: true
+              volume: true
+            card_mod:
+              style: |
+                .cover {
+                  opacity: 0 !important;
+                }
+          - type: custom:mini-media-player
+            entity: media_player.sonos_living
+            name: Sonos living room
+            #icon: mdi:volume-high
+            #artwork: material # cover, full-cover, material, full-cover-fit
+            volume_step: 1
+            max_volume: 50
+            toggle_power: false
+            #idle_view:
+            #  when_idle: false
+            #  when_paused: false
+            #  when_standby: false
+            hide:
+              name: true
+              icon: true
+              info: true
+              power: true # No Sonos support. Always hide this.
+              group: true
+              source: true
+              controls: true
+              mute: true
+              progress: true
+              runtime: true
+              runtime_remaining: true
+              state_label: true
+              volume: false
+              volume_level: false
+      # RIGHT COLUMN SPACER
       - type: vertical-stack
         class: "col-md-1"
         cards:
