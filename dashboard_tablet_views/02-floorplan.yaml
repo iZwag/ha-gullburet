@@ -1986,25 +1986,18 @@ cards:
                   state: "on"
               elements:
                 # BEDROOM PENDANT ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.pendant_bedroom
-                  icon: mdi:lightbulb
-                  #icon: mdi:ceiling-light
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 27%
                     top: 80%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # OFFICE PENDANTS ICON
                 - type: custom:button-card
                   #type: state-icon
                   entity: light.pendants_office
-                  template:
-                    - light
+                  template: light
                   style:
                     left: 54%
                     top: 80%
@@ -2038,197 +2031,123 @@ cards:
                       color: rgb(255, 111, 0)
                       #animation: blink-animation 2s linear infinite
                 # GUEST PENDANT ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.pendant_guest
-                  icon: mdi:lightbulb
-                  #icon: mdi:ceiling-light
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 75%
                     top: 80%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # ENTRY DOWNLIGHTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.downlights_entry
-                  icon: mdi:lightbulb
-                  #icon: mdi:light-recessed
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 71.75%
                     top: 64%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # TOILET DOWNLIGHT ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.downlight_toilet
-                  icon: mdi:lightbulb
-                  #icon: mdi:light-recessed
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 85%
                     top: 52%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # BATH DOWNLIGHTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.downlights_bath
-                  icon: mdi:lightbulb
-                  #icon: mdi:light-recessed
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 63%
                     top: 46%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # BATH LIGHTSTRIP ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.lightstrip_bath
-                  icon: mdi:lightbulb
-                  #icon: mdi:led-strip-variant
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
+                  styles:
+                    icon:
+                      - transform: rotate(45deg)
                   style:
-                    left: 87%
+                    left: 89%
                     top: 41%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # LIVING ROOM SPOTTRACK ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.spottrack4_living
-                  icon: mdi:lightbulb
-                  #icon: mdi:track-light
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 41%
                     top: 44%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # LIVING ROOM DOWNLIGHTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.downlights_living
-                  icon: mdi:lightbulb
-                  #icon: mdi:light-recessed
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
-                    left: 16%
-                    top: 44%
+                    left: 14%
+                    top: 45%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # LIVING ROOM MUSHROOM LAMP
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: switch.lamp_mushroom_living
-                  icon: mdi:lightbulb
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 50%
-                    top: 50%
+                    top: 51%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # LIVING ROOM MOOD BALL
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.mood_ball
-                  icon: mdi:lightbulb
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 50%
-                    top: 41%
+                    top: 38%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # LIVING ROOM GLOBE LAMP
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: switch.lamp_globe_living
-                  icon: mdi:lightbulb
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 18%
                     top: 67%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # DINING PENDANTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.pendants_living
-                  icon: mdi:lightbulb
-                  #icon: mdi:globe-light
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 34.5%
                     top: 20%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # KITCHEN PENDANTS ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.pendants_kitchen
-                  icon: mdi:lightbulb
-                  #icon: mdi:ceiling-light-multiple
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 61%
                     top: 20%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # KITCHEN SPOTTRACK ICON
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.spottrack6_kitchen
-                  icon: mdi:lightbulb
-                  #icon: mdi:track-light
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 74%
                     top: 20%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # KITCHEN LIGHTSTRIP UNDER-SHELF
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.lightstrip_undershelf_kitchen
-                  icon: mdi:lightbulb
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
+                  styles:
+                    icon:
+                      - transform: rotate(45deg)
                   style:
-                    left: 85%
+                    left: 86.5%
                     top: 32%
                     z-index: 15
-                    '--mdc-icon-size': 25px
                 # STORAGE ROOM CEILING LIGHT
                 # Countdown with MM:SS-label when on:
                 # - COMMENTED OUT BECAUSE IT UPDATES TOO SLOWLY, ABOUT 30-40S
@@ -2254,18 +2173,13 @@ cards:
                 #        z-index: 15
                 #        '--mdc-icon-size': 25px
                 # VERANDA WALL LANTERN
-                - type: state-icon
+                - type: custom:button-card
+                  template: light
                   entity: light.wall_lantern_veranda
-                  icon: mdi:lightbulb
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
                   style:
                     left: 53.5%
                     top: 6.5%
                     z-index: 15
-                    '--mdc-icon-size': 25px
             # ###########################################################
             # HIDE ICON / LAYERS + UNSELECT ICON - Z-index: 15
             - type: conditional
