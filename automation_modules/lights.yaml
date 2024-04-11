@@ -1,3 +1,7 @@
+# TIPS:
+# Want to remove default, unused 'metadata: {-}' and 'data: {-}' fields?
+# Search and replace (with nothing) with this Regex: ^.*data: \{\}.*\n?
+
 - id: '1708515045819'
   alias: Lights - Masterdim ALL lights
   description: Masterdims the brightness of lights in all the activity-rooms. The exceptions are Bedroom, Guest room and Storage-room. Only applied to lights with adjustable brightness.
@@ -319,16 +323,12 @@
         - cooking-on
       sequence:
       - service: script.lights_kitchen_cooking_mood
-        metadata: {}
-        data: {}
     - conditions:
       - condition: trigger
         id:
         - cooking-off
       sequence:
       - service: input_boolean.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id: input_boolean.lights_override_kitchen
     - conditions:
@@ -337,15 +337,11 @@
         - dining-on
       sequence:
       - service: input_boolean.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id:
           - input_boolean.lights_movie_mode
           - input_boolean.lights_cooking_mode
       - service: script.lights_dinner_mood
-        metadata: {}
-        data: {}
     - conditions:
       - condition: trigger
         id:
@@ -353,8 +349,6 @@
         - movie-off
       sequence:
       - service: input_boolean.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id:
           - input_boolean.lights_override_entry
@@ -367,17 +361,17 @@
         - movie-on
       sequence:
       - service: input_boolean.turn_off
-        metadata: {}
-        data: {}
         target:
           entity_id:
           - input_boolean.lights_cooking_mode
           - input_boolean.lights_dining_mode
       - service: script.lights_tv_mood
-        metadata: {}
-        data: {}
   mode: queued
 
+# To find the required event_data for the double-click triggers,
+# use HA Developer Tools to listen for Z-wave events with trigger:
+#  'zwave_js_value_notification'. Then physically double-click the target 
+#  switch to identify its information. 
 - id: '1710423415819'
   alias: Lights - Handle Fibaro Dimmer double-clicks
   description: ''
@@ -409,6 +403,33 @@
       value: 14
     id: dining-double-click
     alias: Listen for Fibaro Dimmer dining double-clicked
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 13
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: bath-downlights-2x
+    alias: Listen for Fibaro Dimmer bath downlights 2x
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 14
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: bath-lighstrip-2x
+    alias: Listen for Fibaro Dimmer bath lighstrip 2x
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 4
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: living-track4-2x
+    alias: Listen for Fibaro Dimmer living track4 2x
   condition: []
   action:
   - choose:
@@ -418,8 +439,6 @@
         - entry-double-click
       sequence:
       - service: script.all_lights_off
-        metadata: {}
-        data: {}
       alias: Entry double-click
     - conditions:
       - condition: trigger
@@ -427,8 +446,6 @@
         - kitchen-double-click
       sequence:
       - service: input_boolean.turn_on
-        metadata: {}
-        data: {}
         target:
           entity_id: input_boolean.lights_cooking_mode
     - conditions:
@@ -437,8 +454,34 @@
         - dining-double-click
       sequence:
       - service: input_boolean.turn_on
-        metadata: {}
-        data: {}
         target:
           entity_id: input_boolean.lights_dining_mode
-  mode: restart
+    - conditions:
+      - condition: trigger
+        id:
+        - bath-downlights-2x
+      sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.bathroom_mode_select
+        data:
+          option: "bright"
+    - conditions:
+      - condition: trigger
+        id:
+        - bath-lighstrip-2x
+      sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.bathroom_mode_select
+        data:
+          option: "night"
+    - conditions:
+      - condition: trigger
+        id:
+        - living-track4-2x
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.lights_movie_mode
+  mode: queued
