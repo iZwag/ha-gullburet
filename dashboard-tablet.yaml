@@ -212,9 +212,7 @@ button_card_templates:
     # bg color disabled: rgba(var(--rgb-disabled), 0.2)
 
   #################################################
-  #                                               #
-  #                  MAIN CSS                     #
-  #                                               #
+  # ICON MAIN CSS
   #################################################
   icon_main:
     styles:
@@ -240,9 +238,9 @@ button_card_templates:
       }
 
   #################################################
-  #                                               #
-  #                    CIRCLE                     #
-  #                                               #
+  # CIRCLE
+  # A progress-circle inside the icon-background 
+  # that shows the brightness
   #################################################
   circle:
     custom_fields:
@@ -280,24 +278,24 @@ button_card_templates:
           - letter-spacing: 0.03vw
 
   #################################################
-  #                                               #
-  #                   LIGHT                       #
-  #                                               #
+  # LIGHT
   #################################################
   light:
     template:
      - icon_main
-     - circle
+     #- circle
     show_state: false
     show_icon: true
     show_name: false
     show_label: false
-    size: 55%
+    size: 60%
     color: auto
     color_type: icon
     tap_action:
       action: toggle
       haptic: light
+    hold_action:
+      action: more-info 
     styles:
       card:
         - width: 3vw
@@ -305,22 +303,18 @@ button_card_templates:
         - borderRadius: 8vw
         - background-color: >
             [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
-    variables:
-      circle_input: >
-        [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
-      circle_color: var(--button-card-light-color)
-    hold_action:
-      action: more-info 
-
+    #variables:
+      #circle_input: >
+      #  [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+      #circle_color: var(--button-card-light-color)
+    
   #################################################
-  #                                               #
-  #                White Light                    #
-  #                                               #
+  # WHITE LIGHT
   #################################################
   light_white:
     template:
      - icon_main
-     - circle
+     #- circle
     show_state: false
     show_icon: true
     show_name: false
@@ -339,15 +333,16 @@ button_card_templates:
         - borderRadius: 8vw
         - background-color: >
             [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
-    variables:
-      circle_input: >
-        [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+    #variables:
+      #circle_input: >
+      #  [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+    hold_action:
+      action: more-info 
 
   
   #############################################################################
   # HEAT DEVICE ICON
   #############################################################################
-
   heat_device:
     template:
      - icon_main
@@ -374,8 +369,8 @@ button_card_templates:
               }
               return 'rgba(255, 255, 255, 1.0)';
             ]]]
-        - animation:
-          - blink 3s linear infinite
+        #- animation:
+        #  - blink 3s linear infinite
       card:
         - width: 3vw
         - height: 3vw
