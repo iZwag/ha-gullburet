@@ -1,7 +1,7 @@
 # #############################################################################
 # SETTING UP TEMPLATES IN A NEW ENVIRONMENT OR BACKING UP FROM OLD:
 # Some of the unique_ids might not work immediately as entity_ids.
-# In those cases they are typically found with their names formatted
+# In those cases they are typically found with their NAMES formatted
 #  with underscores. In the HA UI, go to Settings > Devices & services
 #  > Entities, and search up the entity, and rename it to its unique_id
 #  in there. Then icon can also be configured, as desired.
@@ -551,6 +551,9 @@
           {{ ((maxhour / 2) * 100 ) | round(2) }}
         {% endif %}
   
+  # Holds the calculated average of this month's top 3 max-hour consumption
+  # The attribute holds the percentage of the comparison of the average to the
+  #  current fixed-price level
   - unique_id: power_monthly_maxhour_average
     name: Monthly top max-hour average power consumption 
     device_class: energy
@@ -575,9 +578,9 @@
         48h
       {% endif %}
 
+# Entity to store _hourly_ weather forecast from Met-integration (Met.no)
 - trigger:
   - platform: time_pattern
-    #hours: /1
     minutes: /30
   action:
     service: weather.get_forecasts
@@ -592,4 +595,44 @@
     state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
     attributes:
       forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
-      updatedAt: "{{ now().isoformat() }}"
+
+# Entity to store _daily_ weather forecast from Met-integration (Met.no)
+#  * Used to be included in the weather-entity provided by Met, but as of 
+#    March 2024 it is no longer provided. 
+- trigger:
+  - platform: time_pattern
+    minutes: /30
+  action:
+    service: weather.get_forecasts
+    data:
+      type: daily
+    target:
+      entity_id: weather.yr_weather_home
+    response_variable: forecast_data
+  sensor:
+    name: YR Weather forecast, daily
+    unique_id: yr_weather_forecast_daily
+    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
+    attributes:
+      forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
+
+- sensor:
+  - name: Combined Weather and Forecast
+    unique_id: combined_weather_info
+    state: "{{ states('weather.yr_weather_home') }}"
+    attributes:
+      attribution: "{{ state_attr('weather.yr_weather_home', 'attribution') }}"
+      cloud_coverage: "{{ state_attr('weather.yr_weather_home', 'cloud_coverage') }}"
+      dew_point: "{{ state_attr('weather.yr_weather_home', 'dew_point') }}"
+      humidity: "{{ state_attr('weather.yr_weather_home', 'humidity') }}"
+      precipitation_unit: "{{ state_attr('weather.yr_weather_home', 'precipitation_unit') }}"
+      pressure: "{{ state_attr('weather.yr_weather_home', 'pressure') }}"
+      pressure_unit: "{{ state_attr('weather.yr_weather_home', 'pressure_unit') }}"
+      temperature: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
+      temperature_unit: "{{ state_attr('weather.yr_weather_home', 'temperature_unit') }}"
+      visibility_unit: "{{ state_attr('weather.yr_weather_home', 'visibility_unit') }}"
+      wind_bearing: "{{ state_attr('weather.yr_weather_home', 'wind_bearing') }}"
+      wind_gust_speed: "{{ state_attr('weather.yr_weather_home', 'wind_gust_speed') }}"
+      wind_speed: "{{ state_attr('weather.yr_weather_home', 'wind_speed') }}"
+      wind_speed_unit: "{{ state_attr('weather.yr_weather_home', 'wind_speed_unit') }}"
+      forecast: "{{ state_attr('sensor.yr_weather_forecast_daily', 'forecast') }}"
