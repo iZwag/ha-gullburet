@@ -1,12 +1,13 @@
 - id: '1690996142517'
-  name: 'Living Room lights: Off'
+  name: Living room - OFF
   entities:
-    light.spot_track_4_2_3:
+    light.pendants_living:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
-      friendly_name: Spot-track 4 (2)
+      icon: mdi:globe-light-outline
+      friendly_name: 'Pendants, dining '
       supported_features: 32
       state: 'off'
     light.spottrack4_living:
@@ -14,15 +15,8 @@
       - brightness
       color_mode:
       brightness:
+      icon: mdi:track-light
       friendly_name: Spot-track 4
-      supported_features: 32
-      state: 'off'
-    light.dimmer_2_2_2:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Downlights (2)
       supported_features: 32
       state: 'off'
     light.downlights_living:
@@ -30,9 +24,13 @@
       - brightness
       color_mode:
       brightness:
+      icon: mdi:light-recessed
       friendly_name: 'Downlights '
       supported_features: 32
       state: 'off'
+    switch.lamp_mushroom_living:
+      friendly_name: Lamp, mushroom
+      state: unavailable
     light.mood_ball:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -53,39 +51,21 @@
       friendly_name: Mood ball
       supported_features: 40
       state: 'off'
-    light.pendants_2:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendants, dining (2)
-      supported_features: 32
-      state: 'off'
-    light.pendants_living:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: 'Pendants, dining '
-      supported_features: 32
-      state: 'off'
-    switch.lamp_mushroom_living:
-      friendly_name: Lamp, mushroom
-      state: 'off'
     switch.lamp_globe_living:
       friendly_name: Lamp, globe
-      state: 'off'
+      state: unavailable
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1690996655003'
-  name: 'Kitchen lights: Off'
+  name: Kitchen - OFF
   entities:
-    light.spot_track_6_2_4:
+    light.pendants_kitchen:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
-      friendly_name: Spot-track 6 (2)
+      icon: mdi:ceiling-light-multiple
+      friendly_name: Pendants, Flowerpots
       supported_features: 32
       state: 'off'
     light.spottrack6_kitchen:
@@ -93,46 +73,22 @@
       - brightness
       color_mode:
       brightness:
+      icon: mdi:track-light
       friendly_name: Spot-track 6
       supported_features: 32
       state: 'off'
-    light.pendants_flowerpots_2_5:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendants, Flowerpots (2)
-      supported_features: 32
-      state: 'off'
-    light.pendants_kitchen:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendants, Flowerpots
-      supported_features: 32
-      state: 'off'
-    light.lightstrip_undershelf_kitchen:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      off_with_transition: false
-      off_brightness: 108
-      friendly_name: Lightstrip, under-shelf
-      supported_features: 40
-      state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1690999915263'
-  name: 'Bathroom lights: Off'
+  name: Bathroom - OFF
   entities:
-    light.downlights_2_12:
+    light.lightstrip_bath:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
-      friendly_name: Downlights (2)
+      icon: mdi:led-strip
+      friendly_name: Lightstrip
       supported_features: 32
       state: 'off'
     light.downlights_bath:
@@ -140,145 +96,103 @@
       - brightness
       color_mode:
       brightness:
+      icon: mdi:light-recessed
       friendly_name: Downlights
       supported_features: 32
       state: 'off'
-    light.lightstrip_2_11:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Lightstrip (2)
-      supported_features: 32
-      state: 'off'
-    light.lightstrip_bath:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Lightstrip
-      supported_features: 32
-      state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1691001055077'
-  name: 'Toilet lights: Off'
+  name: Toilet - OFF
   entities:
-    light.downlight_2_10:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Downlight (2)
-      supported_features: 32
-      state: 'off'
     light.downlight_toilet:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
+      icon: mdi:light-recessed
       friendly_name: Downlight
       supported_features: 32
       state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1691001138338'
-  name: 'Entry lights: Off'
+  name: Entry - OFF
   entities:
-    light.downlights_2_9:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Downlights (2)
-      supported_features: 32
-      state: 'off'
     light.downlights_entry:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
+      icon: mdi:light-recessed
       friendly_name: Downlights
       supported_features: 32
       state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1691001208430'
-  name: 'Guestroom lights: Off'
+  name: Guest room - OFF
   entities:
-    light.cloud_pendant_2_8:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendant, cloud (2)
-      supported_features: 32
-      state: 'off'
     light.pendant_guest:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
-      friendly_name: Pendant, cloud
+      icon: mdi:ceiling-light
+      friendly_name: 'Pendant, cloud '
       supported_features: 32
       state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1691001316665'
-  name: 'Office lights: Off'
+  name: Office - OFF
   entities:
-    light.pendants_2_7:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendants (2)
-      supported_features: 32
-      state: 'off'
     light.pendants_office:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
+      icon: mdi:ceiling-light-multiple
       friendly_name: Pendants
       supported_features: 32
       state: 'off'
-  icon: mdi:lightbulb-group-outline
-  metadata: {}
-- id: '1691002062131'
-  name: 'Bedroom lights: Off'
-  entities:
-    light.pendant_2_6:
-      supported_color_modes:
-      - brightness
-      color_mode:
-      brightness:
-      friendly_name: Pendant (2)
-      supported_features: 32
+    input_select.office_mode_select:
+      options:
+      - 'off'
+      - focus
+      - gaming
+      editable: true
+      icon: mdi:desk-lamp-on
+      friendly_name: Office - Mode select
       state: 'off'
+  icon: mdi:lightbulb-group-off-outline
+  metadata:
+    input_select.office_mode_select:
+      entity_only: true
+- id: '1691002062131'
+  name: Bedroom - OFF
+  entities:
     light.pendant_bedroom:
       supported_color_modes:
       - brightness
       color_mode:
       brightness:
+      icon: mdi:ceiling-light
       friendly_name: Pendant
       supported_features: 32
       state: 'off'
-  icon: mdi:lightbulb-group-outline
+  icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1706691991132'
-  name: 'Veranda lights: Off'
+  name: Veranda - OFF
   entities:
     light.wall_lantern_veranda:
       supported_color_modes:
       - brightness
-      color_mode:
-      brightness:
-      off_with_transition: false
-      off_brightness: 254
+      icon: mdi:coach-lamp
       friendly_name: Wall light, lantern
       supported_features: 40
-      state: 'off'
+      state: unavailable
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1709804779112'
@@ -615,4 +529,85 @@
   icon: mdi:video-vintage
   metadata:
     input_boolean.lights_override_entry:
+      entity_only: true
+- id: '1712301659786'
+  name: Bathroom - Bright mode
+  entities:
+    light.downlights_bath:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      icon: mdi:light-recessed
+      friendly_name: Downlights
+      supported_features: 32
+      state: 'on'
+    light.lightstrip_bath:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      icon: mdi:led-strip
+      friendly_name: Lightstrip
+      supported_features: 32
+      state: 'on'
+  icon: mdi:brightness-7
+  metadata:
+    light.downlights_bath:
+      entity_only: true
+    light.lightstrip_bath:
+      entity_only: true
+- id: '1712301864003'
+  name: Bathroom - Spa mode
+  entities:
+    light.downlights_bath:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 26
+      icon: mdi:light-recessed
+      friendly_name: Downlights
+      supported_features: 32
+      state: 'on'
+    light.lightstrip_bath:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 26
+      icon: mdi:led-strip
+      friendly_name: Lightstrip
+      supported_features: 32
+      state: 'on'
+  icon: mdi:spa
+  metadata:
+    light.downlights_bath:
+      entity_only: true
+    light.lightstrip_bath:
+      entity_only: true
+- id: '1712302127206'
+  name: Bathroom - Night mode
+  entities:
+    light.downlights_bath:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 15
+      icon: mdi:light-recessed
+      friendly_name: Downlights
+      supported_features: 32
+      state: 'on'
+    light.lightstrip_bath:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      icon: mdi:led-strip
+      friendly_name: Lightstrip
+      supported_features: 32
+      state: 'off'
+  icon: mdi:power-sleep
+  metadata:
+    light.downlights_bath:
+      entity_only: true
+    light.lightstrip_bath:
       entity_only: true
