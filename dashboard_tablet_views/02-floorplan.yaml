@@ -1956,21 +1956,15 @@ cards:
         #
         # Z-index layer hierarchy:
         # dark base: 0 or 1 (?)
-        # light-effect renders: 2 -> 9
-        # room-outline display: 10
-        # invisible room-outline trigger areas (as icons): 11 -> 14
+        # light-effect renders: 2 -> 8
+        # selected room overlay display: 9 & 10
+        # invisible room overlay trigger areas (as icons): 11 -> 14
         # device icons: 15
         # ###################################################################
         - type: picture-elements
           class: "col-md-6 col-xxl-8"
           # DARK, BASE-LAYER OF FLOORPLAN DEFINED HERE:
           image: /local/floorplan/base-dark-v3.png
-          style: |
-            @keyframes blink-animation {
-              0% {opacity: 0;}
-              50% {opacity: 100;}
-              100% {opacity: 0;}
-            }
           card_mod:
             style: |
               ha-card {
@@ -2425,27 +2419,57 @@ cards:
                 '--mdc-icon-size': 190px
                 transform: 'scaleX(0.7) scaleY(1.2)'
             # ###########################################################
-            # SELECTED ROOM OUTLINES - Z-index: 10 
+            # SELECTED ROOM OUTLINES - Z-index: 9 & 10
             - type: image
               entity: input_select.floorplan_select_state
               state_image:
-                "bath": "/local/floorplan/outline-bath.png"
-                "bedroom": "/local/floorplan/outline-bedroom.png"
-                "commons": "/local/floorplan/outline-commons.png"
-                "entry": "/local/floorplan/outline-entry.png"
-                "guest": "/local/floorplan/outline-guest.png"
-                "kitchen": "/local/floorplan/outline-kitchen.png"
-                "living": "/local/floorplan/outline-living.png"
-                "office": "/local/floorplan/outline-office.png"
-                "storage": "/local/floorplan/outline-storage.png"
-                "toilet": "/local/floorplan/outline-toilet.png"
-                "veranda": "/local/floorplan/outline-veranda.png"
+                "bath": "/local/floorplan/outline-v2-bath.png"
+                "bedroom": "/local/floorplan/outline-v2-bedroom.png"
+                #"commons": "/local/floorplan/outline-commons.png"
+                "entry": "/local/floorplan/outline-v2-entry.png"
+                "guest": "/local/floorplan/outline-v2-guest.png"
+                "kitchen": "/local/floorplan/outline-v2-kitchen.png"
+                "living": "/local/floorplan/outline-v2-living.png"
+                "office": "/local/floorplan/outline-v2-office.png"
+                "storage": "/local/floorplan/outline-v2-storage.png"
+                "toilet": "/local/floorplan/outline-v2-toilet.png"
+                "veranda": "/local/floorplan/outline-v2-veranda.png"
                 "none": "/local/floorplan/base-empty.png"
               style:
                 left: 50%
                 top: 50%
                 width: 100%
                 z-index: 10
+                filter: hue-rotate(199deg)
+              tap_action:
+                action: none
+              hold_action:
+                action: none
+              double_tap_action:
+                action: none
+            # SELECTED ROOM OVERLAYS
+            - type: image
+              entity: input_select.floorplan_select_state
+              state_image:
+                "bath": "/local/floorplan/overlay-bath.png"
+                "bedroom": "/local/floorplan/overlay-bedroom.png"
+                #"commons": "/local/floorplan/outline-commons.png"
+                "entry": "/local/floorplan/overlay-entry.png"
+                "guest": "/local/floorplan/overlay-guest.png"
+                "kitchen": "/local/floorplan/overlay-kitchen.png"
+                "living": "/local/floorplan/overlay-living2.png"
+                "office": "/local/floorplan/overlay-office.png"
+                "storage": "/local/floorplan/overlay-storage.png"
+                "toilet": "/local/floorplan/overlay-toilet.png"
+                "veranda": "/local/floorplan/overlay-veranda.png"
+                "none": "/local/floorplan/base-empty.png"
+              style:
+                left: 50%
+                top: 50%
+                width: 100%
+                z-index: 9
+                filter: hue-rotate(199deg)
+                opacity: 20%
               tap_action:
                 action: none
               hold_action:
@@ -2453,7 +2477,7 @@ cards:
               double_tap_action:
                 action: none
             # ###########################################################
-            # LIGHT EFFECT LAYERS - Z-index: 2 -> 9
+            # LIGHT EFFECT LAYERS - Z-index: 2 -> 8
             # Bedroom
             - type: image
               entity: sensor.pendant_bedroom_dim
@@ -2722,7 +2746,7 @@ cards:
                 left: 50%
                 top: 50%
                 width: 100%
-                z-index: 9
+                z-index: 2
                 mix-blend-mode: lighten
               state_filter:
                 "0": opacity(0%)
