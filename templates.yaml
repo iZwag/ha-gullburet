@@ -566,7 +566,7 @@
     attributes:
       prcnt_of_limit: >
         {% set maxhour = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
-        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=1) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {{ ((maxhour / limit) * 100 ) | round(2) }}
   
   - unique_id: power_price_chart_show_hours
@@ -636,3 +636,17 @@
       wind_speed: "{{ state_attr('weather.yr_weather_home', 'wind_speed') }}"
       wind_speed_unit: "{{ state_attr('weather.yr_weather_home', 'wind_speed_unit') }}"
       forecast: "{{ state_attr('sensor.yr_weather_forecast_daily', 'forecast') }}"
+
+- sensor:
+  - name: Tibber energy - Percentages of active fixed level
+    unique_id: tibber_percentage_of_maxlevel
+    unit_of_measurement: '%'
+    state: >
+      {% set current_hour = states('sensor.tibber_energy_consumption_current_hour') | float(default=0) %}
+      {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+      {{ ((current_hour / limit) * 100 ) | round(2) }}
+    attributes:
+      estimate: >
+        {% set estimate = states('sensor.tibber_estimated_energy_consumption') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+        {{ ((estimate / limit) * 100 ) | round(2) }}
