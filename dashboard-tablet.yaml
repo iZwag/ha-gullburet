@@ -1,10 +1,15 @@
+# Hide default Home Assistant header menu and sidebar-menu
 kiosk_mode:
   hide_header: true
   hide_sidebar: true
 
+# Include all the views for this Dashboard.
+# They are separated and modularized because some of them are quite large.
+# Separating into views is mainly in order to give them their unique, 
+# navigateable URL/path.
 views: !include_dir_list "/config/dashboard_tablet_views/"
 
-# TEMPLATE FOR "custom:button-card" BUTTONS
+# "custom:button-card" button templates used in the views.
 button_card_templates:
   # NAVIGATION BUTTONS IN SIDEBAR
   navbar_button:
@@ -54,6 +59,7 @@ button_card_templates:
       notification: false
 
   # LIGHT MODES: ALL ON, ALL OFF, BEDTIME ETC.
+  # Vertically aligned with icon on top, name on bottom.
   light_mode:
     show_state: false
     size: 20px
@@ -68,6 +74,8 @@ button_card_templates:
         - font-size: "0.8em"
         - color: var(--secondary-text-color)
 
+  # Same as above, but highlights ON-state with the background, and adds
+  # toggle-action on tap.
   light_mode_toggle:
     show_state: false
     size: 20px
@@ -206,10 +214,6 @@ button_card_templates:
       icon:
         - color: var(--primary-text-color)
   
-    # icon color: var(--primary-text-color)
-    # icon color disabled: rgb(var(--rgb-disabled))
-    # background color: rgba(var(--rgb-primary-text-color), 0.05)
-    # bg color disabled: rgba(var(--rgb-disabled), 0.2)
 
   #################################################
   # ICON MAIN CSS
@@ -319,7 +323,7 @@ button_card_templates:
     show_icon: true
     show_name: false
     show_label: false
-    size: 55%
+    size: 60%
     color_type: icon
     color: rgb(255, 159, 0)
     color_off: rgb(255, 255, 255)
@@ -350,11 +354,28 @@ button_card_templates:
     show_icon: true
     show_name: false
     show_label: false
-    size: 55%
+    size: 60%
     color: auto
     color_type: icon
     tap_action:
-      action: none
+      action: more-info
+    hold_action:
+      action: more-info
+    extra_styles: |
+      @keyframes pulse {
+        0% {
+          -moz-box-shadow: 0 0 0 0 rgba(255, 111, 0, 0.6);
+          box-shadow: 0 0 0 0 rgba(255, 111, 0, 0.6);
+        }
+        80% {
+            -moz-box-shadow: 0 0 0 8px rgba(255, 111, 0, 0.8);
+            box-shadow: 0 0 0 8px rgba(255, 111, 0, 0.6);
+        }
+        100% {
+            -moz-box-shadow: 0 0 0 0 rgba(255, 111, 0, 0);
+            box-shadow: 0 0 0 0 rgba(255, 111, 0, 0);
+        }
+      }
     styles:
       icon:
         - color: >
@@ -369,24 +390,35 @@ button_card_templates:
               }
               return 'rgba(255, 255, 255, 1.0)';
             ]]]
-        #- animation:
-        #  - blink 3s linear infinite
       card:
         - width: 3vw
         - height: 3vw
-        - borderRadius: 8vw
-        - background-color: >
-            [[[ 
+        - border-radius: 8vw
+        - display: >
+            [[[
               if (entity.state === 'on') {
-                return 'rgba(255, 111, 0, 0.5)';
+                return 'flex';
               }
               if (entity.state === 'heat') {
                 if (entity.attributes.hvac_action === 'heating' ) {
-                  return 'rgba(255, 111, 0, 0.5)';
+                  return 'flex';
+                }
+              }
+              return 'none';
+            ]]]
+        - background-color: >
+            [[[ 
+              if (entity.state === 'on') {
+                return 'rgba(255, 111, 0, 0.25)';
+              }
+              if (entity.state === 'heat') {
+                if (entity.attributes.hvac_action === 'heating' ) {
+                  return 'rgba(255, 111, 0, 0.25)';
                 }
               }
               return 'rgba(115, 115, 115, 0.6)';
             ]]]
+        - animation: pulse 3s ease-in infinite
     hold_action:
       action: more-info 
     
