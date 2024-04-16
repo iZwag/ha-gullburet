@@ -5,12 +5,11 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.tibber_energy_consumption_this_month
+    - sensor.tibber_monthly_cost
     below: 0.1
   condition: []
   action:
   - service: input_number.set_value
-    metadata: {}
     data:
       value: 0
     target:
@@ -29,4 +28,220 @@
       timestamp: '{{ now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
         }}'
   mode: single
-
+- id: '1711099990422'
+  alias: Bedroom - Handle heated Sheet remote control on/off/up/down
+  description: Controls the behavior of the heated sheet on/off/longer/shorter.
+  trigger:
+  - device_id: 6d307d44235cf1a24620d50d7aead120
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 1
+    unique_id: fbb8e052-aef2-4e2d-9f7e-5b64ff5b87dd
+    id: 'on'
+  - device_id: 6d307d44235cf1a24620d50d7aead120
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 4
+    unique_id: 3ae253c0-9a8d-42c8-a97d-1c0c8f34d3ba
+    id: 'off'
+  - device_id: 6d307d44235cf1a24620d50d7aead120
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 2
+    unique_id: f2c150a3-71ea-4394-a111-84dcda198d42
+    id: up
+  - device_id: 6d307d44235cf1a24620d50d7aead120
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 3
+    unique_id: 36db30f0-b90d-4ec4-907b-983978a747af
+    id: down
+  condition: []
+  action:
+  - if:
+    - condition: trigger
+      id:
+      - 'on'
+    then:
+    - service: script.bedroom_heated_sheet_control
+      data:
+        command: 'on'
+        increase: 00:30:00
+  - if:
+    - condition: trigger
+      id:
+      - 'off'
+    then:
+    - service: script.bedroom_heated_sheet_control
+      data:
+        command: 'off'
+  - if:
+    - condition: trigger
+      id:
+      - up
+    then:
+    - service: script.bedroom_heated_sheet_control
+      data:
+        command: up
+        increase: 00:30:00
+  - if:
+    - condition: trigger
+      id:
+      - down
+    then:
+    - service: script.bedroom_heated_sheet_control
+      data:
+        command: down
+        decrease: 00:10:00
+  mode: queued
+- id: '1711100194488'
+  alias: Bedroom - Handle heated sheet timer start/finish
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - timer.heated_sheet_timer
+    from: idle
+    to: active
+    id: starts
+  - platform: state
+    entity_id:
+    - timer.heated_sheet_timer
+    to: idle
+    from: active
+    id: finishes
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - starts
+      sequence:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.heated_sheet_switch
+      alias: STARTS
+    - conditions:
+      - condition: trigger
+        id:
+        - finishes
+      sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.heated_sheet_switch
+      alias: FINISHES
+  mode: single
+- id: '1712088086740'
+  alias: System - Daily reset & maintenance tasks
+  description: Performs resets, upgrades and maintenance at a daily time set by the
+    provided time-helper.
+  trigger:
+  - platform: time
+    at: input_datetime.system_daily_reset_time
+  condition: []
+  action:
+  - service: script.lights_reset_overrides
+    data: {}
+  - service: input_boolean.turn_off
+    target:
+      entity_id:
+      - input_boolean.party_mode_enable
+      - input_boolean.lights_movie_mode
+      - input_boolean.lights_dining_mode
+      - input_boolean.lights_cooking_mode
+    data: {}
+  - service: script.deselect_floorplan_room
+    data: {}
+  - service: input_select.select_option
+    data:
+      option: 'off'
+    target:
+      entity_id: input_select.office_mode_select
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.bathroom_mode_select
+    data:
+      option: 'off'
+  - service: script.speakers_unjoin_all
+    metadata: {}
+    data: {}
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: Living room
+    target:
+      entity_id: input_select.audio_speaker_select
+  mode: single
+- id: '1712148158938'
+  alias: Office - Handle Light mode change
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_select.office_mode_select
+  condition: []
+  action:
+  - service: script.office_control_homey_ledring
+    data:
+      setting: '{{ states(''input_select.office_mode_select'') }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''input_select.office_mode_select'', ''off'')
+          }}'
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id:
+          - light.pendants_office
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.lights_override_office
+      alias: 'off'
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''input_select.office_mode_select'', ''focus'')
+          }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 50
+        target:
+          entity_id: light.pendants_office
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.lights_override_office
+      alias: focus
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''input_select.office_mode_select'', ''gaming'')
+          }}'
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 10
+        target:
+          entity_id: light.pendants_office
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.lights_override_office
+      alias: gaming
+  mode: single
+- id: '1712303592468'
+  alias: Bathroom - Handle light mode change
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_select.bathroom_mode_select
+  condition: []
+  action:
+  - service: script.bathroom_control_light_mode
+    data:
+      setting: '{{ states(''input_select.bathroom_mode_select'') }}'
+  mode: single
