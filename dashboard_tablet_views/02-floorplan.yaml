@@ -2023,7 +2023,14 @@ cards:
                       z-index: 15
                       '--mdc-icon-size': 25px
                       color: rgb(255, 111, 0)
-                      #animation: blink-animation 2s linear infinite
+                # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: climate.heater_bedroom
+                  template: heat_device
+                  style:
+                      left: 23%
+                      top: 97%
+                      z-index: 15
                 # GUEST PENDANT ICON
                 - type: custom:button-card
                   template: light
@@ -2031,6 +2038,14 @@ cards:
                   style:
                     left: 75%
                     top: 80%
+                    z-index: 15
+                # GUEST HEATER ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: climate.heater_guest
+                  template: heat_device
+                  style:
+                    left: 75%
+                    top: 97%
                     z-index: 15
                 # ENTRY DOWNLIGHTS ICON
                 - type: custom:button-card
@@ -2053,8 +2068,8 @@ cards:
                   template: light
                   entity: light.downlights_bath
                   style:
-                    left: 63%
-                    top: 46%
+                    left: 64%
+                    top: 54%
                     z-index: 15
                 # BATH LIGHTSTRIP ICON
                 - type: custom:button-card
@@ -2066,6 +2081,14 @@ cards:
                   style:
                     left: 89%
                     top: 41%
+                    z-index: 15
+                # BATH FLOOR HEAT ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: climate.floor_heat_bath
+                  template: heat_device
+                  style:
+                    left: 64%
+                    top: 47%
                     z-index: 15
                 # LIVING ROOM SPOTTRACK ICON
                 - type: custom:button-card
@@ -2107,6 +2130,14 @@ cards:
                     left: 18%
                     top: 67%
                     z-index: 15
+                # LIVING HEATER ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: climate.heater_living
+                  template: heat_device
+                  style:
+                    left: 17%
+                    top: 28%
+                    z-index: 15
                 # DINING PENDANTS ICON
                 - type: custom:button-card
                   template: light
@@ -2142,30 +2173,19 @@ cards:
                     left: 86.5%
                     top: 32%
                     z-index: 15
+                # KITCHEN HEATER ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: climate.heater_kitchen
+                  template: heat_device
+                  style:
+                    left: 61%
+                    top: 14%
+                    z-index: 15
                 # STORAGE ROOM CEILING LIGHT
-                # Countdown with MM:SS-label when on:
+                # - Removed to save space on a small location of the 3D-floorplan
+                # Light-timer countdown with MM:SS-label when on:
                 # - COMMENTED OUT BECAUSE IT UPDATES TOO SLOWLY, ABOUT 30-40S
-                # It is hard to make a timer-sensor that updates every second in HA
-                #- type: conditional
-                #  conditions:
-                #    - entity: light.ceiling_light_storage
-                #      state: "off"
-                #  elements:
-                #    - type: state-icon
-                #      entity: light.ceiling_light_storage
-                #      icon: mdi:lightbulb
-                #      tap_action:
-                #        action: call-service
-                #        service: script.turn_on
-                #        data:
-                #          entity_id: script.storage_light_on_auto
-                #      hold_action:
-                #        action: more-info
-                #      style:
-                #        left: 80%
-                #        top: 4%
-                #        z-index: 15
-                #        '--mdc-icon-size': 25px
+                #   It is hard to make a timer-sensor that updates every second in HA
                 # VERANDA WALL LANTERN
                 - type: custom:button-card
                   template: light
@@ -2643,6 +2663,7 @@ cards:
                 "50": opacity(70%)
                 "75": opacity(85%)
                 "100": opacity(100%)
+            
             # Dining pendants
             - type: image
               entity: sensor.pendants_dining_dim
