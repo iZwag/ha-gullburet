@@ -448,8 +448,6 @@ cards:
                   yellow: 2000
                   red: 5000
                 name: Realtime power consumption
-                # .dial {
-                #   stroke: var(--ha-card-background) !important; }
                 card_mod:
                   style:
                     ha-gauge $ svg.gauge: |
@@ -506,7 +504,8 @@ cards:
                   - sensor.ruter_haarklous_plass_platform_11768
                 show_departures: 3
                 walking_distance: 5          
-            # Monthly max-hour consumption average vs. current hour comparison
+            # #################################################################
+            # MONTHLY MAX-HOUR AVERAGE VS. CURRENT HOUR COMPARISON
             # This shows a little apartment "mini-game" where the goal is to
             # have the current hour energy consumption stay below the "Average"
             # or at least the "Price level limit"
@@ -541,21 +540,23 @@ cards:
                       imageClipped: false
                       imageWidth: 50
                       imageHeight: 50
+                      size: 40%
               header:
                 show: true
-                title: 'Current hour consumption vs. this month max-hour average'
+                title: 'Current hour vs. this month max-hour average'
                 show_states: true
                 colorize_states: true
               series:
-                - entity: sensor.tibber_energy_consumption_current_hour
+                # Current hour (chart)
+                - entity: sensor.tibber_percentage_of_maxlevel
                   name: Current hour
                   show:
                     in_header: false
                   color: '#1aff66'
                   data_generator: |
-                    const sensorValueKWh = parseFloat(entity.state);
-                    const percentageOfTotal = (sensorValueKWh / 5) * 100;
-                    return [[new Date().getTime(), percentageOfTotal]];
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                # Current hour (header)
                 - entity: sensor.tibber_energy_consumption_current_hour
                   name: Current hour
                   show:
@@ -563,6 +564,25 @@ cards:
                   unit: ' kWh'
                   color: '#1aff66'
                   float_precision: 2
+                # Estimated (header)
+                - entity: sensor.tibber_estimated_energy_consumption
+                  name: Estimated
+                  show:
+                    in_chart: false
+                  unit: ' kWh'
+                  color: '#fdca40'
+                  float_precision: 2
+                # Estimated (chart)
+                - entity: sensor.tibber_percentage_of_maxlevel
+                  name: Hour estimate (Tibber)
+                  show:
+                    in_header: false
+                  unit: ' kWh'
+                  color: '#fdca40'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.attributes.estimate);
+                    return [[new Date().getTime(), sensor_percent]];
+                # Max-hour average (chart)
                 - entity: sensor.power_monthly_maxhour_average
                   name: Average
                   show:
@@ -572,6 +592,7 @@ cards:
                   data_generator: |
                     const sensor_percent = parseFloat(entity.attributes.prcnt_of_limit);
                     return [[new Date().getTime(), sensor_percent]];
+                # Max-hour average (header)
                 - entity: sensor.power_monthly_maxhour_average
                   name: Average
                   show:
@@ -579,6 +600,7 @@ cards:
                   unit: ' kWh'
                   color: '#d24dff'
                   float_precision: 2
+                # Price level (header)
                 - entity: sensor.elvia_active_fixed_price_level
                   name: Price level limit
                   show:
