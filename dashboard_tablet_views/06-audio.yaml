@@ -156,177 +156,558 @@ cards:
             - background-color: transparent
             - height: 10vh
         # SPEAKER + USER SELECT SECTION
-        #- type: custom:stack-in-card
-        #  mode: horizontal
-        #  cards:
-        #  - type: entities
-        #    show_header_toggle: false
-        #    entities:
-        #      - entity: input_select.audio_speaker_select
-        #        name: Speaker
-        #        secondary_info: none
-        #  - type: entities
-        #    show_header_toggle: false
-        #    entities:
-        #      - entity: input_select.audio_user_select
-        #        name: User content
-            #card_mod:
-            #  style: |
-            #    ha-card {
-            #      background-color: transparent !important;
-            #    }
-        - type: horizontal-stack
-          cards: 
-          - type: custom:mushroom-select-card
-            entity: input_select.audio_speaker_select
-            layout: horizontal
-            icon_type: icon
-            secondary_info: none
-            primary_info: name
-            name: Speaker
-            icon_color: grey
-          - type: custom:mushroom-select-card
-            entity: input_select.audio_user_select
-            layout: horizontal
-            icon_type: icon
-            secondary_info: none
-            primary_info: name
-            icon_color: grey
-            name: User
-        # MEDIA IMAGE + PLAYLIST SELECT SECTION
-        - type: horizontal-stack
-          cards:
-          - type: custom:mini-media-player
-            entity: media_player.sonos_living
-            name: Sonos living room
-            artwork: full-cover # cover, full-cover, material, full-cover-fit
-            info: short  # default, short, scroll
-            toggle_power: false
-            background: /local/ui/sonos_living.jpg
-            idle_view:
-              when_idle: false
-              when_paused: false
-              when_standby: false
-            hide:
-              name: true
-              icon: true
-              info: true 
-              power: true # No Sonos support. Always hide this.
-              source: true
-              sound_mode: true
-              group_button: true
-              controls: true
-              jump: true
-              volume: true
-              volume_level: true
-              mute: true
-              progress: true
-              runtime: true
-              runtime_remaining: true
-              artwork_border: false
-              state_label: true
-          - type: custom:sonos-card
-            heightPercentage: 68.75
-            # 75% = 420px
-            # 70% = 392px
-            title: ''
-            sections:
-            - media browser
-            - grouping
-            - volumes
-            entityId: media_player.sonos_living
-            entities:
-            - media_player.sonos_living
-            - media_player.sonos_move
-            - media_player.sonos_kitchen
-            predefinedGroups:
-            - name: 'Fellesrom'
-              volume: 10
-              entities:
-              - media_player.sonos_living
-              - media_player.sonos_move
-              - media_player.sonos_kitchen
-            - name: 'Stue og kjøkken'
-              volume: 10
-              entities:
-              - media_player.sonos_living
-              - media_player.sonos_kitchen
-            mediaBrowserTitle: ''
-            hideBrowseMediaButton: true
-            mediaBrowserItemsPerRow: 5
-            favoritesToIgnore:
-            - 'Wake Up Happy'
-            topFavorites:
-            - 'NRK P1'
-            - 'NRK P3'
-            - 'NRK P3X'
-            - 'NRK Urørt'
-            - 'NRK mP3'
-            - 'Discover Weekly'
-            - '31 PÅ 31'
-            - 'Electronic Chill'
-            - 'MEGALOMAN'
-        - type: horizontal-stack
-          cards:
-          # AUDIO INFO, CONTROLS
-          - type: custom:mini-media-player
-            entity: media_player.sonos_living
-            name: Sonos living room
-            artwork: material # cover, full-cover, material, full-cover-fit
-            volume_stateless: false
-            #volume_step: 1
-            #max_volume: 50
-            #jump_amount: 15
-            toggle_power: false
-            idle_view:
-              when_idle: false
-              when_paused: false
-              when_standby: false
-            hide:
-              name: true
-              icon: true
-              power: true # No Sonos support. Always hide this.
-              group: true
-              source: true
-              mute: true
-              progress: false
-              runtime: true
-              runtime_remaining: true
-              shuffle: false
-              state_label: true
-              volume: true
-            card_mod:
-              style: |
-                .cover {
-                  opacity: 0 !important;
-                }
-          - type: custom:mini-media-player
-            entity: media_player.sonos_living
-            name: Sonos living room
-            #icon: mdi:volume-high
-            #artwork: material # cover, full-cover, material, full-cover-fit
-            volume_step: 1
-            max_volume: 50
-            toggle_power: false
-            #idle_view:
-            #  when_idle: false
-            #  when_paused: false
-            #  when_standby: false
-            hide:
-              name: true
-              icon: true
-              info: true
-              power: true # No Sonos support. Always hide this.
-              group: true
-              source: true
-              controls: true
-              mute: true
-              progress: true
-              runtime: true
-              runtime_remaining: true
-              state_label: true
-              volume: false
-              volume_level: false
+        - type: custom:mod-card
+          card_mod:
+            style: |
+              ha-card {
+                background-color: var(--ha-card-background);
+                border-radius: var(--ha-card-border-radius);
+              }
+          card:
+            type: custom:layout-card
+            layout_type: grid
+            layout:
+              grid-gap: "var(--ha-card-padding) var(--ha-card-padding)"
+              grid-template-columns: 49.5% 1fr 1fr 1fr
+              margin: 0px
+              padding: var(--ha-card-padding)
+            cards:
+            - type: custom:mushroom-select-card
+              entity: input_select.audio_speaker_select
+              layout: horizontal
+              icon_type: icon
+              secondary_info: none
+              primary_info: name
+              name: Speaker
+              icon_color: grey
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: var(--nested-card-background) !important;
+                    padding: 4px 0 0 0 !important;
+                  }
+            - type: custom:button-card
+              icon: mdi:speaker-multiple
+              name: 'Common rooms'
+              template: light_mode
+              entity: script.speakers_join_all
+              tap_action:
+                action: call-service
+                service: script.speakers_join_all
+                data:
+                  selected_speaker: >
+                    [[[
+                      return states['input_select.audio_speaker_select'].state;
+                    ]]]
+            - type: custom:button-card
+              icon: mdi:speaker-multiple
+              name: Living/Kitchen
+              entity: script.speakers_group_living_kitchen
+              template: light_mode
+              tap_action:
+                action: call-service
+                service: script.speakers_group_living_kitchen
+            - type: custom:button-card
+              icon: mdi:speaker
+              name: Ungroup
+              template: light_mode
+              entity: script.speakers_unjoin_all
+              tap_action:
+                action: call-service
+                service: script.speakers_unjoin_all
+        # SHOW SELECTED SPEAKER RELATED CONTENT
+        - type: custom:state-switch
+          entity: input_select.audio_speaker_select
+          default: 'Living room'
+          states:
+            # #################################################################
+            # LIVING ROOM SPEAKERS - DEFAULT ROOM
+            Living room:
+              type: vertical-stack
+              cards:
+              # MEDIA IMAGE + PLAYLIST SELECT SECTION
+              - type: horizontal-stack
+                cards:
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_living
+                  name: Sonos living room
+                  artwork: full-cover # cover, full-cover, material, full-cover-fit
+                  info: short  # default, short, scroll
+                  toggle_power: false
+                  background: /local/ui/sonos_living.jpg
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true 
+                    power: true # No Sonos support. Always hide this.
+                    source: true
+                    sound_mode: true
+                    group_button: true
+                    controls: true
+                    jump: true
+                    volume: true
+                    volume_level: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    artwork_border: false
+                    state_label: true
+                - type: custom:swipe-card
+                  reset_after: 45
+                  cards:
+                  - type: custom:sonos-card
+                    heightPercentage: 68.75
+                    # 75% = 420px
+                    # 70% = 392px
+                    title: ''
+                    sections:
+                    - media browser
+                    entityId: media_player.sonos_living
+                    mediaBrowserTitle: ''
+                    hideBrowseMediaButton: true
+                    mediaBrowserHideTitleForThumbnailIcons: true
+                    mediaBrowserItemsPerRow: 4
+                    numberOfFavoritesToShow: 16
+                    topFavorites:
+                    - 'NRK P1'
+                    - 'NRK P3'
+                    - 'NRK P3X'
+                    - 'NRK mP3'
+                    - 'Ingen planer fredag kl. 20'
+                    - 'Film & spill'
+                    - 'Elektronii Stiimulii'
+                    - '31 PÅ 31'
+                    card_mod:
+                      style: 
+                        sonos-media-browser$: |
+                          sonos-media-browser-header {
+                            display: none !important;
+                          }
+                  - type: custom:sonos-card
+                    heightPercentage: 68.75
+                    title: ''
+                    sections:
+                    - grouping
+                    entityId: media_player.sonos_living
+                    entities:
+                    - media_player.sonos_living
+                    - media_player.sonos_move
+                    - media_player.sonos_kitchen
+              - type: horizontal-stack
+                cards:
+                # AUDIO INFO, CONTROLS
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_living
+                  name: Sonos living room
+                  artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_stateless: false
+                  #volume_step: 1
+                  #max_volume: 50
+                  #jump_amount: 15
+                  toggle_power: false
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    mute: true
+                    progress: false
+                    runtime: true
+                    runtime_remaining: true
+                    shuffle: false
+                    state_label: true
+                    volume: true
+                  card_mod:
+                    style: |
+                      .cover {
+                        opacity: 0 !important;
+                      }
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_living
+                  name: Sonos living room
+                  #icon: mdi:volume-high
+                  #artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_step: 1
+                  max_volume: 50
+                  toggle_power: false
+                  #idle_view:
+                  #  when_idle: false
+                  #  when_paused: false
+                  #  when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    controls: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    state_label: true
+                    volume: false
+                    volume_level: false
+            # KITCHEN SPEAKER
+            Kitchen:
+              type: vertical-stack
+              cards:
+              # MEDIA IMAGE + PLAYLIST SELECT SECTION
+              - type: horizontal-stack
+                cards:
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_kitchen
+                  name: Sonos kitchen
+                  artwork: full-cover # cover, full-cover, material, full-cover-fit
+                  info: short  # default, short, scroll
+                  toggle_power: false
+                  background: /local/ui/sonos_living.jpg
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true 
+                    power: true # No Sonos support. Always hide this.
+                    source: true
+                    sound_mode: true
+                    group_button: true
+                    controls: true
+                    jump: true
+                    volume: true
+                    volume_level: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    artwork_border: false
+                    state_label: true
+                - type: custom:sonos-card
+                  heightPercentage: 68.75
+                  title: ''
+                  sections:
+                  - media browser
+                  entityId: media_player.sonos_kitchen
+                  mediaBrowserTitle: ''
+                  hideBrowseMediaButton: true
+                  mediaBrowserHideTitleForThumbnailIcons: true
+                  mediaBrowserItemsPerRow: 4
+                  numberOfFavoritesToShow: 16
+                  topFavorites:
+                  - 'NRK P1'
+                  - 'NRK P3'
+                  - 'NRK P3X'
+                  - 'NRK mP3'
+                  - 'Ingen planer fredag kl. 20'
+                  - 'Film & spill'
+                  - 'Elektronii Stiimulii'
+                  - '31 PÅ 31'
+                  card_mod:
+                    style: 
+                      sonos-media-browser$: |
+                        sonos-media-browser-header {
+                          display: none !important;
+                        }
+              - type: horizontal-stack
+                cards:
+                # AUDIO INFO, CONTROLS
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_kitchen
+                  name: Sonos kitchen
+                  artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_stateless: false
+                  #volume_step: 1
+                  #max_volume: 50
+                  #jump_amount: 15
+                  toggle_power: false
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    mute: true
+                    progress: false
+                    runtime: true
+                    runtime_remaining: true
+                    shuffle: false
+                    state_label: true
+                    volume: true
+                  card_mod:
+                    style: |
+                      .cover {
+                        opacity: 0 !important;
+                      }
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_kitchen
+                  name: Sonos kitchen
+                  #icon: mdi:volume-high
+                  #artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_step: 1
+                  max_volume: 50
+                  toggle_power: false
+                  #idle_view:
+                  #  when_idle: false
+                  #  when_paused: false
+                  #  when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    controls: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    state_label: true
+                    volume: false
+                    volume_level: false
+            # SONOS MOVE MOBILE SPEAKER
+            Sonos Move:
+              type: vertical-stack
+              cards:
+              # MEDIA IMAGE + PLAYLIST SELECT SECTION
+              - type: horizontal-stack
+                cards:
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_move
+                  name: Sonos Move
+                  artwork: full-cover # cover, full-cover, material, full-cover-fit
+                  info: short  # default, short, scroll
+                  toggle_power: false
+                  background: /local/ui/sonos_living.jpg
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true 
+                    power: true # No Sonos support. Always hide this.
+                    source: true
+                    sound_mode: true
+                    group_button: true
+                    controls: true
+                    jump: true
+                    volume: true
+                    volume_level: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    artwork_border: false
+                    state_label: true
+                - type: custom:sonos-card
+                  heightPercentage: 68.75
+                  title: ''
+                  sections:
+                  - media browser
+                  entityId: media_player.sonos_kitchen
+                  mediaBrowserTitle: ''
+                  hideBrowseMediaButton: true
+                  mediaBrowserHideTitleForThumbnailIcons: true
+                  mediaBrowserItemsPerRow: 4
+                  numberOfFavoritesToShow: 16
+                  topFavorites:
+                  - 'NRK P1'
+                  - 'NRK P3'
+                  - 'NRK P3X'
+                  - 'NRK mP3'
+                  - 'Ingen planer fredag kl. 20'
+                  - 'Film & spill'
+                  - 'Elektronii Stiimulii'
+                  - '31 PÅ 31'
+                  card_mod:
+                    style: 
+                      sonos-media-browser$: |
+                        sonos-media-browser-header {
+                          display: none !important;
+                        }
+              - type: horizontal-stack
+                cards:
+                # AUDIO INFO, CONTROLS
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_move
+                  name: Sonos Move
+                  artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_stateless: false
+                  toggle_power: false
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    mute: true
+                    progress: false
+                    runtime: true
+                    runtime_remaining: true
+                    shuffle: false
+                    state_label: true
+                    volume: true
+                  card_mod:
+                    style: |
+                      .cover {
+                        opacity: 0 !important;
+                      }
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_move
+                  volume_step: 1
+                  max_volume: 50
+                  toggle_power: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    controls: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    state_label: true
+                    volume: false
+                    volume_level: false
+            # SONOS BEDROOM SPEAKER
+            Bedroom:
+              type: vertical-stack
+              cards:
+              # MEDIA IMAGE + PLAYLIST SELECT SECTION
+              - type: horizontal-stack
+                cards:
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_bedroom
+                  name: Sonos bedroom
+                  artwork: full-cover # cover, full-cover, material, full-cover-fit
+                  info: short  # default, short, scroll
+                  toggle_power: false
+                  background: /local/ui/sonos_living.jpg
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true 
+                    power: true # No Sonos support. Always hide this.
+                    source: true
+                    sound_mode: true
+                    group_button: true
+                    controls: true
+                    jump: true
+                    volume: true
+                    volume_level: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    artwork_border: false
+                    state_label: true
+                - type: custom:sonos-card
+                  heightPercentage: 68.75
+                  title: ''
+                  sections:
+                  - media browser
+                  entityId: media_player.sonos_bedroom
+                  mediaBrowserTitle: ''
+                  hideBrowseMediaButton: true
+                  mediaBrowserHideTitleForThumbnailIcons: true
+                  mediaBrowserItemsPerRow: 4
+                  numberOfFavoritesToShow: 16
+                  topFavorites:
+                  - 'NRK P1'
+                  - 'NRK P3'
+                  - 'NRK P3X'
+                  - 'NRK mP3'
+                  - 'Ingen planer fredag kl. 20'
+                  - 'Film & spill'
+                  - 'Elektronii Stiimulii'
+                  - '31 PÅ 31'
+                  card_mod:
+                    style: 
+                      sonos-media-browser$: |
+                        sonos-media-browser-header {
+                          display: none !important;
+                        }
+              - type: horizontal-stack
+                cards:
+                # AUDIO INFO, CONTROLS
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_bedroom
+                  name: Sonos bedroom
+                  artwork: material # cover, full-cover, material, full-cover-fit
+                  volume_stateless: false
+                  toggle_power: false
+                  idle_view:
+                    when_idle: false
+                    when_paused: false
+                    when_standby: false
+                  hide:
+                    name: true
+                    icon: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    mute: true
+                    progress: false
+                    runtime: true
+                    runtime_remaining: true
+                    shuffle: false
+                    state_label: true
+                    volume: true
+                  card_mod:
+                    style: |
+                      .cover {
+                        opacity: 0 !important;
+                      }
+                - type: custom:mini-media-player
+                  entity: media_player.sonos_bedroom
+                  volume_step: 1
+                  max_volume: 50
+                  toggle_power: false
+                  hide:
+                    name: true
+                    icon: true
+                    info: true
+                    power: true # No Sonos support. Always hide this.
+                    group: true
+                    source: true
+                    controls: true
+                    mute: true
+                    progress: true
+                    runtime: true
+                    runtime_remaining: true
+                    state_label: true
+                    volume: false
+                    volume_level: false
       # RIGHT COLUMN SPACER
       - type: vertical-stack
         class: "col-md-1"
