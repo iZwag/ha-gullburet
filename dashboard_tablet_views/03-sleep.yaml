@@ -298,38 +298,70 @@ cards:
             - type: custom:stack-in-card
               mode: vertical
               cards:
-              - type: custom:mushroom-entity-card
+              - type: tile
                 entity: input_boolean.wakeup_alarm_active
-                name: Wake-up alarm for tomorrow
-                icon: mdi:power
+                name: Wake-up routine enabled tomorrow
+                color: accent
                 tap_action:
                   action: toggle
-              - type: custom:time-picker-card
-                entity: input_datetime.wakeup_alarm
-                hour_mode: 24
-                hour_step: 1
-                minute_step: 1
-                layout:
-                  hour_mode: double
-                  align_controls: left
-                  name: header
-                  embedded: false
-                  thin: true
-                hide:
-                  seconds: true
-                  icon: true
-                  name: true
+                icon_tap_action:
+                  action: toggle
                 card_mod:
-                  style:
-                    time_unit$: |
-                      input {
-                        border: 1px solid white !important;
-                      }
-                    .: |
+                  style: |
+                    ha-card {
+                      background-color: transparent !important;
+                    }
+              - type: horizontal-stack
+                cards:
+                - type: custom:time-picker-card
+                  entity: input_datetime.wakeup_alarm_weekdays
+                  hour_mode: 24
+                  hour_step: 1
+                  minute_step: 5
+                  layout:
+                    hour_mode: double
+                    align_controls: center
+                    name: header
+                  hide:
+                    seconds: true
+                  name: Monday - Friday
+                  link_values: true
+                  card_mod:
+                    style: |
                       ha-card {
-                        --tpc-elements-background-color: transparent !important;
+                        --tpc-elements-background-color: var(--button-card-background) !important;
                         --tpc-icon-color: var(--secondary-text-color);
-                        padding: var(--ha-card-padding) !important;
+                        background-color: transparent !important;
+                      }
+                      .time-picker-header {
+                        border-top-left-radius: 0px !important;
+                        border-top-right-radius: 0px !important;
+                        font-weight: 500;
+                      }
+                - type: custom:time-picker-card
+                  entity: input_datetime.wakeup_alarm_weekends
+                  hour_mode: 24
+                  hour_step: 1
+                  minute_step: 5
+                  layout:
+                    hour_mode: double
+                    align_controls: center
+                    name: header
+                  hide:
+                    seconds: true
+                  name: Saturday & Sunday
+                  link_values: true
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --tpc-elements-background-color: var(--button-card-background) !important;
+                        --tpc-icon-color: var(--secondary-text-color);
+                        background-color: transparent !important;
+                      }
+                      .time-picker-header {
+                        border-top-left-radius: 0px !important;
+                        border-top-right-radius: 0px !important;
+                        font-weight: 500;
                       }
         # Whitespace right
         - type: vertical-stack
