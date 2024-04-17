@@ -2003,26 +2003,14 @@ cards:
                   #  action: toggle
                   #hold_action:
                   #  action: more-info
-                # BEDROOM HEATED SHEET ICON
-                - type: conditional
-                  conditions:
-                    - entity: switch.heated_sheet_switch
-                      state: "on"
-                  elements:
-                  - type: state-icon
-                    entity: switch.heated_sheet_switch
-                    icon: mdi:heating-coil
-                    #template: heat_device
-                    tap_action:
-                      action: none
-                    hold_action:
-                      action: more-info
-                    style:
+                # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
+                - type: custom:button-card
+                  entity: switch.heated_sheet_switch
+                  template: heat_device
+                  style:
                       left: 31%
                       top: 86%
                       z-index: 15
-                      '--mdc-icon-size': 25px
-                      color: rgb(255, 111, 0)
                 # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
                 - type: custom:button-card
                   entity: climate.heater_bedroom
