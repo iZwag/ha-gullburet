@@ -334,3 +334,47 @@
         light_entity: light.pendant_bedroom
         brightness: 100
   mode: single
+- id: '1713471081102'
+  alias: Wakeup - Update Sonos alarm when alarm active ON/OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.wakeup_alarm_active
+    from: 'off'
+    to: 'on'
+    id: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.wakeup_alarm_active
+    from: 'on'
+    to: 'off'
+    id: 'off'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - service: sonos.update_alarm
+        data:
+          alarm_id: 72
+          volume: 10
+          enabled: true
+          time: 06:55:00
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - 'off'
+      sequence:
+      - service: sonos.update_alarm
+        data:
+          alarm_id: 72
+          enabled: false
+        target:
+          entity_id: media_player.sonos_bedroom
+  mode: single
