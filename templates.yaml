@@ -650,3 +650,131 @@
         {% set estimate = states('sensor.tibber_estimated_energy_consumption') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {{ ((estimate / limit) * 100 ) | round(2) }}
+
+- sensor:
+  - name: Wakeup - Next alarm time
+    unique_id: wakeup_next_alarm_time
+    icon: mdi:alarm
+    device_class: timestamp
+    state: >
+      {% set weekday_alarm = states('input_datetime.wakeup_alarm_weekdays') %}
+      {% set weekend_alarm = states('input_datetime.wakeup_alarm_weekends') %}
+      {# Set the correct alarm_time assuming it is today, adjust below #}
+      {% set alarm_time = weekday_alarm if now().weekday() < 5 else weekend_alarm %}
+      {% set alarm_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ alarm_time), '%Y-%m-%d %H:%M:%S')) %}
+      {# Checks if today's alarm time has passed or not #}
+      {% if now().timestamp() > alarm_dt %}
+        {# Check tomorrow day & select correct alarm #}
+        {% if 3 < now().weekday() < 6 %}
+          {% set alarm_time = weekend_alarm %}
+        {% else %}
+          {% set alarm_time = weekday_alarm %}
+        {% endif %}
+        {% set alarm_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ alarm_time), '%Y-%m-%d %H:%M:%S')) + 86400 %}
+      {% endif %}
+      {{ alarm_dt | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.wakeup_next_alarm_time')) | timestamp_custom('%H:%M:%S', true) }}
+    
+  - name: Wakeup - Light start time
+    unique_id: wakeup_light_start_time
+    icon: mdi:sun-clock
+    device_class: timestamp
+    state: >
+      {% set adjustment = states('input_number.wakeup_minutes_of_light') | int * 60 %}
+      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) - adjustment %}
+      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.wakeup_light_start_time')) | timestamp_custom('%H:%M:%S', true) }}
+      hour: >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_light_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int }}
+      minute:  >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_light_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int }}
+      second: 0
+      timestamp: >
+        {{ ((state_attr('sensor.wakeup_light_start_time', 'hour') | int) * 3600) + ((state_attr('sensor.wakeup_light_start_time', 'minute') | int) * 60) }}
+
+  - name: Wakeup - Increase time
+    unique_id: wakeup_increase_time
+    icon: mdi:volume-plus
+    device_class: timestamp
+    state: >
+      {% set adjustment = states('input_number.wakeup_increase_minutes') | int * 60 %}
+      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) + adjustment %}
+      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.wakeup_increase_time')) | timestamp_custom('%H:%M:%S', true) }}
+      hour: >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_increase_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int }}
+      minute:  >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_increase_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int }}
+      second: 0
+      timestamp: >
+        {{ ((state_attr('sensor.wakeup_increase_time', 'hour') | int) * 3600) + ((state_attr('sensor.wakeup_increase_time', 'minute') | int) * 60) }}
+
+
+  - name: Wakeup - Last call time
+    unique_id: wakeup_last_call_time
+    icon: mdi:bed-clock
+    device_class: timestamp
+    state: >
+      {% set adjustment = states('input_number.wakeup_last_call_minutes') | int * 60 %}
+      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) + adjustment %}
+      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.wakeup_last_call_time')) | timestamp_custom('%H:%M:%S', true) }}
+      hour: >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_last_call_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int }}
+      minute:  >
+        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_last_call_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int }}
+      second: 0
+      timestamp: >
+        {{ ((state_attr('sensor.wakeup_last_call_time', 'hour') | int) * 3600) + ((state_attr('sensor.wakeup_last_call_time', 'minute') | int) * 60) }}
+
+  - name: Bedtime - Next trigger time
+    unique_id: bedtime_next_trigger_time
+    icon: mdi:alarm
+    device_class: timestamp
+    state: >
+      {% set weekday_trigger = states('input_datetime.bedtime_trigger_weekdays') %}
+      {% set weekend_trigger = states('input_datetime.bedtime_trigger_weekends') %}
+      {# Set the correct trigger_time assuming it is today, adjust below #}
+      {% set trigger_time = weekend_trigger if (3 < now().weekday() < 6) else weekday_trigger %}
+      {% set trigger_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ trigger_time), '%Y-%m-%d %H:%M:%S')) %}
+      {# Checks if today's bedtime trigger has passed or not #}
+      {% if now().timestamp() > trigger_dt %}
+        {# Check what day tomorrow is & select correct trigger #}
+        {% if 2 < now().weekday() < 5 %}
+          {% set trigger_time = weekend_trigger %}
+        {% else %}
+          {% set trigger_time = weekday_trigger %}
+        {% endif %}
+        {% set trigger_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ trigger_time), '%Y-%m-%d %H:%M:%S')) + 86400 %}
+      {% endif %}
+      {{ trigger_dt | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.bedtime_next_trigger_time')) | timestamp_custom('%H:%M:%S', true) }}
+
+  - name: Bedtime - Heated sheet start time
+    unique_id: bedtime_heated_sheet_start_time
+    icon: mdi:heating-coil
+    device_class: timestamp
+    state: >
+      {% set adjustment = states('input_number.bedtime_preheating_sheet_minutes') | int * 60 %}
+      {% set adjusted_time = as_timestamp(states('sensor.bedtime_next_trigger_time')) - adjustment %}
+      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+    attributes:
+      time: >
+        {{ as_timestamp(states('sensor.bedtime_heated_sheet_start_time')) | timestamp_custom('%H:%M:%S', true) }}
+      hour: >
+        {{ (as_timestamp(strptime(state_attr('sensor.bedtime_heated_sheet_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int }}
+      minute:  >
+        {{ (as_timestamp(strptime(state_attr('sensor.bedtime_heated_sheet_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int }}
+      second: 0
+      timestamp: >
+        {{ ((state_attr('sensor.bedtime_heated_sheet_start_time', 'hour') | int) * 3600) + ((state_attr('sensor.bedtime_heated_sheet_start_time', 'minute') | int) * 60) }}
