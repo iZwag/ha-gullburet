@@ -795,3 +795,34 @@
       second: 0
       timestamp: >
         {{ ((state_attr('sensor.bedtime_heated_sheet_start_time', 'hour') | int(default=0)) * 3600) + ((state_attr('sensor.bedtime_heated_sheet_start_time', 'minute') | int(default=0)) * 60) }}
+
+  # Calculates the veranda automatic lights on time
+  # Uses the sunset time if it is before 22:00, or uses that time if not
+  - name: Veranda - Lights on time
+    unique_id: veranda_lights_on
+    icon: mdi:lightbulb-group
+    device_class: timestamp
+    state: >
+      {% set sunset_time = as_timestamp(states('sensor.sun_next_setting')) %}
+      {% set default_time = as_timestamp(now().strftime('%Y-%m-%d') + ' 22:00:00') %}
+      {% set guard_time = as_timestamp(now().strftime('%Y-%m-%d') + ' 12:00:00') %}
+      {% if guard_time < sunset_time < default_time %}
+      {{ sunset_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+      {% else %}
+      {{ default_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+      {% endif %}
+
+  # Calculates the veranda automatic lights off time
+  # Uses the dawn time if it is before 08:00, or uses that time if not
+  - name: Veranda - Lights off time
+    unique_id: veranda_lights_off
+    icon: mdi:lightbulb-group-off-outline
+    device_class: timestamp
+    state: >
+      {% set dawn_time = as_timestamp(states('sensor.sun_next_dawn')) %}
+      {% set default_time = as_timestamp(now().strftime('%Y-%m-%d') + ' 08:00:00') %}
+      {% if dawn_time < default_time %}
+      {{ dawn_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+      {% else %}
+      {{ default_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
+      {% endif %}
