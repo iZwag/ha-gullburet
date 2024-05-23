@@ -27,7 +27,7 @@ lovelace:
     dashboard-tablet:
       mode: yaml
       filename: dashboard-tablet.yaml
-      title: Tablet Dashboard
+      title: Tablet
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
     tablet-test:
@@ -35,6 +35,12 @@ lovelace:
       filename: tablet-test.yaml
       title: Tablet Test
       icon: mdi:tablet-dashboard
+      show_in_sidebar: true
+    dashboard-mobile:
+      mode: yaml
+      filename: dashboard-mobile.yaml
+      title: Mobile
+      icon: mdi:cellphone
       show_in_sidebar: true
 
 # PYTHON SCRIPTS

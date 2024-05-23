@@ -1,0 +1,7 @@
+# Hide default Home Assistant header menu and sidebar-menu
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+
+# Include all the views for this Dashboard.
+views: !include_dir_list "/config/dashboard_mobile_views/"

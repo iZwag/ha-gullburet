@@ -1,0 +1,153 @@
+title: Start
+path: start
+type: masonry
+icon: mdi:cellphone
+#background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+theme: ios-dark-mode
+cards:
+# The main column - Orders all of the content in one column
+- type: vertical-stack
+  cards:
+  # Top navigation
+  - type: custom:mushroom-chips-card
+    alignment: justify
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+      - type: action
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-mobile/start
+        icon: mdi:home
+      - type: action
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/0
+        icon: mdi:cog
+  # Greeting title card
+  - type: custom:mushroom-title-card
+    title: |
+      {% set now = now().hour %} 
+      {% if now >= 5 and now < 9 %}
+        God morgen ☀️
+      {% elif now >= 9 and now < 12 %}
+        God formiddag 💼
+      {% elif now >= 12 and now < 15 %}
+        God dag 🍦
+      {% elif now >= 15 and now < 18 %}
+        God ettermiddag 🚴
+      {% elif now >= 18 and now < 23 %}
+        God kveld 🍔
+      {% else %}
+        Sov godt 😴 
+      {% endif %}
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_apartment_avg
+    - type: weather
+      entity: weather.yr_weather_home
+      show_temperature: true
+      show_conditions: true
+    - type: entity
+      icon: mdi:ceiling-light-multiple
+      entity: sensor.lights_on_count
+  # Aktivere vekkerutine
+  - type: tile
+    entity: input_boolean.wakeup_alarm_active
+    name: Vekkerutine aktiv
+    color: accent
+    tap_action:
+      action: toggle
+  # Stille vekketid
+  - type: horizontal-stack
+    cards:
+    # Vekketid, hverdager
+    - type: custom:time-picker-card
+      entity: input_datetime.wakeup_alarm_weekdays
+      hour_mode: 24
+      hour_step: 1
+      minute_step: 5
+      layout:
+        hour_mode: double
+        align_controls: center
+        name: header
+      hide:
+        seconds: true
+      name: Vekketid, hverdager
+      link_values: true
+      card_mod:
+        style: |
+          ha-card {
+            --tpc-elements-background-color: var(--button-card-background) !important;
+            --tpc-icon-color: var(--secondary-text-color);
+          }
+          .time-picker-header {
+            font-weight: 500;
+          }
+    # Vekketid, helg
+    - type: custom:time-picker-card
+      entity: input_datetime.wakeup_alarm_weekends
+      hour_mode: 24
+      hour_step: 1
+      minute_step: 5
+      layout:
+        hour_mode: double
+        align_controls: center
+        name: header
+      hide:
+        seconds: true
+      name: Vekketid, helg
+      link_values: true
+      card_mod:
+        style: |
+          ha-card {
+            --tpc-elements-background-color: var(--button-card-background) !important;
+            --tpc-icon-color: var(--secondary-text-color);
+          }
+          .time-picker-header {
+            font-weight: 500;
+          }
+    # STUE
+  - type: custom:mushroom-title-card
+    title: Stue
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: light.downlights_living
+      name: Spottekasse
+      color: accent
+      tap_action:
+        action: toggle
+    - type: tile
+      entity: light.spottrack4_living
+      name: Spotteskinne
+      color: accent
+      tap_action:
+        action: toggle
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: switch.lamp_mushroom_living
+      name: Sopplampe
+      color: accent
+      tap_action:
+        action: toggle
+    - type: tile
+      entity: switch.lamp_globe_living
+      name: Globus
+      color: accent
+      tap_action:
+        action: toggle
+  
