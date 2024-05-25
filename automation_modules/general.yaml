@@ -1,3 +1,7 @@
+# TIPS:
+# Want to remove default, unused 'metadata: {-}' and 'data: {-}' fields?
+# Search and replace (with nothing) with this Regex: ^.*data: \{\}.*\n?
+
 - id: "1702582088817"
   alias: Spot-track6 to Lightstrip shelf ON/OFF/DIM
   description:
@@ -37,48 +41,6 @@
               data:
                 brightness: "{{ trigger.to_state.attributes.brightness }}"
   mode: single
-- id: '1706688448886'
-  alias: Tablet charge-switch ON/OFF
-  description: Turns the tablet charge-switch ON if it is below 20%, and OFF if it
-    is above 80%.
-  trigger:
-  - alias: Below 20 pcnt
-    platform: numeric_state
-    entity_id:
-    - sensor.lenovo_tab_m10_battery
-    below: 20
-    id: below-20-pcnt
-  - alias: Above 80 pcnt
-    platform: numeric_state
-    entity_id:
-    - sensor.lenovo_tab_m10_battery
-    above: 80
-    id: above-80-pcnt
-  condition: []
-  action:
-  - alias: Choose switch ON or OFF
-    choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - below-20-pcnt
-      sequence:
-      - alias: Turn Tablet charge-switch ON
-        type: turn_on
-        device_id: e7edcdcfed58b7cedd57142e4434bc5d
-        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
-        domain: switch
-    - conditions:
-      - condition: trigger
-        id:
-        - above-80-pcnt
-      sequence:
-      - alias: Turn charge-switch OFF
-        type: turn_off
-        device_id: e7edcdcfed58b7cedd57142e4434bc5d
-        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
-        domain: switch
-  mode: single
 - id: "1702642524314"
   alias: Tablet motion turns screen ON/OFF
   description: ""
@@ -117,128 +79,6 @@
               target:
                 entity_id: switch.lenovo_tab_m10_fhd_plus_screen
   mode: single
-- id: "1702588010634"
-  alias: Veranda dusk-ON/dawn-OFF
-  description: ""
-  trigger:
-    - platform: time
-      at: sensor.sun_next_setting
-      id: sun-down
-    - platform: time
-      at: sensor.sun_next_dawn
-      id: sun-dawn
-  condition: []
-  action:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - sun-down
-          sequence:
-            - type: turn_on
-              device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
-              entity_id: f7e543af2bb56185534ecba1eb4a0c2d
-              domain: switch
-        - conditions:
-            - condition: trigger
-              id:
-                - sun-dawn
-          sequence:
-            - type: turn_off
-              device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
-              entity_id: f7e543af2bb56185534ecba1eb4a0c2d
-              domain: switch
-  mode: single
-
-# Bedtime: Start Heated Sheet 30 minutes before bedtime, and turn off lights.
-- id: "1705059631645"
-  alias: Bedtime - Time triggered actions
-  description:
-    If automatic bedtime is toggled ON, then certain actions are automatically
-    started. For winter, heated sheet is turned on 30 min ahead. Lights are automatically
-    turned off.
-  trigger:
-    - platform: time
-      at: input_datetime.bedtime_alarm
-      id: alarm
-    - platform: template
-      value_template:
-        "{{ now() >= today_at(states('input_datetime.bedtime_alarm'))
-        - timedelta(minutes=30) }}"
-      id: 30min-before
-  condition:
-    - condition: state
-      entity_id: input_boolean.bedtime_alarm_active
-      state: "on"
-  action:
-    - if:
-        - condition: trigger
-          id:
-            - 30min-before
-      then:
-        - type: turn_on
-          device_id: b7f6e30daaa39a28f6356d29ffd5efe5
-          entity_id: 9b7ec62590734746bf02741e11be30ba
-          domain: switch
-        - service: timer.start
-          data:
-            duration: 01:00:00
-          target:
-            entity_id: timer.heated_sheet_timer
-  mode: single
-
-- id: "1705067967420"
-  alias: Wake-up alarm - Time triggered actions
-  description:
-    Handles all time-triggered actions associated with the wake-up alarm,
-    such as turning on the lights and audio media.
-  trigger:
-    - platform: time
-      at: input_datetime.wakeup_alarm
-      id: alarm
-    - platform: template
-      value_template:
-        "{{ now() >= today_at(states('input_datetime.wakeup_alarm'))
-        - timedelta(minutes=10) }}"
-      id: 10min-before
-    - platform: template
-      value_template:
-        "{{ now() >= today_at(states('input_datetime.wakeup_alarm'))
-        + timedelta(minutes=30) }}"
-      id: 30min-after
-  condition:
-    - condition: state
-      entity_id: input_boolean.wakeup_alarm_active
-      state: "on"
-  action:
-    - if:
-        - condition: trigger
-          id:
-            - 10min-before
-      then:
-        - service: light.turn_on
-          data:
-            brightness_pct: 3
-          target:
-            entity_id: light.pendant_bedroom
-        - service: light.turn_on
-          data:
-            brightness_pct: 25
-            transition: 300
-          target:
-            entity_id: light.pendant_bedroom
-    - if:
-        - condition: trigger
-          id:
-            - 30min-after
-      then:
-        - service: script.masterdim_script
-          data:
-            manual_override: "{{ is_state('input_boolean.wakeup_alarm_active', 'on') }}"
-            light_entity: light.pendant_bedroom
-            brightness: 100
-  mode: single
-  
 - id: '1706625904243'
   alias: Storage room light ON/OFF with motion/timer
   description: ''

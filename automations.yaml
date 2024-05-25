@@ -293,11 +293,14 @@
     such as turning on the lights and audio media.
   trigger:
   - platform: time
-    at: input_datetime.wakeup_alarm_weekdays
-    id: alarm
-  - platform: time
     at: sensor.wakeup_light_start_time
     id: 10min-before
+  - platform: time
+    at: sensor.wakeup_next_alarm_time
+    id: alarm
+  - platform: time
+    at: sensor.wakeup_increase_time
+    id: increase
   - platform: time
     at: sensor.wakeup_last_call_time
     id: 30min-after
@@ -306,36 +309,54 @@
     entity_id: input_boolean.wakeup_alarm_active
     state: 'on'
   action:
-  - if:
-    - condition: trigger
-      id:
-      - 10min-before
-    then:
-    - service: light.turn_on
-      data:
-        brightness_pct: 3
-      target:
-        entity_id: light.pendant_bedroom
-    - service: light.turn_on
-      data:
-        brightness_pct: 25
-        transition: 300
-      target:
-        entity_id: light.pendant_bedroom
-  - if:
-    - condition: trigger
-      id:
-      - 30min-after
-    then:
-    - service: script.masterdim_script
-      data:
-        manual_override: '{{ is_state(''input_boolean.wakeup_alarm_active'', ''on'')
-          }}'
-        light_entity: light.pendant_bedroom
-        brightness: 100
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - increase
+      sequence:
+      - service: script.masterdim_script
+        data:
+          manual_override: false
+          light_entity: light.pendant_bedroom
+          brightness: 60
+      - service: media_player.volume_set
+        target:
+          entity_id:
+          - media_player.sonos_bedroom
+        data:
+          volume_level: 0.13
+    - conditions:
+      - condition: trigger
+        id:
+        - 30min-after
+      sequence:
+      - service: script.masterdim_script
+        data:
+          manual_override: '{{ is_state(''input_boolean.wakeup_alarm_active'', ''on'')
+            }}'
+          light_entity: light.pendant_bedroom
+          brightness: 100
+      - service: media_player.volume_set
+        metadata: {}
+        data:
+          volume_level: 0.18
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - 10min-before
+      sequence:
+      - service: light.turn_on
+        data:
+          brightness_pct: 25
+          transition: 300
+        target:
+          entity_id: light.pendant_bedroom
   mode: single
 - id: '1713471081102'
-  alias: Wakeup - Update Sonos alarm when alarm active ON/OFF
+  alias: Wakeup - Update Sonos alarm when alarm settings change
   description: ''
   trigger:
   - platform: state
@@ -350,6 +371,14 @@
     from: 'on'
     to: 'off'
     id: 'off'
+  - platform: state
+    entity_id:
+    - input_datetime.wakeup_alarm_weekdays
+    id: weekday-changes
+  - platform: state
+    entity_id:
+    - input_datetime.wakeup_alarm_weekends
+    id: weekend-changes
   condition: []
   action:
   - choose:
@@ -361,9 +390,11 @@
       - service: sonos.update_alarm
         data:
           alarm_id: 72
-          volume: 10
           enabled: true
-          time: 06:55:00
+          time: '{{ state_attr(''sensor.wakeup_next_alarm_time'', ''time'') }}
+
+            '
+          volume: 0.08
         target:
           entity_id: media_player.sonos_bedroom
     - conditions:
@@ -377,4 +408,193 @@
           enabled: false
         target:
           entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - weekday-changes
+        - weekend-changes
+      sequence:
+      - if:
+        - condition: state
+          entity_id: input_boolean.wakeup_alarm_active
+          state: 'on'
+        then:
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 2
+            milliseconds: 0
+        - service: sonos.update_alarm
+          data:
+            alarm_id: 72
+            enabled: true
+            time: '{{ state_attr(''sensor.wakeup_next_alarm_time'', ''time'') }}
+
+              '
+            volume: 0.08
+          target:
+            entity_id: media_player.sonos_bedroom
+  mode: single
+- id: '1713970599927'
+  alias: Bedroom - Handle remote presses for light/alarm
+  description: ''
+  trigger:
+  - device_id: 5030e395b732b51ea772e9b0e5554ef5
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 1
+    unique_id: 0472f0bd-ccb1-4cb1-8c78-5392cf238eb8
+    id: on-button
+  - device_id: 5030e395b732b51ea772e9b0e5554ef5
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 2
+    unique_id: 4cc3368f-f69e-4f4f-883a-00694c445a9e
+    id: up-button
+  - device_id: 5030e395b732b51ea772e9b0e5554ef5
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 3
+    unique_id: 276caed8-8551-47e2-b62c-932b110f0920
+    alias: down
+    id: down-button
+  - device_id: 5030e395b732b51ea772e9b0e5554ef5
+    domain: hue
+    platform: device
+    type: short_release
+    subtype: 4
+    unique_id: bd0d0840-ae40-4f99-88b5-9fe2730c63cb
+    id: off-button
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - on-button
+      sequence:
+      - service: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.pendant_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - up-button
+      sequence:
+      - service: media_player.volume_up
+        metadata: {}
+        data: {}
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - down-button
+      sequence:
+      - service: media_player.volume_down
+        metadata: {}
+        data: {}
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - off-button
+      sequence:
+      - service: media_player.media_play_pause
+        metadata: {}
+        data: {}
+        target:
+          entity_id: media_player.sonos_bedroom
+  mode: queued
+  max: 10
+- id: '1714376090355'
+  alias: Bedroom - Pause Sonos when light turned off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.pendant_bedroom
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: media_player.sonos_bedroom
+    state: playing
+  action:
+  - service: media_player.media_pause
+    metadata: {}
+    data: {}
+    target:
+      entity_id: media_player.sonos_bedroom
+  mode: single
+- id: '1714643311108'
+  alias: Bedtime - Time triggered actions
+  description: If automatic bedtime is toggled ON, then certain actions are automatically
+    started. For winter, heated sheet is turned on 30 min ahead. Lights are automatically
+    turned off.
+  trigger:
+  - platform: time
+    at: sensor.bedtime_next_trigger_time
+    id: alarm
+  - platform: time
+    at: sensor.bedtime_heated_sheet_start_time
+    id: 30min-before
+  condition:
+  - condition: state
+    entity_id: input_boolean.bedtime_alarm_active
+    state: 'on'
+  action:
+  - if:
+    - condition: trigger
+      id:
+      - 30min-before
+    then:
+    - type: turn_on
+      device_id: b7f6e30daaa39a28f6356d29ffd5efe5
+      entity_id: 9b7ec62590734746bf02741e11be30ba
+      domain: switch
+    - service: timer.start
+      data:
+        duration: 01:00:00
+      target:
+        entity_id: timer.heated_sheet_timer
+  mode: single
+- id: '1716287088981'
+  alias: Veranda lights automatic ON/OFF
+  description: Lights are turned off with sunset, or at latest 22:00. Lights are turned
+    off at dawn, or at latest 08:00.
+  trigger:
+  - platform: time
+    at: sensor.veranda_lights_on_time
+    id: sun-down
+  - platform: time
+    at: sensor.veranda_lights_off_time
+    id: sun-dawn
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - sun-down
+      sequence:
+      - type: turn_on
+        device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
+        entity_id: f7e543af2bb56185534ecba1eb4a0c2d
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id:
+        - sun-dawn
+      sequence:
+      - type: turn_off
+        device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
+        entity_id: f7e543af2bb56185534ecba1eb4a0c2d
+        domain: switch
   mode: single
