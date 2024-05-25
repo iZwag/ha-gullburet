@@ -61,8 +61,14 @@ cards:
       show_temperature: true
       show_conditions: true
     - type: entity
-      icon: mdi:ceiling-light-multiple
-      entity: sensor.lights_on_count
+      entity: sensor.humidity_apartment_average
+    - type: template
+      entity: sensor.energy_price_hourly_total
+      icon_color: ''
+      icon: mdi:cash
+      content: >
+        {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
+        {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
   # Aktivere vekkerutine
   - type: tile
     entity: input_boolean.wakeup_alarm_active
@@ -119,9 +125,25 @@ cards:
           .time-picker-header {
             font-weight: 500;
           }
-    # STUE
+  # STUE
   - type: custom:mushroom-title-card
     title: Stue
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_living
+    - type: entity
+      entity: sensor.humidity_living
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_living
   - type: horizontal-stack
     cards:
     - type: tile
@@ -130,12 +152,34 @@ cards:
       color: accent
       tap_action:
         action: toggle
+      hold_action:
+        action: more-info
     - type: tile
       entity: light.spottrack4_living
       name: Spotteskinne
       color: accent
       tap_action:
         action: toggle
+      hold_action:
+        action: more-info
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: light.pendants_living
+      name: Spisebord
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
+    - type: tile
+      entity: light.mood_ball
+      name: Fargekule
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
   - type: horizontal-stack
     cards:
     - type: tile
@@ -144,10 +188,61 @@ cards:
       color: accent
       tap_action:
         action: toggle
+      hold_action:
+        action: more-info
     - type: tile
       entity: switch.lamp_globe_living
       name: Globus
       color: accent
       tap_action:
         action: toggle
+      hold_action:
+        action: more-info
   
+  # KJØKKEN
+  - type: custom:mushroom-title-card
+    title: Kjøkken
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_kitchen
+    - type: entity
+      entity: sensor.humidity_kitchen
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_kitchen
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: light.pendants_kitchen
+      name: Flowerpots
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
+    - type: tile
+      entity: light.spottrack6_kitchen
+      name: Spotteskinner
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: light.lightstrip_undershelf_kitchen
+      name: Oppvasklys
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
