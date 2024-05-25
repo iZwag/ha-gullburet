@@ -826,3 +826,16 @@
       {% else %}
       {{ default_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
       {% endif %}
+
+# Apartment average humidity
+- sensor:
+  - name: Humidity - Apartment average
+    unique_id: humidity_apartment_average
+    icon: mdi:water-percent
+    device_class: humidity
+    unit_of_measurement: '%'
+    state: >
+      {% set sensor_1 = states('sensor.humidity_kitchen') | float(default=0) %}
+      {% set sensor_2 = states('sensor.humidity_living') | float(default=0) %}
+      {% set sensor_3 = states('sensor.humidity_entry') | float(default=0) %}
+      {{ ((sensor_1 + sensor_2 + sensor_3) / 3) | round(0) }}
