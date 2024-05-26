@@ -839,3 +839,20 @@
       {% set sensor_2 = states('sensor.humidity_living') | float(default=0) %}
       {% set sensor_3 = states('sensor.humidity_entry') | float(default=0) %}
       {{ ((sensor_1 + sensor_2 + sensor_3) / 3) | round(0) }}
+
+- sensor:
+  - name: Bedtime - Display time
+    unique_id: bedtime_display_time
+    state: >
+      {% set current_time = now() %}
+      {% set current_day = current_time.weekday() %}
+      {% set current_hour = current_time.hour %}
+      {% if current_day == 4 and current_hour >= 20 %}
+        weekend
+      {% elif current_day == 5 %}
+        weekend
+      {% elif current_day == 6 and current_hour < 20 %}
+        weekend
+      {% else %}
+        weekday
+      {% endif %}
