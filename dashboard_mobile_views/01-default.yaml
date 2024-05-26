@@ -26,6 +26,11 @@ cards:
       - type: action
         tap_action:
           action: navigate
+          navigation_path: /dashboard-mobile/heating
+        icon: mdi:heat-wave
+      - type: action
+        tap_action:
+          action: navigate
           navigation_path: /lovelace/0
         icon: mdi:cog
   # Greeting title card
@@ -182,58 +187,12 @@ cards:
         action: none
       hold_action:
         action: none
-  # Stille vekketid
-  #- type: horizontal-stack
-  #  cards:
-  #  # Vekketid, hverdager
-  #  - type: custom:time-picker-card
-  #    entity: input_datetime.wakeup_alarm_weekdays
-  #    hour_mode: 24
-  #    hour_step: 1
-  #    minute_step: 5
-  #    layout:
-  #      hour_mode: double
-  #      align_controls: center
-  #      name: header
-  #    hide:
-  #      seconds: true
-  #    name: Vekketid, hverdager
-  #    link_values: true
-  #    card_mod:
-  #      style: |
-  #        ha-card {
-  #          --tpc-elements-background-color: var(--button-card-background) !important;
-  #          --tpc-icon-color: var(--secondary-text-color);
-  #        }
-  #        .time-picker-header {
-  #          font-weight: 500;
-  #        }
-    # Vekketid, helg
-    #- type: custom:time-picker-card
-    #  entity: input_datetime.wakeup_alarm_weekends
-    #  hour_mode: 24
-    #  hour_step: 1
-    #  minute_step: 5
-    #  layout:
-    #    hour_mode: double
-    #    align_controls: center
-    #    name: header
-    #  hide:
-    #    seconds: true
-    #  name: Vekketid, helg
-    #  link_values: true
-    #  card_mod:
-    #    style: |
-    #      ha-card {
-    #        --tpc-elements-background-color: var(--button-card-background) !important;
-    #        --tpc-icon-color: var(--secondary-text-color);
-    #      }
-    #      .time-picker-header {
-    #        font-weight: 500;
-    #      }
+
   # STUE
+  # Title
   - type: custom:mushroom-title-card
     title: Stue
+  # Chips
   - type: custom:mushroom-chips-card
     alignment: start
     card_mod:
@@ -250,6 +209,7 @@ cards:
     - type: entity
       icon: mdi:heat-wave
       entity: input_select.heating_mode_living
+  # Lights
   - type: horizontal-stack
     cards:
     - type: tile
@@ -268,6 +228,7 @@ cards:
         action: toggle
       hold_action:
         action: more-info
+  # Lights
   - type: horizontal-stack
     cards:
     - type: tile
@@ -286,6 +247,7 @@ cards:
         action: toggle
       hold_action:
         action: more-info
+  # Lights
   - type: horizontal-stack
     cards:
     - type: tile
@@ -304,10 +266,21 @@ cards:
         action: toggle
       hold_action:
         action: more-info
+  # Panel heater
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_living
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
   
   # KJØKKEN
+  # Title
   - type: custom:mushroom-title-card
     title: Kjøkken
+  # Chips
   - type: custom:mushroom-chips-card
     alignment: start
     card_mod:
@@ -324,6 +297,7 @@ cards:
     - type: entity
       icon: mdi:heat-wave
       entity: input_select.heating_mode_kitchen
+  # Lights
   - type: horizontal-stack
     cards:
     - type: tile
@@ -342,6 +316,7 @@ cards:
         action: toggle
       hold_action:
         action: more-info
+  # Lights
   - type: horizontal-stack
     cards:
     - type: tile
@@ -352,3 +327,54 @@ cards:
         action: toggle
       hold_action:
         action: more-info
+  # Panel heater
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_kitchen
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
+  
+  # SOVEROM
+  # Title
+  - type: custom:mushroom-title-card
+    title: Soverom
+  # Chips
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_bedroom
+    - type: entity
+      entity: sensor.humidity_bedroom
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_bedroom
+  # Lights
+  - type: horizontal-stack
+    cards:
+    - type: tile
+      entity: light.pendant_bedroom
+      name: Pendel
+      color: accent
+      tap_action:
+        action: toggle
+      hold_action:
+        action: more-info
+  # Panel heater
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_bedroom
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
