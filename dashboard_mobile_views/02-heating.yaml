@@ -1,0 +1,251 @@
+title: Heating
+path: heating
+type: masonry
+icon: mdi:heat-wave
+#background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+theme: ios-dark-mode
+cards:
+# The main column - Orders all of the content in one column
+- type: vertical-stack
+  cards:
+  # Top navigation
+  - type: custom:mushroom-chips-card
+    alignment: justify
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+      - type: back
+      - type: action
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-mobile/start
+  # Title card
+  - type: custom:mushroom-title-card
+    title: Varmestyring
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: weather
+      entity: weather.yr_weather_home
+      show_temperature: true
+      show_conditions: true
+    - type: template
+      entity: sensor.energy_price_hourly_total
+      icon_color: ''
+      icon: mdi:cash
+      content: >
+        {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
+        {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
+
+  # STUE, KJØKKEN, ENTRE
+  # Title
+  - type: custom:mushroom-title-card
+    title: Stue, kjøkken & entré
+  # Chips
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_apartment_avg
+    - type: entity
+      entity: sensor.humidity_apartment_average
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_living
+  # Heating mode temperature constants
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_comfort_living
+    name: Komfort temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_sleep_living
+    name: Natt temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_away_living
+    name: Borte temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: entities
+    entities:
+      - entity: schedule.heating_comfort_living
+        name: Komfort temp. tidsplan
+        secondary_info: none
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+      - entity: schedule.heating_sleep_living
+        name: Natt temp. tidsplan
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+  # Panel heaters
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_living
+    name: Panelovn, stue
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_kitchen
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
+  
+  # SOVEROM
+  # Title
+  - type: custom:mushroom-title-card
+    title: Soverom
+  # Chips
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_bedroom
+    - type: entity
+      entity: sensor.humidity_bedroom
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_bedroom
+  # Heating mode temperature constants
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_sleep_bedroom
+    name: Natt temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_away_bedroom
+    name: Borte temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: entities
+    entities:
+      - entity: schedule.heating_sleep_bedroom
+        name: Natt temp. tidsplan
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+  # Panel heater
+  - type: custom:mushroom-climate-card
+    entity: climate.heater_bedroom
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
+
+  # BAD
+  # Title
+  - type: custom:mushroom-title-card
+    title: Bad
+  # Chips
+  - type: custom:mushroom-chips-card
+    alignment: start
+    card_mod:
+      style: |
+        ha-card {
+          --chip-background: rgba(25, 25, 25, 0.2);
+          --primary-text-color: var(--secondary-text-color);
+        }
+    chips:
+    - type: entity
+      entity: sensor.temperature_bath
+    - type: entity
+      icon: mdi:heat-wave
+      entity: input_select.heating_mode_bath
+  # Heating mode temperature constants
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_comfort_bath
+    name: Komfort temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_sleep_bath
+    name: Natt temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: custom:mushroom-number-card
+    entity: input_number.temperature_away_bath
+    name: Borte temp.
+    display_mode: buttons
+    layout: horizontal
+    icon_color: accent
+    primary_info: name
+    secondary_info: none
+  - type: entities
+    entities:
+      - entity: schedule.heating_comfort_bath
+        name: Komfort temp. tidsplan
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+      - entity: schedule.heating_sleep_bath
+        name: Natt temp. tidsplan
+        tap_action:
+          action: more-info
+        hold_action:
+          action: more-info
+  # Floor heating
+  - type: custom:mushroom-climate-card
+    entity: climate.floor_heat_bath
+    name: Panelovn
+    hvac_modes:
+      - heat
+      - 'off'
+    show_temperature_control: true
+    layout: horizontal
