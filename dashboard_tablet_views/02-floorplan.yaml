@@ -621,40 +621,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_bath
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_bath'].state ) }"
-                          entity: input_select.heating_mode_bath
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_bath
                   - type: tile
                     name: Temperature
                     entity: sensor.temperature_bath
@@ -760,40 +738,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_bedroom
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_bedroom'].state ) }"
-                          entity: input_select.heating_mode_bedroom
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_bedroom
                   - type: horizontal-stack
                     cards:
                     - type: tile
@@ -1109,40 +1065,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_guest
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_guest'].state ) }"
-                          entity: input_select.heating_mode_guest
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_guest
                   - type: horizontal-stack
                     cards:
                     - type: tile
@@ -1265,40 +1199,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_kitchen
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_kitchen'].state ) }"
-                          entity: input_select.heating_mode_kitchen
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_kitchen
                   - type: horizontal-stack
                     cards:
                     - type: tile
@@ -1421,40 +1333,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_living
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_living'].state ) }"
-                          entity: input_select.heating_mode_living
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_living
                   - type: horizontal-stack
                     cards:
                     - type: tile
@@ -1820,40 +1710,18 @@ cards:
                             ha-card {
                               background-color: var(--nested-card-background);
                             }
-                    - type: custom:config-template-card
-                      entities:
-                      - input_select.heating_mode_toilet
-                      variables:
-                        GET_MODE_ICON: | 
-                          mode => {
-                            if (mode == "Manual") {
-                              return "mdi:gesture-tap-hold";
-                            }
-                            if (mode == "Sleep") {
-                              return "mdi:power-sleep";
-                            }
-                            if (mode == "Comfort") {
-                              return "mdi:emoticon-outline";
-                            }
-                            if (mode == "Vacation") {
-                              return "mdi:palm-tree";
-                            }
-                            // Away-icon
-                            return "mdi:home-export-outline";
+                    - type: custom:mushroom-chips-card
+                      alignment: end
+                      card_mod:
+                        style: |
+                          ha-card {
+                            padding: var(--ha-card-padding) !important;
+                            --chip-background: var(--button-card-background);
                           }
-                      card:
-                        type: custom:mushroom-chips-card
-                        alignment: end
-                        card_mod:
-                          style: |
-                            ha-card {
-                              padding: var(--ha-card-padding) !important;
-                              --chip-background: var(--button-card-background);
-                            }
-                        chips:
-                        - type: entity
-                          icon: "${ GET_MODE_ICON( states['input_select.heating_mode_toilet'].state ) }"
-                          entity: input_select.heating_mode_toilet
+                      chips:
+                      - type: entity
+                        icon: mdi:heat-wave
+                        entity: input_select.heating_mode_toilet
                   - type: tile
                     name: Temperature
                     entity: sensor.temperature_toilet
@@ -2004,13 +1872,14 @@ cards:
                   #hold_action:
                   #  action: more-info
                 # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
-                - type: custom:button-card
-                  entity: switch.heated_sheet_switch
-                  template: heat_device
-                  style:
-                      left: 31%
-                      top: 86%
-                      z-index: 15
+                # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
+                #- type: custom:button-card
+                #  entity: switch.heated_sheet_switch
+                #  template: heat_device
+                #  style:
+                #      left: 31%
+                #      top: 86%
+                #      z-index: 15
                 # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
                 - type: custom:button-card
                   entity: climate.heater_bedroom
