@@ -6,375 +6,382 @@ icon: mdi:cellphone
 theme: ios-dark-mode
 cards:
 # The main column - Orders all of the content in one column
-- type: vertical-stack
-  cards:
-  # Top navigation
-  - type: custom:mushroom-chips-card
-    alignment: justify
-    card_mod:
-      style: |
-        ha-card {
-          --chip-background: rgba(25, 25, 25, 0.2);
-          --primary-text-color: var(--secondary-text-color);
-        }
-    chips:
-      - type: action
-        tap_action:
-          action: navigate
-          navigation_path: /dashboard-mobile/start
-        icon: mdi:home
-      - type: action
-        tap_action:
-          action: navigate
-          navigation_path: /dashboard-mobile/heating
-        icon: mdi:heat-wave
-      - type: action
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/0
-        icon: mdi:cog
-  # Greeting title card
-  - type: custom:mushroom-title-card
-    title: |
-      {% set now = now().hour %} 
-      {% if now >= 5 and now < 9 %}
-        God morgen ☀️
-      {% elif now >= 9 and now < 12 %}
-        God formiddag 💼
-      {% elif now >= 12 and now < 15 %}
-        God dag 🍦
-      {% elif now >= 15 and now < 18 %}
-        God ettermiddag 🚴
-      {% elif now >= 18 and now < 23 %}
-        God kveld 🍔
-      {% else %}
-        Sov godt 😴 
-      {% endif %}
-  - type: custom:mushroom-chips-card
-    alignment: start
-    card_mod:
-      style: |
-        ha-card {
-          --chip-background: rgba(25, 25, 25, 0.2);
-          --primary-text-color: var(--secondary-text-color);
-        }
-    chips:
-    - type: entity
-      entity: sensor.temperature_apartment_avg
-    - type: weather
-      entity: weather.yr_weather_home
-      show_temperature: true
-      show_conditions: true
-    - type: entity
-      entity: sensor.humidity_apartment_average
-    - type: template
-      entity: sensor.energy_price_hourly_total
-      icon_color: ''
-      icon: mdi:cash
-      content: >
-        {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
-        {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
-  # Aktivere vekkerutine
-  - type: horizontal-stack
+- type: custom:mod-card
+  card_mod:
+    style: |
+      ha-card {
+        padding: 0px 12px 12px;
+      }
+  card:
+    type: vertical-stack
     cards:
-    - type: tile
-      entity: input_boolean.wakeup_alarm_active
-      name: Vekkerutine aktiv
-      color: accent
-      vertical: true
-      tap_action:
-        action: toggle
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: sensor.bedtime_display_time
-          state: weekday
-      card:
-        type: custom:time-picker-card
-        entity: input_datetime.wakeup_alarm_weekdays
-        hour_mode: 24
-        hour_step: 1
-        minute_step: 5
-        layout:
-          hour_mode: double
-          align_controls: center
-          name: header
-          embedded: false
-          thin: true
-        hide:
-          seconds: true
-          name: true
-          icon: true
-        link_values: true
-        card_mod:
+    # Top navigation
+    - type: custom:mushroom-chips-card
+      alignment: justify
+      card_mod:
         style: |
           ha-card {
-            --tpc-elements-background-color: var(--button-card-background) !important;
-            --tpc-icon-color: var(--secondary-text-color);
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
           }
-    - type: conditional
-      conditions:
-        - condition: state
-          entity: sensor.bedtime_display_time
-          state: weekend
-      card:
-        type: custom:time-picker-card
-        entity: input_datetime.wakeup_alarm_weekends
-        hour_mode: 24
-        hour_step: 1
-        minute_step: 5
-        layout:
-          hour_mode: double
-          align_controls: center
-          name: header
-          embedded: false
-          thin: true
-        hide:
-          seconds: true
-          name: true
-          icon: true
-        link_values: true
-        card_mod:
+      chips:
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/start
+          icon: mdi:home
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/heating
+          icon: mdi:heat-wave
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace/0
+          icon: mdi:cog
+    # Greeting title card
+    - type: custom:mushroom-title-card
+      title: |
+        {% set now = now().hour %} 
+        {% if now >= 5 and now < 9 %}
+          God morgen ☀️
+        {% elif now >= 9 and now < 12 %}
+          God formiddag 💼
+        {% elif now >= 12 and now < 15 %}
+          God dag 🍦
+        {% elif now >= 15 and now < 18 %}
+          God ettermiddag 🚴
+        {% elif now >= 18 and now < 23 %}
+          God kveld 🍔
+        {% else %}
+          Sov godt 😴 
+        {% endif %}
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
         style: |
           ha-card {
-            --tpc-elements-background-color: var(--button-card-background) !important;
-            --tpc-icon-color: var(--secondary-text-color);
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
           }
-  - type: horizontal-stack
-    cards:
-    - type: custom:mushroom-template-card
-      entity: sensor.wakeup_light_start_time
-      icon: mdi:sun-clock
-      primary: Oppvåkningslys
-      secondary: |-
-        {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-          Starter {{ (state_attr('sensor.wakeup_light_start_time', 'time')).split(':')[0:2] | join(':') }}
-        {% else %}
-          Ikke aktiv
-        {% endif %}
-      icon_color: |-
-        {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-          white
-        {% else %}
-          disabled
-        {% endif %}
-      badge_icon: mdi:numeric-1-circle
-      badge_color: black
-      tap_action:
-        action: none
-      hold_action:
-        action: none
-    - type: custom:mushroom-template-card
-      entity: input_boolean.wakeup_alarm_active
-      icon: mdi:alarm-note
-      primary: Vekkelyd
-      secondary: |-
-        {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-          {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
-          Starter {{ alarm_time.split(':')[0:2] | join(':') }}
-        {% else %}
-          Ikke aktiv
-        {% endif %}
-      icon_color: |-
-        {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-          white
-        {% else %}
-          disabled
-        {% endif %}
-      badge_icon: mdi:numeric-2-circle
-      badge_color: black
-      tap_action:
-        action: none
-      hold_action:
-        action: none
+      chips:
+      - type: entity
+        entity: sensor.temperature_apartment_avg
+      - type: weather
+        entity: weather.yr_weather_home
+        show_temperature: true
+        show_conditions: true
+      - type: entity
+        entity: sensor.humidity_apartment_average
+      - type: template
+        entity: sensor.energy_price_hourly_total
+        icon_color: ''
+        icon: mdi:cash
+        content: >
+          {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
+          {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
+    # Aktivere vekkerutine
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: input_boolean.wakeup_alarm_active
+        name: Vekkerutine aktiv
+        color: accent
+        vertical: true
+        tap_action:
+          action: toggle
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: sensor.bedtime_display_time
+            state: weekday
+        card:
+          type: custom:time-picker-card
+          entity: input_datetime.wakeup_alarm_weekdays
+          hour_mode: 24
+          hour_step: 1
+          minute_step: 5
+          layout:
+            hour_mode: double
+            align_controls: center
+            name: header
+            embedded: false
+            thin: true
+          hide:
+            seconds: true
+            name: true
+            icon: true
+          link_values: true
+          card_mod:
+          style: |
+            ha-card {
+              --tpc-elements-background-color: var(--button-card-background) !important;
+              --tpc-icon-color: var(--secondary-text-color);
+            }
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: sensor.bedtime_display_time
+            state: weekend
+        card:
+          type: custom:time-picker-card
+          entity: input_datetime.wakeup_alarm_weekends
+          hour_mode: 24
+          hour_step: 1
+          minute_step: 5
+          layout:
+            hour_mode: double
+            align_controls: center
+            name: header
+            embedded: false
+            thin: true
+          hide:
+            seconds: true
+            name: true
+            icon: true
+          link_values: true
+          card_mod:
+          style: |
+            ha-card {
+              --tpc-elements-background-color: var(--button-card-background) !important;
+              --tpc-icon-color: var(--secondary-text-color);
+            }
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-template-card
+        entity: sensor.wakeup_light_start_time
+        icon: mdi:sun-clock
+        primary: Oppvåkningslys
+        secondary: |-
+          {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+            Starter {{ (state_attr('sensor.wakeup_light_start_time', 'time')).split(':')[0:2] | join(':') }}
+          {% else %}
+            Ikke aktiv
+          {% endif %}
+        icon_color: |-
+          {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+            white
+          {% else %}
+            disabled
+          {% endif %}
+        badge_icon: mdi:numeric-1-circle
+        badge_color: black
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+      - type: custom:mushroom-template-card
+        entity: input_boolean.wakeup_alarm_active
+        icon: mdi:alarm-note
+        primary: Vekkelyd
+        secondary: |-
+          {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+            {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
+            Starter {{ alarm_time.split(':')[0:2] | join(':') }}
+          {% else %}
+            Ikke aktiv
+          {% endif %}
+        icon_color: |-
+          {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+            white
+          {% else %}
+            disabled
+          {% endif %}
+        badge_icon: mdi:numeric-2-circle
+        badge_color: black
+        tap_action:
+          action: none
+        hold_action:
+          action: none
 
-  # STUE
-  # Title
-  - type: custom:mushroom-title-card
-    title: Stue
-  # Chips
-  - type: custom:mushroom-chips-card
-    alignment: start
-    card_mod:
-      style: |
-        ha-card {
-          --chip-background: rgba(25, 25, 25, 0.2);
-          --primary-text-color: var(--secondary-text-color);
-        }
-    chips:
-    - type: entity
-      entity: sensor.temperature_living
-    - type: entity
-      entity: sensor.humidity_living
-    - type: entity
-      icon: mdi:heat-wave
-      entity: input_select.heating_mode_living
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: light.downlights_living
-      name: Spottekasse
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-    - type: tile
-      entity: light.spottrack4_living
-      name: Spotteskinne
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: light.pendants_living
-      name: Spisebord
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-    - type: tile
-      entity: light.mood_ball
-      name: Fargekule
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: switch.lamp_mushroom_living
-      name: Sopplampe
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-    - type: tile
-      entity: switch.lamp_globe_living
-      name: Globus
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Panel heater
-  - type: custom:mushroom-climate-card
-    entity: climate.heater_living
-    name: Panelovn
-    hvac_modes:
-      - heat
-      - 'off'
-    show_temperature_control: true
-    layout: horizontal
-  
-  # KJØKKEN
-  # Title
-  - type: custom:mushroom-title-card
-    title: Kjøkken
-  # Chips
-  - type: custom:mushroom-chips-card
-    alignment: start
-    card_mod:
-      style: |
-        ha-card {
-          --chip-background: rgba(25, 25, 25, 0.2);
-          --primary-text-color: var(--secondary-text-color);
-        }
-    chips:
-    - type: entity
-      entity: sensor.temperature_kitchen
-    - type: entity
-      entity: sensor.humidity_kitchen
-    - type: entity
-      icon: mdi:heat-wave
-      entity: input_select.heating_mode_kitchen
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: light.pendants_kitchen
-      name: Flowerpots
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-    - type: tile
-      entity: light.spottrack6_kitchen
-      name: Spotteskinner
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: light.lightstrip_undershelf_kitchen
-      name: Oppvasklys
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Panel heater
-  - type: custom:mushroom-climate-card
-    entity: climate.heater_kitchen
-    name: Panelovn
-    hvac_modes:
-      - heat
-      - 'off'
-    show_temperature_control: true
-    layout: horizontal
-  
-  # SOVEROM
-  # Title
-  - type: custom:mushroom-title-card
-    title: Soverom
-  # Chips
-  - type: custom:mushroom-chips-card
-    alignment: start
-    card_mod:
-      style: |
-        ha-card {
-          --chip-background: rgba(25, 25, 25, 0.2);
-          --primary-text-color: var(--secondary-text-color);
-        }
-    chips:
-    - type: entity
-      entity: sensor.temperature_bedroom
-    - type: entity
-      entity: sensor.humidity_bedroom
-    - type: entity
-      icon: mdi:heat-wave
-      entity: input_select.heating_mode_bedroom
-  # Lights
-  - type: horizontal-stack
-    cards:
-    - type: tile
-      entity: light.pendant_bedroom
-      name: Pendel
-      color: accent
-      tap_action:
-        action: toggle
-      hold_action:
-        action: more-info
-  # Panel heater
-  - type: custom:mushroom-climate-card
-    entity: climate.heater_bedroom
-    name: Panelovn
-    hvac_modes:
-      - heat
-      - 'off'
-    show_temperature_control: true
-    layout: horizontal
+    # STUE
+    # Title
+    - type: custom:mushroom-title-card
+      title: Stue
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_living
+      - type: entity
+        entity: sensor.humidity_living
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_living
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.downlights_living
+        name: Spottekasse
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: light.spottrack4_living
+        name: Spotteskinne
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.pendants_living
+        name: Spisebord
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: light.mood_ball
+        name: Fargekule
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: switch.lamp_mushroom_living
+        name: Sopplampe
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: switch.lamp_globe_living
+        name: Globus
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.heater_living
+      name: Panelovn
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+    
+    # KJØKKEN
+    # Title
+    - type: custom:mushroom-title-card
+      title: Kjøkken
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_kitchen
+      - type: entity
+        entity: sensor.humidity_kitchen
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_kitchen
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.pendants_kitchen
+        name: Flowerpots
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: light.spottrack6_kitchen
+        name: Spotteskinner
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.lightstrip_undershelf_kitchen
+        name: Oppvasklys
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.heater_kitchen
+      name: Panelovn
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+    
+    # SOVEROM
+    # Title
+    - type: custom:mushroom-title-card
+      title: Soverom
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_bedroom
+      - type: entity
+        entity: sensor.humidity_bedroom
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_bedroom
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.pendant_bedroom
+        name: Pendel
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.heater_bedroom
+      name: Panelovn
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
