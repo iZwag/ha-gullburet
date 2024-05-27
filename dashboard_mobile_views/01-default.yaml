@@ -18,28 +18,25 @@ cards:
     # Top navigation
     - type: custom:mushroom-chips-card
       alignment: justify
-      card_mod:
-        style: |
-          ha-card {
-            --chip-background: rgba(25, 25, 25, 0.2);
-            --primary-text-color: var(--secondary-text-color);
-          }
       chips:
-        - type: action
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-mobile/start
-          icon: mdi:home
-        - type: action
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-mobile/heating
-          icon: mdi:heat-wave
         - type: action
           tap_action:
             action: navigate
             navigation_path: /lovelace/0
           icon: mdi:cog
+          icon_color: light-grey
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/heating
+          icon: mdi:heat-wave
+          icon_color: deep-orange
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/start
+          icon: mdi:home
+          icon_color: primary
     # Greeting title card
     - type: custom:mushroom-title-card
       title: |
@@ -385,3 +382,286 @@ cards:
         - 'off'
       show_temperature_control: true
       layout: horizontal
+    
+    # BAD
+    # Title
+    - type: custom:mushroom-title-card
+      title: Bad
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_bath
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_bath
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.downlights_bath
+        name: Spotter
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: light.lightstrip_bath
+        name: Badelys
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.floor_heat_bath
+      name: Gulvvarme
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+    
+    # KONTOR
+    # Title
+    - type: custom:mushroom-title-card
+      title: Kontor
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_office
+      - type: entity
+        entity: sensor.humidity_office
+      #- type: entity
+      #  icon: mdi:heat-wave
+      #  entity: input_select.heating_mode_office
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.pendants_office
+        name: Pendler
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    #- type: custom:mushroom-climate-card
+    #  entity: climate.heater_bedroom
+    #  name: Panelovn
+    #  hvac_modes:
+    #    - heat
+    #    - 'off'
+    #  show_temperature_control: true
+    #  layout: horizontal
+
+    # ENTRE
+    # Title
+    - type: custom:mushroom-title-card
+      title: Entré
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_entry
+      - type: entity
+        entity: sensor.humidity_entry
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.downlights_entry
+        name: Spotter
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: switch.plug_tablet_charger
+            state_not: on
+        card:
+          type: tile
+          entity: switch.plug_tablet_charger
+          name: Statusskjerm
+          color: accent
+          tap_action:
+            action: toggle
+          hold_action:
+            action: more-info
+
+    # VERANDA
+    # Title
+    - type: custom:mushroom-title-card
+      title: Veranda
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_outdoor
+      - type: entity
+        entity: sensor.humidity_outdoor
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: switch.plug_switch_string_lights_bryter
+        icon: mdi:string-lights
+        name: Lyslenker
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+      - type: tile
+        entity: light.wall_lantern_veranda
+        name: Vegglys
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+
+    # GJESTEROM
+    # Title
+    - type: custom:mushroom-title-card
+      title: June-/Gjesterommet
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_guest
+      - type: entity
+        entity: sensor.humidity_guest
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_guest
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.pendant_guest
+        name: Skypendel
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.heater_guest
+      name: Panelovn
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+
+    # WC
+    # Title
+    - type: custom:mushroom-title-card
+      title: Toalett
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_toilet
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_toilet
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.downlight_toilet
+        name: Takspott
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+    # Floor heat
+    - type: custom:mushroom-climate-card
+      entity: climate.floor_heat_toilet
+      name: Gulvvarme
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+
+    # BOD
+    # Title
+    - type: custom:mushroom-title-card
+      title: Bod
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_storage
+    # Lights
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: light.ceiling_light_storage
+        name: Taklys
+        color: accent
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
