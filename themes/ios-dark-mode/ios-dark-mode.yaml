@@ -58,7 +58,7 @@ ios-dark-mode:
   ha-card-background: var(--card-background-color) # Changed below
   paper-card-background-color: var(--ha-card-background)
   code-editor-background-color: var(--disabled-text-color)
-  ha-card-border-width: 0 # from https://github.com/basnijholt/lovelace-ios-dark-mode-theme/issues/82
+  ha-card-border-width: 0px
   # Toggles
   paper-toggle-button-checked-button-color: "#484848"
   paper-toggle-button-checked-bar-color: "#484848"
@@ -140,3 +140,15 @@ ios-dark-mode:
 
   # For the custom:mini-media-player
   # mini-media-player-scale: 1.25
+  mini-media-player-overlay-color-stop: 1%
+
+  # CARD MOD THEME 
+  # Mods that are applied to all defined components
+  card-mod-theme: ios-dark-mode
+  # Changing sidebar-views to have the sidebar on the left instead of right
+  card-mod-view-yaml: |
+    hui-sidebar-view $: |
+      .container {
+        flex-direction: row-reverse;
+      }
+    
