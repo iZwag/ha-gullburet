@@ -78,6 +78,8 @@ cards:
         content: >
           {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
           {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
+      - type: entity
+        entity: sensor.tibber_power_consumption_realtime
     # Aktivere vekkerutine
     - type: horizontal-stack
       cards:
