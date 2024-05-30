@@ -856,3 +856,39 @@
       {% else %}
         weekday
       {% endif %}
+
+# Momentary, combined power consumption values
+- sensor:
+  - name: Power - Momentary light consumption
+    unique_id: power_momentary_light_consumption
+    device_class: power
+    unit_of_measurement: 'W'
+    state: >
+      {% set sensors = [
+        states('sensor.power_downlight_toilet') | float(default=0),
+        states('sensor.power_downlights_bath') | float(default=0),
+        states('sensor.power_downlights_entry') | float(default=0),
+        states('sensor.power_downlights_living') | float(default=0),
+        states('sensor.power_lightstrip_bath') | float(default=0),
+        states('sensor.power_pendant_bedroom') | float(default=0),
+        states('sensor.power_pendant_guest') | float(default=0),
+        states('sensor.power_pendants_kitchen') | float(default=0),
+        states('sensor.power_pendants_living') | float(default=0),
+        states('sensor.power_pendants_office') | float(default=0),
+        states('sensor.power_spottrack_kitchen') | float(default=0),
+        states('sensor.power_spottrack_living') | float(default=0)
+      ] %}
+      {{ sensors | sum }}
+
+  - name: Power - Other momentary consumption
+    unique_id: power_other_momentary_consumption
+    device_class: power
+    unit_of_measurement: 'W'
+    state: >
+      {% set total = states('sensor.tibber_power_consumption_realtime') | float(default=0) %}
+      {% set lights = states('sensor.power_momentary_light_consumption') | float(default=0) %}
+      {% if (total - lights) < 0 %}
+        {{ 0 }}
+      {% else %}
+        {{ total - lights }}
+      {% endif %}
