@@ -167,7 +167,6 @@ ios-dark-mode:
       #main {
         padding-top: 4px;
         padding-right: 4px;
-        padding-bot: 4px;
       }
     .: |  
       hui-sidebar-view {
