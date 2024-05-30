@@ -1,8 +1,0 @@
-kiosk_mode:
-  hide_header: true
-  hide_sidebar: true  
-
-# "custom:button-card" button templates used in the views.
-button_card_templates: !include button_card_templates.yaml
-
-views: !include_dir_list "/config/tablet_test_views/"
