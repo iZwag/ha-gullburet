@@ -1,20 +1,21 @@
+# MAIN VIEW
 path: main
 type: sidebar
 theme: ios-dark-mode
 cards:
-  # Sidebar column
-  #- type: custom:mod-card
-  #  card_mod:
-  #    style: |
-  #      ha-card {
-  #        background-color: var(--ha-card-background);
-  #        border-radius: var(--ha-card-border-radius);
-  #      }
-  #  card:
+  # SIDEBAR CONTENTS
   - type: vertical-stack
     view_layout:
       position: sidebar
     cards:
+    # Display Clock
+    - type: custom:button-card
+      entity: sensor.time
+      template: navbar_clock
+    # Display Date string
+    - type: custom:button-card
+      entity: sensor.date_string
+      template: navbar_datestring
     - type: custom:button-card
       icon: mdi:home
       name: Dashboard
@@ -24,8 +25,6 @@ cards:
       tap_action:
         action: navigate
         navigation_path: /tablet-test/main/dashboard
-      view_layout:
-        position: sidebar
     - type: custom:button-card
       icon: mdi:floor-plan
       name: Floorplan control
@@ -33,8 +32,6 @@ cards:
       tap_action:
         action: navigate
         navigation_path: /tablet-test
-      view_layout:
-        position: sidebar
     - type: custom:button-card
       icon: mdi:thermometer
       name: Climate control
@@ -42,8 +39,6 @@ cards:
       tap_action:
         action: navigate
         navigation_path: /tablet-test
-      view_layout:
-        position: sidebar
     - type: custom:button-card
       icon: mdi:bed
       name: Bedtime & wake-up
@@ -52,7 +47,7 @@ cards:
         action: navigate
         navigation_path: /tablet-test
   
-  # Main content
+  # MAIN SECTION CONTENT
   - type: "custom:bootstrap-grid-card"
     cards:
       - type: row
