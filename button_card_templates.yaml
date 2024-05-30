@@ -1,0 +1,462 @@
+# NAVIGATION BUTTONS IN SIDEBAR
+navbar_button:
+  variables:
+    link_active: "false"
+  layout: icon_name_state
+  styles:
+    grid:
+      - grid-template-areas: '"s n i"'
+      - grid-template-columns: 12.5% 1fr 20%
+    card:
+      #- box-shadow: "0px 0.2vw 0.8vw 0px rgba(0,0,0,0.1)"
+      - background-color: rgba(25,25,25,0.75)
+      - padding: var(--ha-card-padding)
+      - border: >
+          [[[ 
+            if (variables.link_active == "true") return "solid 1px var(--accent-color)";
+            return "none";
+          ]]]
+      
+      #- --keep-background: "true"
+    icon:
+      - width: 26px
+      - height: 26px
+      - color: >
+          [[[ 
+            if (variables.link_active == "true") return "var(--primary-text-color)";
+            return "var(--secondary-text-color)";
+          ]]]
+    name:
+      - align-self: middle
+      - justify-self: start
+      - color: >
+          [[[ 
+            if (variables.link_active == "true") return "var(--primary-text-color)";
+            return "var(--secondary-text-color)";
+          ]]]
+    custom_fields:
+      notification:
+        - background-color: >
+            [[[
+              if (variables.link_active == "true") return "var(--accent-color)";
+              return "rgba(0,0,0,0)";
+            ]]]
+        - color: rgba(0,0,0,0)
+        - border-radius: 50%
+        - position: absolute
+        - left: 8%
+        - top: 45%
+        - height: 7px
+        - width: 7px
+  custom_fields:
+    notification: false
+
+navbar_clock:
+  layout: icon_state
+  show_icon: false
+  show_state: true
+  show_name: false
+  show_label: false
+  styles:
+    grid:
+      - grid-template-areas: '"i s n"'
+      - grid-template-columns: "12.5% 1fr 1%"
+    card:
+      - padding: 32px 12px 0px
+      - background-color: transparent
+      - pointer-events: none
+    state:
+      - justify-self: start
+      - color: var(--primary-text-color)
+      - font-size: 5.41vw
+      - font-weight: 200
+      - letter-spacing: '-0.05vw'
+  tap_action:
+    action: none
+  hold_action:
+    action: none
+
+navbar_datestring:
+  layout: icon_state
+  show_icon: false
+  show_state: true
+  show_name: false
+  show_label: false
+  styles:
+    grid:
+      - grid-template-areas: '"i s n"'
+      - grid-template-columns: 12.5% 1fr 1%
+    card:
+      - padding: 0px 12px 32px
+      - background-color: transparent
+      - pointer-events: none
+    state:
+      - justify-self: start
+      - color: var(--primary-text-color)
+      - font-size: 1.3vw
+      - font-weight: 300
+      - letter-spacing: '-0.05vw'
+  tap_action:
+    action: none
+  hold_action:
+    action: none
+
+
+# LIGHT MODES: ALL ON, ALL OFF, BEDTIME ETC.
+# Vertically aligned with icon on top, name on bottom.
+light_mode:
+  show_state: false
+  size: 20px
+  #aspect_ratio: 3/2
+  styles:
+    card:
+      - border-radius: var(--button-card-border-radius)
+      - background: var(--button-card-background)
+      - margin: "0px !important"
+      - padding: 7px # This makes it match 50px height
+    name:
+      - font-size: "0.8em"
+      - color: var(--secondary-text-color)
+
+# Same as above, but highlights ON-state with the background, and adds
+# toggle-action on tap.
+light_mode_toggle:
+  show_state: false
+  size: 20px
+  #aspect_ratio: 3/2
+  styles:
+    card:
+      - border-radius: var(--button-card-border-radius)
+      - background: >
+          [[[
+            if (entity.state == "on") return "var(--button-card-active-background)";
+            return "var(--button-card-background)";
+          ]]]
+      - margin: "0px !important"
+      - padding: 7px # This makes it match 50px height
+    name:
+      - font-size: "0.8em"
+      - color: var(--secondary-text-color)
+  tap_action:
+    action: toggle
+
+# THERMOSTAT PROGRAM/MANUAL TOGGLE SWITCH
+thermostat_program:
+  layout: icon_name
+  state:
+    - value: "on"
+      name: "Program"
+      icon: mdi:toggle-switch
+      color: rgb(255, 111, 34)
+    - value: "off"
+      name: "Manuell"
+      icon: mdi:toggle-switch-off
+      color: rgb(85, 85, 85)
+  styles:
+    grid:
+      - grid-template-areas: '"s n i l"'
+      - grid-template-columns: 20% 1fr 1fr 20%
+    card:
+      - padding-top: 0%
+      - padding-bottom: 0%
+      - height: "5vh"
+      - background: var(--button-card-background)
+      - border-radius: var(--button-card-border-radius)
+
+# Button template that represents one option of an input_select entity
+# Give entity as part of card definition, and also set variable to the
+#  target option, such that if its active it gets highlighted.
+input_select_buttons:
+  variables:
+    select_option: "off"
+  size: 20px
+  #show_name: false
+  show_state: false
+  tap_action:
+    action: call-service
+    service: input_select.select_option
+    target:
+      entity_id: '[[[ return entity.entity_id ]]]'
+    data:
+      option: >
+        [[[
+          if (variables.select_option == entity.state) return "off";
+          return variables.select_option;
+        ]]]
+  styles:
+    card: 
+      - padding: 7px # This makes it match 50px height
+      - margin: 0px
+      - background-color: >
+          [[[
+            if (variables.select_option == entity.state) return "var(--button-card-active-background)";
+            return "var(--button-card-background)";
+          ]]]
+      - border-radius: var(--button-card-border-radius)
+    icon:
+      - color: var(--primary-text-color)
+    name:
+      - font-size: "0.8em"
+      - color: var(--secondary-text-color)
+
+vacuum_fan_speed:
+  variables:
+    fan_speed: "Standard"
+  size: 26px
+  show_name: false
+  tap_action:
+    action: call-service
+    service: vacuum.set_fan_speed
+    target:
+      entity_id: '[[[ return entity.entity_id ]]]'
+    data:
+      fan_speed: '[[[ return variables.fan_speed ]]]'
+  styles:
+    card: 
+      - padding: var(--ha-card-padding)
+      - margin: 0px
+      - background-color: >
+          [[[
+            if (variables.fan_speed == entity.attributes.fan_speed) return "var(--button-card-active-background)";
+            return "var(--button-card-background)";
+          ]]]
+      - border-radius: var(--button-card-border-radius)
+    icon:
+      - color: var(--primary-text-color)
+
+# TODO: Disable the card from working if Esmeralda is already cleaning
+vacuum_fan_and_room:
+  variables:
+    fan_speed: "Standard"
+    target_room: 16
+  size: 26px
+  show_name: false
+  tap_action:
+    action: call-service
+    service: script.robot_clean_target_room
+    data:
+      room_number_id: '[[[ return variables.target_room ]]]'
+      fan_speed: '[[[ return variables.fan_speed ]]]'
+  styles:
+    card: 
+      - padding: var(--ha-card-padding)
+      - margin: 0px
+      - background: var(--button-card-background)
+      - border-radius: var(--button-card-border-radius)
+    icon:
+      - color: var(--primary-text-color)
+
+vacuum_mopping:
+  size: 26px
+  show_name: false
+  styles:
+    card: 
+      - padding: var(--ha-card-padding)
+      - margin: 0px
+      - background-color: var(--button-card-background)
+      - border-radius: var(--button-card-border-radius)
+    icon:
+      - color: var(--primary-text-color)
+
+
+#################################################
+# ICON MAIN CSS
+#################################################
+icon_main:
+  styles:
+    icon:
+      - display: flex
+  extra_styles: |
+    .ha-card.button-card-main{
+        padding: 0 !important;
+    }
+    @media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2),
+    only screen and (                min-resolution: 192dpi),
+    only screen and (                min-resolution: 2dppx) {
+
+      /* Retina-specific screens */
+      .ha-card.button-card-main{
+          padding: 0 !important;
+        }
+
+    }
+
+#################################################
+# CIRCLE
+# A progress-circle inside the icon-background 
+# that shows the brightness
+#################################################
+circle:
+  custom_fields:
+    circle: >
+      [[[
+        if (entity.state === 'on') {
+          const input = variables.circle_input;
+          const radius = 23;
+          const circumference = radius * 2 * Math.PI;
+          return `
+            <svg width="100%" viewBox="0 0 50 50">
+              <style>
+                circle {
+                  transform: rotate(-90deg);
+                  transform-origin: 50% 50%;
+                  stroke-dasharray: ${circumference};
+                  stroke-dashoffset: ${circumference - input / 100 * circumference};
+                }
+                tspan {
+                  font-size: 10px;
+                }
+              </style>
+              <circle cx="25" cy="25" r="${radius}" stroke="${variables.circle_color}" stroke-width="2" fill="none" />
+            </svg>
+          `;
+        }
+      ]]]
+  styles:
+    custom_fields:
+      circle:
+        - top: 0%
+        - left: 0%
+        - width: 3vw
+        - position: absolute
+        - letter-spacing: 0.03vw
+
+#################################################
+# LIGHT
+#################################################
+light:
+  template:
+    - icon_main
+    #- circle
+  show_state: false
+  show_icon: true
+  show_name: false
+  show_label: false
+  size: 60%
+  color: auto
+  color_type: icon
+  tap_action:
+    action: toggle
+    haptic: light
+  hold_action:
+    action: more-info 
+  styles:
+    card:
+      - width: 3vw
+      - height: 3vw
+      - border-radius: 8vw
+      - background-color: >
+          [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
+  #variables:
+    #circle_input: >
+    #  [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+    #circle_color: var(--button-card-light-color)
+  
+#################################################
+# WHITE LIGHT
+#################################################
+light_white:
+  template:
+    - icon_main
+    #- circle
+  show_state: false
+  show_icon: true
+  show_name: false
+  show_label: false
+  size: 60%
+  color_type: icon
+  color: rgb(255, 159, 0)
+  color_off: rgb(255, 255, 255)
+  tap_action:
+    action: toggle
+    haptic: light
+  styles:
+    card:
+      - width: 3vw
+      - height: 3vw
+      - border-radius: 8vw
+      - background-color: >
+          [[[ return (entity.state === 'on' || entity.state === 'home') ? 'rgba(255, 255, 255, 1.0)' : 'rgba(115, 115, 115, 0.6)'; ]]]
+  #variables:
+    #circle_input: >
+    #  [[[ return Math.round(entity.attributes.brightness / 2.54); ]]]
+  hold_action:
+    action: more-info 
+
+
+#############################################################################
+# HEAT DEVICE ICON
+#############################################################################
+heat_device:
+  template:
+    - icon_main
+  show_state: false
+  show_icon: true
+  show_name: false
+  show_label: false
+  size: 60%
+  color: auto
+  color_type: icon
+  tap_action:
+    action: more-info
+  hold_action:
+    action: more-info
+  extra_styles: |
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 111, 0, 0.6);
+      }
+      80% {
+        box-shadow: 0 0 0 8px rgba(255, 111, 0, 0.6);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 111, 0, 0);
+      }
+    }
+  styles:
+    icon:
+      - color: >
+          [[[ 
+            if (entity.state == 'on') {
+              return 'rgba(255, 111, 0, 1.0)';
+            }
+            if (entity.state == 'heat') {
+              if (entity.attributes.hvac_action == 'heating' ) {
+                return 'rgba(255, 111, 0, 1.0)';
+              }
+            }
+            return 'rgba(255, 255, 255, 1.0)';
+          ]]]
+    card:
+      - width: 3vw
+      - height: 3vw
+      - border-radius: 8vw
+      - display: >
+          [[[
+            if (entity.state == 'on') {
+              return 'flex';
+            }
+            if (entity.state == 'heat') {
+              if (entity.attributes.hvac_action == 'heating' ) {
+                return 'flex';
+              }
+            }
+            return 'none';
+          ]]]
+      - background-color: >
+          [[[ 
+            if (entity.state == 'on') {
+              return 'rgba(255, 111, 0, 0.25)';
+            }
+            if (entity.state == 'heat') {
+              if (entity.attributes.hvac_action == 'heating' ) {
+                return 'rgba(255, 111, 0, 0.25)';
+              }
+            }
+            return 'rgba(115, 115, 115, 0.6)';
+          ]]]
+      - animation: pulse 3s ease-in infinite
