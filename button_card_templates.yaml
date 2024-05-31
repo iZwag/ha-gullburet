@@ -9,14 +9,18 @@ navbar_button:
       - grid-template-columns: 12.5% 1fr 20%
     card:
       #- box-shadow: "0px 0.2vw 0.8vw 0px rgba(0,0,0,0.1)"
-      - background-color: rgba(25,25,25,0.75)
-      - padding: var(--ha-card-padding)
-      - border: >
-          [[[ 
-            if (variables.link_active == "true") return "solid 1px var(--accent-color)";
-            return "none";
+      - background-color: >
+          [[[
+            if (variables.link_active == "true") return "var(--button-card-active-background)";
+            return "var(--button-card-background)";
           ]]]
-      
+      - padding: var(--ha-card-padding)
+      #- border: >
+      #    [[[ 
+      #      if (variables.link_active == "true") return "solid 1px var(--accent-color)";
+      #      return "none";
+      #    ]]]
+      #
       #- --keep-background: "true"
     icon:
       - width: 26px
@@ -62,7 +66,7 @@ navbar_clock:
       - grid-template-areas: '"i s n"'
       - grid-template-columns: "12.5% 1fr 1%"
     card:
-      - padding: 32px 12px 0px
+      - padding: 5vh 12px 0px
       - background-color: transparent
       - pointer-events: none
     state:
@@ -87,7 +91,7 @@ navbar_datestring:
       - grid-template-areas: '"i s n"'
       - grid-template-columns: 12.5% 1fr 1%
     card:
-      - padding: 0px 12px 32px
+      - padding: 0px 12px 5vh
       - background-color: transparent
       - pointer-events: none
     state:
