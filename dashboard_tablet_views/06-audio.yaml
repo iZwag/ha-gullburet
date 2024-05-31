@@ -523,7 +523,7 @@ cards:
                   title: ''
                   sections:
                   - media browser
-                  entityId: media_player.sonos_kitchen
+                  entityId: media_player.sonos_move
                   mediaBrowserTitle: ''
                   hideBrowseMediaButton: true
                   mediaBrowserHideTitleForThumbnailIcons: true
