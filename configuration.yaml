@@ -30,12 +30,6 @@ lovelace:
       title: Tablet
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
-    tablet-test:
-      mode: yaml
-      filename: tablet-test.yaml
-      title: Tablet Test
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
     dashboard-mobile:
       mode: yaml
       filename: dashboard-mobile.yaml
