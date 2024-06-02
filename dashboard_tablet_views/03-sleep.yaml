@@ -1,133 +1,98 @@
+# SLEEP VIEW: BEDTIME & WAKEUP
 title: Bedtime & wakeup
 path: sleep
-background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
-type: "custom:ha-dashboard"
+type: sidebar
 theme: ios-dark-mode
-badges: []
-usePanel: true
-sidebar:
-  screenMinWidth: 828
-  buttons: []
-  stickyCards:
-    - type: picture-elements
-      image: "/local/ui/clck-background.png"
-      elements:
-        - type: state-label
-          entity: sensor.time
-          hold_action:
-            action: none
-          style:
-            color: var(--primary-text-color)
-            font-size: 5.41vw
-            font-weight: 200
-            left: 16%
-            letter-spacing: "-0.05vw"
-            max-width: 1px
-            top: 37.5%
-            pointer-events: none
-          tap_action:
-            action: none
-        - type: state-label
-          entity: sensor.date_string
-          hold_action:
-            action: none
-          style:
-            color: var(--secondary-text-color)
-            font-size: 1.3vw
-            font-weight: 300
-            left: 31.5%
-            letter-spacing: "-0.05vw"
-            text-align: left
-            top: 65%
-            width: 30%
-            pointer-events: none
-          tap_action:
-            action: none
-  cards:
-    - type: custom:stack-in-card
-      mode: vertical
-      keep:
-        border_radius: true
-        margin: true
-        box_shadow: true
-        background: true
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+cards:
+  # SIDEBAR CONTENTS
+  - type: vertical-stack
+    view_layout:
+      position: sidebar
+    cards:
+    # Display Clock
+    - type: custom:button-card
+      entity: sensor.time
+      template: navbar_clock
+    # Display Date string
+    - type: custom:button-card
+      entity: sensor.date_string
+      template: navbar_datestring
+    # NAVBUTTONS
+    # Dashboard
+    - type: custom:button-card
+      template: navbar_button
+      name: Dashboard
+      icon: mdi:home
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/dashboard
+    - type: custom:button-card
+      template: navbar_button
+      name: Floorplan control
+      icon: mdi:floor-plan      
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/floorplan
+    - type: custom:button-card
+      template: navbar_button
+      name: Bedtime & wake-up
+      icon: mdi:bed
+      variables:
+        link_active: "true"
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/sleep
+    - type: custom:button-card
+      icon: mdi:chart-bar
+      name: Consumption
+      template: navbar_button
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/consumption
+    - type: custom:button-card
+      icon: mdi:star
+      name: Special
+      template: navbar_button
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/special
+    - type: custom:button-card
+      icon: mdi:speaker
+      name: Listen
+      template: navbar_button
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-tablet/audio
+    # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
+    - type: custom:button-card
+      color_type: blank_card
+      styles:
+        card:
+          - height: 25vh
+          - background-color: transparent
+    - type: custom:mushroom-chips-card
+      alignment: center
       card_mod:
         style: |
           ha-card {
-            padding: 0% 1% 0% 1%;
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
           }
-      cards:
-        - type: "custom:button-card"
-          icon: mdi:home
-          name: Dashboard
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/dashboard
-        - type: "custom:button-card"
-          icon: mdi:floor-plan
-          name: Floorplan control
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/floorplan
-        - type: "custom:button-card"
-          icon: mdi:bed
-          name: Bedtime & wake-up
-          template: navbar_button
-          variables:
-            link_active: "true"
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/sleep
-        - type: "custom:button-card"
-          icon: mdi:chart-bar
-          name: Consumption
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/consumption
-        - type: "custom:button-card"
-          icon: mdi:star
-          name: Special
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/special
-        - type: "custom:button-card"
-          icon: mdi:speaker
-          name: Listen
-          template: navbar_button
-          tap_action:
-            action: navigate
-            navigation_path: /dashboard-tablet/audio
-        # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
-        - type: "custom:button-card"
-          color_type: blank_card
-          styles:
-            card:
-              - height: 25vh
-        - type: custom:mushroom-chips-card
-          alignment: center
-          card_mod:
-            style: |
-              ha-card {
-                --chip-background: rgba(25, 25, 25, 0.2);
-                --primary-text-color: var(--secondary-text-color);
-              }
-          chips:
-          - type: action
-            tap_action:
-              action: navigate
-              navigation_path: /lovelace/0
-            icon: mdi:cog
-          - type: entity
-            entity: sensor.temperature_apartment_avg
-          - type: weather
-            entity: weather.yr_weather_home
-            show_temperature: true
-            show_conditions: true
-cards:
+      chips:
+      - type: action
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/0
+        icon: mdi:cog
+      - type: entity
+        entity: sensor.temperature_apartment_avg
+      - type: weather
+        entity: weather.yr_weather_home
+        show_temperature: true
+        show_conditions: true
+
+  # MAIN VIEW CONTENT
   - type: "custom:bootstrap-grid-card"
     #container_padding: 10px
     #use_hass_style_gutter: true
@@ -509,9 +474,7 @@ cards:
                   primary: Wake-up audio
                   secondary: |-
                     {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      {% set weekday_alarm = states('input_datetime.wakeup_alarm_weekdays') %}
-                      {% set weekend_alarm = states('input_datetime.wakeup_alarm_weekends') %}
-                      {% set alarm_time = weekday_alarm if now().weekday() < 5 else weekend_alarm %}
+                      {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
                       Starts at {{ alarm_time.split(':')[0:2] | join(':') }}
                     {% else %}
                       Not active
