@@ -93,442 +93,426 @@ cards:
         show_conditions: true
 
   # MAIN VIEW CONTENT
-  - type: "custom:bootstrap-grid-card"
-    #container_padding: 10px
-    #use_hass_style_gutter: true
-    #hass_style_gutter_size: "10px"
-    cards:
-      - type: row
+  - type: custom:mod-card
+    card_mod:
+      style: |
+        ha-card {
+          padding: 0px 5vw;
+        }
+    card:
+      type: horizontal-stack
+      cards:
+      # Bedtime column
+      - type: vertical-stack
+        class: "col-md-5"
         cards:
-        # Whitespace left
-        - type: vertical-stack
-          class: "col-md-1"
-          cards:
-          - type: custom:button-card
-            color_type: blank_card
-            styles:
-              card:
-              - background-color: transparent
-          # Bedtime column
-        # Bedtime column
-        - type: vertical-stack
-          class: "col-md-5"
-          cards:
-            # BEDTIME TITLE
-            - type: markdown
-              content: "# Bedtime"
+          # BEDTIME TITLE
+          - type: markdown
+            content: "# Bedtime"
+            card_mod:
+              style:
+                ha-markdown$: |
+                  h1 {
+                    font-weight: 300;
+                  }
+                .: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+                  ha-markdown {
+                    padding: var(--ha-card-padding) !important;
+                  }
+          # BEDTIME CONTROLS
+          - type: custom:stack-in-card
+            mode: vertical
+            cards:
+            - type: custom:mushroom-template-card
+              entity: input_boolean.bedtime_trigger_active
+              primary: Bedtime routine enabled
+              secondary: '{{ states(''input_boolean.bedtime_trigger_active'').capitalize() }}'
+              icon: |-
+                {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
+                  mdi:bed
+                {% else %}
+                  mdi:bed-empty
+                {% endif %}
+              icon_color: |-
+                {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
+                  accent
+                {% else %}
+                  disabled
+                {% endif %}
+              tap_action:
+                action: toggle
+              hold_action:
+                action: more-info
               card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
-            # BEDTIME CONTROLS
-            - type: custom:stack-in-card
-              mode: vertical
+                style: |
+                  ha-card {
+                    background-color: transparent !important;
+                  }
+            - type: horizontal-stack
               cards:
+              - type: custom:time-picker-card
+                entity: input_datetime.bedtime_trigger_weekdays
+                hour_mode: 24
+                hour_step: 1
+                minute_step: 5
+                layout:
+                  hour_mode: double
+                  align_controls: center
+                  name: header
+                hide:
+                  seconds: true
+                name: Sunday - Thursday
+                link_values: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      --tpc-elements-background-color: var(--button-card-background) !important;
+                      --tpc-icon-color: var(--secondary-text-color);
+                      background-color: transparent !important;
+                      padding-left: 12px !important;
+                    }
+                    .time-picker-header {
+                      border-top-left-radius: 0px !important;
+                      border-top-right-radius: 0px !important;
+                      font-weight: 500;
+                    }
+              - type: custom:time-picker-card
+                entity: input_datetime.bedtime_trigger_weekends
+                hour_mode: 24
+                hour_step: 1
+                minute_step: 5
+                layout:
+                  hour_mode: double
+                  align_controls: center
+                  name: header
+                hide:
+                  seconds: true
+                name: Friday & Saturday
+                link_values: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      --tpc-elements-background-color: var(--button-card-background) !important;
+                      --tpc-icon-color: var(--secondary-text-color);
+                      background-color: transparent !important;
+                      padding-right: 12px !important;
+                    }
+                    .time-picker-header {
+                      border-top-left-radius: 0px !important;
+                      border-top-right-radius: 0px !important;
+                      font-weight: 500;
+                    }
+          # BEDTIME INFO
+          - type: custom:stack-in-card
+            mode: vertical
+            keep:
+              background: false
+            cards:
+              - type: custom:mushroom-template-card
+                entity: input_boolean.bedtime_heating_sheet_enable
+                icon: mdi:heating-coil
+                primary: Automatic heated sheet
+                secondary: |-
+                  {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
+                    Starts preheating {{ (state_attr('sensor.bedtime_heated_sheet_start_time', 'time')).split(':')[0:2] | join(':') }}
+                  {% else %}
+                    Not active
+                  {% endif %}
+                icon_color: |-
+                  {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
+                    white
+                  {% else %}
+                    disabled
+                  {% endif %}
+                badge_icon: mdi:numeric-1-circle
+                badge_color: black
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: more-info
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: transparent !important;
+                    }
               - type: custom:mushroom-template-card
                 entity: input_boolean.bedtime_trigger_active
-                primary: Bedtime routine enabled
-                secondary: '{{ states(''input_boolean.bedtime_trigger_active'').capitalize() }}'
-                icon: |-
+                icon: mdi:bed
+                primary: Bedtime goal
+                secondary: |-
                   {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                    mdi:bed
+                    {% set weekday_trigger = states('input_datetime.bedtime_trigger_weekdays') %}
+                    {% set weekend_trigger = states('input_datetime.bedtime_trigger_weekends') %}
+                    {% set trigger_time = weekend_trigger if (3 < now().weekday() < 6) else weekday_trigger  %}
+                    {{ trigger_time.split(':')[0:2] | join(':') }}
                   {% else %}
-                    mdi:bed-empty
+                    Not active
                   {% endif %}
                 icon_color: |-
                   {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                    accent
+                    white
                   {% else %}
                     disabled
                   {% endif %}
+                badge_icon: mdi:numeric-2-circle
+                badge_color: black
                 tap_action:
-                  action: toggle
+                  action: none
                 hold_action:
-                  action: more-info
+                  action: none
                 card_mod:
                   style: |
                     ha-card {
                       background-color: transparent !important;
                     }
-              - type: horizontal-stack
-                cards:
-                - type: custom:time-picker-card
-                  entity: input_datetime.bedtime_trigger_weekdays
-                  hour_mode: 24
-                  hour_step: 1
-                  minute_step: 5
-                  layout:
-                    hour_mode: double
-                    align_controls: center
-                    name: header
-                  hide:
-                    seconds: true
-                  name: Sunday - Thursday
-                  link_values: true
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --tpc-elements-background-color: var(--button-card-background) !important;
-                        --tpc-icon-color: var(--secondary-text-color);
-                        background-color: transparent !important;
-                        padding-left: 12px !important;
-                      }
-                      .time-picker-header {
-                        border-top-left-radius: 0px !important;
-                        border-top-right-radius: 0px !important;
-                        font-weight: 500;
-                      }
-                - type: custom:time-picker-card
-                  entity: input_datetime.bedtime_trigger_weekends
-                  hour_mode: 24
-                  hour_step: 1
-                  minute_step: 5
-                  layout:
-                    hour_mode: double
-                    align_controls: center
-                    name: header
-                  hide:
-                    seconds: true
-                  name: Friday & Saturday
-                  link_values: true
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --tpc-elements-background-color: var(--button-card-background) !important;
-                        --tpc-icon-color: var(--secondary-text-color);
-                        background-color: transparent !important;
-                        padding-right: 12px !important;
-                      }
-                      .time-picker-header {
-                        border-top-left-radius: 0px !important;
-                        border-top-right-radius: 0px !important;
-                        font-weight: 500;
-                      }
-            # BEDTIME INFO
-            - type: custom:stack-in-card
-              mode: vertical
-              keep:
-                background: false
+          # HEATED SHEET CONTROL
+          - type: custom:stack-in-card
+            mode: vertical
+            cards:
+            - type: custom:timer-bar-card
+              entity: timer.heated_sheet_timer
+              name: "Heated sheet timer"
+              invert: true
+              bar_direction: rtl
+              mushroom:
+                layout: horizontal
+                color: deep-orange
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+            - type: horizontal-stack
               cards:
-                - type: custom:mushroom-template-card
-                  entity: input_boolean.bedtime_heating_sheet_enable
-                  icon: mdi:heating-coil
-                  primary: Automatic heated sheet
-                  secondary: |-
-                    {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
-                      Starts preheating {{ (state_attr('sensor.bedtime_heated_sheet_start_time', 'time')).split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-1-circle
-                  badge_color: black
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-                - type: custom:mushroom-template-card
-                  entity: input_boolean.bedtime_trigger_active
-                  icon: mdi:bed
-                  primary: Bedtime goal
-                  secondary: |-
-                    {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                      {% set weekday_trigger = states('input_datetime.bedtime_trigger_weekdays') %}
-                      {% set weekend_trigger = states('input_datetime.bedtime_trigger_weekends') %}
-                      {% set trigger_time = weekend_trigger if (3 < now().weekday() < 6) else weekday_trigger  %}
-                      {{ trigger_time.split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-2-circle
-                  badge_color: black
-                  tap_action:
-                    action: none
-                  hold_action:
-                    action: none
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-            # HEATED SHEET CONTROL
-            - type: custom:stack-in-card
-              mode: vertical
+              - type: tile
+                entity: script.bedroom_heated_sheet_control
+                color: white
+                icon: mdi:chevron-up
+                hide_state: true
+                name: Timer +30 min
+                tap_action:
+                  action: call-service
+                  service: script.bedroom_heated_sheet_control
+                  data:
+                    command: up
+                    increase: 00:30:00
+                icon_tap_action:
+                  action: call-service
+                  service: script.bedroom_heated_sheet_control
+                  data:
+                    command: up
+                    increase: 00:30:00
+              - type: tile
+                entity: script.bedroom_heated_sheet_control
+                color: white
+                icon: mdi:chevron-down
+                hide_state: true
+                name: Timer -10 min
+                tap_action:
+                  action: call-service
+                  service: script.bedroom_heated_sheet_control
+                  data:
+                    command: down
+                    decrease: 00:10:00
+                icon_tap_action:
+                  action: call-service
+                  service: script.bedroom_heated_sheet_control
+                  data:
+                    command: down
+                    decrease: 00:10:00
+      # #####################################################################
+      # WAKE-UP COLUMN
+      - type: vertical-stack
+        class: "col-md-5"
+        cards:
+          # WAKE-UP TITLE
+          - type: markdown
+            content: "# Wake-up"
+            card_mod:
+              style:
+                ha-markdown$: |
+                  h1 {
+                    font-weight: 300;
+                  }
+                .: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+                  ha-markdown {
+                    padding: var(--ha-card-padding) !important;
+                  }
+          # WAKE-UP CONTROLS
+          - type: custom:stack-in-card
+            mode: vertical
+            cards:
+            - type: custom:mushroom-template-card
+              entity: input_boolean.wakeup_alarm_active
+              primary: Wake-up routine enabled
+              secondary: '{{ states(''input_boolean.wakeup_alarm_active'').capitalize() }}'
+              icon: |-
+                {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                  mdi:alarm-check
+                {% else %}
+                  mdi:alarm-off
+                {% endif %}
+              icon_color: |-
+                {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                  accent
+                {% else %}
+                  disabled
+                {% endif %}
+              tap_action:
+                action: toggle
+              hold_action:
+                action: more-info
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: transparent !important;
+                  }
+            - type: horizontal-stack
               cards:
-              - type: custom:timer-bar-card
-                entity: timer.heated_sheet_timer
-                name: "Heated sheet timer"
-                invert: true
-                bar_direction: rtl
-                mushroom:
-                  layout: horizontal
-                  color: deep-orange
+              - type: custom:time-picker-card
+                entity: input_datetime.wakeup_alarm_weekdays
+                hour_mode: 24
+                hour_step: 1
+                minute_step: 5
+                layout:
+                  hour_mode: double
+                  align_controls: center
+                  name: header
+                hide:
+                  seconds: true
+                name: Monday - Friday
+                link_values: true
                 card_mod:
                   style: |
                     ha-card {
-                      background-color: var(--nested-card-background);
+                      --tpc-elements-background-color: var(--button-card-background) !important;
+                      --tpc-icon-color: var(--secondary-text-color);
+                      background-color: transparent !important;
+                      padding-left: 12px !important;
                     }
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  entity: script.bedroom_heated_sheet_control
-                  color: white
-                  icon: mdi:chevron-up
-                  hide_state: true
-                  name: Timer +30 min
-                  tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: up
-                      increase: 00:30:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: up
-                      increase: 00:30:00
-                - type: tile
-                  entity: script.bedroom_heated_sheet_control
-                  color: white
-                  icon: mdi:chevron-down
-                  hide_state: true
-                  name: Timer -10 min
-                  tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: down
-                      decrease: 00:10:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: down
-                      decrease: 00:10:00
-        # #####################################################################
-        # WAKE-UP COLUMN
-        - type: vertical-stack
-          class: "col-md-5"
-          cards:
-            # WAKE-UP TITLE
-            - type: markdown
-              content: "# Wake-up"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
+                    .time-picker-header {
+                      border-top-left-radius: 0px !important;
+                      border-top-right-radius: 0px !important;
+                      font-weight: 500;
                     }
-                  .: |
+              - type: custom:time-picker-card
+                entity: input_datetime.wakeup_alarm_weekends
+                hour_mode: 24
+                hour_step: 1
+                minute_step: 5
+                layout:
+                  hour_mode: double
+                  align_controls: center
+                  name: header
+                hide:
+                  seconds: true
+                name: Saturday & Sunday
+                link_values: true
+                card_mod:
+                  style: |
                     ha-card {
-                      background-color: var(--nested-card-background);
+                      --tpc-elements-background-color: var(--button-card-background) !important;
+                      --tpc-icon-color: var(--secondary-text-color);
+                      background-color: transparent !important;
+                      padding-right: 12px !important;
                     }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
+                    .time-picker-header {
+                      border-top-left-radius: 0px !important;
+                      border-top-right-radius: 0px !important;
+                      font-weight: 500;
                     }
-            # WAKE-UP CONTROLS
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
+          # WAKE-UP INFO
+          - type: custom:stack-in-card
+            mode: vertical
+            keep:
+              background: false
+            cards:
+              - type: custom:mushroom-template-card
+                entity: sensor.wakeup_light_start_time
+                icon: mdi:sun-clock
+                primary: Wake-up light
+                secondary: |-
+                  {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                    Starts at {{ (state_attr('sensor.wakeup_light_start_time', 'time')).split(':')[0:2] | join(':') }}
+                  {% else %}
+                    Not active
+                  {% endif %}
+                icon_color: |-
+                  {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                    white
+                  {% else %}
+                    disabled
+                  {% endif %}
+                badge_icon: mdi:numeric-1-circle
+                badge_color: black
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: transparent !important;
+                    }
               - type: custom:mushroom-template-card
                 entity: input_boolean.wakeup_alarm_active
-                primary: Wake-up routine enabled
-                secondary: '{{ states(''input_boolean.wakeup_alarm_active'').capitalize() }}'
-                icon: |-
+                icon: mdi:alarm-note
+                primary: Wake-up audio
+                secondary: |-
                   {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                    mdi:alarm-check
+                    {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
+                    Starts at {{ alarm_time.split(':')[0:2] | join(':') }}
                   {% else %}
-                    mdi:alarm-off
+                    Not active
                   {% endif %}
                 icon_color: |-
                   {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                    accent
+                    white
                   {% else %}
                     disabled
                   {% endif %}
+                badge_icon: mdi:numeric-2-circle
+                badge_color: black
                 tap_action:
-                  action: toggle
+                  action: none
                 hold_action:
-                  action: more-info
+                  action: none
                 card_mod:
                   style: |
                     ha-card {
                       background-color: transparent !important;
                     }
-              - type: horizontal-stack
-                cards:
-                - type: custom:time-picker-card
-                  entity: input_datetime.wakeup_alarm_weekdays
-                  hour_mode: 24
-                  hour_step: 1
-                  minute_step: 5
-                  layout:
-                    hour_mode: double
-                    align_controls: center
-                    name: header
-                  hide:
-                    seconds: true
-                  name: Monday - Friday
-                  link_values: true
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --tpc-elements-background-color: var(--button-card-background) !important;
-                        --tpc-icon-color: var(--secondary-text-color);
-                        background-color: transparent !important;
-                        padding-left: 12px !important;
-                      }
-                      .time-picker-header {
-                        border-top-left-radius: 0px !important;
-                        border-top-right-radius: 0px !important;
-                        font-weight: 500;
-                      }
-                - type: custom:time-picker-card
-                  entity: input_datetime.wakeup_alarm_weekends
-                  hour_mode: 24
-                  hour_step: 1
-                  minute_step: 5
-                  layout:
-                    hour_mode: double
-                    align_controls: center
-                    name: header
-                  hide:
-                    seconds: true
-                  name: Saturday & Sunday
-                  link_values: true
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --tpc-elements-background-color: var(--button-card-background) !important;
-                        --tpc-icon-color: var(--secondary-text-color);
-                        background-color: transparent !important;
-                        padding-right: 12px !important;
-                      }
-                      .time-picker-header {
-                        border-top-left-radius: 0px !important;
-                        border-top-right-radius: 0px !important;
-                        font-weight: 500;
-                      }
-            # WAKE-UP INFO
-            - type: custom:stack-in-card
-              mode: vertical
-              keep:
-                background: false
-              cards:
-                - type: custom:mushroom-template-card
-                  entity: sensor.wakeup_light_start_time
-                  icon: mdi:sun-clock
-                  primary: Wake-up light
-                  secondary: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      Starts at {{ (state_attr('sensor.wakeup_light_start_time', 'time')).split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-1-circle
-                  badge_color: black
-                  tap_action:
-                    action: none
-                  hold_action:
-                    action: none
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-                - type: custom:mushroom-template-card
-                  entity: input_boolean.wakeup_alarm_active
-                  icon: mdi:alarm-note
-                  primary: Wake-up audio
-                  secondary: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
-                      Starts at {{ alarm_time.split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-2-circle
-                  badge_color: black
-                  tap_action:
-                    action: none
-                  hold_action:
-                    action: none
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-                - type: custom:mushroom-template-card
-                  entity: sensor.wakeup_last_call_time
-                  icon: mdi:bed-clock
-                  primary: Last call
-                  secondary: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      Starts at {{ (state_attr('sensor.wakeup_last_call_time', 'time')).split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-3-circle
-                  badge_color: black
-                  tap_action:
-                    action: none
-                  hold_action:
-                    action: none
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-        # Whitespace right
-        - type: vertical-stack
-          class: "col-md-1"
-          cards:
-          - type: custom:button-card
-            color_type: blank_card
-            styles:
-              card:
-              - background-color: transparent
+              - type: custom:mushroom-template-card
+                entity: sensor.wakeup_last_call_time
+                icon: mdi:bed-clock
+                primary: Last call
+                secondary: |-
+                  {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                    Starts at {{ (state_attr('sensor.wakeup_last_call_time', 'time')).split(':')[0:2] | join(':') }}
+                  {% else %}
+                    Not active
+                  {% endif %}
+                icon_color: |-
+                  {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+                    white
+                  {% else %}
+                    disabled
+                  {% endif %}
+                badge_icon: mdi:numeric-3-circle
+                badge_color: black
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: transparent !important;
+                    }
+      
