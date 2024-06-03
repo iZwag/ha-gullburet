@@ -95,6 +95,7 @@ cards:
   # MAIN VIEW CONTENT
   - type: custom:mod-card
     card_mod:
+      # Add 5% padding on both sides of the main content
       style: |
         ha-card {
           padding: 0px 5vw;
@@ -102,9 +103,8 @@ cards:
     card:
       type: horizontal-stack
       cards:
-      # Bedtime column
+      # BEDTIME COLUMN
       - type: vertical-stack
-        class: "col-md-5"
         cards:
           # BEDTIME TITLE
           - type: markdown
@@ -326,7 +326,6 @@ cards:
       # #####################################################################
       # WAKE-UP COLUMN
       - type: vertical-stack
-        class: "col-md-5"
         cards:
           # WAKE-UP TITLE
           - type: markdown
