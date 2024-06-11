@@ -246,7 +246,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.mood_ball
+        entity: light.mood_lamp_living
         name: Fargekule
         color: accent
         tap_action:
@@ -507,11 +507,11 @@ cards:
       - type: conditional
         conditions:
           - condition: state
-            entity: switch.plug_tablet_charger
+            entity: switch.tablet_charger_entry
             state_not: on
         card:
           type: tile
-          entity: switch.plug_tablet_charger
+          entity: switch.tablet_charger_entry
           name: Statusskjerm
           color: accent
           tap_action:
@@ -541,7 +541,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: switch.plug_switch_string_lights_bryter
+        entity: switch.string_lights_veranda
         icon: mdi:string-lights
         name: Lyslenker
         color: accent
@@ -550,7 +550,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.wall_lantern_veranda
+        entity: light.wall_light_veranda
         name: Vegglys
         color: accent
         tap_action:

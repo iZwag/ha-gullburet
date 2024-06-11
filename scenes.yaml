@@ -31,7 +31,7 @@
     switch.lamp_mushroom_living:
       friendly_name: Lamp, mushroom
       state: unavailable
-    light.mood_ball:
+    light.mood_lamp_living:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
       min_mireds: 153
@@ -316,7 +316,7 @@
       friendly_name: Wall light, lantern
       supported_features: 40
       state: 'on'
-    switch.plug_switch_string_lights_bryter:
+    switch.string_lights_veranda:
       friendly_name: Plug switch, string lights Bryter
       state: 'on'
     input_boolean.lights_override_living:

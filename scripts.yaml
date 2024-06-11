@@ -96,7 +96,7 @@ all_lights_on:
       color_temp: 400
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.mood_ball
+      entity_id: light.mood_lamp_living
   - delay: 00:00:01
   - service: light.turn_on
     data:

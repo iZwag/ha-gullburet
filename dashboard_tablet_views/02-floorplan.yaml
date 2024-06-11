@@ -1784,12 +1784,12 @@ cards:
               - type: horizontal-stack
                 cards:
                 - type: tile
-                  entity: switch.plug_switch_string_lights_bryter
+                  entity: switch.string_lights_veranda
                   icon: mdi:string-lights
                   name: String lights
                   color: white
                 - type: tile
-                  entity: light.wall_lantern_veranda
+                  entity: light.wall_light_veranda
                   icon: mdi:coach-lamp
                   name: Wall lantern
                   color: white                   
@@ -2022,7 +2022,7 @@ cards:
             # VERANDA WALL LANTERN
             - type: custom:button-card
               template: light
-              entity: light.wall_lantern_veranda
+              entity: light.wall_light_veranda
               style:
                 left: 53.5%
                 top: 6.5%
