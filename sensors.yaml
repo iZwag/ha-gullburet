@@ -266,3 +266,49 @@
         {% set energy = states('sensor.tibber_prices') | float(default=0) %}
         {% set grid = states('sensor.elvia_variable_pricing') | float(default=0) %}
         {{ energy + grid }}
+
+# Power sensors
+- platform: template
+  sensors:
+    # Chat-GPT aproximated model for power consumption, fitted using a
+    # exponential model: P(x) = a * e^(b*x) + c, where x = brightness
+    # Measurements: 1% = 1.1W, 50% = 4.7W, 75% = 9.8W, 85% = 12.9W, 90% = 14.8W, 95% = 17W, 100% = 20W
+    power_lightstrip_kitchen:
+      friendly_name: "Lightstrip under-shelf power, kitchen"
+      device_class: power
+      unit_of_measurement: W
+      value_template: >
+        {% if is_state('light.lightstrip_undershelf_kitchen', 'on') %}
+          {% set brightness_int = state_attr('light.lightstrip_undershelf_kitchen', 'brightness') | int %}
+          {% set brightness = ((brightness_int / 255) | float) * 100 %}
+          {% set a = 1.13587816 %}
+          {% set b = 0.02862676 %}
+          {% set c = -0.04965023 %}
+          {{ (a * (e ** (b * brightness)) + c) | round(1) }}
+        {% else %}
+          0
+        {% endif %}
+    
+    # Measured to be 3.3W when on
+    power_mushroom_living:
+      friendly_name: "Mushroom lamp power, living"
+      device_class: power
+      unit_of_measurement: W
+      value_template: >
+        {% if is_state('switch.lamp_mushroom_living', 'on') %}
+          3.3
+        {% else %}
+          0
+        {% endif %}
+
+    # Measured to be 3.3W when on
+    power_stringlights_veranda:
+      friendly_name: "String lights power, veranda"
+      device_class: power
+      unit_of_measurement: W
+      value_template: >
+        {% if is_state('switch.string_lights_veranda', 'on') %}
+          7.1
+        {% else %}
+          0
+        {% endif %}
