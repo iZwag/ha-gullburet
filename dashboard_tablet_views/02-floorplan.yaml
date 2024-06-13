@@ -1950,7 +1950,7 @@ cards:
             # LIVING ROOM MOOD BALL
             - type: custom:button-card
               template: light
-              entity: light.mood_ball
+              entity: light.mood_lamp_living
               style:
                 left: 50%
                 top: 38%

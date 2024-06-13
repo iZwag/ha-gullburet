@@ -49,7 +49,7 @@
   - service: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
-      light_entity: light.mood_ball
+      light_entity: light.mood_lamp_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living mood ball
   - service: script.masterdim_script
