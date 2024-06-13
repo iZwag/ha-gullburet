@@ -93,23 +93,18 @@ cards:
         show_conditions: true
 
   # MAIN VIEW CONTENT
-  - type: "custom:bootstrap-grid-card"
-    #container_padding: 10px
-    #use_hass_style_gutter: true
-    #hass_style_gutter_size: "10px"
-    cards:
-    - type: row
+  - type: custom:mod-card
+    card_mod:
+      # Add 5% padding on both sides of the main content
+      style: |
+        ha-card {
+          padding: 0px 5vw;
+        }
+    card:
+      type: horizontal-stack
       cards:
+      # Left column
       - type: vertical-stack
-        class: "col-md-1"
-        cards:
-        - type: custom:button-card
-          color_type: blank_card
-          styles:
-            card:
-            - background-color: transparent
-      - type: vertical-stack
-        class: "col-md-10"
         cards:
         - type: horizontal-stack
           cards:
@@ -269,31 +264,37 @@ cards:
                   icon: mdi:cash
                 - entity: sensor.tibber_energy_consumption_this_month
                   name: Power consumption
-            - type: gauge
+            - type: custom:bar-card
+              icon: mdi:lightning-bolt
+              #entities:
+              #  - entity: sensor.tibber_power_consumption_realtime
               entity: sensor.tibber_power_consumption_realtime
               min: 0
-              max: 8800
-              needle: false
+              max: 8000
+              title: Apartment power consumption
               severity:
-                green: 1
-                yellow: 2000
-                red: 5000
-              name: Power consumption (realtime)
-              card_mod:
-                style:
-                  ha-gauge $ svg.gauge: |
-                    .dial {
-                      stroke: var(--ha-card-background) !important;
-                      stroke-width: 5 !important;
-                    }
-                    .value {
-                      stroke-width: 5 !important;
-                    }
-                  .: | 
-                    ha-card {
-                      background-color: transparent;
-                      padding: 0 var(--ha-card-padding) var(--ha-card-padding) !important;
-                    }    
+                - color: '#1aff66'
+                  from: 0
+                  to: 1999
+                - color: '#fdca40'
+                  from: 2000
+                  to: 4999
+                - color: red
+                  from: 5000
+              positions:
+                icon: 'off'
+                indicator: 'off'
+                name: 'off'
+              style: |
+                bar-card-value {
+                  padding-right: 12px;
+                  font-size: 1.3em;
+                }
+                bar-card-backgroundbar {
+                  background-color: #FFFFFF80;
+                }
+        
+        # Last row 
         - type: horizontal-stack
           cards:
           - type: entities
@@ -327,11 +328,3 @@ cards:
               - entity: sensor.motion_battery_storage
                 name: Sensor, storage
             state_color: true
-      - type: vertical-stack
-        class: "col-md-1"
-        cards:
-        - type: custom:button-card
-          color_type: blank_card
-          styles:
-            card:
-            - background-color: transparent
