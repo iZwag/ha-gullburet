@@ -464,108 +464,196 @@ cards:
           show_departures: 3
           walking_distance: 5          
       # #################################################################
-      # MONTHLY MAX-HOUR AVERAGE VS. CURRENT HOUR COMPARISON
-      # This shows a little apartment "mini-game" where the goal is to
-      # have the current hour energy consumption stay below the "Average"
-      # or at least the "Price level limit"
-      - type: custom:apexcharts-card
-        card_mod:
-          style: |
-            ha-card {
-              padding: var(--ha-card-padding) var(--ha-card-padding) 0 !important;
-            }
-            #spinner-wrapper {
-              display: none !important;
-            }
-            #header {
-              padding: 0 16px !important;
-            }
-            #header__title {
-              font-size: 1em !important;
-              font-weight: regular !important;
-              color: var(--primary-text-color) !important;
-            }
-        chart_type: radialBar
-        apex_config:
-          legend:
-            show: false
-          chart:
-            height: 250px
-          plotOptions:
-            radialBar:
-              inverseOrder: true
-              hollow:
-                image: '/local/ui/google-icon-electric-bolt-128px.png'
-                imageClipped: false
-                imageWidth: 50
-                imageHeight: 50
-                size: 40%
-        header:
-          show: true
-          title: 'Current hour vs. this month max-hour average'
-          show_states: true
-          colorize_states: true
-        series:
-          # Current hour (chart)
-          - entity: sensor.tibber_percentage_of_maxlevel
-            name: Current hour
-            show:
-              in_header: false
-            color: '#1aff66'
-            data_generator: |
-              const sensor_percent = parseFloat(entity.state);
-              return [[new Date().getTime(), sensor_percent]];
-          # Current hour (header)
-          - entity: sensor.tibber_energy_consumption_current_hour
-            name: Current hour
-            show:
-              in_chart: false
-            unit: ' kWh'
-            color: '#1aff66'
-            float_precision: 2
-          # Estimated (header)
-          - entity: sensor.tibber_estimated_energy_consumption
-            name: Estimated
-            show:
-              in_chart: false
-            unit: ' kWh'
-            color: '#fdca40'
-            float_precision: 2
-          # Estimated (chart)
-          - entity: sensor.tibber_percentage_of_maxlevel
-            name: Hour estimate (Tibber)
-            show:
-              in_header: false
-            unit: ' kWh'
-            color: '#fdca40'
-            data_generator: |
-              const sensor_percent = parseFloat(entity.attributes.estimate);
-              return [[new Date().getTime(), sensor_percent]];
-          # Max-hour average (chart)
-          - entity: sensor.power_monthly_maxhour_average
-            name: Average
-            show:
-              in_header: false
-            unit: ' %'
-            color: '#d24dff'
-            data_generator: |
-              const sensor_percent = parseFloat(entity.attributes.prcnt_of_limit);
-              return [[new Date().getTime(), sensor_percent]];
-          # Max-hour average (header)
-          - entity: sensor.power_monthly_maxhour_average
-            name: Average
-            show:
-              in_chart: false
-            unit: ' kWh'
-            color: '#d24dff'
-            float_precision: 2
-          # Price level (header)
-          - entity: sensor.elvia_active_fixed_price_level
-            name: Price level limit
-            show:
-              in_chart: false
-            unit: ' kWh'
-            color: red
-            data_generator: |
-              const sensorValueKWh = parseFloat(entity.attributes.level_max);
-              return [[new Date().getTime(), sensorValueKWh]];
+      # MOMENTARY ENERGY AND POWER
+      - type: horizontal-stack
+        cards:
+        # MONTHLY MAX-HOUR AVERAGE VS. CURRENT HOUR COMPARISON
+        # This shows a little apartment "mini-game" where the goal is to
+        # have the current hour energy consumption stay below the "Average"
+        # or at least the "Price level limit"
+        - type: custom:apexcharts-card
+          card_mod:
+            style: |
+              ha-card {
+                padding-top: var(--ha-card-padding) !important;
+              }
+              #spinner-wrapper {
+                display: none !important;
+              }
+              #header {
+                padding: 0 16px !important;
+              }
+              #header__title {
+                font-size: 1em !important;
+                font-weight: regular !important;
+                color: var(--primary-text-color) !important;
+              }
+          chart_type: radialBar
+          apex_config:
+            legend:
+              show: false
+            chart:
+              height: 250px
+            plotOptions:
+              radialBar:
+                inverseOrder: true
+                hollow:
+                  image: '/local/ui/google-icon-electric-bolt-128px.png'
+                  imageClipped: false
+                  imageWidth: 50
+                  imageHeight: 50
+                  size: 40%
+          header:
+            show: true
+            title: 'Current hour vs. price level'
+            show_states: true
+            colorize_states: true
+          series:
+            # Current hour (chart)
+            - entity: sensor.tibber_percentage_of_maxlevel
+              name: Current hour
+              show:
+                in_header: false
+              color: '#1aff66'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            # Current hour (header)
+            - entity: sensor.tibber_energy_consumption_current_hour
+              name: Current hour
+              show:
+                in_chart: false
+              unit: ' kWh'
+              color: '#1aff66'
+              float_precision: 2
+            # Estimated (header)
+            #- entity: sensor.tibber_estimated_energy_consumption
+            #  name: Estimated
+            #  show:
+            #    in_chart: false
+            #  unit: ' kWh'
+            #  color: '#fdca40'
+            #  float_precision: 2
+            # Estimated (chart)
+            - entity: sensor.tibber_percentage_of_maxlevel
+              name: Hour estimate (Tibber)
+              show:
+                in_header: false
+              unit: ' kWh'
+              color: '#fdca40'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.attributes.estimate);
+                return [[new Date().getTime(), sensor_percent]];
+            # Max-hour average (chart)
+            - entity: sensor.power_monthly_maxhour_average
+              name: Average
+              show:
+                in_header: false
+              unit: ' %'
+              color: '#d24dff'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.attributes.prcnt_of_limit);
+                return [[new Date().getTime(), sensor_percent]];
+            # Max-hour average (header)
+            #- entity: sensor.power_monthly_maxhour_average
+            #  name: Average
+            #  show:
+            #    in_chart: false
+            #  unit: ' kWh'
+            #  color: '#d24dff'
+            #  float_precision: 2
+            # Price level (header)
+            - entity: sensor.elvia_active_fixed_price_level
+              name: Price level limit
+              show:
+                in_chart: false
+              unit: ' kWh'
+              color: red
+              data_generator: |
+                const sensorValueKWh = parseFloat(entity.attributes.level_max);
+                return [[new Date().getTime(), sensorValueKWh]];
+
+        # MOMENTARY POWER CONSUMPTION CATEGORIES
+        - type: custom:apexcharts-card
+          card_mod:
+            style: |
+              ha-card {
+                padding-top: var(--ha-card-padding) !important;
+              }
+              #spinner-wrapper {
+                display: none !important;
+              }
+              #header {
+                padding: 0 16px !important;
+              }
+              #header__title {
+                font-size: 1em !important;
+                font-weight: regular !important;
+                color: var(--primary-text-color) !important;
+              } 
+          chart_type: donut
+          apex_config:
+            legend:
+              show: false
+            chart:
+              height: 250px
+          header:
+            show: true
+            title: Power distribution
+            show_states: true
+            colorize_states: true
+          series:
+            - entity: sensor.tibber_power_consumption_realtime
+              name: Realtime total apartment consumption
+              show:
+                in_chart: false
+              unit: ' W'
+              color: '#1aff66'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            - entity: sensor.power_momentary_light_consumption
+              name: Lights
+              color: '#1aff66'
+              show:
+                in_header: false
+              unit: ' W'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            - entity: sensor.power_momentary_heating_consumption
+              name: Heating
+              color: '#fdca40'
+              show:
+                in_header: false
+              unit: ' W'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            - entity: sensor.power_momentary_static_consumption
+              name: Static
+              color: '#1AC8ED'
+              show:
+                in_header: false
+              unit: ' W'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            - entity: sensor.power_momentary_dynamic_consumption
+              name: Dynamic
+              color: '#d24dff'
+              show:
+                in_header: false
+              unit: ' W'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            - entity: sensor.power_other_momentary_consumption
+              name: Other
+              color: '#343434'
+              show:
+                in_header: false
+              unit: ' W'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
