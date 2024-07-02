@@ -1,6 +1,6 @@
 # SPECIAL VIEW
-title: Special
-path: special
+title: Guests
+path: guests
 type: sidebar
 theme: ios-dark-mode
 background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
@@ -49,14 +49,14 @@ cards:
         action: navigate
         navigation_path: /dashboard-tablet/consumption
     - type: custom:button-card
-      icon: mdi:star
-      name: Special
+      icon: mdi:information-slab-circle
+      name: Guest info
       template: navbar_button
       variables:
         link_active: "true"
       tap_action:
         action: navigate
-        navigation_path: /dashboard-tablet/special
+        navigation_path: /dashboard-tablet/guests
     - type: custom:button-card
       icon: mdi:speaker
       name: Listen
@@ -111,7 +111,7 @@ cards:
           cards:
           # Title card: Guests
           - type: markdown
-            content: "# Guests"
+            content: "# Guest room"
             card_mod:
               style:
                 ha-markdown$: |
@@ -140,26 +140,27 @@ cards:
                     ha-card {
                       background-color: var(--nested-card-background);
                     }
-              - type: custom:mushroom-chips-card
-                alignment: end
+              - type: tile
+                entity: schedule.heating_sleep_guest
+                color: black
+                name: Sleep schedule
+                hide_state: false
+                tap_action:
+                  action: more-info
+                hold_action:
+                  action: more-info
                 card_mod:
                   style: |
                     ha-card {
-                      --chip-background: rgba(25, 25, 25, 0.2);
-                      --primary-text-color: var(--secondary-text-color);
+                      background-color: var(--nested-card-background);
                     }
-                chips:
-                - type: entity
-                  content_info: name
-                  name: Thermostat sleep schedule
-                  entity: schedule.heating_sleep_guest
             - type: horizontal-stack
               cards:
               - type: tile
                 entity: input_number.temperature_sleep_guest
                 hide_state: true
                 icon: mdi:thermometer
-                name: Guest room sleep
+                name: Sleep temperature
                 features:
                   - type: numeric-input
                     style: buttons
@@ -172,7 +173,7 @@ cards:
                 entity: input_number.temperature_away_guest
                 hide_state: true
                 icon: mdi:thermometer
-                name: Guest room away
+                name: Away temperature
                 features:
                   - type: numeric-input
                     style: buttons
@@ -181,17 +182,23 @@ cards:
                     ha-card {
                       background-color: var(--nested-card-background);
                     }
-            - type: tile
-              entity: input_boolean.party_mode_enable
-              color: pink
-              name: Party mode
-              hide_state: true
-              card_mod:
-                style: |
+        - type: vertical-stack
+          cards:
+          - type: markdown
+            content: "# Wi-Fi"
+            card_mod:
+              style:
+                ha-markdown$: |
+                  h1 {
+                    font-weight: 300;
+                  }
+                .: |
                   ha-card {
                     background-color: var(--nested-card-background);
                   }
-        - type: vertical-stack
-          cards:  
-          - type: picture
-            image: /local/ui/guest-wifi-qr.png
+                  ha-markdown {
+                    padding: var(--ha-card-padding) !important;
+                  }
+          - type: custom:button-card
+            entity: input_boolean.guests_show_wifi
+            template: wifi_qr_code
