@@ -96,7 +96,7 @@ navbar_datestring:
       - pointer-events: none
     state:
       - justify-self: start
-      - color: var(--primary-text-color)
+      - color: var(--secondary-text-color)
       - font-size: 1.3vw
       - font-weight: 300
       - letter-spacing: '-0.05vw'
@@ -464,3 +464,18 @@ heat_device:
             return 'rgba(115, 115, 115, 0.6)';
           ]]]
       - animation: pulse 3s ease-in infinite
+
+#############################################################################
+# WI-FI QR CODE
+#############################################################################
+wifi_qr_code:
+  tap_action:
+    action: toggle
+  show_name: false
+  show_state: false
+  show_entity_picture: true
+  entity_picture: |
+    [[[
+      if (entity.state == 'on') return '/local/ui/guest-wifi-qr.png';
+      return '/local/ui/guest-wifi-qr-instructions.png';
+    ]]]
