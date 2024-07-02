@@ -34,6 +34,12 @@ cards:
         - type: action
           tap_action:
             action: navigate
+            navigation_path: /dashboard-mobile/special
+          icon: mdi:star
+          icon_color: purple
+        - type: action
+          tap_action:
+            action: navigate
             navigation_path: /dashboard-mobile/start
           icon: mdi:home
           icon_color: primary

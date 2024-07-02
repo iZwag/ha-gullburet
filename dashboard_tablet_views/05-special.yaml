@@ -93,171 +93,105 @@ cards:
         show_conditions: true
 
   # MAIN VIEW CONTENT
-  - type: "custom:bootstrap-grid-card"
-    #container_padding: 10px
-    #use_hass_style_gutter: true
-    #hass_style_gutter_size: "10px"
-    cards:
-    - type: row
+  - type: custom:mod-card
+    card_mod:
+      # Add 5% padding on both sides of the main content
+      style: |
+        ha-card {
+          padding: 0px 5vw;
+        }
+    card:
+      type: vertical-stack
       cards:
-      # 1st column
-      - type: vertical-stack
-        class: "col-md-6"
+      # 1st row
+      - type: horizontal-stack
         cards:
-        # Title card: Guests
-        - type: markdown
-          content: "# Guests"
-          card_mod:
-            style:
-              ha-markdown$: |
-                h1 {
-                  font-weight: 300;
-                }
-              .: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-                ha-markdown {
-                  padding: var(--ha-card-padding) !important;
-                }
-        - type: custom:stack-in-card
-          mode: vertical
+        # Guests column
+        - type: vertical-stack
           cards:
-          - type: horizontal-stack
-            cards:
-            - type: tile
-              entity: input_boolean.guest_mode_enable
-              color: purple
-              name: Guests staying
-              hide_state: true
-              card_mod:
-                style: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-            - type: custom:mushroom-chips-card
-              alignment: end
-              card_mod:
-                style: |
-                  ha-card {
-                    --chip-background: rgba(25, 25, 25, 0.2);
-                    --primary-text-color: var(--secondary-text-color);
-                  }
-              chips:
-              - type: entity
-                content_info: name
-                name: Thermostat sleep schedule
-                entity: schedule.heating_sleep_guest
-          - type: horizontal-stack
-            cards:
-            - type: tile
-              entity: input_number.temperature_sleep_guest
-              hide_state: true
-              icon: mdi:thermometer
-              name: Guest room sleep
-              features:
-                - type: numeric-input
-                  style: buttons
-              card_mod:
-                style: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-            - type: tile
-              entity: input_number.temperature_away_guest
-              hide_state: true
-              icon: mdi:thermometer
-              name: Guest room away
-              features:
-                - type: numeric-input
-                  style: buttons
-              card_mod:
-                style: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-          - type: tile
-            entity: input_boolean.party_mode_enable
-            color: pink
-            name: Party mode
-            hide_state: true
-            card_mod:
-              style: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-      # 2nd column
-      - type: vertical-stack
-        class: "col-md-6"
-        cards:
-        - type: markdown
-          content: "# Vacation"
-          card_mod:
-            style:
-              ha-markdown$: |
-                h1 {
-                  font-weight: 300;
-                }
-              .: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-                ha-markdown {
-                  padding: var(--ha-card-padding) !important;
-                }
-        - type: custom:stack-in-card
-          mode: vertical
-          cards:
+          # Title card: Guests
           - type: markdown
-            content: |
-              Automatically disables automations and sets thermostats to vacation temperatures.
-              Setting *return time* will make sure to automatically clean and return temperatures to normal 6h before.
+            content: "# Guests"
             card_mod:
-              style: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-                ha-markdown {
-                  padding: var(--ha-card-padding) !important;
-                }
-          - type: tile
-            entity: input_boolean.vacation_mode_enable
-            name: Vacation mode
-            hide_state: true
-            color: green
-            card_mod:
-              style: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-        - type: entities
-          entities:
-          - entity: input_datetime.vacation_return_time
-            name: 'Return from vacation time'
-            icon: mdi:home-import-outline
-    - type: row
-      cards:
-      - type: vertical-stack
-        class: "col-md-6"
-        cards:
-        - type: markdown
-          content: "# Seasonal"
-          card_mod:
-            style:
-              ha-markdown$: |
-                h1 {
-                  font-weight: 300;
-                }
-              .: |
-                ha-card {
-                  background-color: var(--nested-card-background);
-                }
-                ha-markdown {
-                  padding: var(--ha-card-padding) !important;
-                }
-        - type: entities
-          show_header_toggle: false
-          entities:
-            - entity: input_select.climate_season_select
-              name: Cold/warm season select
-          
+              style:
+                ha-markdown$: |
+                  h1 {
+                    font-weight: 300;
+                  }
+                .: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+                  ha-markdown {
+                    padding: var(--ha-card-padding) !important;
+                  }
+          - type: custom:stack-in-card
+            mode: vertical
+            cards:
+            - type: horizontal-stack
+              cards:
+              - type: tile
+                entity: input_boolean.guest_mode_enable
+                color: purple
+                name: Guests staying
+                hide_state: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: var(--nested-card-background);
+                    }
+              - type: custom:mushroom-chips-card
+                alignment: end
+                card_mod:
+                  style: |
+                    ha-card {
+                      --chip-background: rgba(25, 25, 25, 0.2);
+                      --primary-text-color: var(--secondary-text-color);
+                    }
+                chips:
+                - type: entity
+                  content_info: name
+                  name: Thermostat sleep schedule
+                  entity: schedule.heating_sleep_guest
+            - type: horizontal-stack
+              cards:
+              - type: tile
+                entity: input_number.temperature_sleep_guest
+                hide_state: true
+                icon: mdi:thermometer
+                name: Guest room sleep
+                features:
+                  - type: numeric-input
+                    style: buttons
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: var(--nested-card-background);
+                    }
+              - type: tile
+                entity: input_number.temperature_away_guest
+                hide_state: true
+                icon: mdi:thermometer
+                name: Guest room away
+                features:
+                  - type: numeric-input
+                    style: buttons
+                card_mod:
+                  style: |
+                    ha-card {
+                      background-color: var(--nested-card-background);
+                    }
+            - type: tile
+              entity: input_boolean.party_mode_enable
+              color: pink
+              name: Party mode
+              hide_state: true
+              card_mod:
+                style: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+        - type: vertical-stack
+          cards:  
+          - type: picture
+            image: /local/ui/guest-wifi-qr.png
