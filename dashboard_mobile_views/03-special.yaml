@@ -27,24 +27,37 @@ cards:
             navigation_path: /dashboard-mobile/start
           icon: mdi:home
           icon_color: primary
+    
+    # -----------------------------------------------
+    # MAIN SECTION
+    # -----------------------------------------------
+    # PARTY
+    # Title
+    - type: custom:mushroom-title-card
+      title: Fest
+    # Party mode enable
+    - type: tile
+      entity: input_boolean.party_mode_enable
+      color: pink
+      name: Festmodus!
+      hide_state: true
+    
     # VACATION
     # Title
     - type: custom:mushroom-title-card
       title: Ferie
+    # Instructions
     - type: markdown
       content: |
         Automatically disables automations and sets thermostats to vacation temperatures.
         Setting *return time* will make sure to automatically clean and return temperatures to normal 6h before.
+    # Vacation mode enable
     - type: tile
       entity: input_boolean.vacation_mode_enable
       name: Feriemodus
       hide_state: true
       color: green
-      card_mod:
-        style: |
-          ha-card {
-            background-color: var(--nested-card-background);
-          }
+    # Return home datetime
     - type: entities
       entities:
       - entity: input_datetime.vacation_return_time
