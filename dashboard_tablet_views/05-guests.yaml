@@ -103,13 +103,13 @@ cards:
     card:
       type: vertical-stack
       cards:
-      # 1st row
+      # 1ST MAIN ROW
       - type: horizontal-stack
         cards:
-        # Guests column
+        # Guest room column
         - type: vertical-stack
           cards:
-          # Title card: Guests
+          # Title
           - type: markdown
             content: "# Guest room"
             card_mod:
@@ -142,7 +142,7 @@ cards:
                     }
               - type: tile
                 entity: schedule.heating_sleep_guest
-                color: black
+                color: purple
                 name: Sleep schedule
                 hide_state: false
                 tap_action:
@@ -199,6 +199,113 @@ cards:
                   ha-markdown {
                     padding: var(--ha-card-padding) !important;
                   }
-          - type: custom:button-card
-            entity: input_boolean.guests_show_wifi
-            template: wifi_qr_code
+          - type: horizontal-stack
+            cards:
+            - type: vertical-stack
+              cards:
+              - type: custom:mushroom-template-card
+                primary: Gullburet-Guest
+                secondary: ''
+                icon: mdi:wifi
+                icon_color: light-blue
+              - type: custom:mushroom-template-card
+                primary: >
+                  {% if is_state('input_boolean.guest_show_wifi', 'on') %}
+                    {{ states('input_text.guest_wifi_password') }}
+                  {% else %}
+                    {{ "•••••••••••••" }} 
+                  {% endif %}
+                secondary: ''
+                icon: mdi:key
+                entity: input_boolean.guest_show_wifi
+                icon_color: >
+                  {% if is_state('input_boolean.guest_show_wifi', 'on') %}
+                    {{ light-blue }}
+                  {% else %}
+                    {{ disabled }} 
+                  {% endif %}
+            - type: custom:button-card
+              entity: input_boolean.guest_show_wifi
+              template: wifi_qr_code
+      # 2ND MAIN ROW
+      - type: horizontal-stack
+        cards:
+        - type: vertical-stack
+          cards:
+          # Title
+          - type: markdown
+            content: |
+              # Nearby public transport
+
+              Swipe to see different stops. House icon is this apartment.
+
+              Showing: **Sandaker Senter** (tram), **Storo** (subway/tram/bus), **Torshov** (bus/tram) and **Haarklous Plass** (bus).
+            card_mod:
+              style:
+                ha-markdown$: |
+                  h1 {
+                    font-weight: 300;
+                  }
+                .: |
+                  ha-card {
+                    background-color: var(--nested-card-background);
+                  }
+                  ha-markdown {
+                    padding: var(--ha-card-padding) !important;
+                  }
+          - type: custom:swipe-card
+            start_card: 1
+            reset_after: 600
+            cards:
+              - type: map
+                entities:
+                  - entity: sensor.ruter_sandaker_senter_platform_11752
+                    name: SandakerS.
+                  - entity: sensor.ruter_torshov_platform_11734
+                    name: Torshov
+                  - entity: sensor.ruter_haarklous_plass_platform_11766
+                    name: Haarklous
+                  - entity: zone.home
+                    label_mode: state
+                default_zoom: 15
+                aspect_ratio: 68%
+                fit_zones: true
+              - type: map
+                entities:
+                  - entity: sensor.ruter_sandaker_senter_platform_11752
+                    name: SandakerS.
+                  - entity: zone.home
+                    label_mode: state
+                default_zoom: 16
+                aspect_ratio: 68%
+                fit_zones: true
+              - type: map
+                entities:
+                  - entity: sensor.ruter_storo_platform_2
+                    name: Storo
+                  - entity: zone.home
+                    label_mode: state
+                default_zoom: 14
+                dark_mode: true
+                aspect_ratio: 68%
+                fit_zones: true
+              - type: map
+                entities:
+                  - entity: sensor.ruter_torshov_platform_11734
+                    name: Torshov
+                  - entity: zone.home
+                    label_mode: state
+                default_zoom: 16
+                aspect_ratio: 68%
+                fit_zones: true
+              - type: map
+                entities:
+                  - entity: sensor.ruter_haarklous_plass_platform_11766
+                    name: Haarklous
+                  - entity: zone.home
+                    label_mode: state
+                default_zoom: 16
+                aspect_ratio: 68%
+                fit_zones: true     
+        - type: custom:button-card
+          color_type: blank-card
