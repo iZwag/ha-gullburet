@@ -51,12 +51,12 @@ cards:
         action: navigate
         navigation_path: /dashboard-tablet/consumption
     - type: custom:button-card
-      icon: mdi:star
-      name: Special
+      icon: mdi:information-slab-circle
+      name: Guest info
       template: navbar_button
       tap_action:
         action: navigate
-        navigation_path: /dashboard-tablet/special
+        navigation_path: /dashboard-tablet/guests
     - type: custom:button-card
       icon: mdi:speaker
       name: Listen
