@@ -479,3 +479,9 @@ wifi_qr_code:
       if (entity.state == 'on') return '/local/ui/guest-wifi-qr.png';
       return '/local/ui/guest-wifi-qr-instructions.png';
     ]]]
+  styles:
+    card:
+    - background-color: transparent
+    - padding: 0px
+    icon:
+    - width: 88%
