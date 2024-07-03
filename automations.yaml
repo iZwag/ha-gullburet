@@ -154,6 +154,7 @@
       - input_boolean.lights_movie_mode
       - input_boolean.lights_dining_mode
       - input_boolean.lights_cooking_mode
+      - input_boolean.guest_show_wifi
     data: {}
   - service: script.deselect_floorplan_room
     data: {}
@@ -273,8 +274,8 @@
       sequence:
       - alias: Turn Tablet charge-switch ON
         type: turn_on
-        device_id: e7edcdcfed58b7cedd57142e4434bc5d
-        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
+        device_id: 08c265c1d754ce213325346cc0b673dc
+        entity_id: e014659779f203d9916e7f94a8109afb
         domain: switch
     - conditions:
       - condition: trigger
@@ -283,8 +284,8 @@
       sequence:
       - alias: Turn charge-switch OFF
         type: turn_off
-        device_id: e7edcdcfed58b7cedd57142e4434bc5d
-        entity_id: 82cd7e59d5a8397fb6ee740fcd273acf
+        device_id: 08c265c1d754ce213325346cc0b673dc
+        entity_id: e014659779f203d9916e7f94a8109afb
         domain: switch
   mode: single
 - id: '1713360573726'
@@ -585,8 +586,8 @@
         - sun-down
       sequence:
       - type: turn_on
-        device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
-        entity_id: f7e543af2bb56185534ecba1eb4a0c2d
+        device_id: 566fe21e7b944509a9e0d09103f0bba2
+        entity_id: cd7249fddd178416baa06258feb86991
         domain: switch
     - conditions:
       - condition: trigger
@@ -594,7 +595,85 @@
         - sun-dawn
       sequence:
       - type: turn_off
-        device_id: e115fa7aa6cbeb1d373b0ab0d7c808d0
-        entity_id: f7e543af2bb56185534ecba1eb4a0c2d
+        device_id: 566fe21e7b944509a9e0d09103f0bba2
+        entity_id: cd7249fddd178416baa06258feb86991
         domain: switch
+  mode: single
+- id: '1717858387784'
+  alias: Veranda - Handle remote presses L/R/MID/UP/DOWN
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.action_veranda_remote
+    to: arrow_right_click
+    id: right
+  - platform: state
+    entity_id:
+    - sensor.action_veranda_remote
+    to: arrow_left_click
+    id: left
+  - platform: state
+    entity_id:
+    - sensor.action_veranda_remote
+    to: toggle
+    id: middle
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - left
+      sequence:
+      - if:
+        - condition: not
+          conditions:
+          - condition: state
+            entity_id: sensor.curtain_state_living
+            state: stopped
+        then:
+        - service: cover.stop_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.curtain_living
+        else:
+        - service: cover.close_cover
+          target:
+            entity_id: cover.curtain_living
+          data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - right
+      sequence:
+      - if:
+        - condition: not
+          conditions:
+          - condition: state
+            entity_id: sensor.curtain_state_living
+            state: stopped
+        then:
+        - service: cover.stop_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.curtain_living
+        else:
+        - service: cover.open_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.curtain_living
+    - conditions:
+      - condition: trigger
+        id:
+        - middle
+      sequence:
+      - service: light.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.wall_light_veranda
   mode: single
