@@ -1,0 +1,85 @@
+title: Batteries
+path: batteries
+type: masonry
+icon: mdi:battery-charging
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+theme: ios-dark-mode
+cards:
+# The main column - Orders all of the content in one column
+- type: custom:mod-card
+  card_mod:
+    style: |
+      ha-card {
+        padding: 0px 12px 12px;
+      }
+  card:
+    type: vertical-stack
+    cards:
+    # Top navigation
+    - type: custom:mushroom-chips-card
+      alignment: justify
+      chips:
+        - type: back
+          icon_color: light-grey
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/start
+          icon: mdi:home
+          icon_color: primary
+    
+    # -----------------------------------------------
+    # MAIN SECTION
+    # -----------------------------------------------
+    # BATTERIES
+    # Title
+    - type: custom:mushroom-title-card
+      title: Batteristatus
+    # Rechargable batteries
+    - type: entities
+      title: Oppladbare batterier
+      show_header_toggle: false
+      state_color: true
+      entities:
+        - entity: sensor.esmeralda_battery
+          name: Esmeralda
+        - entity: sensor.sonos_move_battery
+          name: Sonos Move
+        - entity: sensor.lenovo_tab_m10_battery
+          name: Lenovo Tab M10
+          icon: mdi:battery
+        - entity: sensor.iphone_jon_battery
+          name: Jon's iPhone
+        - entity: sensor.curtains_battery_living
+          name: Gardinrobot, stue
+    - type: entities
+      title: CR2032
+      show_header_toggle: false
+      state_color: true
+      entities:
+        - entity: sensor.temperature_battery_bedroom
+          name: Sensor, bedroom
+        - entity: sensor.temperature_battery_entry
+          name: Sensor, entry
+        - entity: sensor.temperature_battery_kitchen
+          name: Sensor, kitchen
+        - entity: sensor.temperature_battery_living
+          name: Sensor, living room
+    - type: entities
+      title: CR2450
+      show_header_toggle: false
+      state_color: true
+      entities:
+        # Hue Dimmer Switches
+        - entity: sensor.temperature_battery_guest
+          name: Sensor, guest room
+        - entity: sensor.temperature_battery_office
+          name: Sensor, office
+    - type: entities
+      title: AAA
+      show_header_toggle: false
+      state_color: true
+      entities:  
+        - entity: sensor.motion_battery_storage
+          name: Sensor, storage
+    
