@@ -47,13 +47,13 @@
   trigger:
     - platform: state
       entity_id:
-        - switch.lenovo_tab_m10_fhd_plus_motion_detection
+        - switch.lenovo_tab_m10_motion_detection
       to: "on"
       id: tablet-motion-on
       alias: Tablet motion ON
     - platform: state
       entity_id:
-        - switch.lenovo_tab_m10_fhd_plus_motion_detection
+        - switch.lenovo_tab_m10_motion_detection
       to: "off"
       alias: Tablet motion OFF
       id: tablet-motion-off
@@ -68,7 +68,7 @@
             - alias: Turn Tablet screen ON
               service: switch.turn_on
               target:
-                entity_id: switch.lenovo_tab_m10_fhd_plus_screen
+                entity_id: switch.lenovo_tab_m10_screen
         - conditions:
             - condition: trigger
               id:
@@ -77,41 +77,7 @@
             - alias: Turn tablet screen OFF
               service: switch.turn_off
               target:
-                entity_id: switch.lenovo_tab_m10_fhd_plus_screen
-  mode: single
-- id: '1706625904243'
-  alias: Storage room light ON/OFF with motion/timer
-  description: ''
-  trigger:
-  - type: motion
-    platform: device
-    device_id: 824b5557f8c2ad8dfeb08dbd46c54633
-    entity_id: 70d72f7f452d91b4252ed7136974148c
-    domain: binary_sensor
-    id: motion
-  - platform: state
-    entity_id:
-    - timer.storage_room_light_timer
-    from: active
-    to: idle
-    id: timer
-  condition: []
-  action:
-  - if:
-    - condition: trigger
-      id:
-      - motion
-    then:
-    - service: script.storage_room_light_on_auto
-  - if:
-    - condition: trigger
-      id:
-      - timer
-    then:
-    - type: turn_off
-      device_id: 0f0cf256bc675de29f236888b06ff677
-      entity_id: fad54750e7aefa1a6178fdf5e8714bcc
-      domain: light
+                entity_id: switch.lenovo_tab_m10_screen
   mode: single
 
 - id: '1708597925586'

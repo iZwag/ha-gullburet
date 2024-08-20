@@ -677,3 +677,39 @@
         target:
           entity_id: light.wall_light_veranda
   mode: single
+- id: '1724167870416'
+  alias: Storage room light ON/OFF with motion/timer
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: b84fcc8638043ae4b155921ff3e1d28d
+    entity_id: 83e8a6edb56e981eb53faf14879e2aa2
+    domain: binary_sensor
+    id: motion
+  - platform: state
+    entity_id:
+    - timer.storage_room_light_timer
+    from: active
+    to: idle
+    id: timer
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - motion
+      sequence:
+      - service: script.storage_room_light_on_auto
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - timer
+      sequence:
+      - service: script.storage_room_light_off_finish_timer
+        metadata: {}
+        data: {}
+  mode: single
