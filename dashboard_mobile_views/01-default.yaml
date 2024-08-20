@@ -2,7 +2,7 @@ title: Start
 path: start
 type: masonry
 icon: mdi:cellphone
-#background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
 theme: ios-dark-mode
 cards:
 # The main column - Orders all of the content in one column
@@ -25,6 +25,12 @@ cards:
             navigation_path: /lovelace/0
           icon: mdi:cog
           icon_color: light-grey
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/batteries
+          icon: mdi:battery-charging
+          icon_color: teal
         - type: action
           tap_action:
             action: navigate
