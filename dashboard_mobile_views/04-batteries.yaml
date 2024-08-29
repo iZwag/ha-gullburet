@@ -58,13 +58,15 @@ cards:
       state_color: true
       entities:
         - entity: sensor.temperature_battery_bedroom
-          name: Sensor, bedroom
+          name: Sensor, soverom
         - entity: sensor.temperature_battery_entry
-          name: Sensor, entry
+          name: Sensor, entre
         - entity: sensor.temperature_battery_kitchen
-          name: Sensor, kitchen
+          name: Sensor, kjøkken
         - entity: sensor.temperature_battery_living
-          name: Sensor, living room
+          name: Sensor, stue
+        - entity: sensor.remote_battery_veranda
+          name: Gardinknapper
     - type: entities
       title: CR2450
       show_header_toggle: false
@@ -75,6 +77,10 @@ cards:
           name: Sensor, guest room
         - entity: sensor.temperature_battery_office
           name: Sensor, office
+        - entity: sensor.alarm_remote_battery
+          name: Vekkerklokke kontroll
+        - entity: sensor.sheet_remote_battery
+          name: Varmelaken kontroll
     - type: entities
       title: AAA
       show_header_toggle: false
