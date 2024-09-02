@@ -284,6 +284,12 @@ cards:
           action: toggle
         hold_action:
           action: more-info
+    # Curtains
+    - type: custom:mushroom-cover-card
+      entity: cover.curtain_living
+      name: Gardiner
+      show_buttons_control: true
+      layout: horizontal
     # Panel heater
     - type: custom:mushroom-climate-card
       entity: climate.heater_living
