@@ -74,3 +74,43 @@ cards:
       entities:
         - entity: input_select.climate_season_select
           name: Cold/warm season select
+
+    # AUTO-DIM BRIGHTNESS LEVELS
+    # Title
+    - type: custom:mushroom-title-card
+      title: Auto-dim styrkenivåer
+    # Highest
+    - type: custom:mushroom-number-card
+      entity: input_number.dimconstant_highest
+      layout: horizontal
+      display_mode: buttons
+      icon_color: accent
+      name: Høyest (midt på dagen)
+    # Lowest
+    - type: custom:mushroom-number-card
+      entity: input_number.dimconstant_high
+      layout: horizontal
+      display_mode: buttons
+      icon_color: accent
+      name: Høy (ettermiddag)
+    # Lowest
+    - type: custom:mushroom-number-card
+      entity: input_number.dimconstant_medium
+      layout: horizontal
+      display_mode: buttons
+      icon_color: accent
+      name: Medium (solnedgang)
+    # Low
+    - type: custom:mushroom-number-card
+      entity: input_number.dimconstant_low
+      layout: horizontal
+      display_mode: buttons
+      icon_color: accent
+      name: Lav (skumring)
+    # Lowest
+    - type: custom:mushroom-number-card
+      entity: input_number.dimconstant_lowest
+      layout: horizontal
+      display_mode: buttons
+      icon_color: accent
+      name: Lavest (midnatt)
