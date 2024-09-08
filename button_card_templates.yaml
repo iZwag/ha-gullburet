@@ -485,3 +485,140 @@ wifi_qr_code:
     - padding: 0px
     icon:
     - width: 88%
+
+#############################################################################
+# BIG SENSOR CARD
+#############################################################################
+big_sensor:
+  show_units: true
+  show_state: true
+  styles:
+    card:
+      - padding: 20px
+    icon:
+      - width: 24px
+    img_cell:
+      - width: 30px
+      - justify-self: start
+      - height: 30px
+      - margin-left: '-3px'
+    state:
+      - justify-self: start
+      - font-size: 24px
+      - font-weight: 500
+    name:
+      - justify-self: start
+      - font-size: 14px
+      - opacity: '0.7'
+    grid:
+      - grid-template-areas: '"i s" "i n"'
+      - grid-template-columns: 40px 1fr
+      - grid-template-rows: min-content min-content
+
+#############################################################################
+# BIG SENSOR CARD WITH DOT
+#############################################################################
+big_sensor_dot:
+  show_units: true
+  show_state: true
+  variables:
+    dotHiSeverity: 75
+    dotMidSeverity: 30
+  custom_fields:
+    dot: |
+      [[[
+        return `<div></div>`
+      ]]]
+  styles:
+    card:
+      - padding: 20px
+    icon:
+      - width: 24px
+    img_cell:
+      - width: 30px
+      - justify-self: start
+      - height: 30px
+      - margin-left: '-3px'
+    state:
+      - justify-self: start
+      - font-size: 24px
+      - font-weight: 500
+    name:
+      - justify-self: start
+      - font-size: 14px
+      - opacity: '0.7'
+    grid:
+      - grid-template-areas: '"i s dot" "i n dot"'
+      - grid-template-columns: 40px 1fr 40px
+      - grid-template-rows: min-content min-content
+    custom_fields:
+      dot:
+        - justify-self: center
+        - width: 12px
+        - height: 12px
+        - border-radius: 6px
+        - background: |
+            [[[
+              var color = "#1aff66";
+              if (entity.state > variables.dotHiSeverity) color = "red";
+              else if (entity.state > variables.dotMidSeverity) color = "#fdca40";
+              return color;
+            ]]]
+
+#############################################################################
+# BIG SENSOR CARD WITH BAR
+#############################################################################
+big_sensor_bar:
+  show_units: true
+  show_state: true
+  variables:
+    barMax: 100
+    barHiSeverity: 75
+    barMidSeverity: 30
+  custom_fields:
+    bar: |
+      [[[
+        var color = "#1aff66";
+        var state = (entity.state/variables.barMax) * 100;
+        if (entity.state > variables.barHiSeverity) color = "red";
+        else if (entity.state > variables.barMidSeverity) color = "#fdca40";
+
+        return `
+        <div>
+          <div style="background:${color}; height: 12px; width:${state}%; transition: width 0.5s ease;">
+          </div>
+        </div>
+        `
+      ]]]
+  styles:
+    card:
+      - padding: 20px
+    icon:
+      - width: 24px
+    img_cell:
+      - width: 30px
+      - justify-self: start
+      - height: 30px
+      - padding-bottom: 12px
+      - margin-left: '-3px'
+    state:
+      - justify-self: start
+      - font-size: 24px
+      - font-weight: 500
+    name:
+      - justify-self: start
+      - font-size: 14px
+      - opacity: '0.7'
+      - padding: 0px 0 12px
+    grid:
+      - grid-template-areas: '"i s" "i n" "bar bar"'
+      - grid-template-columns: 40px 1fr
+      - grid-template-rows: min-content min-content
+    custom_fields:
+      bar:
+        - justify-self: start
+        - width: 100%
+        - height: 12px
+        - border-radius: 6px
+        - background: '#343434'
+        - overflow: hidden
