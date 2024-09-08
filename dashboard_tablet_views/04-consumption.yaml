@@ -103,9 +103,105 @@ cards:
     card:
       type: horizontal-stack
       cards:
-      # Left column
       - type: vertical-stack
         cards:
+        # First row 
+        - type: horizontal-stack
+          cards:
+          - type: custom:stack-in-card
+            mode: vertical
+            cards:
+            # REALTIME APARTMENT SENSOR WITH BAR
+            - type: custom:button-card
+              template: big_sensor_bar
+              name: Apartment power, realtime
+              icon: mdi:lightning-bolt
+              entity: sensor.tibber_power_consumption_realtime
+              variables:
+                barMax: 8800
+                barHiSeverity: 5000
+                barMidSeverity: 2000
+              styles:
+                card:
+                  - padding: 20px 20px 0px
+            
+            # MOMENTARY POWER CONSUMPTION CATEGORIES
+            - type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  #spinner-wrapper {
+                    display: none !important;
+                  }
+              chart_type: donut
+              apex_config:
+                legend:
+                  show: true
+                  fontSize: '14px'
+                  fontFamily: 'Open Sans'
+                dataLabels:
+                  enabled: false  
+                #chart:
+                #  height: 300px
+              header:
+                show: false
+              series:
+                - entity: sensor.power_momentary_light_consumption
+                  name: Lights
+                  color: '#1aff66'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_heating_consumption
+                  name: Heating
+                  color: '#fdca40'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_static_consumption
+                  name: Static
+                  color: '#1AC8ED'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_dynamic_consumption
+                  name: Dynamic
+                  color: '#d24dff'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_other_momentary_consumption
+                  name: Other
+                  color: '#343434'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+
+          # REALTIME POWER BAR
+          - type: custom:button-card
+            template: big_sensor_bar
+            name: Apartment power
+            icon: mdi:lightning-bolt
+            entity: sensor.tibber_power_consumption_realtime
+            variables:
+              barMax: 8800
+              barHiSeverity: 5000
+              barMidSeverity: 2000
+        # Last row
         - type: horizontal-stack
           cards:
           # ENERGY CONSUMPTION RADIAL-BAR
@@ -246,85 +342,20 @@ cards:
           
           - type: vertical-stack
             cards:
-            - type: entities
-              title: So far this month
-              show_header_toggle: false
-              state_color: true
-              card_mod:
-                style: | 
-                  ha-card {
-                    background-color: transparent;
-                  }
-              entities:
-                - entity: sensor.tibber_monthly_cost
-                  name: 'Electricity bill (Tibber)'
-                  icon: mdi:cash
-                - entity: sensor.elvia_monthly_total
-                  name: 'Grid company bill (Elvia)'
-                  icon: mdi:cash
-                - entity: sensor.tibber_energy_consumption_this_month
-                  name: Power consumption
-            - type: custom:bar-card
-              icon: mdi:lightning-bolt
-              #entities:
-              #  - entity: sensor.tibber_power_consumption_realtime
-              entity: sensor.tibber_power_consumption_realtime
-              min: 0
-              max: 8000
-              title: Apartment power consumption
-              severity:
-                - color: '#1aff66'
-                  from: 0
-                  to: 1999
-                - color: '#fdca40'
-                  from: 2000
-                  to: 4999
-                - color: red
-                  from: 5000
-              positions:
-                icon: 'off'
-                indicator: 'off'
-                name: 'off'
-              style: |
-                bar-card-value {
-                  padding-right: 12px;
-                  font-size: 1.3em;
-                }
-                bar-card-backgroundbar {
-                  background-color: #FFFFFF80;
-                }
-        
-        # Last row 
-        - type: horizontal-stack
-          cards:
-          - type: entities
-            title: Battery status
-            entities:
-              - entity: sensor.heatsheet_remote_battery
-                name: Heated sheet remote
-              - entity: sensor.esmeralda_battery
-                name: Esmeralda
-              - entity: sensor.sonos_move_battery
-                name: Sonos Move
-              - entity: sensor.lenovo_tab_m10_battery
-                name: Lenovo Tab M10
-              - entity: sensor.iphone_jon_battery
-                name: "Jon's iPhone"
-            state_color: true
-          - type: entities
-            entities:
-              - entity: sensor.temperature_battery_bedroom
-                name: Sensor, bedroom
-              - entity: sensor.temperature_battery_guest
-                name: Sensor, guest room
-              - entity: sensor.temperature_battery_entry
-                name: Sensor, entry
-              - entity: sensor.temperature_battery_kitchen
-                name: Sensor, kitchen
-              - entity: sensor.temperature_battery_office
-                name: Sensor, office
-              - entity: sensor.temperature_battery_living
-                name: Sensor, living room
-              - entity: sensor.motion_battery_storage
-                name: Sensor, storage
-            state_color: true
+            - type: horizontal-stack
+              cards:
+              - type: custom:button-card
+                template: big_sensor
+                entity: sensor.tibber_monthly_cost
+                name: 'Electricity (Tibber)'
+              - type: custom:button-card
+                template: big_sensor
+                entity: sensor.elvia_monthly_total
+                name: 'Grid usage (Elvia)'
+            - type: custom:button-card
+              template: big_sensor_dot
+              entity: sensor.tibber_energy_consumption_this_month
+              name: Energy consumption this month
+              variables:
+                dotHiSeverity: 900
+                dotMidSeverity: 400
