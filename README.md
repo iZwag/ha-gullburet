@@ -15,11 +15,13 @@ The system is compromised of many hardware devices, obviously.
 - PSU: 5V/3A USB-C
 - Storage: Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
 - Network: CAT-6 network to router
-- USB: ConBee II Stick (as Zigbee-controller)
+- SMLIGHT SLZB-06M (PoE Zigbee coordinator)
 - USB: Aeotec Z-Stick 7 (as Z-Wave-controller)
 
-### Router
-Asus RT-AC88U
+### Networking
+- Unifi Cloud Gateway Ultra
+- Unifi Switch Lite 8 PoE
+- Unifi U6 Pro
 
 ### Wi-Fi/Network Devices
 - Heating: **Mill Heat** (panel heaters, movable floor-unit)
@@ -42,9 +44,9 @@ Asus RT-AC88U
 
 #### Tips on deploying a Zigbee network
 
-- Use only one application to control the Zigbee-network. With the ConBee II-stick on Home Assistant there were mainly three options I considered: **ZHA**, **deCONZ** and **Zigbee2MQTT**. I chose ZHA because it is compatible with the intended devices, and it is really easy to add devices from the HA interface. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html).
+- To control the Zigbee-network, I considered: **ZHA** and **Zigbee2MQTT**. I chose Zigbee2MQTT the second time because it is compatible with more devices. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html).
 - Choose network channel to reduce Wi-Fi interference. [This article explains overlapping channels between Wi-Fi and Zigbee](https://www.metageek.com/training/resources/zigbee-wifi-coexistence/). I use Wi-Fi channels for 6 and 11 for my guest and IoT 2.4GHz Wi-Fis respectively, so I chose Zigbee-channel 11 to be as away from these as possible. Ideally I should have regarded surrounding Wi-Fis in my apartment building... oh, well. Whoopsies.
-- Connect the Zigbee-stick with an extension cable away from the host, as well as away from Wi-Fi APs and big metal objects.
+- Connect the Zigbee coordinator with a 3m cable away from the host, as well as away from Wi-Fi APs and big metal objects.
 - Add relaying devices first to the network (devices powered by wire), starting with the closest ones to the coordinator first. Then add edge devices (powered by battery) last. This enables a strong mesh-network.
 
 ## Software 
@@ -55,6 +57,8 @@ The host system for Home Assistant incorporates the following services running a
 - Home Assistant Container
 - VSCode
 - Z-Wave JS UI
+- Zigbee2MQTT
+- Mosquitto
 
 ### Dashboard services
 To display relevant info about life in Oslo and Norway, here are some public APIs that are being consumed:
