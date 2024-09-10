@@ -111,11 +111,11 @@ cards:
           - type: custom:stack-in-card
             mode: vertical
             cards:
-            # REALTIME APARTMENT SENSOR WITH BAR
+            # REALTIME APARTMENT POWER CONSUMPTION WITH BAR
             - type: custom:button-card
               template: big_sensor_bar
               name: Apartment power, realtime
-              icon: mdi:lightning-bolt
+              icon: mdi:home-lightning-bolt
               entity: sensor.tibber_power_consumption_realtime
               variables:
                 barMax: 8800
@@ -123,14 +123,20 @@ cards:
                 barMidSeverity: 2000
               styles:
                 card:
-                  - padding: 20px 20px 0px
+                  - padding: var(--ha-card-padding) var(--ha-card-padding) 0px
             
-            # MOMENTARY POWER CONSUMPTION CATEGORIES
+            # MOMENTARY POWER CONSUMPTION CATEGORIES DONUT
             - type: custom:apexcharts-card
               card_mod:
                 style: |
+                  ha-card {
+                    padding-bottom: var(--ha-card-padding) !important;
+                  }
                   #spinner-wrapper {
                     display: none !important;
+                  }
+                  .apexcharts-legend {
+                    padding: 0 var(--ha-card-padding) !important;
                   }
               chart_type: donut
               apex_config:
@@ -138,6 +144,7 @@ cards:
                   show: true
                   fontSize: '14px'
                   fontFamily: 'Open Sans'
+                  horizontalAlign: left
                 dataLabels:
                   enabled: false  
                 #chart:
@@ -147,16 +154,7 @@ cards:
               series:
                 - entity: sensor.power_momentary_light_consumption
                   name: Lights
-                  color: '#1aff66'
-                  show:
-                    in_header: false
-                  unit: ' W'
-                  data_generator: |
-                    const sensor_percent = parseFloat(entity.state);
-                    return [[new Date().getTime(), sensor_percent]];
-                - entity: sensor.power_momentary_heating_consumption
-                  name: Heating
-                  color: '#fdca40'
+                  color: '#fff9d2'
                   show:
                     in_header: false
                   unit: ' W'
@@ -181,6 +179,15 @@ cards:
                   data_generator: |
                     const sensor_percent = parseFloat(entity.state);
                     return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_heating_consumption
+                  name: Heating
+                  color: '#ff9800'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];    
                 - entity: sensor.power_other_momentary_consumption
                   name: Other
                   color: '#343434'
@@ -191,16 +198,17 @@ cards:
                     const sensor_percent = parseFloat(entity.state);
                     return [[new Date().getTime(), sensor_percent]];
 
-          # REALTIME POWER BAR
+          # ENERGY PRICE NOW THIS HOUR
           - type: custom:button-card
-            template: big_sensor_bar
-            name: Apartment power
-            icon: mdi:lightning-bolt
-            entity: sensor.tibber_power_consumption_realtime
-            variables:
-              barMax: 8800
-              barHiSeverity: 5000
-              barMidSeverity: 2000
+            template: big_sensor
+            name: Energy price, this hour
+            icon: mdi:cash
+            entity: sensor.energy_price_hourly_total
+            state_display: |
+              [[[
+                return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+              ]]]
+              
         # Last row
         - type: horizontal-stack
           cards:
@@ -348,10 +356,18 @@ cards:
                 template: big_sensor
                 entity: sensor.tibber_monthly_cost
                 name: 'Electricity (Tibber)'
+                state_display: |
+                  [[[
+                    return parseFloat(entity.state).toFixed(1) + ' kr';
+                  ]]]
               - type: custom:button-card
                 template: big_sensor
                 entity: sensor.elvia_monthly_total
                 name: 'Grid usage (Elvia)'
+                state_display: |
+                  [[[
+                    return parseFloat(entity.state).toFixed(1) + ' kr';
+                  ]]]
             - type: custom:button-card
               template: big_sensor_dot
               entity: sensor.tibber_energy_consumption_this_month
@@ -359,3 +375,7 @@ cards:
               variables:
                 dotHiSeverity: 900
                 dotMidSeverity: 400
+              state_display: |
+                [[[
+                  return parseFloat(entity.state).toFixed(1) + ' kWh';
+                ]]]
