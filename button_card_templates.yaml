@@ -608,8 +608,12 @@ big_sensor_bar:
       - opacity: '0.7'
       - padding-bottom: 12px
     grid:
-      - grid-template-areas: '"i s s" "i n maxLimit" "bar bar bar"'
-      - grid-template-columns: 40px 1fr 10%
+      - grid-template-areas: |
+          [[[
+            if (variables.showLimit == false) return '"i s s" "i n n" "bar bar bar"';
+            return '"i s s" "i n n" "bar bar maxLimit"';
+          ]]]
+      - grid-template-columns: 40px 1fr 4em
       - grid-template-rows: min-content min-content min-content
     custom_fields:
       bar:
@@ -621,7 +625,6 @@ big_sensor_bar:
       maxLimit:
         - justify-self: end
         - font-size: 14px
-        - padding-bottom: 12px
         - color: red
         - font-weight: 500
         - display: |
@@ -638,6 +641,7 @@ extra_bar:
     barMax: 100
     barHiSeverity: 75
     barMidSeverity: 30
+    secondary: ""
   custom_fields:
     bar: |
       [[[
@@ -653,6 +657,10 @@ extra_bar:
         </div>
         `
       ]]]
+    secondary: |
+      [[[
+        return variables.secondary;
+      ]]]
   styles:
     card:
       - padding: 0 var(--ha-card-padding) var(--ha-card-padding)
@@ -660,16 +668,15 @@ extra_bar:
       - justify-self: end
       - font-size: 14px
       - font-weight: 500
-      - padding-bottom: 4px
     name:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
       - padding-bottom: 4px
     grid:
-      - grid-template-areas: '"n s" "bar bar"'
-      - grid-template-columns: 1fr 25
-      - grid-template-rows: min-content min-content
+      - grid-template-areas: '"n secondary secondary" "bar bar s"'
+      - grid-template-columns: 70% 1fr 4em
+      - grid-template-rows: min-content min-content min-content
     custom_fields:
       bar:
         - justify-self: start
@@ -677,3 +684,8 @@ extra_bar:
         - height: 12px
         - border-radius: 6px
         - background: '#343434'
+      secondary:
+        - justify-self: end
+        - font-size: 14px
+        - opacity: '0.7'
+        - padding-bottom: 4px
