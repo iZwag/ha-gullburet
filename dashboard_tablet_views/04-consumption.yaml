@@ -530,6 +530,12 @@ cards:
                   barMax: "[[[ return states['sensor.elvia_active_fixed_price_level'].attributes.level_max ]]]"
                   barHiSeverity: 10
                   barMidSeverity: 10
+                  secondary: |
+                    [[[ 
+                      const date = new Date(entity.attributes.start_time);
+                      const options = { hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                      return date.toLocaleString('en-US', options); 
+                    ]]]
               # MAXHOUR 2    
               - type: custom:button-card
                 template: extra_bar
@@ -541,6 +547,12 @@ cards:
                   barMax: "[[[ return states['sensor.elvia_active_fixed_price_level'].attributes.level_max ]]]"
                   barHiSeverity: 10
                   barMidSeverity: 10
+                  secondary: |
+                    [[[ 
+                      const date = new Date(entity.attributes.start_time);
+                      const options = { hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                      return date.toLocaleString('en-US', options); 
+                    ]]]
               # MAXHOUR 3
               - type: custom:button-card
                 template: extra_bar
@@ -552,8 +564,13 @@ cards:
                   barMax: "[[[ return states['sensor.elvia_active_fixed_price_level'].attributes.level_max ]]]"
                   barHiSeverity: 10
                   barMidSeverity: 10
-          
-          
+                  secondary: |
+                    [[[ 
+                      const date = new Date(entity.attributes.start_time);
+                      const options = { hour12: false, month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                      return date.toLocaleString('en-US', options); 
+                    ]]]
+          # LAST ROW, RIGHT COLUMN
           - type: vertical-stack
             cards:
             - type: custom:button-card
