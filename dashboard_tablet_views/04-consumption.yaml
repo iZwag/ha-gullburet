@@ -98,7 +98,7 @@ cards:
       # Add 5% padding on both sides of the main content
       style: |
         ha-card {
-          padding: 0px 5vw;
+          padding: 0px 2.5vw;
         }
     card:
       type: horizontal-stack
@@ -459,6 +459,7 @@ cards:
                   barMax: "[[[ return states['sensor.elvia_active_fixed_price_level'].attributes.level_max ]]]"
                   barHiSeverity: 1.5
                   barMidSeverity: 1
+                  showLimit: true
               # ESTIMATED ENERGY
               - type: custom:button-card
                 template: extra_bar
@@ -527,7 +528,7 @@ cards:
                 dotHiSeverity: 900
                 dotMidSeverity: 400
             - type: custom:button-card
-              template: big_sensor_dot
+              template: big_sensor
               entity: sensor.elvia_active_fixed_price_level
               name: Price level energy limit, per hour
               icon: mdi:lightning-bolt-circle
@@ -536,7 +537,4 @@ cards:
                 [[[
                   return states['sensor.elvia_active_fixed_price_level'].attributes.level_max + ' kWh';
                 ]]]
-              variables:
-                dotHiSeverity: 1
-                dotMidSeverity: 0.5
               

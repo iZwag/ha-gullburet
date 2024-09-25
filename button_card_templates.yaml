@@ -568,6 +568,7 @@ big_sensor_bar:
     barMax: 100
     barHiSeverity: 75
     barMidSeverity: 30
+    showLimit: false
   custom_fields:
     bar: |
       [[[
@@ -583,6 +584,10 @@ big_sensor_bar:
         </div>
         `
       ]]]
+    maxLimit: |
+      [[[
+        return variables.barMax + " " + entity.attributes.unit_of_measurement;
+      ]]]
   styles:
     card:
       - padding: var(--ha-card-padding)
@@ -593,7 +598,6 @@ big_sensor_bar:
       - justify-self: start
       - height: 30px
       - padding-bottom: 12px
-      #- margin-left: '-3px'
     state:
       - justify-self: start
       - font-size: 24px
@@ -602,11 +606,11 @@ big_sensor_bar:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
-      - padding: 0px 0 12px
+      - padding-bottom: 12px
     grid:
-      - grid-template-areas: '"i s" "i n" "bar bar"'
-      - grid-template-columns: 40px 1fr
-      - grid-template-rows: min-content min-content
+      - grid-template-areas: '"i s s" "i n maxLimit" "bar bar bar"'
+      - grid-template-columns: 40px 1fr 10%
+      - grid-template-rows: min-content min-content min-content
     custom_fields:
       bar:
         - justify-self: start
@@ -614,6 +618,16 @@ big_sensor_bar:
         - height: 12px
         - border-radius: 6px
         - background: '#343434'
+      maxLimit:
+        - justify-self: end
+        - font-size: 14px
+        - padding-bottom: 12px
+        - color: red
+        - font-weight: 500
+        - display: |
+            [[[
+              if (variables.showLimit == false) return "none";
+            ]]]
 
 extra_bar:
   show_units: true
