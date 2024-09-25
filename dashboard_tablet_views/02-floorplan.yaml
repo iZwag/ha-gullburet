@@ -101,8 +101,6 @@ cards:
   # MAIN SECTION CONTENTS    
   - type: horizontal-stack
     cards:
-      # HOME/ROOM/DEVICE DATA & CONTROL COLUMN
-        # VERTICAL STACK FOR ALL INFO MENU SECTIONS REGARDLESS OF ROOM
     # ###################################################################
     #
     # ROOM INFO & CONTROL COLUMN
@@ -111,6 +109,7 @@ cards:
     - type: custom:mod-card
       card_mod:
         # Add 5% padding on both sides of the info section
+        # 3% on right side since the 3D-floorplan has inherit 2% l-padding
         style: |
           ha-card {
             padding-left: 5vw;
@@ -143,12 +142,9 @@ cards:
           none:
             type: vertical-stack
             cards:
-            # TITLE
+            # HOME-VIEW: TITLE
             - type: markdown
               content: "# Gullburet Home"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -162,7 +158,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # HOME-VIEW ALL LIGHTS
+            # HOME-VIEW: ALL LIGHTS
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -340,7 +336,7 @@ cards:
                       ha-card {
                         background-color: var(--nested-card-background);
                       }  
-            # HOME-VIEW CLEANING
+            # HOME-VIEW: CLEANING
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -558,12 +554,9 @@ cards:
           bath:
             type: vertical-stack
             cards:
-            # TITLE
+            # BATH-VIEW: TITLE
             - type: markdown
               content: "# Bathroom"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -577,7 +570,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # BATH-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -622,7 +615,7 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
-            # LIGHT MODES SECTION
+            # BATH-VIEW: LIGHT MODES
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -675,12 +668,9 @@ cards:
           bedroom: 
             type: vertical-stack
             cards:
-            # TITLE
+            # BEDROOM-VIEW: TITLE
             - type: markdown
               content: "# Bedroom"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -694,7 +684,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # BEDROOM-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -744,7 +734,7 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
-            # DEVICES
+            # BEDROOM-VIEW: DEVICES
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -826,7 +816,7 @@ cards:
                     data:
                       command: down
                       decrease: 00:10:00
-            # CLEANING SECTION
+            # BEDROOM-VIEW: CLEANING
             # Bedroom Xiaomi id = 20
             - type: custom:stack-in-card
               mode: vertical
@@ -891,12 +881,9 @@ cards:
           entry:
             type: vertical-stack
             cards:
-            # TITLE
+            # ENTRY-VIEW: TITLE
             - type: markdown
               content: "# Entry hall"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -910,7 +897,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # ENTRY-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -937,7 +924,7 @@ cards:
                 - type: tile
                   name: Humidity
                   entity: sensor.humidity_entry
-            # CLEANING SECTION
+            # ENTRY-VIEW: CLEANING
             # Entry Xiaomi id = 16
             - type: custom:stack-in-card
               mode: vertical
@@ -1002,7 +989,7 @@ cards:
           guest:
             type: vertical-stack
             cards:
-            # TITLE
+            # GUEST-VIEW: TITLE
             - type: markdown
               content: "# Guest room"
               # In the first version, this was applied in the config-template-card:
@@ -1021,7 +1008,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # GUEST-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1071,7 +1058,7 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
-            # CLEANING SECTION
+            # GUEST-VIEW: CLEANING
             # Guest room Xiaomi id = 19
             - type: custom:stack-in-card
               mode: vertical
@@ -1136,7 +1123,7 @@ cards:
           kitchen:
             type: vertical-stack
             cards:
-            # TITLE
+            # KITCHEN-VIEW: TITLE
             - type: markdown
               content: "# Kitchen"
               # In the first version, this was applied in the config-template-card:
@@ -1155,7 +1142,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # KITCHEN-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1205,7 +1192,7 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
-            # CLEANING SECTION
+            # KITCHEN-VIEW: CLEANING
             # Kitchen Xiaomi id = 17
             - type: custom:stack-in-card
               mode: vertical
@@ -1270,7 +1257,7 @@ cards:
           living:
             type: vertical-stack
             cards:
-            # TITLE
+            # LIVING-VIEW: TITLE
             - type: markdown
               content: "# Living room"
               # In the first version, this was applied in the config-template-card:
@@ -1289,7 +1276,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # LIVING-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1404,7 +1391,7 @@ cards:
           office:
             type: vertical-stack
             cards:
-            # TITLE
+            # OFFICE-VIEW: TITLE
             - type: markdown
               content: "# Office"
               card_mod:
@@ -1420,7 +1407,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # OFFICE-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1447,48 +1434,7 @@ cards:
                 - type: tile
                   name: Humidity
                   entity: sensor.humidity_office
-            # LIGHT MODES SECTION
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: "## Light modes"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }  
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: input_select.office_mode_select
-                  icon: mdi:desk-lamp-on
-                  name: Focus
-                  template: input_select_buttons
-                  variables:
-                    select_option: "focus"
-                - type: custom:button-card
-                  entity: input_select.office_mode_select
-                  icon: mdi:controller
-                  name: Gaming
-                  template: input_select_buttons
-                  variables:
-                    select_option: "gaming"
-            # CLEANING SECTION
+            # OFFICE-VIEW: CLEANING
             # Office Xiaomi id = 21
             - type: custom:stack-in-card
               mode: vertical
@@ -1553,12 +1499,9 @@ cards:
           storage:
             type: vertical-stack
             cards:
-            # TITLE
+            # STORAGE-VIEW: TITLE
             - type: markdown
               content: "# Storage room"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -1572,7 +1515,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE
+            # STORAGE-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1594,7 +1537,7 @@ cards:
               - type: tile
                 name: Temperature
                 entity: sensor.temperature_storage
-            # LIGHTS
+            # STORAGE-VIEW: LIGHTS
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1647,12 +1590,9 @@ cards:
           toilet:
             type: vertical-stack
             cards:
-            # TITLE
+            # TOILET-VIEW: TITLE
             - type: markdown
               content: "# Toilet room"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -1666,7 +1606,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # TOILET-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1716,12 +1656,9 @@ cards:
           veranda:
             type: vertical-stack
             cards:
-            # TITLE
+            # VERANDA-VIEW: TITLE
             - type: markdown
               content: "# Veranda"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
               card_mod:
                 style:
                   ha-markdown$: |
@@ -1735,7 +1672,7 @@ cards:
                     ha-markdown {
                       padding: var(--ha-card-padding) !important;
                     }
-            # CLIMATE SECTION
+            # VERANDA-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -1762,7 +1699,7 @@ cards:
                 - type: tile
                   name: Humidity
                   entity: sensor.humidity_outdoor
-            # LIGHTS
+            # VERANDA-VIEW: LIGHTS
             - type: custom:stack-in-card
               mode: vertical
               cards:
