@@ -42,8 +42,8 @@ cards:
         action: navigate
         navigation_path: /dashboard-tablet/sleep
     - type: custom:button-card
-      icon: mdi:chart-bar
-      name: Consumption
+      icon: mdi:lightning-bolt
+      name: Energy
       template: navbar_button
       tap_action:
         action: navigate
@@ -204,7 +204,7 @@ cards:
             - type: vertical-stack
               cards:
               - type: custom:mushroom-template-card
-                primary: Gullburet-Guest
+                primary: Gullburet-Gjest
                 secondary: ''
                 icon: mdi:wifi
                 icon_color: light-blue

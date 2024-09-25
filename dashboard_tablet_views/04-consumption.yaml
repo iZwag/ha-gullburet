@@ -42,8 +42,8 @@ cards:
         action: navigate
         navigation_path: /dashboard-tablet/sleep
     - type: custom:button-card
-      icon: mdi:chart-bar
-      name: Consumption
+      icon: mdi:lightning-bolt
+      name: Energy
       template: navbar_button
       variables:
         link_active: "true"
@@ -526,4 +526,17 @@ cards:
               variables:
                 dotHiSeverity: 900
                 dotMidSeverity: 400
+            - type: custom:button-card
+              template: big_sensor_dot
+              entity: sensor.elvia_active_fixed_price_level
+              name: Price level energy limit, per hour
+              icon: mdi:lightning-bolt-circle
+              numeric_precision: 1
+              state_display: |
+                [[[
+                  return states['sensor.elvia_active_fixed_price_level'].attributes.level_max + ' kWh';
+                ]]]
+              variables:
+                dotHiSeverity: 1
+                dotMidSeverity: 0.5
               

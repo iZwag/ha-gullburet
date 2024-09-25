@@ -47,8 +47,8 @@ cards:
         navigation_path: /dashboard-tablet/sleep
     # Consumption
     - type: custom:button-card
-      icon: mdi:chart-bar
-      name: Consumption
+      icon: mdi:lightning-bolt
+      name: Energy
       template: navbar_button
       tap_action:
         action: navigate
