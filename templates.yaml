@@ -939,3 +939,22 @@
       {% else %}
         {{ total - lights - heating - static - dynamic}}
       {% endif %}
+
+- sensor:
+  # Tracks hour progress - literally
+  - name: Hour progress
+    unique_id: hour_progress
+    unit_of_measurement: '%'
+    icon: mdi:clock
+    state: >
+      {% set current_time = now() %}
+      {{ (current_time.minute / 60 * 100) | round(1) }}
+    attributes:
+      remaining: >
+        {% set state = states('sensor.hour_progress') | float(default=0) %}
+        {{ (100 - state) | round(1) }}
+      of_energy_level: >
+        {% set energy_level = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=0) %}
+        {% set state = states('sensor.hour_progress') | float(default=0) %}
+        {{ ((state / 100) * energy_level) | round(2) }}
+        
