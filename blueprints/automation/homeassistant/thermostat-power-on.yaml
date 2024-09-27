@@ -1,0 +1,110 @@
+blueprint:
+  name: Set thermostat to control mode when power on
+  description: |
+    When the defined thermostat is turned on from being off, this automation make sure its
+    target temperature is set to what is expected of its current control mode.
+  domain: automation
+  author: 'github.com/izwag'
+  input:
+    thermostat_entity:
+      name: Thermostat entity
+      description: The climate-entity to react to power on
+      selector:
+        entity:
+          filter:
+            domain: climate
+    select_entity:
+      name: Select entity
+      description: The input_select with control mode
+      selector:
+        entity:
+          filter:
+            domain: input_select
+    away_temperature_entity:
+      name: Away temperature entity
+      description: The input_number-entity holding the Away temperature.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    sleep_temperature_entity:
+      name: Sleep temperature entity
+      description: The input_number-entity holding the Sleep temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    comfort_temperature_entity:
+      name: Comfort temperature entity
+      description: The input_number-entity holding the Comfort temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+    vacation_temperature_entity:
+      name: Vacation temperature entity
+      description: The input_number-entity holding the Vacation temperature. Optional.
+      selector:
+        entity:
+          filter:
+            domain: input_number
+mode: restart
+trigger:
+- platform: state
+  entity_id: !input thermostat_entity
+  to: heat
+  from: "off"
+- platform: state
+  entity_id: !input thermostat_entity
+  from: unavailable
+  to: heat
+- platform: state
+  entity_id: !input thermostat_entity
+  from: unknown
+  to: heat
+action:
+- choose:
+  - conditions:
+    - condition: state
+        entity_id: !input select_entity
+        state: Away
+    sequence:
+    - delay:
+        seconds: 30
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input away_temperature_entity
+  - conditions:
+    - condition: state
+        entity_id: !input select_entity
+        state: Sleep
+    sequence:
+    - delay:
+        seconds: 30
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input sleep_temperature_entity
+  - conditions:
+    - condition: state
+        entity_id: !input select_entity
+        state: Comfort
+    sequence:
+    - delay:
+        seconds: 30
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input comfort_temperature_entity
+  - conditions:
+    - condition: state
+        entity_id: !input select_entity
+        state: Vacation
+    sequence:
+    - delay:
+        seconds: 30
+    - service: script.heating_mode_sets_temperature
+      data:
+        thermostat_entity: !input thermostat_entity
+        temperature_entity: !input vacation_temperature_entity
