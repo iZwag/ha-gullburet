@@ -397,30 +397,6 @@ cards:
                 data_generator: |
                   const total_nok = parseFloat(entity.state);
                   return [[new Date().getTime(), total_nok*100]];
-        # Power consumption gauge of apartment right now, in realtime
-        - type: gauge
-          entity: sensor.tibber_power_consumption_realtime
-          min: 0
-          max: 8800
-          needle: false
-          severity:
-            green: 1
-            yellow: 2000
-            red: 5000
-          name: Realtime power consumption
-          card_mod:
-            style:
-              ha-gauge $ svg.gauge: |
-                .dial {
-                  stroke-width: 5 !important;
-                }
-                .value {
-                  stroke-width: 5 !important;
-                }
-              .: | 
-                ha-card {
-                  padding: 0 var(--ha-card-padding) var(--ha-card-padding) !important;
-                }
     # Last row
     - type: horizontal-stack
       cards:
