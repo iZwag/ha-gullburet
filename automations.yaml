@@ -713,3 +713,96 @@
         metadata: {}
         data: {}
   mode: single
+- id: '1727439077538'
+  alias: Heating - Handle pause heating ON/OFF
+  description: Handles toggling of the input_boolean pause heating
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.pause_heating
+    from: 'off'
+    to: 'on'
+    id: activated
+  - platform: state
+    entity_id:
+    - input_boolean.pause_heating
+    from: 'on'
+    to: 'off'
+    id: deactivated
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - activated
+      sequence:
+      - service: climate.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - climate.floor_heat_bath
+          - climate.floor_heat_toilet
+          - climate.heater_bedroom
+          - climate.heater_guest
+          - climate.heater_kitchen
+          - climate.heater_living
+    - conditions:
+      - condition: trigger
+        id:
+        - deactivated
+      sequence:
+      - service: climate.set_hvac_mode
+        metadata: {}
+        data:
+          hvac_mode: heat
+        target:
+          entity_id:
+          - climate.floor_heat_bath
+          - climate.floor_heat_toilet
+          - climate.heater_bedroom
+          - climate.heater_guest
+          - climate.heater_kitchen
+          - climate.heater_living
+  mode: single
+- id: '1727445980885'
+  alias: Energy - Time triggered pause heating checks
+  description: Handles time-triggered checks for resetting heating pause, as well
+    as timed checks to pause heating
+  trigger:
+  - platform: time_pattern
+    minutes: '0'
+    id: hour-start
+  - platform: time_pattern
+    minutes: '40'
+    id: 40min
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - hour-start
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.pause_heating
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - 40min
+        - condition: template
+          value_template: '{{ ( states(''sensor.tibber_energy_consumption_current_hour'')
+            | float ) > state_attr(''sensor.hour_progress'', ''of_energy_level'')
+            }}'
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.pause_heating
+        data: {}
+  mode: single
