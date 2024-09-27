@@ -8,7 +8,7 @@ scene: !include scenes.yaml
 sensor: !include sensors.yaml
 script: !include scripts.yaml
 template: !include templates.yaml
-input: !include inputs.yaml
+input_boolean: !include input_boolean.yaml
 
 # TEXT TO SPEECH
 tts:

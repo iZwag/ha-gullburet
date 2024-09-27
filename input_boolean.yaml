@@ -1,0 +1,3 @@
+pause_heating:
+  name: Heating - Pause heat devices
+  icon: mdi:radiator-off
