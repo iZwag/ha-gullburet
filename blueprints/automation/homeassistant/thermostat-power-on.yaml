@@ -66,8 +66,8 @@ action:
 - choose:
   - conditions:
     - condition: state
-        entity_id: !input select_entity
-        state: Away
+      entity_id: !input select_entity
+      state: Away
     sequence:
     - delay:
         seconds: 30
@@ -77,8 +77,8 @@ action:
         temperature_entity: !input away_temperature_entity
   - conditions:
     - condition: state
-        entity_id: !input select_entity
-        state: Sleep
+      entity_id: !input select_entity
+      state: Sleep
     sequence:
     - delay:
         seconds: 30
@@ -88,8 +88,8 @@ action:
         temperature_entity: !input sleep_temperature_entity
   - conditions:
     - condition: state
-        entity_id: !input select_entity
-        state: Comfort
+      entity_id: !input select_entity
+      state: Comfort
     sequence:
     - delay:
         seconds: 30
@@ -99,8 +99,8 @@ action:
         temperature_entity: !input comfort_temperature_entity
   - conditions:
     - condition: state
-        entity_id: !input select_entity
-        state: Vacation
+      entity_id: !input select_entity
+      state: Vacation
     sequence:
     - delay:
         seconds: 30
