@@ -1,6 +1,11 @@
 blueprint:
   name: Update thermostat control mode on schedule triggers
-  description: Takes a schedule input that triggers when certain sleep/comfort modes activate. Off-state of the schedule means Away. Also takes input of which input_select to change control mode of.
+  description: |
+    Takes a schedule input that triggers when certain sleep/comfort modes activate. 
+    Off-state of the schedule means Away. 
+    Also takes input of which input_select to change control mode of. 
+    The delay was added to allow heat sources to turn on properly before updating, in case 
+    they were turned on simultaneous with schedule triggers. 
   domain: automation
   author: 'github.com/izwag'
   input:
@@ -63,7 +68,6 @@ action:
       id: schedule-on
     sequence:
     - service: script.heating_set_thermostat_mode
-      metadata: {}
       data:
         mode: !input schedule_type
         control_mode_entity: !input select_entity
@@ -73,7 +77,6 @@ action:
       - schedule-off
     sequence:
     - service: script.heating_set_thermostat_mode
-      metadata: {}
       data:
         mode: Away
         control_mode_entity: !input select_entity
