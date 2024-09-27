@@ -181,3 +181,81 @@
       schedule_type: Sleep
       select_entity: input_select.heating_mode_guest
       enabled_if: "{{ is_state('input_boolean.guest_mode_enable', 'on') }}"
+
+# #############################################################################
+# SET THERMOSTAT TO CONTROL-MODE TEMPERATURE WHEN POWERED ON
+# Automations that reacts to heat devices that turn ON. They then have their
+# target temperatures set depending on their current control mode
+- id: 'heating_bath_power_on_temperature'
+  alias: Heating - Bath - Power on temperature
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_bath
+      thermostat_entity: climate.floor_heat_bath
+      away_temperature_entity: input_number.temperature_away_bath
+      sleep_temperature_entity: input_number.temperature_sleep_bath
+      comfort_temperature_entity: input_number.temperature_comfort_bath
+      vacation_temperature_entity: input_number.temperature_vacation_bathrooms
+
+- id: 'heating_toilet_power_on_temperature'
+  alias: Heating - Toilet - Power on temperature
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_toilet
+      thermostat_entity: climate.floor_heat_toilet
+      away_temperature_entity: input_number.temperature_away_toilet
+      sleep_temperature_entity: input_number.temperature_sleep_bath
+      comfort_temperature_entity: input_number.temperature_comfort_toilet
+      vacation_temperature_entity: input_number.temperature_vacation_bathrooms
+
+- id: 'heating_bedroom_power_on_temperature'
+  alias: Heating - Bedroom - Power on temperature
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_bedroom
+      thermostat_entity: climate.heater_bedroom
+      away_temperature_entity: input_number.temperature_away_bedroom
+      sleep_temperature_entity: input_number.temperature_sleep_bedroom
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
+
+- id: 'heating_living_power_on_temperature'
+  alias: Heating - Living - Power on temperature
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_living
+      thermostat_entity: climate.heater_living
+      away_temperature_entity: input_number.temperature_away_living
+      sleep_temperature_entity: input_number.temperature_sleep_living
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_commons
+
+- id: 'heating_guest_power_on_temperature'
+  alias: Heating - Guest - Power on temperature
+  description: ""
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      thermostat_entity: climate.heater_guest
+      select_entity: input_select.heating_mode_guest
+      away_temperature_entity: input_number.temperature_away_guest
+      sleep_temperature_entity: input_number.temperature_sleep_guest
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
+      comfort_temperature_entity: input_number.temperature_comfort_living
+
+- id: 'heating_kitchen_power_on_temperature'
+  alias: Heating - Kitchen - Power on temperature
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_kitchen
+      thermostat_entity: climate.heater_kitchen
+      away_temperature_entity: input_number.temperature_away_living
+      sleep_temperature_entity: input_number.temperature_sleep_living
+      comfort_temperature_entity: input_number.temperature_comfort_living
+      vacation_temperature_entity: input_number.temperature_vacation_commons
