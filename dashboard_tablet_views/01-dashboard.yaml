@@ -508,6 +508,9 @@ cards:
             icon: mdi:lightning-bolt
             name: This hour
             numeric_precision: 2
+            styles:
+              card:
+              - padding: var(--ha-card-padding) var(--ha-card-padding) 0px
             variables:
               dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
               dotMidSeverity: 10
@@ -521,20 +524,17 @@ cards:
                 #spinner-wrapper {
                   display: none !important;
                 }
-                #header {
-                  padding: 0 16px !important;
-                }
-                #header__title {
-                  font-size: 1em !important;
-                  font-weight: regular !important;
-                  color: var(--primary-text-color) !important;
-                }
             chart_type: radialBar
             apex_config:
+              dataLabels:
+                enabled: false
               legend:
-                show: false
+                show: true
+                fontSize: '12px'
+                fontFamily: 'Open Sans'
+                horizontalAlign: left
               chart:
-                height: 250px
+                height: 300px
               plotOptions:
                 radialBar:
                   inverseOrder: true
@@ -552,133 +552,120 @@ cards:
             series:
               # Current hour (chart)
               - entity: sensor.tibber_percentage_of_maxlevel
-                name: Current hour
+                name: Energy consumed
                 show:
                   in_header: false
+                color: '#ff9800'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+              # Max-hour average (chart)
+              - entity: sensor.hour_progress
+                name: Hour progress
+                show:
+                  in_header: false
+                unit: ' %'
+                color: '#1ac8ed'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+
+        # MOMENTARY POWER CONSUMPTION CATEGORIES
+        - type: custom:stack-in-card
+          mode: vertical
+          cards:
+          - type: custom:button-card
+            template: big_sensor_bar
+            name: Apartment power, realtime
+            icon: mdi:home-lightning-bolt
+            entity: sensor.tibber_power_consumption_realtime
+            variables:
+              barMax: 8800
+              barHiSeverity: 5000
+              barMidSeverity: 2000
+            styles:
+              card:
+                - padding: var(--ha-card-padding) var(--ha-card-padding) 0px 
+          - type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding-top: var(--ha-card-padding) !important;
+                }
+                #spinner-wrapper {
+                  display: none !important;
+                }
+                #header {
+                  padding: 0 16px !important;
+                }
+                #header__title {
+                  font-size: 1em !important;
+                  font-weight: regular !important;
+                  color: var(--primary-text-color) !important;
+                } 
+            chart_type: donut
+            apex_config:
+              legend:
+                show: false
+              chart:
+                height: 250px
+            header:
+              show: false
+              title: Power distribution
+              show_states: true
+              colorize_states: true
+            series:
+              - entity: sensor.tibber_power_consumption_realtime
+                name: Realtime total apartment consumption
+                show:
+                  in_chart: false
+                unit: ' W'
                 color: '#1aff66'
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
-              # Current hour (header)
-              - entity: sensor.tibber_energy_consumption_current_hour
-                name: Current hour
-                show:
-                  in_chart: false
-                unit: ' kWh'
+              - entity: sensor.power_momentary_light_consumption
+                name: Lights
                 color: '#1aff66'
-                float_precision: 2
-              # Estimated (chart)
-              - entity: sensor.tibber_percentage_of_maxlevel
-                name: Hour estimate (Tibber)
                 show:
                   in_header: false
-                unit: ' kWh'
+                unit: ' W'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+              - entity: sensor.power_momentary_heating_consumption
+                name: Heating
                 color: '#fdca40'
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.attributes.estimate);
-                  return [[new Date().getTime(), sensor_percent]];
-              # Max-hour average (chart)
-              - entity: sensor.power_monthly_maxhour_average
-                name: Average
                 show:
                   in_header: false
-                unit: ' %'
-                color: '#d24dff'
+                unit: ' W'
                 data_generator: |
-                  const sensor_percent = parseFloat(entity.attributes.prcnt_of_limit);
+                  const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
-              # Price level (header)
-              - entity: sensor.elvia_active_fixed_price_level
-                name: Price level limit
+              - entity: sensor.power_momentary_static_consumption
+                name: Static
+                color: '#1AC8ED'
                 show:
-                  in_chart: false
-                unit: ' kWh'
-                color: red
+                  in_header: false
+                unit: ' W'
                 data_generator: |
-                  const sensorValueKWh = parseFloat(entity.attributes.level_max);
-                  return [[new Date().getTime(), sensorValueKWh]];
-
-        # MOMENTARY POWER CONSUMPTION CATEGORIES
-        - type: custom:apexcharts-card
-          card_mod:
-            style: |
-              ha-card {
-                padding-top: var(--ha-card-padding) !important;
-              }
-              #spinner-wrapper {
-                display: none !important;
-              }
-              #header {
-                padding: 0 16px !important;
-              }
-              #header__title {
-                font-size: 1em !important;
-                font-weight: regular !important;
-                color: var(--primary-text-color) !important;
-              } 
-          chart_type: donut
-          apex_config:
-            legend:
-              show: false
-            chart:
-              height: 250px
-          header:
-            show: true
-            title: Power distribution
-            show_states: true
-            colorize_states: true
-          series:
-            - entity: sensor.tibber_power_consumption_realtime
-              name: Realtime total apartment consumption
-              show:
-                in_chart: false
-              unit: ' W'
-              color: '#1aff66'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            - entity: sensor.power_momentary_light_consumption
-              name: Lights
-              color: '#1aff66'
-              show:
-                in_header: false
-              unit: ' W'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            - entity: sensor.power_momentary_heating_consumption
-              name: Heating
-              color: '#fdca40'
-              show:
-                in_header: false
-              unit: ' W'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            - entity: sensor.power_momentary_static_consumption
-              name: Static
-              color: '#1AC8ED'
-              show:
-                in_header: false
-              unit: ' W'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            - entity: sensor.power_momentary_dynamic_consumption
-              name: Dynamic
-              color: '#d24dff'
-              show:
-                in_header: false
-              unit: ' W'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            - entity: sensor.power_other_momentary_consumption
-              name: Other
-              color: '#343434'
-              show:
-                in_header: false
-              unit: ' W'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+              - entity: sensor.power_momentary_dynamic_consumption
+                name: Dynamic
+                color: '#d24dff'
+                show:
+                  in_header: false
+                unit: ' W'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+              - entity: sensor.power_other_momentary_consumption
+                name: Other
+                color: '#343434'
+                show:
+                  in_header: false
+                unit: ' W'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
