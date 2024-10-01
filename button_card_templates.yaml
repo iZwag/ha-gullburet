@@ -663,7 +663,7 @@ extra_bar:
       ]]]
   styles:
     card:
-      - padding: 0 var(--ha-card-padding) var(--ha-card-padding)
+      - padding: 0px var(--ha-card-padding)
     state:
       - justify-self: end
       - font-size: 14px
@@ -689,3 +689,39 @@ extra_bar:
         - font-size: 14px
         - opacity: '0.7'
         - padding-bottom: 4px
+
+
+chart_legend_line:
+  show_icon: false
+  show_state: true
+  variables:
+    dotColor: "white"
+  custom_fields:
+    dot: |
+      [[[
+        return `<div></div>`
+      ]]]
+  styles:
+    card:
+      - padding: 0px var(--ha-card-padding) 0px 0px
+    name:
+      - justify-self: start
+      - font-size: 14px
+      - opacity: '0.7'
+    state:
+      - justify-self: end
+      - font-size: 14px
+    grid:
+      - grid-template-areas: '"dot n s"'
+      - grid-template-columns: 36px 1fr 4em
+      - grid-template-rows: min-content
+    custom_fields:
+      dot:
+        - justify-self: center
+        - width: 12px
+        - height: 12px
+        - border-radius: 6px
+        - background-color: |
+            [[[
+              return variables.dotColor;
+            ]]]
