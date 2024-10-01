@@ -495,7 +495,7 @@ cards:
       # MOMENTARY ENERGY AND POWER
       - type: horizontal-stack
         cards:
-        # MONTHLY MAX-HOUR AVERAGE VS. CURRENT HOUR COMPARISON
+        # ENERGY-THIS-HOUR MINIGAME
         # This shows a little apartment "mini-game" where the goal is to
         # have the current hour energy consumption stay below the "Price level limit"
         - type: custom:stack-in-card
@@ -647,27 +647,9 @@ cards:
               show_states: true
               colorize_states: true
             series:
-              - entity: sensor.tibber_power_consumption_realtime
-                name: Realtime total apartment consumption
-                show:
-                  in_chart: false
-                unit: ' W'
-                color: '#1aff66'
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
               - entity: sensor.power_momentary_light_consumption
                 name: Lights
-                color: '#1aff66'
-                show:
-                  in_header: false
-                unit: ' W'
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_heating_consumption
-                name: Heating
-                color: '#fdca40'
+                color: '#1ac8ed'
                 show:
                   in_header: false
                 unit: ' W'
@@ -676,7 +658,7 @@ cards:
                   return [[new Date().getTime(), sensor_percent]];
               - entity: sensor.power_momentary_static_consumption
                 name: Static
-                color: '#1AC8ED'
+                color: '#0B758C'
                 show:
                   in_header: false
                 unit: ' W'
@@ -686,6 +668,15 @@ cards:
               - entity: sensor.power_momentary_dynamic_consumption
                 name: Dynamic
                 color: '#d24dff'
+                show:
+                  in_header: false
+                unit: ' W'
+                data_generator: |
+                  const sensor_percent = parseFloat(entity.state);
+                  return [[new Date().getTime(), sensor_percent]];
+              - entity: sensor.power_momentary_heating_consumption
+                name: Heating
+                color: '#ff9800'
                 show:
                   in_header: false
                 unit: ' W'
