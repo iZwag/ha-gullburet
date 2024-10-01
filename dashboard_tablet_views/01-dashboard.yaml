@@ -93,9 +93,10 @@ cards:
         show_conditions: true
 
   # MAIN VIEW CONTENT
-  - type: vertical-stack
+  - type: horizontal-stack
     cards:
-    - type: horizontal-stack
+    # Left column
+    - type: vertical-stack
       cards:
       # #####################################################################
       # WEATHER FORECAST SECTION
@@ -184,277 +185,10 @@ cards:
                 return entity.attributes.forecast.map((entry) => {
                   return [new Date(entry.datetime).getTime(), entry.precipitation];
                 });
-      # #####################################################################
-      # ENERGY SECTION
-      - type: vertical-stack
-        cards:
-        # Energy prices (now) today & tomorrow
-        # Two different views are shown conditionally depending on time:
-        # - 24h-view before 13:00, tomorrow's prices are not ready
-        # - 48h-view after 13:00, when tomorrow's Tibber forecast arrives
-        - type: custom:stack-in-card
-          mode: vertical
-          cards:
-          - type: custom:button-card
-            template: big_sensor
-            name: Energy price, this hour
-            icon: mdi:cash
-            entity: sensor.energy_price_hourly_total
-            state_display: |
-              [[[
-                return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
-              ]]]
-          - type: conditional
-            conditions:
-            - condition: "state"
-              entity: sensor.power_price_chart_state
-              state: 24h
-            card:
-              type: custom:apexcharts-card
-              card_mod:
-                style: |
-                  ha-card {
-                    padding-top: 0px !important;
-                  }
-                  #header {
-                    padding: 0 16px !important;
-                  }
-                  #header__title {
-                    font-size: 1em !important;
-                    font-weight: regular !important;
-                    color: var(--primary-text-color) !important;
-                  }
-                  .apexcharts-legend {
-                    padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
-                  }
-              apex_config:
-                legend:
-                  show: true
-                  fontSize: '14px'
-                  fontFamily: 'Open Sans'
-                  horizontalAlign: center
-                grid:
-                  show: false
-                chart:
-                  height: 220px
-                tooltip:
-                  enabled: true
-                  shared: true
-                  followCursor: true
-                  enabledOnSeries:
-                    - 0
-                    - 2
-              header:
-                show: false
-                title: 'Energy prices now & today'
-                show_states: true
-                colorize_states: true
-              now:
-                show: true
-                color: '#d24dff'
-              graph_span: 23h
-              span:
-                start: day
-              yaxis:
-                - id: kwh
-                  decimals: 0
-                  apex_config:
-                    tickAmount: 5
-                  min: ~0
-              series:
-                - entity: sensor.elvia_variable_pricing
-                  name: Elvia
-                  show:
-                    in_header: false
-                    in_legend: false
-                  type: line
-                  color: '#ff9800'
-                  unit: ' øre/kWh'
-                  curve: stepline
-                  yaxis_id: kwh
-                  stroke_width: 3
-                  float_precision: 0
-                  data_generator: |
-                    const midnight = new Date()
-                    midnight.setHours(0, 0, 0, 0)
-                    const prices = entity.attributes.hours
-                    const data = [];
-                    for(let i = 0; i < prices.length; i++) {
-                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
-                    }
-                    return data;
-                - entity: sensor.elvia_variable_kwh_pricing_current_hour
-                  name: Elvia
-                  color: '#ff9800'
-                  opacity: 0
-                  show:
-                    in_header: false
-                  unit: ' øre/kWh'
-                  float_precision: 0
-                  data_generator: |
-                    const price = parseFloat(entity.state);
-                    return [[new Date().getTime(), price * 100]]; 
-                - entity: sensor.tibber_prices
-                  name: Tibber
-                  show:
-                    in_header: false
-                    in_legend: false
-                  color: '#1ac8ed'
-                  type: line
-                  unit: ' øre/kWh'
-                  curve: stepline
-                  yaxis_id: kwh
-                  stroke_width: 3
-                  float_precision: 0
-                  data_generator: |
-                    const noon = new Date()
-                    noon.setHours(0, 0, 0, 0)
-                    const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
-                    const data = [];
-                    for(let i = 0; i < prices.length; i++) {
-                      data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
-                    }
-                    return data;
-                - entity: sensor.tibber_energy_price_hourly
-                  name: Tibber
-                  color: '#1ac8ed'
-                  opacity: 0
-                  show:
-                    in_header: false
-                  unit: ' øre/kWh'
-                  float_precision: 0
-                  data_generator: |
-                    const price = parseFloat(entity.state);
-                    return [[new Date().getTime(), price * 100]]; 
-          - type: conditional
-            conditions:
-            - condition: "state"
-              entity: sensor.power_price_chart_state
-              state: 48h
-            card:
-              type: custom:apexcharts-card
-              card_mod:
-                style: |
-                  ha-card {
-                    padding-top: 0px !important;
-                  }
-                  #header {
-                    padding: 0 16px !important;
-                  }
-                  #header__title {
-                    font-size: 1em !important;
-                    font-weight: regular !important;
-                    color: var(--primary-text-color) !important;
-                  }
-                  .apexcharts-legend {
-                    padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
-                  }
-              apex_config:
-                legend:
-                  show: true
-                  fontSize: '14px'
-                  fontFamily: 'Open Sans'
-                  horizontalAlign: center
-                grid:
-                  show: false
-                chart:
-                  height: 220px
-                tooltip:
-                  enabled: true
-                  shared: true
-                  followCursor: true
-                  enabledOnSeries:
-                    - 0
-                    - 2
-              header:
-                show: false
-                title: 'Energy prices today & tomorrow'
-                show_states: true
-                colorize_states: true
-              now:
-                show: true
-                color: '#d24dff'
-              graph_span: 48h
-              span:
-                start: day
-              yaxis:
-                - id: kwh
-                  decimals: 0
-                  apex_config:
-                    tickAmount: 5
-                  min: 0
-              series:
-                - entity: sensor.elvia_variable_pricing
-                  name: Elvia
-                  color: '#ff9800'
-                  show:
-                    in_header: false
-                    in_legend: false
-                  type: line
-                  unit: ' øre/kWh'
-                  curve: stepline
-                  yaxis_id: kwh
-                  stroke_width: 3
-                  float_precision: 0
-                  data_generator: |
-                    const midnight = new Date()
-                    midnight.setHours(0, 0, 0, 0)
-                    const prices = entity.attributes.hours
-                    const data = [];
-                    for(let i = 0; i < prices.length; i++) {
-                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
-                    }
-                    return data;
-                - entity: sensor.elvia_variable_kwh_pricing_current_hour
-                  name: Elvia
-                  color: '#ff9800'
-                  opacity: 0
-                  show:
-                    in_header: false
-                  unit: ' øre/kWh'
-                  float_precision: 0
-                  data_generator: |
-                    const price = parseFloat(entity.state);
-                    return [[new Date().getTime(), price * 100]]; 
-                - entity: sensor.tibber_prices
-                  name: Tibber
-                  color: '#1ac8ed'
-                  show:
-                    in_header: false
-                    in_legend: false
-                  type: line
-                  unit: ' øre/kWh'
-                  curve: stepline
-                  yaxis_id: kwh
-                  stroke_width: 3
-                  float_precision: 0
-                  data_generator: |
-                    const noon = new Date()
-                    noon.setHours(0, 0, 0, 0)
-                    const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
-                    const data = [];
-                    for(let i = 0; i < prices.length; i++) {
-                      data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
-                    }
-                    return data;
-                - entity: sensor.tibber_energy_price_hourly
-                  name: Tibber
-                  color: '#1ac8ed'
-                  opacity: 0
-                  show:
-                    in_header: false
-                  unit: ' øre/kWh'
-                  float_precision: 0
-                  data_generator: |
-                    const price = parseFloat(entity.state);
-                    return [[new Date().getTime(), price * 100]]; 
-            
-    # Last row
-    - type: horizontal-stack
-      cards:
+    
       # #################################################################
       # PUBLIC TRANSPORT SECTION
-      # Swipe-carousel. Shows nearby stops with my own, custom card:
+      # Swipe-carousel. Shows nearby stops with totally custom card:
       # ruter-stop-info. This uses info retrieved with the Entur-platform
       # integration. Departure-info at stops are retrieved as entities and
       # passed to the custom card. 
@@ -491,6 +225,271 @@ cards:
             - sensor.ruter_haarklous_plass_platform_11768
           show_departures: 3
           walking_distance: 5          
+      
+    # Right column
+    - type: vertical-stack
+      cards:
+      # Energy prices (now) today & tomorrow
+      # Two different views are shown conditionally depending on time:
+      # - 24h-view before 13:00, tomorrow's prices are not ready
+      # - 48h-view after 13:00, when tomorrow's Tibber forecast arrives
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:
+        - type: custom:button-card
+          template: big_sensor
+          name: Energy price, this hour
+          icon: mdi:cash
+          entity: sensor.energy_price_hourly_total
+          state_display: |
+            [[[
+              return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+            ]]]
+        - type: conditional
+          conditions:
+          - condition: "state"
+            entity: sensor.power_price_chart_state
+            state: 24h
+          card:
+            type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding-top: 0px !important;
+                }
+                #header {
+                  padding: 0 16px !important;
+                }
+                #header__title {
+                  font-size: 1em !important;
+                  font-weight: regular !important;
+                  color: var(--primary-text-color) !important;
+                }
+                .apexcharts-legend {
+                  padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
+                }
+            apex_config:
+              legend:
+                show: true
+                fontSize: '14px'
+                fontFamily: 'Open Sans'
+                horizontalAlign: center
+              grid:
+                show: false
+              chart:
+                height: 220px
+              tooltip:
+                enabled: true
+                shared: true
+                followCursor: true
+                enabledOnSeries:
+                  - 0
+                  - 2
+            header:
+              show: false
+              title: 'Energy prices now & today'
+              show_states: true
+              colorize_states: true
+            now:
+              show: true
+              color: '#d24dff'
+            graph_span: 23h
+            span:
+              start: day
+            yaxis:
+              - id: kwh
+                decimals: 0
+                apex_config:
+                  tickAmount: 5
+                min: ~0
+            series:
+              - entity: sensor.elvia_variable_pricing
+                name: Elvia
+                show:
+                  in_header: false
+                  in_legend: false
+                type: line
+                color: '#ff9800'
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 3
+                float_precision: 0
+                data_generator: |
+                  const midnight = new Date()
+                  midnight.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.hours
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
+                  }
+                  return data;
+              - entity: sensor.elvia_variable_kwh_pricing_current_hour
+                name: Elvia
+                color: '#ff9800'
+                opacity: 0
+                show:
+                  in_header: false
+                unit: ' øre/kWh'
+                float_precision: 0
+                data_generator: |
+                  const price = parseFloat(entity.state);
+                  return [[new Date().getTime(), price * 100]]; 
+              - entity: sensor.tibber_prices
+                name: Tibber
+                show:
+                  in_header: false
+                  in_legend: false
+                color: '#1ac8ed'
+                type: line
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 3
+                float_precision: 0
+                data_generator: |
+                  const noon = new Date()
+                  noon.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                  }
+                  return data;
+              - entity: sensor.tibber_energy_price_hourly
+                name: Tibber
+                color: '#1ac8ed'
+                opacity: 0
+                show:
+                  in_header: false
+                unit: ' øre/kWh'
+                float_precision: 0
+                data_generator: |
+                  const price = parseFloat(entity.state);
+                  return [[new Date().getTime(), price * 100]]; 
+        - type: conditional
+          conditions:
+          - condition: "state"
+            entity: sensor.power_price_chart_state
+            state: 48h
+          card:
+            type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding-top: 0px !important;
+                }
+                #header {
+                  padding: 0 16px !important;
+                }
+                #header__title {
+                  font-size: 1em !important;
+                  font-weight: regular !important;
+                  color: var(--primary-text-color) !important;
+                }
+                .apexcharts-legend {
+                  padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
+                }
+            apex_config:
+              legend:
+                show: true
+                fontSize: '14px'
+                fontFamily: 'Open Sans'
+                horizontalAlign: center
+              grid:
+                show: false
+              chart:
+                height: 220px
+              tooltip:
+                enabled: true
+                shared: true
+                followCursor: true
+                enabledOnSeries:
+                  - 0
+                  - 2
+            header:
+              show: false
+              title: 'Energy prices today & tomorrow'
+              show_states: true
+              colorize_states: true
+            now:
+              show: true
+              color: '#d24dff'
+            graph_span: 48h
+            span:
+              start: day
+            yaxis:
+              - id: kwh
+                decimals: 0
+                apex_config:
+                  tickAmount: 5
+                min: 0
+            series:
+              - entity: sensor.elvia_variable_pricing
+                name: Elvia
+                color: '#ff9800'
+                show:
+                  in_header: false
+                  in_legend: false
+                type: line
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 3
+                float_precision: 0
+                data_generator: |
+                  const midnight = new Date()
+                  midnight.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.hours
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
+                  }
+                  return data;
+              - entity: sensor.elvia_variable_kwh_pricing_current_hour
+                name: Elvia
+                color: '#ff9800'
+                opacity: 0
+                show:
+                  in_header: false
+                unit: ' øre/kWh'
+                float_precision: 0
+                data_generator: |
+                  const price = parseFloat(entity.state);
+                  return [[new Date().getTime(), price * 100]]; 
+              - entity: sensor.tibber_prices
+                name: Tibber
+                color: '#1ac8ed'
+                show:
+                  in_header: false
+                  in_legend: false
+                type: line
+                unit: ' øre/kWh'
+                curve: stepline
+                yaxis_id: kwh
+                stroke_width: 3
+                float_precision: 0
+                data_generator: |
+                  const noon = new Date()
+                  noon.setHours(0, 0, 0, 0)
+                  const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                  const data = [];
+                  for(let i = 0; i < prices.length; i++) {
+                    data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                  }
+                  return data;
+              - entity: sensor.tibber_energy_price_hourly
+                name: Tibber
+                color: '#1ac8ed'
+                opacity: 0
+                show:
+                  in_header: false
+                unit: ' øre/kWh'
+                float_precision: 0
+                data_generator: |
+                  const price = parseFloat(entity.state);
+                  return [[new Date().getTime(), price * 100]]; 
+      
       # #################################################################
       # MOMENTARY ENERGY AND POWER
       - type: horizontal-stack
@@ -510,7 +509,7 @@ cards:
             numeric_precision: 2
             styles:
               card:
-              - padding: var(--ha-card-padding) var(--ha-card-padding) 0px
+              - padding: var(--ha-card-padding)
               icon:
               - color: '#ff9800'
             variables:
@@ -622,7 +621,7 @@ cards:
             card_mod:
               style: |
                 ha-card {
-                  padding-top: var(--ha-card-padding) !important;
+                  padding-top: 0px !important;
                 }
                 #spinner-wrapper {
                   display: none !important;
@@ -638,9 +637,18 @@ cards:
             chart_type: donut
             apex_config:
               legend:
-                show: false
+                show: true
+                fontSize: '12px'
+                fontFamily: 'Open Sans'
+                horizontalAlign: left
+                markers:
+                  size: 5
+                itemMargin:
+                  horizontal: 3
+              dataLabels:
+                enabled: false 
               chart:
-                height: 250px
+                height: 300px
             header:
               show: false
               title: Power distribution
