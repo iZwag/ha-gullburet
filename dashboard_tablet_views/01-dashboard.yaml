@@ -505,12 +505,14 @@ cards:
           - type: custom:button-card
             template: big_sensor_dot
             entity: sensor.tibber_energy_consumption_current_hour
-            icon: mdi:lightning-bolt
-            name: This hour
+            icon: mdi:lightning-bolt-circle
+            name: Energy, this hour
             numeric_precision: 2
             styles:
               card:
               - padding: var(--ha-card-padding) var(--ha-card-padding) 0px
+              icon:
+              - color: '#ff9800'
             variables:
               dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
               dotMidSeverity: 10
@@ -529,8 +531,8 @@ cards:
               dataLabels:
                 enabled: false
               legend:
-                show: true
-                fontSize: '12px'
+                show: false
+                fontSize: '14px'
                 fontFamily: 'Open Sans'
                 horizontalAlign: left
               chart:
@@ -539,10 +541,10 @@ cards:
                 radialBar:
                   inverseOrder: true
                   hollow:
-                    image: '/local/ui/google-icon-electric-bolt-128px.png'
+                    image: '/local/ui/google-icon-sports-score-128px-1ac8ed.png'
                     imageClipped: false
-                    imageWidth: 50
-                    imageHeight: 50
+                    imageWidth: 48
+                    imageHeight: 48
                     size: 40%
             header:
               show: false
@@ -555,13 +557,14 @@ cards:
                 name: Energy consumed
                 show:
                   in_header: false
+                  in_legend: false
                 color: '#ff9800'
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
               # Max-hour average (chart)
               - entity: sensor.hour_progress
-                name: Hour progress
+                name: "Time: Keep ahead of energy"
                 show:
                   in_header: false
                 unit: ' %'
@@ -569,14 +572,43 @@ cards:
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
-
+          # CUSTOM LEGEND
+          - type: custom:button-card
+            template: chart_legend_line
+            name: "Minutes, this hour"
+            show_state: false
+            variables:
+              dotColor: "#1ac8ed"
+            styles:
+              grid:
+                - grid-template-areas: '"dot n"'
+                - grid-template-columns: 36px 1fr
+          - type: custom:button-card
+            template: chart_legend_line
+            name: "Limit, this hour"
+            entity: sensor.elvia_active_fixed_price_level
+            state_display: |
+              [[[
+                return entity.attributes.level_max + " kWh" 
+              ]]]
+            variables:
+              dotColor: "transparent"
+            styles:
+              card:
+                - padding-bottom: var(--ha-card-padding)
+              custom_fields:
+                dot:
+                  - width: 8px
+                  - height: 8px
+                  - border-radius: 6px
+                  - border: solid 2px white
         # MOMENTARY POWER CONSUMPTION CATEGORIES
         - type: custom:stack-in-card
           mode: vertical
           cards:
           - type: custom:button-card
             template: big_sensor_bar
-            name: Apartment power, realtime
+            name: Power, realtime
             icon: mdi:home-lightning-bolt
             entity: sensor.tibber_power_consumption_realtime
             variables:
