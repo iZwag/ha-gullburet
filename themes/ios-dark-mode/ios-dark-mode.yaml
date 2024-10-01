@@ -5,12 +5,12 @@
 ios-dark-mode:
   # Global
   background-image: "center / cover no-repeat fixed url('/themes/ios-dark-mode/homekit-bg-4-cropped.jpg')"
-  primary-color: "#FF9F09" # from Apple systemOrange dark mode
+  primary-color: "var(--color-primary)" # Original value: "#FF9F09" # from Apple systemOrange dark mode
   light-primary-color: "#B6B6C1" # light gray (icons on left menu)
   primary-background-color: "#2c2c2e" # systemGray5 dark mode
   secondary-background-color: rgba(25, 25, 25, 0.7)
   divider-color: "#98989d" # from Apple systemGray dark mode
-  accent-color: rgba(255, 159, 9, 1)
+  accent-color: "var(--color-accent)" # Original value: rgba(255, 159, 9, 1)
   # Text
   #primary-font-family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
   #primary-font-family: "Quicksand"
@@ -120,13 +120,27 @@ ios-dark-mode:
   # ###########################################################################
   # ALL BELOW THIS LINE ARE @iZwag's ADDED/CHANGED STYLES
   # Added to style HA Dashboard HACS interface
-  sidebar-background: "#00FF00"
-  sidebar-min-width: 100px
-  sidebar-max-width: 700px
-  sidebar-relative-width: 24%
+  #sidebar-background: "#00FF00"
+  #sidebar-min-width: 100px
+  #sidebar-max-width: 700px
+  #sidebar-relative-width: 24%
+  
+  # Custom color palette
+  color-primary: '#1ac8ed'
+  color-primary-dark: '#10A0C1'
+  color-primary-darker: '#0B758C'
+  color-accent: '#ff9800'
+  color-accent-dark: '#C87800'
+  color-accent-darker: '#925700'
+  color-third: '#d24dff'
+  color-third-dark: '#C105FF'
+  color-third-darker: '#8E00BD'
+  color-ok: '#1aff66'
+  color-warning: '#fdca40'
+  color-error: '#ff0000'
 
-  ha-card-padding: 12px # My own. It's non-standard
-
+  # For general card styling
+  ha-card-padding: 12px # Actual custom field
   nested-card-background: transparent
   button-card-border-radius: 8px # ha-card-border-radius MINUS ha-card-padding
   button-card-background: rgba(var(--rgb-primary-text-color), 0.05)
@@ -159,8 +173,8 @@ ios-dark-mode:
         flex-direction: row-reverse;
       }
       #sidebar {
-        min-width: 10%;
-        max-width: 25%; 
+        min-width: 24vw;
+        max-width: 24vw;
         width: 24vw;
         margin-right: 1vw;
         padding: 0px var(--ha-card-padding);
