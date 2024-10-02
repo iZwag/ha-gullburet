@@ -102,11 +102,11 @@ cards:
       # WEATHER FORECAST SECTION
       - type: custom:stack-in-card
         mode: vertical
-        card_mod:
-          style: |
-            ha-card {
-              background-color: transparent !important;
-            }
+        #card_mod:
+        #  style: |
+        #    ha-card {
+        #      background-color: transparent !important;
+        #    }
         cards: 
         # Weather now and 5-day forecast with high & low temperatures
         # and precipitation
@@ -584,7 +584,7 @@ cards:
                 - grid-template-columns: 36px 1fr
           - type: custom:button-card
             template: chart_legend_line
-            name: "Limit, this hour"
+            name: "Limit, this hour:"
             entity: sensor.elvia_active_fixed_price_level
             state_display: |
               [[[
@@ -661,6 +661,7 @@ cards:
                 show:
                   in_header: false
                 unit: ' W'
+                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
@@ -670,6 +671,7 @@ cards:
                 show:
                   in_header: false
                 unit: ' W'
+                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
@@ -679,6 +681,7 @@ cards:
                 show:
                   in_header: false
                 unit: ' W'
+                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
@@ -688,6 +691,7 @@ cards:
                 show:
                   in_header: false
                 unit: ' W'
+                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
@@ -697,6 +701,7 @@ cards:
                 show:
                   in_header: false
                 unit: ' W'
+                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
