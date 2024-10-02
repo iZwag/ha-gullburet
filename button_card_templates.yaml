@@ -16,8 +16,9 @@ navbar_button:
       - background-color: >
           [[[
             if (variables.link_active == "true") return "var(--button-card-active-background)";
-            return "var(--button-card-background)";
+            return "transparent";
           ]]]
+      #return "var(--button-card-background)";
       - padding: var(--ha-card-padding)
     icon:
       - width: 26px
@@ -30,6 +31,7 @@ navbar_button:
     name:
       - align-self: middle
       - justify-self: start
+      - font-family: var(--primary-font-family)
       - color: >
           [[[ 
             if (variables.link_active == "true") return "var(--primary-text-color)";
@@ -93,6 +95,7 @@ navbar_datestring:
       - font-size: 1.3vw
       - font-weight: 300
       - letter-spacing: '-0.05vw'
+      - font-family: var(--primary-font-family)
   tap_action:
     action: none
   hold_action:
@@ -114,6 +117,7 @@ light_mode:
     name:
       - font-size: "0.8em"
       - color: var(--secondary-text-color)
+      - font-family: var(--primary-font-family)
 
 # Same as above, but highlights ON-state with the background, and adds
 # toggle-action on tap.
@@ -134,6 +138,7 @@ light_mode_toggle:
     name:
       - font-size: "0.8em"
       - color: var(--secondary-text-color)
+      - font-family: var(--primary-font-family)
   tap_action:
     action: toggle
 
@@ -494,15 +499,16 @@ big_sensor:
       - width: 30px
       - justify-self: start
       - height: 30px
-      #- margin-left: 3px
     state:
       - justify-self: start
       - font-size: 24px
       - font-weight: 500
+      - font-family: var(--primary-font-family)
     name:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
+      - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"i s" "i n"'
       - grid-template-columns: 40px 1fr
@@ -536,10 +542,12 @@ big_sensor_dot:
       - justify-self: start
       - font-size: 24px
       - font-weight: 500
+      - font-family: var(--primary-font-family)
     name:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
+      - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"i s dot" "i n dot"'
       - grid-template-columns: 40px 1fr 40px
@@ -602,11 +610,13 @@ big_sensor_bar:
       - justify-self: start
       - font-size: 24px
       - font-weight: 500
+      - font-family: var(--primary-font-family)
     name:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
       - padding-bottom: 12px
+      - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: |
           [[[
@@ -637,7 +647,7 @@ extra_bar:
   show_state: true
   show_icon: false
   variables:
-    barColor: "#1aff66"
+    barColor: var(--color-ok)
     barMax: 100
     barHiSeverity: 75
     barMidSeverity: 30
@@ -668,11 +678,13 @@ extra_bar:
       - justify-self: end
       - font-size: 14px
       - font-weight: 500
+      - font-family: var(--primary-font-family)
     name:
       - justify-self: start
       - font-size: 14px
       - opacity: '0.7'
       - padding-bottom: 4px
+      - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"n secondary secondary" "bar bar s"'
       - grid-template-columns: 70% 1fr 4em
@@ -689,7 +701,7 @@ extra_bar:
         - font-size: 14px
         - opacity: '0.7'
         - padding-bottom: 4px
-
+        - font-family: var(--primary-font-family)
 
 chart_legend_line:
   show_icon: false
@@ -706,11 +718,13 @@ chart_legend_line:
       - padding: 0px var(--ha-card-padding) 0px 0px
     name:
       - justify-self: start
-      - font-size: 14px
-      - opacity: '0.7'
+      - font-size: 12px
+      - font-family: var(--primary-font-family)
     state:
       - justify-self: end
-      - font-size: 14px
+      - font-size: 12px
+      - font-weight: 600
+      - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"dot n s"'
       - grid-template-columns: 36px 1fr 4em
