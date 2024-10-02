@@ -176,15 +176,14 @@ ios-dark-mode:
         min-width: 24vw;
         max-width: 24vw;
         width: 24vw;
-        margin-right: 1vw;
+        margin-right: var(--ha-card-padding);
         padding: 0px var(--ha-card-padding);
-        background-color: var(--ha-card-background);
-        border-right: solid 2px var(--button-card-active-background);
+        background-color: rgba(0,0,0, 0.15);
         height: 100vh;
       }
       #main {
-        padding-top: 4px;
-        padding-right: 4px;
+        padding-top: var(--ha-card-padding);
+        padding-right: var(--ha-card-padding);
       }
     .: |  
       hui-sidebar-view {
