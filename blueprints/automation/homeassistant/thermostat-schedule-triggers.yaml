@@ -67,6 +67,8 @@ action:
     - condition: trigger
       id: schedule-on
     sequence:
+    - delay:
+        seconds: 30
     - service: script.heating_set_thermostat_mode
       data:
         mode: !input schedule_type
