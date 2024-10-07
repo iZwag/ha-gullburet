@@ -615,6 +615,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
             # BATH-VIEW: LIGHT MODES
             - type: custom:stack-in-card
               mode: vertical
@@ -734,6 +736,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
             # BEDROOM-VIEW: DEVICES
             - type: custom:stack-in-card
               mode: vertical
@@ -1058,6 +1062,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
             # GUEST-VIEW: CLEANING
             # Guest room Xiaomi id = 19
             - type: custom:stack-in-card
@@ -1192,6 +1198,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
             # KITCHEN-VIEW: CLEANING
             # Kitchen Xiaomi id = 17
             - type: custom:stack-in-card
@@ -1326,6 +1334,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
             # CLEANING SECTION
             # Living room Xiaomi id = 18
             - type: custom:stack-in-card
@@ -1651,6 +1661,8 @@ cards:
                 show_temperature_control: true
                 layout: horizontal
                 secondary_info: none
+                tap_action: 
+                  action: more-info
           # ###############################################################
           # VERANDA VIEW
           veranda:
