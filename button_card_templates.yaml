@@ -703,6 +703,9 @@ extra_bar:
         - padding-bottom: 4px
         - font-family: var(--primary-font-family)
 
+#############################################################################
+# CHART LEGEND ENTRY - One row for a legend with color-dot
+#############################################################################
 chart_legend_line:
   show_icon: false
   show_state: true
@@ -727,7 +730,7 @@ chart_legend_line:
       - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"dot n s"'
-      - grid-template-columns: 36px 1fr 4em
+      - grid-template-columns: 36px 1fr 5em
       - grid-template-rows: min-content
     custom_fields:
       dot:
@@ -739,3 +742,24 @@ chart_legend_line:
             [[[
               return variables.dotColor;
             ]]]
+
+#############################################################################
+# SECTION TITLE - Initially created for the Floorplan info sections
+#############################################################################
+# Inputs: [name] = Section title 
+section_title:
+  show_state: false
+  show_name: true
+  show_icon: false
+  styles:
+    card:
+      - background: transparent
+      - border: none
+      - height: 40px
+      - width: 100%
+    name:
+      - font-family: var(--primary-font-family)
+      - font-size: 18px
+      - font-weight: 400
+      - color: var(--primary-text-color)
+      - justify-self: start
