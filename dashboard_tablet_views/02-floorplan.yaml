@@ -1293,7 +1293,7 @@ cards:
                 layout_type: custom:grid-layout
                 layout:
                   margin: 0px
-                  gap: 4px
+                  grid-gap: "0px 4px"
                   padding: 4px 4px 0px 12px
                   grid-template-areas: '"title . temp hum"'
                   grid-template-rows: min-content
@@ -1312,14 +1312,17 @@ cards:
                   entity: sensor.humidity_living
                   numeric_precision: 0
               ##############################    
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_living
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_living
+              - type: custom:mushroom-select-card
+                entity: input_select.heating_mode_living
+                layout: horizontal
+                secondary_info: none
+                name: Mode
+                icon_color: deep-orange
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                icon: mdi:heat-wave
               - type: custom:mushroom-climate-card
                 entity: climate.heater_living
                 name: Thermostat
@@ -1331,6 +1334,13 @@ cards:
                 secondary_info: none
                 tap_action: 
                   action: more-info
+              - type: custom:mini-graph-card
+                entities:
+                  - sensor.temperature_living
+                show:
+                  name: false
+                  icon: false
+                  state: false
             # CLEANING SECTION
             # Living room Xiaomi id = 18
             - type: custom:stack-in-card
