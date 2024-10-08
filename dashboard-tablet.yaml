@@ -3,8 +3,16 @@ kiosk_mode:
   hide_header: true
   hide_sidebar: true
 
-# "custom:button-card" button templates used in the views.
+# "custom:button-card" templates are defined in this file.
+# These templates are treated as INDIVIDUAL reuseable UI components
+# Not only buttons, but titles, chips, indicators, bars etc.
 button_card_templates: !include button_card_templates.yaml
+
+# "custom:decluttering-card" templates are defined in this file.
+# These templates are treated as COMPOSITE reusable UI components
+# Contains whole sections that are reused across views
+decluttering_templates: !include decluttering_templates.yaml
+
 
 # Include all the views for this Dashboard.
 # They are separated and modularized because some of them are quite large.
