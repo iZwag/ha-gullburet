@@ -1285,62 +1285,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # LIVING-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              # Experiment
-              - type: custom:layout-card
-                layout_type: custom:grid-layout
-                layout:
-                  margin: 0px
-                  grid-gap: "0px 4px"
-                  padding: 4px 4px 0px 12px
-                  grid-template-areas: '"title . temp hum"'
-                  grid-template-rows: min-content
-                  grid-template-columns: 1fr max-content max-content
-                cards:
-                - type: custom:button-card
-                  template: section_title
-                  name: Climate
-                - type: custom:button-card
-                  template: state_chip
-                  entity: sensor.temperature_living
-                  variables:
-                    iconColor: '#ff9800'
-                - type: custom:button-card
-                  template: state_chip
-                  entity: sensor.humidity_living
-                  numeric_precision: 0
-              ##############################    
-              - type: custom:mushroom-select-card
-                entity: input_select.heating_mode_living
-                layout: horizontal
-                secondary_info: none
-                name: Mode
-                icon_color: deep-orange
-                tap_action:
-                  action: none
-                hold_action:
-                  action: none
-                icon: mdi:heat-wave
-              - type: custom:mushroom-climate-card
-                entity: climate.heater_living
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
-              - type: custom:mini-graph-card
-                entities:
-                  - sensor.temperature_living
-                show:
-                  name: false
-                  icon: false
-                  state: false
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_living
+                - humidity_entity: sensor.humidity_living
+                - mode_entity: input_select.heating_mode_living
+                - climate_entity: climate.heater_living
             # CLEANING SECTION
             # Living room Xiaomi id = 18
             - type: custom:stack-in-card
