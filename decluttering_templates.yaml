@@ -1,0 +1,63 @@
+# CLIMATE SECTION - Used in Floorplan room infos
+# Variables:
+# - temperature_entity:
+# - humidity_entity: 
+# - climate_entity:
+# - mode_entity:  
+climate_section:
+  card:
+    type: custom:stack-in-card
+    mode: vertical
+    cards:
+    - type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        margin: 0px
+        grid-gap: "0px 4px"
+        padding: 4px 0px 12px 12px
+        grid-template-areas: '"title . temp hum"'
+        grid-template-rows: min-content
+        grid-template-columns: 1fr max-content max-content
+      cards:
+      - type: custom:button-card
+        template: section_title
+        name: Climate
+      - type: custom:button-card
+        template: state_chip
+        entity: '[[temperature_entity]]'
+        variables:
+          iconColor: '#ff9800'
+      - type: custom:button-card
+        template: state_chip
+        entity: '[[humidity_entity]]'
+        numeric_precision: 0
+    ##############################    
+    - type: custom:mushroom-select-card
+      entity: '[[mode_entity]]'
+      layout: horizontal
+      secondary_info: none
+      name: Mode
+      icon_color: deep-orange
+      tap_action:
+        action: none
+      hold_action:
+        action: none
+      icon: mdi:heat-wave
+    - type: custom:mushroom-climate-card
+      entity: '[[climate_entity]]'
+      name: Thermostat
+      hvac_modes:
+      - 'off'
+      - 'heat'
+      show_temperature_control: true
+      layout: horizontal
+      secondary_info: none
+      tap_action: 
+        action: more-info
+    - type: custom:mini-graph-card
+      entities:
+        - '[[temperature_entity]]'
+      show:
+        name: false
+        icon: false
+        state: false
