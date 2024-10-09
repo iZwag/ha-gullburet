@@ -79,6 +79,20 @@
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
       vacation_temperature_entity: input_number.temperature_vacation_commons
+
+- id: 'heating_office_update_on_mode_change'
+  alias: Heating - Office - Update thermostat on mode change
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-control-mode.yaml
+    input:
+      select_entity: input_select.heating_mode_office
+      thermostat_entity: climate.heater_office
+      away_temperature_entity: input_number.temperature_away_office
+      sleep_temperature_entity: input_number.temperature_sleep_office
+      comfort_temperature_entity: input_number.temperature_comfort_office
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
+
 # #############################################################################
 # THERMOSTAT PROGRAM SCHEDULE TRIGGERS HANDLERS
 # Automations that listens to changes in the thermostat schedules
@@ -182,6 +196,28 @@
       select_entity: input_select.heating_mode_guest
       enabled_if: "{{ is_state('input_boolean.guest_mode_enable', 'on') }}"
 
+- id: 'heating_office_sleep_schedule_triggers'
+  alias: Heating - Office - Sleep/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_sleep_office
+      schedule_type: Sleep
+      select_entity: input_select.heating_mode_office
+      enabled_if: true
+
+- id: 'heating_office_comfort_schedule_triggers'
+  alias: Heating - Office - Comfort/away on schedule triggers
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-schedule-triggers.yaml
+    input:
+      schedule_entity: schedule.heating_comfort_office
+      schedule_type: Comfort
+      select_entity: input_select.heating_mode_kitchen
+      enabled_if: true
+
 # #############################################################################
 # SET THERMOSTAT TO CONTROL-MODE TEMPERATURE WHEN POWERED ON
 # Automations that reacts to heat devices that turn ON. They then have their
@@ -259,3 +295,16 @@
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
       vacation_temperature_entity: input_number.temperature_vacation_commons
+
+- id: 'heating_office_power_on_temperature'
+  alias: Heating - Office - Power on temperature
+  description: ''
+  use_blueprint:
+    path: homeassistant/thermostat-power-on.yaml
+    input:
+      select_entity: input_select.heating_mode_office
+      thermostat_entity: climate.heater_office
+      away_temperature_entity: input_number.temperature_away_office
+      sleep_temperature_entity: input_number.temperature_sleep_office
+      comfort_temperature_entity: input_number.temperature_comfort_office
+      vacation_temperature_entity: input_number.temperature_vacation_bedrooms
