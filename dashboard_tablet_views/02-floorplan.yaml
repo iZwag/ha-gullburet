@@ -1013,57 +1013,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # GUEST-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: horizontal-stack
-                cards:
-                - type: markdown
-                  content: "## Climate"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: var(--ha-card-padding) !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        padding: var(--ha-card-padding) !important;
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:heat-wave
-                    entity: input_select.heating_mode_guest
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_guest
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_guest
-              - type: custom:mushroom-climate-card
-                entity: climate.heater_guest
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_guest
+                - humidity_entity: sensor.humidity_guest
+                - mode_entity: input_select.heating_mode_guest
+                - climate_entity: climate.heater_guest
             # GUEST-VIEW: CLEANING
             # Guest room Xiaomi id = 19
             - type: custom:stack-in-card
@@ -1149,57 +1105,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # KITCHEN-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: horizontal-stack
-                cards:
-                - type: markdown
-                  content: "## Climate"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: var(--ha-card-padding) !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        padding: var(--ha-card-padding) !important;
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:heat-wave
-                    entity: input_select.heating_mode_kitchen
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_kitchen
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_kitchen
-              - type: custom:mushroom-climate-card
-                entity: climate.heater_kitchen
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_kitchen
+                - humidity_entity: sensor.humidity_kitchen
+                - mode_entity: input_select.heating_mode_kitchen
+                - climate_entity: climate.heater_kitchen
             # KITCHEN-VIEW: CLEANING
             # Kitchen Xiaomi id = 17
             - type: custom:stack-in-card
