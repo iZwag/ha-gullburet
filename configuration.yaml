@@ -9,6 +9,8 @@ sensor: !include sensors.yaml
 script: !include scripts.yaml
 template: !include templates.yaml
 input_boolean: !include input_boolean.yaml
+input_number: !include input_number.yaml
+input_select: !include input_select.yaml
 
 # TEXT TO SPEECH
 tts:
@@ -37,6 +39,9 @@ lovelace:
       title: Mobile
       icon: mdi:cellphone
       show_in_sidebar: true
+  resources:
+    - url: /local/community/decluttering-card/decluttering-card.js
+      type: module
 
 # PYTHON SCRIPTS
 # Add scripts to <config>/python_scripts. Also add its entry to services.yaml in same folder.

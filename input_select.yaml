@@ -1,0 +1,10 @@
+# Tracks the currently active control mode 
+heating_mode_office:
+  name: "Heating - Office - Control mode"
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Comfort
+    - Vacation

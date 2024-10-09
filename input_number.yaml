@@ -1,0 +1,29 @@
+# "Constant" holding the away temperature for office
+temperature_away_office:
+  name: "Heating - Office - Away temperature"
+  min: 10.0
+  max: 35.0
+  icon: mdi:home-export-outline
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# "Constant" holding the comfort temperature for office
+temperature_comfort_office:
+  name: "Heating - Office - Comfort temperature"
+  min: 10.0
+  max: 35.0
+  icon: mdi:emoticon
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# "Constant" holding the sleep temperature for office
+temperature_sleep_office:
+  name: "Heating - Office - Sleep temperature"
+  min: 10.0
+  max: 35.0
+  icon: mdi:power-sleep
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
