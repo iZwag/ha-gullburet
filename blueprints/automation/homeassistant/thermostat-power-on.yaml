@@ -62,6 +62,18 @@ trigger:
   entity_id: !input thermostat_entity
   from: unknown
   to: heat
+condition:
+- condition: or
+  conditions:
+    - condition: state
+      entity_id: !input select_entity
+      state: Away
+    - condition: state
+      entity_id: !input select_entity
+      state: Sleep
+    - condition: state
+      entity_id: !input select_entity
+      state: Comfort
 action:
 - choose:
   - conditions:
