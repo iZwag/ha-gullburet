@@ -43,6 +43,12 @@ climate_section:
       hold_action:
         action: none
       icon: mdi:heat-wave
+      card_mod:
+        style: |
+          ha-card {
+            padding: 4px 12px !important;
+            font-family: var(--primary-font-family) !important;
+          }
     - type: custom:mushroom-climate-card
       entity: '[[climate_entity]]'
       name: Thermostat
@@ -54,6 +60,12 @@ climate_section:
       secondary_info: none
       tap_action: 
         action: more-info
+      card_mod:
+        style: |
+          ha-card {
+            padding: 4px 12px !important;
+            font-family: var(--primary-font-family) !important;
+          }
     - type: custom:mini-graph-card
       entities:
         - '[[temperature_entity]]'
