@@ -820,3 +820,24 @@ state_chip:
       - color: var(--primary-text-color)
       - padding: 0px 6px
       - justify-self: center
+
+#############################################################################
+# ROOM TITLE - Initially created for the Floorplan info sections
+#############################################################################
+# Inputs: [name] = Room title 
+room_title:
+  show_state: false
+  show_name: true
+  show_icon: false
+  styles:
+    card:
+      - background: transparent
+      - border: none
+      - width: 100%
+      - padding: var(--ha-card-padding)
+    name:
+      - font-family: var(--primary-font-family)
+      - font-size: 28px
+      - font-weight: 300
+      - color: var(--primary-text-color)
+      - justify-self: start
