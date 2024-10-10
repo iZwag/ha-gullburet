@@ -571,52 +571,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # BATH-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: horizontal-stack
-                cards:
-                - type: markdown
-                  content: "## Climate"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: var(--ha-card-padding) !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        padding: var(--ha-card-padding) !important;
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:heat-wave
-                    entity: input_select.heating_mode_bath
-              - type: tile
-                name: Temperature
-                entity: sensor.temperature_bath
-              - type: custom:mushroom-climate-card
-                entity: climate.floor_heat_bath
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_bath
+                - humidity_entity: sensor.humidity_placeholder
+                - mode_entity: input_select.heating_mode_bath
+                - climate_entity: climate.floor_heat_bath
             # BATH-VIEW: LIGHT MODES
             - type: custom:stack-in-card
               mode: vertical
@@ -1286,32 +1247,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # OFFICE-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: "## Climate"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_office
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_office
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_office
+                - humidity_entity: sensor.humidity_office
+                - mode_entity: input_select.heating_mode_office
+                - climate_entity: climate.heater_office
             # OFFICE-VIEW: CLEANING
             # Office Xiaomi id = 21
             - type: custom:stack-in-card
@@ -1485,52 +1427,13 @@ cards:
                       padding: var(--ha-card-padding) !important;
                     }
             # TOILET-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: horizontal-stack
-                cards:
-                - type: markdown
-                  content: "## Climate"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: var(--ha-card-padding) !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        padding: var(--ha-card-padding) !important;
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:heat-wave
-                    entity: input_select.heating_mode_toilet
-              - type: tile
-                name: Temperature
-                entity: sensor.temperature_toilet
-              - type: custom:mushroom-climate-card
-                entity: climate.floor_heat_toilet
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_toilet
+                - humidity_entity: sensor.humidity_placeholder
+                - mode_entity: input_select.heating_mode_toilet
+                - climate_entity: climate.floor_heat_toilet
           # ###############################################################
           # VERANDA VIEW
           veranda:
