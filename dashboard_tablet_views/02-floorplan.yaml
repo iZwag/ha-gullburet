@@ -143,21 +143,9 @@ cards:
             type: vertical-stack
             cards:
             # HOME-VIEW: TITLE
-            - type: markdown
-              content: "# Gullburet Home"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Gullburet Home
             # HOME-VIEW: ALL LIGHTS
             - type: custom:stack-in-card
               mode: vertical
@@ -555,21 +543,9 @@ cards:
             type: vertical-stack
             cards:
             # BATH-VIEW: TITLE
-            - type: markdown
-              content: "# Bathroom"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Bathroom
             # BATH-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -632,21 +608,9 @@ cards:
             type: vertical-stack
             cards:
             # BEDROOM-VIEW: TITLE
-            - type: markdown
-              content: "# Bedroom"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Bedroom
             # BEDROOM-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
@@ -847,21 +811,9 @@ cards:
             type: vertical-stack
             cards:
             # ENTRY-VIEW: TITLE
-            - type: markdown
-              content: "# Entry hall"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Entry hall
             # ENTRY-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
@@ -955,24 +907,9 @@ cards:
             type: vertical-stack
             cards:
             # GUEST-VIEW: TITLE
-            - type: markdown
-              content: "# Guest room"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Guest room
             # GUEST-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -1047,24 +984,9 @@ cards:
             type: vertical-stack
             cards:
             # KITCHEN-VIEW: TITLE
-            - type: markdown
-              content: "# Kitchen"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Kitchen
             # KITCHEN-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -1139,24 +1061,9 @@ cards:
             type: vertical-stack
             cards:
             # LIVING-VIEW: TITLE
-            - type: markdown
-              content: "# Living room"
-              # In the first version, this was applied in the config-template-card:
-              # style:
-              #   margin: 0px
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Living room
             # LIVING-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -1231,21 +1138,9 @@ cards:
             type: vertical-stack
             cards:
             # OFFICE-VIEW: TITLE
-            - type: markdown
-              content: "# Office"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Office
             # OFFICE-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -1320,21 +1215,9 @@ cards:
             type: vertical-stack
             cards:
             # STORAGE-VIEW: TITLE
-            - type: markdown
-              content: "# Storage room"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Storage
             # STORAGE-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
@@ -1411,21 +1294,9 @@ cards:
             type: vertical-stack
             cards:
             # TOILET-VIEW: TITLE
-            - type: markdown
-              content: "# Toilet room"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Toilet room
             # TOILET-VIEW: CLIMATE
             - type: custom:decluttering-card
               template: climate_section
@@ -1440,21 +1311,9 @@ cards:
             type: vertical-stack
             cards:
             # VERANDA-VIEW: TITLE
-            - type: markdown
-              content: "# Veranda"
-              card_mod:
-                style:
-                  ha-markdown$: |
-                    h1 {
-                      font-weight: 300;
-                    }
-                  .: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-                    ha-markdown {
-                      padding: var(--ha-card-padding) !important;
-                    }
+            - type: custom:button-card
+              template: room_title
+              name: Veranda
             # VERANDA-VIEW: CLIMATE
             - type: custom:stack-in-card
               mode: vertical
