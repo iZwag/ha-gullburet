@@ -782,6 +782,12 @@ state_chip:
       - grid-template-rows: min-content
       - grid-template-columns: 32px 1fr
     card:
+      - display: |
+          [[[
+            if (entity.state == 0) {
+              return "none";
+            }
+          ]]]
       - font-family: var(--primary-font-family)
       - padding: 4px
       - background: var(--button-card-background)
@@ -810,7 +816,7 @@ state_chip:
           ]]]
     state:
       - font-size: 14px
-      - font-weight: 700
+      - font-weight: 600
       - color: var(--primary-text-color)
       - padding: 0px 6px
       - justify-self: center
