@@ -267,6 +267,14 @@
         {% set grid = states('sensor.elvia_variable_pricing') | float(default=0) %}
         {{ energy + grid }}
 
+    # Always 0 humidity placeholder
+    humidity_placeholder:
+      friendly_name: "Placeholder humidity device, always 0"
+      device_class: humidity
+      unit_of_measurement: '%'
+      value_template: >
+        {{ 0 | float(default=0) }}
+    
 # Power sensors
 - platform: template
   sensors:
