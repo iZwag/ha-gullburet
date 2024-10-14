@@ -747,64 +747,10 @@ cards:
                       decrease: 00:10:00
             # BEDROOM-VIEW: CLEANING
             # Bedroom Xiaomi id = 20
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the bedroom **only**. Remember: Open the door.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 20
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 20
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 20
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 20
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 20
           # ###############################################################
           # ENTRY VIEW
           entry:
@@ -843,64 +789,10 @@ cards:
                   entity: sensor.humidity_entry
             # ENTRY-VIEW: CLEANING
             # Entry Xiaomi id = 16
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the entry **only**.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 16
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 16
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 16
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 16
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 16
           # ###############################################################
           # GUEST VIEW
           guest:
@@ -920,64 +812,10 @@ cards:
                 - climate_entity: climate.heater_guest
             # GUEST-VIEW: CLEANING
             # Guest room Xiaomi id = 19
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the guest room **only**.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 19
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 19
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 19
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 19
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 19
           # ###############################################################
           # KITCHEN VIEW
           kitchen:
@@ -997,64 +835,10 @@ cards:
                 - climate_entity: climate.heater_kitchen
             # KITCHEN-VIEW: CLEANING
             # Kitchen Xiaomi id = 17
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the kitchen **only**.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 17
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 17
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 17
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 17
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 17
           # ###############################################################
           # LIVING VIEW
           living:
@@ -1074,64 +858,10 @@ cards:
                 - climate_entity: climate.heater_living
             # CLEANING SECTION
             # Living room Xiaomi id = 18
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the living room **only**.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 18
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 18
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 18
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 18
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 18
           # ###############################################################
           # OFFICE VIEW
           office:
@@ -1151,64 +881,10 @@ cards:
                 - climate_entity: climate.heater_office
             # OFFICE-VIEW: CLEANING
             # Office Xiaomi id = 21
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: >
-                  ## Cleaning
-
-                  Immediately send Esmeralda to clean the office **only**.
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: 0px !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: var(--ha-card-padding) !important;
-                      }
-              - type: "custom:layout-card"
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr 1fr 1fr
-                  margin: 0px
-                  padding: var(--ha-card-padding)
-                cards:
-                - type: custom:button-card
-                  entity: script.robot_clean_target_room
-                  icon: mdi:power-sleep
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Silent"
-                    target_room: 21
-                - type: custom:button-card
-                  icon: mdi:fan
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Standard"
-                    target_room: 21
-                - type: custom:button-card
-                  icon: mdi:fan-plus
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Medium"
-                    target_room: 21
-                - type: custom:button-card
-                  icon: mdi:fan-speed-3
-                  entity: script.robot_clean_target_room
-                  template: vacuum_fan_and_room
-                  variables:
-                    fan_speed: "Turbo"
-                    target_room: 21
+            - type: custom:decluttering-card
+              template: cleaning_section
+              variables: 
+                - xiaomi_room_id: 21
           # ###############################################################
           # STORAGE VIEW
           storage:
