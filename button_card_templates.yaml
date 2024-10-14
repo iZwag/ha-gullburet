@@ -748,8 +748,6 @@ chart_legend_line:
 #############################################################################
 # Inputs: [name] = Section title 
 section_title:
-  show_state: false
-  show_name: true
   show_icon: false
   styles:
     card:
@@ -763,6 +761,25 @@ section_title:
       - font-weight: 400
       - color: var(--primary-text-color)
       - justify-self: start
+
+#############################################################################
+# SECTION TEXT - Initially created for the Floorplan info sections
+#############################################################################
+# Inputs: [name] = Section text
+section_text:
+  show_icon: false
+  styles:
+    card:
+    - background: transparent
+    - padding: 4px var(--ha-card-padding)
+    - width: 100%
+    name:
+    - text-align: start
+    - white-space: normal
+    - font-size: 12px
+    - font-family: var(--primary-font-family)
+    - font-weight: 400
+    - color: var(--primary-text-color)
 
 #############################################################################
 # STATE CHIP - Custom chip, showing icon+state
