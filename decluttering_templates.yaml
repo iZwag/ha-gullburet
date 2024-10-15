@@ -73,6 +73,46 @@ climate_section:
         icon: false
         state: false
 
+# CLIMATE SECTION W/O THERMOSTAT - Used in Floorplan room infos
+# Variables:
+# - temperature_entity:
+# - humidity_entity: 
+climate_section_wo_thermo:
+  card:
+    type: custom:stack-in-card
+    mode: vertical
+    cards:
+    - type: custom:layout-card
+      layout_type: custom:grid-layout
+      layout:
+        margin: 0px
+        grid-gap: "0px 4px"
+        padding: 4px 0px 12px 12px
+        grid-template-areas: '"title . temp hum"'
+        grid-template-rows: min-content
+        grid-template-columns: 1fr max-content max-content
+      cards:
+      - type: custom:button-card
+        template: section_title
+        name: Climate
+      - type: custom:button-card
+        template: state_chip
+        entity: '[[temperature_entity]]'
+        variables:
+          iconColor: '#ff9800'
+      - type: custom:button-card
+        template: state_chip
+        entity: '[[humidity_entity]]'
+        numeric_precision: 0   
+    - type: custom:mini-graph-card
+      entities:
+        - '[[temperature_entity]]'
+      show:
+        name: false
+        icon: false
+        state: false
+
+
 # CLEANING SECTION - Used in Floorplan room infos
 # Variables:
 # - xiaomi_room_id
