@@ -612,57 +612,13 @@ cards:
               template: room_title
               name: Bedroom
             # BEDROOM-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: horizontal-stack
-                cards:
-                - type: markdown
-                  content: "## Climate"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: var(--ha-card-padding) !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        padding: var(--ha-card-padding) !important;
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:heat-wave
-                    entity: input_select.heating_mode_bedroom
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_bedroom
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_bedroom
-              - type: custom:mushroom-climate-card
-                entity: climate.heater_bedroom
-                name: Thermostat
-                hvac_modes:
-                - 'off'
-                - 'heat'
-                show_temperature_control: true
-                layout: horizontal
-                secondary_info: none
-                tap_action: 
-                  action: more-info
+            - type: custom:decluttering-card
+              template: climate_section
+              variables: 
+                - temperature_entity: sensor.temperature_bedroom
+                - humidity_entity: sensor.humidity_bedroom
+                - mode_entity: input_select.heating_mode_bedroom
+                - climate_entity: climate.heater_bedroom
             # BEDROOM-VIEW: DEVICES
             - type: custom:stack-in-card
               mode: vertical
@@ -761,32 +717,11 @@ cards:
               template: room_title
               name: Entry hall
             # ENTRY-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: "## Climate"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_entry
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_entry
+            - type: custom:decluttering-card
+              template: climate_section_wo_thermo
+              variables:
+                - temperature_entity: sensor.temperature_entry
+                - humidity_entity: sensor.humidity_entry
             # ENTRY-VIEW: CLEANING
             # Entry Xiaomi id = 16
             - type: custom:decluttering-card
@@ -895,27 +830,11 @@ cards:
               template: room_title
               name: Storage
             # STORAGE-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: "## Climate"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
-              - type: tile
-                name: Temperature
-                entity: sensor.temperature_storage
+            - type: custom:decluttering-card
+              template: climate_section_wo_thermo
+              variables:
+                - temperature_entity: sensor.temperature_storage
+                - humidity_entity: sensor.humidity_placeholder
             # STORAGE-VIEW: LIGHTS
             - type: custom:stack-in-card
               mode: vertical
@@ -991,32 +910,11 @@ cards:
               template: room_title
               name: Veranda
             # VERANDA-VIEW: CLIMATE
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: markdown
-                content: "## Climate"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  name: Temperature
-                  entity: sensor.temperature_outdoor
-                - type: tile
-                  name: Humidity
-                  entity: sensor.humidity_outdoor
+            - type: custom:decluttering-card
+              template: climate_section_wo_thermo
+              variables:
+                - temperature_entity: sensor.temperature_outdoor
+                - humidity_entity: sensor.humidity_outdoor
             # VERANDA-VIEW: LIGHTS
             - type: custom:stack-in-card
               mode: vertical
