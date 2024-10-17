@@ -1,3 +1,38 @@
+# Mode for pausing heating, effectively reducing power consumption
+# Turned On = Heating devices are turned off
+# Turned Off = Heating devices are turned back on - Occurs every hour
 pause_heating:
   name: Heating - Pause heat devices
   icon: mdi:radiator-off
+
+# Mode for selecting rooms for robot vacuum session in 3D-floorplan
+# Turned On = Prepares 3D-floorplan for selecting rooms for cleaning
+# Turned Off = Clears 3D-floorplan of select rooms
+select_rooms_cleaning:
+  name: Cleaning - Select rooms
+  icon: mdi:floor-plan
+
+floorplan_bedroom_selected:
+  name: Floorplan - Bedroom selected
+  icon: mdi:gesture-tap
+
+floorplan_entry_selected:
+  name: Floorplan - Entry selected
+  icon: mdi:gesture-tap
+
+floorplan_guest_selected:
+  name: Floorplan - Guest room selected
+  icon: mdi:gesture-tap
+
+floorplan_kitchen_selected:
+  name: Floorplan - Kitchen selected
+  icon: mdi:gesture-tap
+
+floorplan_living_selected:
+  name: Floorplan - Living room selected
+  icon: mdi:gesture-tap
+
+floorplan_office_selected:
+  name: Floorplan - Office selected
+  icon: mdi:gesture-tap
+
