@@ -806,3 +806,59 @@
           entity_id: input_boolean.pause_heating
         data: {}
   mode: single
+- id: '1729197107885'
+  alias: Cleaning - Handle select rooms ON/OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.select_rooms_cleaning
+    from: 'off'
+    to: 'on'
+    id: turned-on
+  - platform: state
+    entity_id:
+    - input_boolean.select_rooms_cleaning
+    from: 'on'
+    to: 'off'
+    id: turned-off
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-on
+      sequence:
+      - service: script.deselect_floorplan_room
+        metadata: {}
+        data: {}
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.floorplan_show_icons
+          - input_boolean.floorplan_bedroom_selected
+          - input_boolean.floorplan_entry_selected
+          - input_boolean.floorplan_guest_selected
+          - input_boolean.floorplan_kitchen_selected
+          - input_boolean.floorplan_living_selected
+          - input_boolean.floorplan_office_selected
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-off
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - input_boolean.floorplan_bedroom_selected
+          - input_boolean.floorplan_entry_selected
+          - input_boolean.floorplan_guest_selected
+          - input_boolean.floorplan_kitchen_selected
+          - input_boolean.floorplan_living_selected
+          - input_boolean.floorplan_office_selected
+  mode: single
