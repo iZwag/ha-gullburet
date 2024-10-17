@@ -623,21 +623,13 @@ cards:
             - type: custom:stack-in-card
               mode: vertical
               cards:
-              - type: markdown
-                content: "## Devices"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
+              - type: custom:button-card
+                template: section_title
+                name: Devices
+                styles:
+                  card:
+                  - padding: 12px var(--ha-card-padding) 12px
+                  - height: 48px
               - type: horizontal-stack
                 cards:
                 - type: tile
@@ -839,21 +831,13 @@ cards:
             - type: custom:stack-in-card
               mode: vertical
               cards:
-              - type: markdown
-                content: "## Lights"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
+              - type: custom:button-card
+                template: section_title
+                name: Lights
+                styles:
+                  card:
+                  - padding: 12px var(--ha-card-padding) 12px
+                  - height: 48px
               - type: custom:timer-bar-card
                 entity: timer.storage_room_light_timer
                 name: "Light timer"
@@ -919,21 +903,13 @@ cards:
             - type: custom:stack-in-card
               mode: vertical
               cards:
-              - type: markdown
-                content: "## Lights"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }
+              - type: custom:button-card
+                template: section_title
+                name: Lights
+                styles:
+                  card:
+                  - padding: 12px var(--ha-card-padding) 12px
+                  - height: 48px
               - type: horizontal-stack
                 cards:
                 - type: tile
@@ -1264,222 +1240,360 @@ cards:
                 '--mdc-icon-size': 30px
         # ###########################################################
         # OUTLINES HIDDEN SELECT ICONS - Z-index: 11 -> 14
-        # Veranda
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: veranda
-          style:
-            left: 34.5%
-            top: 0%
-            opacity: 0
-            z-index: 13
-            color: grey
-            '--mdc-icon-size': 65px
-            transform: 'scaleX(4.5) scaleY(1)'
-        # Storage
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: storage
-          style:
-            left: 73.2%
-            top: 0%
-            opacity: 0
-            z-index: 14
-            color: purple
-            '--mdc-icon-size': 66px
-            transform: 'scaleX(1.3) scaleY(1)'
-        # Kitchen
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: kitchen
-          style:
-            left: 53.3%
-            top: 10%
-            opacity: 0
-            z-index: 13
-            color: green
-            '--mdc-icon-size': 177px
-            transform: 'scaleX(1) scaleY(1.2)'
-        # Living room
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: living
-          style:
-            left: 5%
-            top: 24%
-            opacity: 0
-            z-index: 12
-            color: red
-            '--mdc-icon-size': 250px
-            transform: 'scaleX(0.9) scaleY(2.03)'
-        # Bath
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: bath
-          style:
-            left: 53%
-            top: 34%
-            opacity: 0
-            z-index: 13
-            color: yellow
-            '--mdc-icon-size': 185px
-            transform: 'scaleX(1) scaleY(1)'
-        # Toilet
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: toilet
-          style:
-            left: 76.5%
-            top: 46.75%
-            opacity: 0
-            z-index: 14
-            color: teal
-            '--mdc-icon-size': 80px
-            transform: 'scaleX(1) scaleY(1.15)'
-        # Entry
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: entry
-          style:
-            left: 61%
-            top: 57%
-            opacity: 0
-            z-index: 13
-            color: pink
-            '--mdc-icon-size': 120px
-            transform: 'scaleX(1.6) scaleY(1)'
-        # Bedroom
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: bedroom
-          style:
-            left: 2%
-            top: 73%
-            opacity: 0
-            z-index: 13
-            color: blue
-            '--mdc-icon-size': 209px
-            transform: 'scaleX(0.85) scaleY(1.1)'
-        # Office
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: office
-          style:
-            left: 37%
-            top: 75%
-            opacity: 0
-            z-index: 14
-            color: violet
-            '--mdc-icon-size': 170px
-            transform: 'scaleX(0.75) scaleY(1.3)'
-        # Guest
-        - type: icon
-          icon: mdi:selection
-          tap_action:
-            action: call-service
-            service: script.select_floorplan_room
-            data:
-              room_name: guest
-          style:
-            left: 61%
-            top: 74%
-            opacity: 0
-            z-index: 12
-            color: orange
-            '--mdc-icon-size': 190px
-            transform: 'scaleX(0.7) scaleY(1.2)'
+        - type: conditional
+          conditions:
+            - entity: input_boolean.select_rooms_cleaning
+              state: "off"
+          elements:
+          # Veranda
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: veranda
+            style:
+              left: 34.5%
+              top: 0%
+              opacity: 0
+              z-index: 13
+              color: grey
+              '--mdc-icon-size': 65px
+              transform: 'scaleX(4.5) scaleY(1)'
+          # Storage
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: storage
+            style:
+              left: 73.2%
+              top: 0%
+              opacity: 0
+              z-index: 14
+              color: purple
+              '--mdc-icon-size': 66px
+              transform: 'scaleX(1.3) scaleY(1)'
+          # Kitchen
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: kitchen
+            style:
+              left: 53.3%
+              top: 10%
+              opacity: 0
+              z-index: 13
+              color: green
+              '--mdc-icon-size': 177px
+              transform: 'scaleX(1) scaleY(1.2)'
+          # Living room
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: living
+            style:
+              left: 5%
+              top: 24%
+              opacity: 0
+              z-index: 12
+              color: red
+              '--mdc-icon-size': 250px
+              transform: 'scaleX(0.9) scaleY(2.03)'
+          # Bath
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: bath
+            style:
+              left: 53%
+              top: 34%
+              opacity: 0
+              z-index: 13
+              color: yellow
+              '--mdc-icon-size': 185px
+              transform: 'scaleX(1) scaleY(1)'
+          # Toilet
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: toilet
+            style:
+              left: 76.5%
+              top: 46.75%
+              opacity: 0
+              z-index: 14
+              color: teal
+              '--mdc-icon-size': 80px
+              transform: 'scaleX(1) scaleY(1.15)'
+          # Entry
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: entry
+            style:
+              left: 61%
+              top: 57%
+              opacity: 0
+              z-index: 13
+              color: pink
+              '--mdc-icon-size': 120px
+              transform: 'scaleX(1.6) scaleY(1)'
+          # Bedroom
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: bedroom
+            style:
+              left: 2%
+              top: 73%
+              opacity: 0
+              z-index: 13
+              color: blue
+              '--mdc-icon-size': 209px
+              transform: 'scaleX(0.85) scaleY(1.1)'
+          # Office
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: office
+            style:
+              left: 37%
+              top: 75%
+              opacity: 0
+              z-index: 14
+              color: violet
+              '--mdc-icon-size': 170px
+              transform: 'scaleX(0.75) scaleY(1.3)'
+          # Guest
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: guest
+            style:
+              left: 61%
+              top: 74%
+              opacity: 0
+              z-index: 12
+              color: orange
+              '--mdc-icon-size': 190px
+              transform: 'scaleX(0.7) scaleY(1.2)'
+          # ###########################################################
+          # SELECTED ROOM OUTLINES - Z-index: 9 & 10
+          - type: image
+            entity: input_select.floorplan_select_state
+            state_image:
+              "bath": "/local/floorplan/outline-v2-bath.png"
+              "bedroom": "/local/floorplan/outline-v2-bedroom.png"
+              "entry": "/local/floorplan/outline-v2-entry.png"
+              "guest": "/local/floorplan/outline-v2-guest.png"
+              "kitchen": "/local/floorplan/outline-v2-kitchen.png"
+              "living": "/local/floorplan/outline-v2-living.png"
+              "office": "/local/floorplan/outline-v2-office.png"
+              "storage": "/local/floorplan/outline-v2-storage.png"
+              "toilet": "/local/floorplan/outline-v2-toilet.png"
+              "veranda": "/local/floorplan/outline-v2-veranda.png"
+              "none": "/local/floorplan/base-empty.png"
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+              filter: hue-rotate(199deg)
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # SELECTED ROOM OVERLAYS
+          - type: image
+            entity: input_select.floorplan_select_state
+            state_image:
+              "bath": "/local/floorplan/overlay-bath.png"
+              "bedroom": "/local/floorplan/overlay-bedroom.png"
+              "entry": "/local/floorplan/overlay-entry.png"
+              "guest": "/local/floorplan/overlay-guest.png"
+              "kitchen": "/local/floorplan/overlay-kitchen.png"
+              "living": "/local/floorplan/overlay-living2.png"
+              "office": "/local/floorplan/overlay-office.png"
+              "storage": "/local/floorplan/overlay-storage.png"
+              "toilet": "/local/floorplan/overlay-toilet.png"
+              "veranda": "/local/floorplan/overlay-veranda.png"
+              "none": "/local/floorplan/base-empty.png"
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              filter: hue-rotate(199deg)
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+        
         # ###########################################################
-        # SELECTED ROOM OUTLINES - Z-index: 9 & 10
-        - type: image
-          entity: input_select.floorplan_select_state
-          state_image:
-            "bath": "/local/floorplan/outline-v2-bath.png"
-            "bedroom": "/local/floorplan/outline-v2-bedroom.png"
-            "entry": "/local/floorplan/outline-v2-entry.png"
-            "guest": "/local/floorplan/outline-v2-guest.png"
-            "kitchen": "/local/floorplan/outline-v2-kitchen.png"
-            "living": "/local/floorplan/outline-v2-living.png"
-            "office": "/local/floorplan/outline-v2-office.png"
-            "storage": "/local/floorplan/outline-v2-storage.png"
-            "toilet": "/local/floorplan/outline-v2-toilet.png"
-            "veranda": "/local/floorplan/outline-v2-veranda.png"
-            "none": "/local/floorplan/base-empty.png"
-          style:
-            left: 50%
-            top: 50%
-            width: 100%
-            z-index: 10
-            filter: hue-rotate(199deg)
-          tap_action:
-            action: none
-          hold_action:
-            action: none
-          double_tap_action:
-            action: none
-        # SELECTED ROOM OVERLAYS
-        - type: image
-          entity: input_select.floorplan_select_state
-          state_image:
-            "bath": "/local/floorplan/overlay-bath.png"
-            "bedroom": "/local/floorplan/overlay-bedroom.png"
-            "entry": "/local/floorplan/overlay-entry.png"
-            "guest": "/local/floorplan/overlay-guest.png"
-            "kitchen": "/local/floorplan/overlay-kitchen.png"
-            "living": "/local/floorplan/overlay-living2.png"
-            "office": "/local/floorplan/overlay-office.png"
-            "storage": "/local/floorplan/overlay-storage.png"
-            "toilet": "/local/floorplan/overlay-toilet.png"
-            "veranda": "/local/floorplan/overlay-veranda.png"
-            "none": "/local/floorplan/base-empty.png"
-          style:
-            left: 50%
-            top: 50%
-            width: 100%
-            z-index: 9
-            filter: hue-rotate(199deg)
-            opacity: 20%
-          tap_action:
-            action: none
-          hold_action:
-            action: none
-          double_tap_action:
-            action: none
+        # ROOM SELECT OVERLAYS FOR CLEANING  - Z-index: 11 -> 14
+        - type: conditional
+          conditions:
+            - entity: input_boolean.select_rooms_cleaning
+              state: "on"
+          elements:
+          # Entry
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: entry
+            style:
+              left: 61%
+              top: 57%
+              opacity: 0
+              z-index: 13
+              color: pink
+              '--mdc-icon-size': 120px
+              transform: 'scaleX(1.6) scaleY(1)'
+          # Bedroom
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: bedroom
+            style:
+              left: 2%
+              top: 73%
+              opacity: 0
+              z-index: 13
+              color: blue
+              '--mdc-icon-size': 209px
+              transform: 'scaleX(0.85) scaleY(1.1)'
+          # Office
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: office
+            style:
+              left: 37%
+              top: 75%
+              opacity: 0
+              z-index: 14
+              color: violet
+              '--mdc-icon-size': 170px
+              transform: 'scaleX(0.75) scaleY(1.3)'
+          # Guest
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: guest
+            style:
+              left: 61%
+              top: 74%
+              opacity: 0
+              z-index: 12
+              color: orange
+              '--mdc-icon-size': 190px
+              transform: 'scaleX(0.7) scaleY(1.2)'
+          # Kitchen
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: kitchen
+            style:
+              left: 53.3%
+              top: 10%
+              opacity: 0
+              z-index: 13
+              color: green
+              '--mdc-icon-size': 177px
+              transform: 'scaleX(1) scaleY(1.2)'
+          # Living room
+          - type: icon
+            icon: mdi:selection
+            tap_action:
+              action: call-service
+              service: script.select_floorplan_room
+              data:
+                room_name: living
+            style:
+              left: 5%
+              top: 24%
+              opacity: 0
+              z-index: 12
+              color: red
+              '--mdc-icon-size': 250px
+              transform: 'scaleX(0.9) scaleY(2.03)'
+          # SELECTED ROOM OVERLAYS AND OUTLINES - Z-index: 9 & 10
+          # BEDROOM
+          - type: image
+            entity: input_boolean.floorplan_bedroom_selected
+            image: "/local/floorplan/outline-v2-bedroom.png"
+            state_filter:
+              "on": hue-rotate(99deg)
+              "off": hue-rotate(199deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_bedroom_selected
+            image: "/local/floorplan/overlay-bedroom.png"
+            state_filter:
+              "on": hue-rotate(99deg)
+              "off": hue-rotate(199deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
         # ###########################################################
         # LIGHT EFFECT LAYERS - Z-index: 2 -> 8
         # Bedroom
