@@ -1468,11 +1468,9 @@ cards:
           # Entry
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_entry_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: entry
+              action: toggle
             style:
               left: 61%
               top: 57%
@@ -1484,11 +1482,9 @@ cards:
           # Bedroom
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_bedroom_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: bedroom
+              action: toggle
             style:
               left: 2%
               top: 73%
@@ -1500,11 +1496,9 @@ cards:
           # Office
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_office_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: office
+              action: toggle
             style:
               left: 37%
               top: 75%
@@ -1516,11 +1510,9 @@ cards:
           # Guest
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_guest_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: guest
+              action: toggle
             style:
               left: 61%
               top: 74%
@@ -1532,11 +1524,9 @@ cards:
           # Kitchen
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_kitchen_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: kitchen
+              action: toggle
             style:
               left: 53.3%
               top: 10%
@@ -1548,11 +1538,9 @@ cards:
           # Living room
           - type: icon
             icon: mdi:selection
+            entity: input_boolean.floorplan_living_selected
             tap_action:
-              action: call-service
-              service: script.select_floorplan_room
-              data:
-                room_name: living
+              action: toggle
             style:
               left: 5%
               top: 24%
@@ -1567,8 +1555,8 @@ cards:
             entity: input_boolean.floorplan_bedroom_selected
             image: "/local/floorplan/outline-v2-bedroom.png"
             state_filter:
-              "on": hue-rotate(99deg)
-              "off": hue-rotate(199deg)
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
             style:
               left: 50%
               top: 50%
@@ -1582,8 +1570,168 @@ cards:
             entity: input_boolean.floorplan_bedroom_selected
             image: "/local/floorplan/overlay-bedroom.png"
             state_filter:
-              "on": hue-rotate(99deg)
-              "off": hue-rotate(199deg)
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # ENTRY
+          - type: image
+            entity: input_boolean.floorplan_entry_selected
+            image: "/local/floorplan/outline-v2-entry.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_entry_selected
+            image: "/local/floorplan/overlay-entry.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # GUEST
+          - type: image
+            entity: input_boolean.floorplan_guest_selected
+            image: "/local/floorplan/outline-v2-guest.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_guest_selected
+            image: "/local/floorplan/overlay-guest.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # KITCHEN
+          - type: image
+            entity: input_boolean.floorplan_kitchen_selected
+            image: "/local/floorplan/outline-v2-kitchen.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_kitchen_selected
+            image: "/local/floorplan/overlay-kitchen.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # LIVING
+          - type: image
+            entity: input_boolean.floorplan_living_selected
+            image: "/local/floorplan/outline-v2-living.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_living_selected
+            image: "/local/floorplan/overlay-living2.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 9
+              opacity: 20%
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          # OFFICE
+          - type: image
+            entity: input_boolean.floorplan_office_selected
+            image: "/local/floorplan/outline-v2-office.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
+            style:
+              left: 50%
+              top: 50%
+              width: 100%
+              z-index: 10
+            tap_action:
+              action: none
+            hold_action:
+              action: none
+          - type: image
+            entity: input_boolean.floorplan_office_selected
+            image: "/local/floorplan/overlay-office.png"
+            state_filter:
+              "on": hue-rotate(199deg)
+              "off": hue-rotate(93deg)
             style:
               left: 50%
               top: 50%
