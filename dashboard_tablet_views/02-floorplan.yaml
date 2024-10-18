@@ -386,19 +386,55 @@ cards:
                     ha-card {
                       background-color: var(--nested-card-background);
                     }
+              - type: custom:layout-card
+                layout_type: grid
+                layout:
+                  grid-gap: "0px var(--ha-card-padding)"
+                  grid-template-columns: 1fr 1fr
+                  margin: 0px
+                  padding: 2px var(--ha-card-padding) 2px
+                cards:
+                - type: custom:button-card
+                  template: light_mode_toggle
+                  entity: input_boolean.select_rooms_cleaning
+                  name: Select rooms
+                - type: conditional
+                  conditions:
+                  - type: state
+                    entity: input_boolean.select_rooms_cleaning
+                    state_not: "on"
+                  card:
+                    type: custom:button-card
+                    color_type: blank
+                    styles:
+                      card:
+                      - background: transparent
+                - type: conditional
+                  conditions:
+                  - type: state
+                    entity: input_boolean.select_rooms_cleaning
+                    state: "on"
+                  card:
+                    type: custom:button-card
+                    template: light_mode
+                    icon: mdi:play
+                    name: Clean selected rooms
+                    tap_action:
+                      action: call-service
+                      service: script.clean_selected_rooms
               - type: conditional
                 conditions:
                   - type: state
                     entity: binary_sensor.esmeralda_mop_ready
                     state_not: "on"
                 card:
-                  type: "custom:layout-card"
+                  type: custom:layout-card
                   layout_type: grid
                   layout:
                     grid-gap: "0px var(--ha-card-padding)"
                     grid-template-columns: 1fr 1fr 1fr 1fr
                     margin: 0px
-                    padding: var(--ha-card-padding)
+                    padding: 2px var(--ha-card-padding) var(--ha-card-padding)
                   cards:
                   - type: custom:button-card
                     entity: vacuum.esmeralda
@@ -436,7 +472,7 @@ cards:
                     grid-gap: "0px var(--ha-card-padding)"
                     grid-template-columns: 1fr 1fr 1fr 1fr
                     margin: 0px
-                    padding: var(--ha-card-padding)
+                    padding: 2px var(--ha-card-padding) var(--ha-card-padding)
                   cards:
                   - type: custom:button-card
                     entity: script.robot_set_mop_mode
