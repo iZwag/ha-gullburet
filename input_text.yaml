@@ -1,4 +1,4 @@
 selected_room_ids_cleaning:
   name: "Cleaning - Selected room IDs"
-  initial: ""
+  initial: "[]"
   max: 255
