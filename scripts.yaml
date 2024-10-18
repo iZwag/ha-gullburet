@@ -210,9 +210,10 @@ storage_room_light_on_auto:
     target:
       entity_id: timer.storage_room_light_timer
   - type: turn_on
-    device_id: 0f0cf256bc675de29f236888b06ff677
-    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
+    device_id: 91c9c36e238ec41947f52b0f55c97036
+    entity_id: 4ad13a64085d45c3fca12e71fa3ba5c1
     domain: light
+    brightness_pct: 100
   mode: single
   icon: mdi:lightbulb-auto
 masterdim_script:
@@ -406,9 +407,10 @@ storage_room_light_off_finish_timer:
   - service: timer.finish
     target:
       entity_id: timer.storage_room_light_timer
+    data: {}
   - type: turn_off
-    device_id: 0f0cf256bc675de29f236888b06ff677
-    entity_id: fad54750e7aefa1a6178fdf5e8714bcc
+    device_id: 91c9c36e238ec41947f52b0f55c97036
+    entity_id: 4ad13a64085d45c3fca12e71fa3ba5c1
     domain: light
   mode: single
   icon: mdi:lightbulb-off
@@ -1015,3 +1017,19 @@ speakers_group_living_kitchen:
       - media_player.sonos_kitchen
   mode: restart
   icon: mdi:speaker-multiple
+clean_selected_rooms:
+  alias: Clean selected rooms
+  sequence:
+  - service: xiaomi_miio.vacuum_clean_segment
+    metadata: {}
+    data:
+      segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
+    target:
+      entity_id: vacuum.esmeralda
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.select_rooms_cleaning
+  mode: single
+  icon: mdi:vacuum
