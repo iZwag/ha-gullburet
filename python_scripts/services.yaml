@@ -51,3 +51,25 @@ power_compare_maxhours:
     top_maxhour_time_3:
       description: Date and time entity for when the top 3 max-hour this month started
       example: input_datetime.power_monthly_highest_max_hour_3
+
+cleaning_room_add:
+  name: Add room for cleaning
+  description: Adds the specified room to a list of rooms to be cleaned by robot vacuum
+  fields:
+    entity_id:
+      description: The input_text-helper that stores the array
+      example: input_text.selected_room_ids_cleaning
+    room_id:
+      description: The integer number id that represents the room to add
+      example: 16
+
+cleaning_room_remove:
+  name: Remove room for cleaning
+  description: Removes the specified room from the list of rooms to be cleaned by robot vacuum
+  fields:
+    entity_id:
+      description: The input_text-helper that stores the array
+      example: input_text.selected_room_ids_cleaning
+    room_id:
+      description: The integer number id that represents the room to remove
+      example: 16

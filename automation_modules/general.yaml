@@ -263,3 +263,47 @@
     target:
       entity_id: input_number.power_last_hour_consumed
   mode: single
+
+# BLUEPRINT TO HANDLE SELECTING ROOMS FOR CLEANING
+- id: 'cleaning_queue_bedroom'
+  alias: Cleaning - Queue bedroom 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_bedroom_selected
+      room_id: "20"
+- id: 'cleaning_queue_entry'
+  alias: Cleaning - Queue entry 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_entry_selected
+      room_id: "16"
+- id: 'cleaning_queue_guest'
+  alias: Cleaning - Queue guest room 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_guest_selected
+      room_id: "19"
+- id: 'cleaning_queue_kitchen'
+  alias: Cleaning - Queue kitchen 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_kitchen_selected
+      room_id: "17"
+- id: 'cleaning_queue_living'
+  alias: Cleaning - Queue living room 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_living_selected
+      room_id: "18"
+- id: 'cleaning_queue_office'
+  alias: Cleaning - Queue office 
+  use_blueprint:
+    path: homeassistant/cleaning-queue-select-room.yaml
+    input:
+      selected_boolean: input_boolean.floorplan_office_selected
+      room_id: "21"
