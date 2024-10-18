@@ -1,0 +1,49 @@
+blueprint:
+  name: Cleaning - Queue select room
+  description: Handles enqueuing or dequeuing a room for cleaning, if it is selected or deselected.
+  domain: automation
+  author: 'github.com/izwag'
+  input:
+    selected_boolean:
+      name: Room select state
+      description: The input_boolean-entity holding the room select state.
+      selector:
+        entity:
+          filter:
+            domain: input_boolean
+    room_id:
+      name: Xiaomi room ID
+      description: The room ID of the room to be enqueued or removed
+mode: queued
+trigger:
+- platform: state
+  entity_id: !input selected_boolean
+  from: "on"
+  to: "off"
+  id: turned-off
+- platform: state
+  entity_id: !input selected_boolean
+  from: "off"
+  to: "on"
+  id: turned-on
+condition: []
+action:
+- choose:
+  - conditions:
+    - condition: trigger
+      id:
+        - turned-on
+    sequence:
+    - service: python_script.cleaning_room_add
+      data:
+        entity_id: input_text.selected_room_ids_cleaning
+        room_id: !input room_id
+  - conditions:
+    - condition: trigger
+      id:
+        - turned-off
+    sequence:
+    - service: python_script.cleaning_room_remove
+      data:
+        entity_id: input_text.selected_room_ids_cleaning
+        room_id: !input room_id
