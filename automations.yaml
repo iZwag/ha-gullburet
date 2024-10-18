@@ -155,6 +155,7 @@
       - input_boolean.lights_dining_mode
       - input_boolean.lights_cooking_mode
       - input_boolean.guest_show_wifi
+      - input_boolean.select_rooms_cleaning
     data: {}
   - service: script.deselect_floorplan_room
     data: {}
@@ -845,6 +846,12 @@
           - input_boolean.floorplan_kitchen_selected
           - input_boolean.floorplan_living_selected
           - input_boolean.floorplan_office_selected
+      - service: input_text.set_value
+        metadata: {}
+        data:
+          value: '[]'
+        target:
+          entity_id: input_text.selected_room_ids_cleaning
     - conditions:
       - condition: trigger
         id:
@@ -861,4 +868,15 @@
           - input_boolean.floorplan_kitchen_selected
           - input_boolean.floorplan_living_selected
           - input_boolean.floorplan_office_selected
+      - service: input_text.set_value
+        metadata: {}
+        data:
+          value: '[]'
+        target:
+          entity_id: input_text.selected_room_ids_cleaning
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.floorplan_show_icons
   mode: single
