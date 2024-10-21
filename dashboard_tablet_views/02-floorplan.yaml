@@ -151,56 +151,54 @@ cards:
               mode: vertical
               cards:
               - type: custom:layout-card
-                layout_type: grid
+                layout_type: custom:grid-layout
                 layout:
-                  grid-gap: "0px 6px"
-                  grid-template-columns: 3fr 7fr
                   margin: 0px
-                  padding: var(--ha-card-padding)
+                  grid-gap: "0px 4px"
+                  padding: 4px 0px 12px 12px
+                  grid-template-areas: '"title . auto num brightness"'
+                  grid-template-rows: min-content
+                  grid-template-columns: 1fr max-content max-content max-content
                 cards:
-                - type: markdown
-                  content: "## All lights"
-                  card_mod:
-                    style:
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: 0px !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        } 
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:brightness-auto
-                    entity: input_boolean.auto_suncycle_masterdim
-                  - type: entity
-                    icon: mdi:ceiling-light-multiple
-                    entity: sensor.lights_on_count
-                  - type: entity
-                    icon: mdi:brightness-7
-                    entity: input_number.apartment_dimmer
+                - type: custom:button-card
+                  template: section_title
+                  name: All lights
+                - type: custom:button-card
+                  template: text_chip
+                  icon: mdi:brightness-auto
+                  entity: input_boolean.auto_suncycle_masterdim
+                  tap_action:
+                    action: toggle
+                  variables:
+                    iconColor: '#1ac8ed'
+                - type: custom:button-card
+                  template: text_chip
+                  icon: mdi:ceiling-light-multiple
+                  entity: sensor.lights_on_count
+                  tap_action:
+                    action: none
+                - type: custom:button-card
+                  template: text_chip
+                  icon: mdi:brightness-7
+                  entity: input_number.apartment_dimmer
+                  numeric_precision: 0
+                  tap_action:
+                    action: none
+                  variables:
+                    iconColor: '#ff9800'
               - type: conditional
                 conditions:
                 - condition: state
                   entity: input_boolean.auto_suncycle_masterdim
                   state: "on"
                 card:
-                  type: tile
+                  type: custom:mushroom-entity-card
                   entity: input_text.sun_cycle_next_event
-                  name: "Next automatic dim event"
+                  primary_info: state
+                  secondary_info: name
+                  icon_color: primary
+                  name: Next automatic dim event
                   icon: mdi:brightness-auto
-                  color: white
                   tap_action:
                     action: call-service
                     service: input_boolean.toggle
@@ -211,24 +209,26 @@ cards:
                     service: input_boolean.toggle
                     target:
                       entity_id: input_boolean.auto_suncycle_masterdim
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        border: none;
-                        --tile-icon-color: var(--primary-text-color) !important;
-                      }
+                  #card_mod:
+                  #  style: |
+                  #    ha-card {
+                  #      background-color: var(--nested-card-background);
+                  #      border: none;
+                  #      --tile-icon-color: var(--primary-text-color) !important;
+                  #    }
               - type: conditional
                 conditions:
                 - condition: state
                   entity: input_boolean.auto_suncycle_masterdim
                   state: "off"
                 card:
-                  type: tile
+                  type: custom:mushroom-entity-card
                   entity: input_boolean.auto_suncycle_masterdim
-                  name: "Next automatic dim event"
+                  primary_info: state
+                  secondary_info: name
+                  icon_color: primary
+                  name: Next automatic dim event
                   icon: mdi:brightness-auto
-                  color: white
                   tap_action:
                     action: call-service
                     service: input_boolean.toggle
@@ -239,20 +239,13 @@ cards:
                     service: input_boolean.toggle
                     target:
                       entity_id: input_boolean.auto_suncycle_masterdim
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        border: none;
-                        --tile-icon-color: var(--primary-text-color) !important;
-                      }
               - type: custom:layout-card
                 layout_type: grid
                 layout:
                   grid-gap: "var(--ha-card-padding) var(--ha-card-padding)"
                   grid-template-columns: 1fr 1fr 1fr
                   margin: 0px
-                  padding: var(--ha-card-padding)
+                  padding: 4px var(--ha-card-padding) 4px 
                 cards:
                 # 1st row
                 - type: "custom:button-card"
@@ -304,7 +297,7 @@ cards:
               - type: custom:mushroom-number-card
                 entity: input_number.apartment_dimmer
                 layout: horizontal
-                icon_color: grey
+                icon_color: accent
                 icon_type: none
                 primary_info: none
                 secondary_info: none
@@ -312,7 +305,7 @@ cards:
                   style:
                     mushroom-number-value-control$: |
                       mushroom-slider {
-                        --main-color: var(--button-card-active-background) !important;
+                        --main-color: var(--color-accent) !important;
                         --bg-color: var(--button-card-background) !important;
                       }
                     mushroom-fan-percentage-control$:
@@ -323,6 +316,7 @@ cards:
                     .: |
                       ha-card {
                         background-color: var(--nested-card-background);
+                        padding: 4px var(--ha-card-padding) var(--ha-card-padding);
                       }  
             # HOME-VIEW: CLEANING
             - type: custom:stack-in-card
