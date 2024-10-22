@@ -209,13 +209,12 @@ cards:
                     service: input_boolean.toggle
                     target:
                       entity_id: input_boolean.auto_suncycle_masterdim
-                  #card_mod:
-                  #  style: |
-                  #    ha-card {
-                  #      background-color: var(--nested-card-background);
-                  #      border: none;
-                  #      --tile-icon-color: var(--primary-text-color) !important;
-                  #    }
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background-color: var(--nested-card-background);
+                        font-family: var(--primary-font-family) !important;
+                      }
               - type: conditional
                 conditions:
                 - condition: state
@@ -239,6 +238,12 @@ cards:
                     service: input_boolean.toggle
                     target:
                       entity_id: input_boolean.auto_suncycle_masterdim
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background-color: var(--nested-card-background);
+                        font-family: var(--primary-font-family) !important;
+                      }
               - type: custom:layout-card
                 layout_type: grid
                 layout:
@@ -315,57 +320,46 @@ cards:
                         }
                     .: |
                       ha-card {
-                        background-color: var(--nested-card-background);
-                        padding: 4px var(--ha-card-padding) var(--ha-card-padding);
-                      }  
+                        padding: 4px var(--ha-card-padding) var(--ha-card-padding) !important;
+                      }
+                  # background-color: var(--nested-card-background);
             # HOME-VIEW: CLEANING
             - type: custom:stack-in-card
               mode: vertical
               cards:
               - type: custom:layout-card
-                layout_type: grid
+                layout_type: custom:grid-layout
                 layout:
-                  grid-gap: "0px 6px"
-                  grid-template-columns: 3fr 7fr
                   margin: 0px
-                  padding: var(--ha-card-padding)
+                  grid-gap: "0px 4px"
+                  padding: 4px 0px 12px 12px
+                  grid-template-areas: '"title . fan mop"'
+                  grid-template-rows: min-content
+                  grid-template-columns: 1fr max-content max-content
                 cards:
-                - type: markdown
-                  content: "## Cleaning"
-                  card_mod:
-                    style: 
-                      ha-markdown$: |
-                        h2 {
-                          font-weight: 400 !important;
-                        }
-                      .: |
-                        ha-markdown {
-                          padding: 0px !important;
-                        }
-                        ha-card {
-                          background-color: var(--nested-card-background);
-                        }    
-                - type: custom:mushroom-chips-card
-                  alignment: end
-                  card_mod:
-                    style: |
-                      ha-card {
-                        --chip-background: var(--button-card-background);
-                      }
-                  chips:
-                  - type: entity
-                    icon: mdi:fan
-                    entity: sensor.esmeralda_fan_speed
-                  - type: template
-                    icon: mdi:water
-                    content: |-
-                      {% if is_state('binary_sensor.esmeralda_mop_attached', 'off') %}
-                        Mop removed
-                      {% elif is_state('binary_sensor.esmeralda_water_box_attached', 'off') %}
-                        Tank removed
-                      {% else %}
-                        Mop ready
-                      {% endif %}
+                - type: custom:button-card
+                  template: section_title
+                  name: Cleaning
+                - type: custom:button-card
+                  template: text_chip
+                  icon: mdi:fan
+                  entity: sensor.esmeralda_fan_speed
+                  tap_action:
+                    action: none
+                - type: custom:button-card
+                  template: text_chip
+                  icon: mdi:water
+                  state_display: |
+                    [[[
+                      var mop = states['binary_sensor.esmeralda_mop_attached'].state
+                      var box = states['binary_sensor.esmeralda_water_box_attached'].state
+
+                      if (mop == "off") return "Mop removed";
+                      if (box == "off") return "Tank removed";
+                      return "Mop ready";
+                    ]]]
+                  tap_action:
+                    action: none
               - type: custom:mushroom-vacuum-card
                 entity: vacuum.esmeralda
                 icon_animation: true
@@ -379,6 +373,7 @@ cards:
                   style: |
                     ha-card {
                       background-color: var(--nested-card-background);
+                      font-family: var(--primary-font-family) !important;
                     }
               - type: custom:layout-card
                 layout_type: grid
