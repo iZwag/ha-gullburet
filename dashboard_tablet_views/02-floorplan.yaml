@@ -583,28 +583,20 @@ cards:
             - type: custom:stack-in-card
               mode: vertical
               cards:
-              - type: markdown
-                content: "## Light modes"
-                card_mod:
-                  style: 
-                    ha-markdown$: |
-                      h2 {
-                        font-weight: 400 !important;
-                      }
-                    .: |
-                      ha-markdown {
-                        padding: var(--ha-card-padding) !important;
-                      }
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                      }  
-              - type: "custom:layout-card"
+              - type: custom:button-card
+                template: section_title
+                name: Light modes
+                styles:
+                  card:
+                  - padding: 8px var(--ha-card-padding) 16px
+                  - height: 48px 
+              - type: custom:layout-card
                 layout_type: grid
                 layout:
                   grid-gap: "0px var(--ha-card-padding)"
                   grid-template-columns: 1fr 1fr 1fr
                   margin: 0px
-                  padding: var(--ha-card-padding)
+                  padding: 4px var(--ha-card-padding) var(--ha-card-padding)
                 cards:
                 - type: custom:button-card
                   entity: input_select.bathroom_mode_select
@@ -653,20 +645,30 @@ cards:
                 name: Devices
                 styles:
                   card:
-                  - padding: 12px var(--ha-card-padding) 12px
+                  - padding: 8px var(--ha-card-padding) 16px
                   - height: 48px
               - type: horizontal-stack
                 cards:
-                - type: tile
+                - type: custom:mushroom-light-card
                   entity: light.lightstrip_closet_bedroom
                   name: Wardrobe light
                   icon: mdi:hanger
-                  color: white
-                - type: tile
+                  icon_color: white
+                  card_mod:
+                    style: |
+                      ha-card {
+                        padding: 4px var(--ha-card-padding) 4px !important;
+                      }
+                - type: custom:mushroom-light-card
                   entity: light.pendant_bedroom
                   icon: mdi:ceiling-light
-                  color: white
+                  icon_color: white
                   name: Pendant lamp
+                  card_mod:
+                    style: |
+                      ha-card {
+                        padding: 4px var(--ha-card-padding) 4px !important;
+                      }
               - type: custom:timer-bar-card
                 entity: timer.heated_sheet_timer
                 name: "Heated sheet timer"
@@ -679,45 +681,44 @@ cards:
                   style: |
                     ha-card {
                       background-color: var(--nested-card-background);
+                      padding: 4px var(--ha-card-padding) 4px !important;
                     }
               - type: horizontal-stack
                 cards:
-                - type: tile
+                - type: custom:mushroom-entity-card
                   entity: script.bedroom_heated_sheet_control
-                  color: white
                   icon: mdi:chevron-up
-                  hide_state: true
+                  icon_color: white
                   name: Timer +30min
+                  secondary_info: none
                   tap_action:
                     action: call-service
                     service: script.bedroom_heated_sheet_control
                     data:
                       command: up
                       increase: 00:30:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: up
-                      increase: 00:30:00
-                - type: tile
+                  card_mod:
+                    style: |
+                      ha-card {
+                        padding: 4px var(--ha-card-padding) var(--ha-card-padding) !important;
+                      }
+                - type: custom:mushroom-entity-card
                   entity: script.bedroom_heated_sheet_control
-                  color: white
                   icon: mdi:chevron-down
-                  hide_state: true
+                  icon_color: white
                   name: Timer -10min
+                  secondary_info: none
                   tap_action:
                     action: call-service
                     service: script.bedroom_heated_sheet_control
                     data:
                       command: down
                       decrease: 00:10:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: down
-                      decrease: 00:10:00
+                  card_mod:
+                    style: |
+                      ha-card {
+                        padding: 4px var(--ha-card-padding) var(--ha-card-padding) !important;
+                      }
             # BEDROOM-VIEW: CLEANING
             # Bedroom Xiaomi id = 20
             - type: custom:decluttering-card
@@ -861,7 +862,7 @@ cards:
                 name: Lights
                 styles:
                   card:
-                  - padding: 12px var(--ha-card-padding) 12px
+                  - padding: 8px var(--ha-card-padding) 16px
                   - height: 48px
               - type: custom:timer-bar-card
                 entity: timer.storage_room_light_timer
@@ -933,7 +934,7 @@ cards:
                 name: Lights
                 styles:
                   card:
-                  - padding: 12px var(--ha-card-padding) 12px
+                  - padding: 8px var(--ha-card-padding) 16px
                   - height: 48px
               - type: horizontal-stack
                 cards:
