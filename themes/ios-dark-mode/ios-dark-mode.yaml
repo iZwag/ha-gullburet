@@ -152,7 +152,8 @@ ios-dark-mode:
 
   # For Mushroom card styling
   mush-title-padding: 24px var(--ha-card-padding) var(--ha-card-padding)
-  control-border-radius: var(--button-card-border-radius)
+  #control-border-radius: var(--button-card-border-radius)
+  mush-control-border-radius: var(--button-card-border-radius)
 
   # For the custom:mini-media-player
   # mini-media-player-scale: 1.25
@@ -166,6 +167,10 @@ ios-dark-mode:
   # - Setting width of the sidebar
   # - Setting background of sidebar
   # - Removing sidebar-view default padding and margin
+  # SIDEBAR vs. MAIN views
+  # The entire viewport of the tablet is mainly divided into two containers
+  # #sidebar - Menu originally on the right, but changed to left with flex-direction: row-reverse
+  # #main - The main area showing different info with different view-paths
   card-mod-view-yaml: |
     hui-sidebar-view $: |
       .container {
@@ -176,7 +181,6 @@ ios-dark-mode:
         min-width: 24vw;
         max-width: 24vw;
         width: 24vw;
-        margin-right: var(--ha-card-padding);
         padding: 0px var(--ha-card-padding);
         background-color: rgba(0,0,0, 0.15);
         height: 100vh;
@@ -184,8 +188,18 @@ ios-dark-mode:
       #main {
         padding-top: var(--ha-card-padding);
         padding-right: var(--ha-card-padding);
+        padding-left: var(--ha-card-padding);
       }
     .: |  
       hui-sidebar-view {
         padding: 0px !important;
       }
+  
+  # TODO:
+  # APPLY CUSTOM FONT TO ALL MUSHROOM ENTITY CARDS
+  # Several attempts at this failed - revisit
+  #card-mod-card-yaml: |
+  #  .type-mushroom-entity-card {
+  #    background-color: var(--nested-card-background);
+  #    font-family: var(--primary-font-family) !important;
+  #  }
