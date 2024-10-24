@@ -106,25 +106,13 @@ cards:
       # 1ST MAIN ROW
       - type: horizontal-stack
         cards:
-        # Guest room column
+        # GUEST ROOM CLIMATE CONTROLS
         - type: vertical-stack
           cards:
           # Title
-          - type: markdown
-            content: "# Guest room"
-            card_mod:
-              style:
-                ha-markdown$: |
-                  h1 {
-                    font-weight: 300;
-                  }
-                .: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-                  ha-markdown {
-                    padding: var(--ha-card-padding) !important;
-                  }
+          - type: custom:button-card
+            template: room_title
+            name: Guest room
           - type: custom:stack-in-card
             mode: vertical
             cards:
@@ -182,23 +170,12 @@ cards:
                     ha-card {
                       background-color: var(--nested-card-background);
                     }
+        # WI-FI INFORMATION
         - type: vertical-stack
           cards:
-          - type: markdown
-            content: "# Wi-Fi"
-            card_mod:
-              style:
-                ha-markdown$: |
-                  h1 {
-                    font-weight: 300;
-                  }
-                .: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-                  ha-markdown {
-                    padding: var(--ha-card-padding) !important;
-                  }
+          - type: custom:button-card
+            template: room_title
+            name: Wi-Fi
           - type: horizontal-stack
             cards:
             - type: vertical-stack
@@ -207,7 +184,7 @@ cards:
                 primary: Gullburet-Gjest
                 secondary: ''
                 icon: mdi:wifi
-                icon_color: light-blue
+                icon_color: primary
               - type: custom:mushroom-template-card
                 primary: >
                   {% if is_state('input_boolean.guest_show_wifi', 'on') %}
@@ -218,12 +195,7 @@ cards:
                 secondary: ''
                 icon: mdi:key
                 entity: input_boolean.guest_show_wifi
-                icon_color: >
-                  {% if is_state('input_boolean.guest_show_wifi', 'on') %}
-                    {{ light-blue }}
-                  {% else %}
-                    {{ disabled }} 
-                  {% endif %}
+                icon_color: primary
             - type: custom:button-card
               entity: input_boolean.guest_show_wifi
               template: wifi_qr_code
@@ -233,26 +205,15 @@ cards:
         - type: vertical-stack
           cards:
           # Title
-          - type: markdown
-            content: |
-              # Nearby public transport
-
-              Swipe to see different stops. House icon is this apartment.
-
-              Showing: **Sandaker Senter** (tram), **Storo** (subway/tram/bus), **Torshov** (bus/tram) and **Haarklous Plass** (bus).
-            card_mod:
-              style:
-                ha-markdown$: |
-                  h1 {
-                    font-weight: 300;
-                  }
-                .: |
-                  ha-card {
-                    background-color: var(--nested-card-background);
-                  }
-                  ha-markdown {
-                    padding: var(--ha-card-padding) !important;
-                  }
+          - type: custom:button-card
+            template: room_title
+            name: Nearby public transport
+          - type: custom:button-card
+            template: section_text
+            name: Swipe to see different stops. House icon is this apartment.
+          - type: custom:button-card
+            template: section_text
+            name: "Showing: Sandaker Senter (tram), Storo (subway/tram/bus), Torshov (bus/tram) and Haarklous Plass (bus)."
           - type: custom:swipe-card
             start_card: 1
             reset_after: 600
