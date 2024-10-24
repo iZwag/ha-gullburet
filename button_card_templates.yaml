@@ -472,8 +472,8 @@ wifi_qr_code:
   show_entity_picture: true
   entity_picture: |
     [[[
-      if (entity.state == 'on') return '/local/ui/guest-wifi-qr.png';
-      return '/local/ui/guest-wifi-qr-instructions.png';
+      if (entity.state == 'on') return '/local/ui/guest-wifi-qr-private.png';
+      return '/local/ui/guest-wifi-qr-public.png';
     ]]]
   styles:
     card:
