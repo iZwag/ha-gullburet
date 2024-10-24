@@ -204,21 +204,24 @@ cards:
           - type: custom:button-card
             template: big_sensor_dot
             entity: sensor.tibber_energy_consumption_this_month
-            name: Energy this month
+            name: So far this month
             numeric_precision: 0
             variables:
               dotHiSeverity: 900
               dotMidSeverity: 400
           - type: custom:button-card
-            template: big_sensor
-            entity: sensor.elvia_active_fixed_price_level
-            name: Energy limit, per hour
-            icon: mdi:lightning-bolt-circle
+            template: big_sensor_dot
+            entity: sensor.tibber_energy_consumption_current_day
+            #entity: sensor.elvia_active_fixed_price_level
+            name: So far today
             numeric_precision: 1
-            state_display: |
-              [[[
-                return states['sensor.elvia_active_fixed_price_level'].attributes.level_max + ' kWh';
-              ]]]
+            variables:
+              dotHiSeverity: 21
+              dotMidSeverity: 10
+            #state_display: |
+            #  [[[
+            #    return states['sensor.elvia_active_fixed_price_level'].attributes.level_max + ' kWh';
+            #  ]]]
         # 10DAYS ENERGY CONSUMPTION COLUMNS CHART
         - type: custom:stack-in-card
           cards:
