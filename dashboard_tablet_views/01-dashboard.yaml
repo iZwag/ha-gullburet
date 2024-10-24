@@ -164,6 +164,7 @@ cards:
             max: ~2
             apex_config:
               tickAmount: 4
+          update_interval: 1h
           series:
             - entity: sensor.yr_weather_forecast_hourly
               name: Temperatur
@@ -264,7 +265,7 @@ cards:
                 ]]]
               styles:
                 card:
-                  - padding-top: 18px
+                  - padding-top: 20px
             # Tibber price legend
             - type: custom:button-card
               template: chart_legend_line
@@ -336,6 +337,7 @@ cards:
                 apex_config:
                   tickAmount: 5
                 min: ~0
+            update_interval: 1h
             series:
               - entity: sensor.elvia_variable_pricing
                 name: Elvia
@@ -458,6 +460,7 @@ cards:
                 apex_config:
                   tickAmount: 5
                 min: 0
+            update_interval: 1h
             series:
               - entity: sensor.elvia_variable_pricing
                 name: Elvia
