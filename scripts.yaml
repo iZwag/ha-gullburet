@@ -1033,3 +1033,19 @@ clean_selected_rooms:
       entity_id: input_boolean.select_rooms_cleaning
   mode: single
   icon: mdi:vacuum
+system_restart_home_assistant:
+  alias: System - Restart Home Assistant
+  sequence:
+  - service: homeassistant.restart
+    metadata: {}
+    data: {}
+  mode: single
+  icon: mdi:restart
+system_restart_zigbee2mqtt:
+  alias: System - Restart Zigbee2MQTT
+  sequence:
+  - service: shell_command.restart_zigbee2mqtt
+    metadata: {}
+    data: {}
+  mode: single
+  icon: mdi:restart
