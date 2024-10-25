@@ -1,0 +1,61 @@
+title: Debug
+path: debug
+type: masonry
+icon: mdi:tools
+background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+theme: ios-dark-mode
+cards:
+# The main column - Orders all of the content in one column
+- type: custom:mod-card
+  card_mod:
+    style: |
+      ha-card {
+        padding: 0px 12px 12px;
+      }
+  card:
+    type: vertical-stack
+    cards:
+    # Top navigation
+    - type: custom:mushroom-chips-card
+      alignment: justify
+      chips:
+        - type: back
+          icon_color: light-grey
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /dashboard-mobile/start
+          icon: mdi:home
+          icon_color: light-blue
+    
+    # -----------------------------------------------
+    # MAIN SECTION
+    # -----------------------------------------------
+    # REPAIR
+    # Title
+    - type: custom:mushroom-title-card
+      title: Repair
+    - type: custom:mushroom-entity-card
+      entity: script.system_restart_home_assistant
+      secondary_info: none
+      name: Restart Home Assistant
+      icon: mdi:restart
+      icon_color: light-blue
+      layout: horizontal
+      tap_action:
+        action: call-service
+        service: script.system_restart_home_assistant
+        confirmation:
+          text: Are you sure you want to restart HA?
+    - type: custom:mushroom-entity-card
+      entity: script.system_restart_zigbee2mqtt
+      secondary_info: none
+      name: Restart Zigbee2MQTT
+      icon_color: light-blue
+      layout: horizontal
+      icon: mdi:restart
+      tap_action:
+        action: call-service
+        service: shell_command.restart_zigbee2mqtt
+        confirmation:
+          text: Are you sure you want to restart the container?

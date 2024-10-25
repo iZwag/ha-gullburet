@@ -46,9 +46,15 @@ cards:
         - type: action
           tap_action:
             action: navigate
+            navigation_path: /dashboard-mobile/debug
+          icon: mdi:tools
+          icon_color: yellow
+        - type: action
+          tap_action:
+            action: navigate
             navigation_path: /dashboard-mobile/start
           icon: mdi:home
-          icon_color: primary
+          icon_color: light-blue
     # Greeting title card
     - type: custom:mushroom-title-card
       title: |
