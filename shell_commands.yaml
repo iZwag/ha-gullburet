@@ -1,0 +1,11 @@
+# THE FOLLOWING COMMANDS HAVE BEEN CONFIGURED FOR HA AS _CONTAINER_
+# Calls are then made from the HA container and out to the Docker-host
+# Ensure that public key (HA has private) is in authorized_keys of the Docker host
+# (Recommendation, but maybe not mandatory:) Make sure the SSH-directory under /config/ has been...
+# - chown -R root:root 
+# - chmod 700
+# - chmod 600 for the private-key 
+
+# Command for restarting zigbee2mqtt Docker container. Format of the secrets string:
+# 'ssh -o UserKnownHostsFile=/config/<ssh known_hosts path> -i /config/<ssh private-key path> <user>@localhost "docker restart zigbee2mqtt"'
+restart_zigbee2mqtt: !secret ssh_restart_z2m
