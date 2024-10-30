@@ -955,16 +955,12 @@ cards:
     # 3D FLOORPLAN VISUALIZATION COLUMN
     #
     # Automatic Z-index layering: The closer the element is declared from
-    #   the elements:-keyword, the lower its assigned Z-index.
-    # Z-index layer hierarchy:
-    # dark base: 0 or 1 (?)
-    # light-effect renders: 2 -> 8
-    # selected room overlay display: 9 & 10
-    # invisible room overlay trigger areas (as icons): 11 -> 14
-    # device icons: 15
+    #   the "elements:"-keyword, the lower its assigned Z-index. 
+    #   I.e. the further down in the "elements"-sequence they are defined
+    #   higher ("in front") they are represented in the image-stack. 
     # ###################################################################
     - type: picture-elements
-      # DARK, BASE-LAYER OF FLOORPLAN DEFINED HERE:
+      # DARK, BASE-LAYER OF FLOORPLAN:
       image: /local/floorplan/base-dark-v3.png
       card_mod:
         style: |
@@ -974,7 +970,9 @@ cards:
           }
       elements:    
         # ###########################################################
-        # LIGHT EFFECT LAYERS - Z-index: 2 -> 8
+        # LIGHT EFFECT LAYERS
+        # Purely visual effects - not interactable. Only illustrates
+        #   state of lights with pre-rendered images. 
         # Bedroom
         - type: image
           entity: sensor.pendant_bedroom_dim
@@ -983,7 +981,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -993,7 +990,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Office
         - type: image
           entity: sensor.pendants_office_dim
@@ -1002,7 +998,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1012,7 +1007,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Guest
         - type: image
           entity: sensor.pendant_guest_dim
@@ -1021,7 +1015,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1031,7 +1024,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Toilet
         - type: image
           entity: sensor.downlight_toilet_dim
@@ -1040,7 +1032,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1050,7 +1041,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Bathroom downlights
         - type: image
           entity: sensor.downlights_bath_dim
@@ -1059,7 +1049,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 3
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1069,8 +1058,7 @@ cards:
             "30": opacity(60%)
             "50": opacity(70%)
             "75": opacity(85%)
-            "100": opacity(100%)
-        
+            "100": opacity(100%) 
         # Bathroom lightstrip
         - type: image
           entity: sensor.lightstrip_bath_dim
@@ -1079,7 +1067,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1089,7 +1076,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Entry 
         - type: image
           entity: sensor.downlights_entry_dim
@@ -1098,7 +1084,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1108,7 +1093,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Living room spottrack
         - type: image
           entity: sensor.spottrack_living_dim
@@ -1117,7 +1101,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 3
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1128,7 +1111,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Living room downlights
         - type: image
           entity: sensor.downlights_living_dim
@@ -1137,7 +1119,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 4
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1148,7 +1129,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Dining pendants
         - type: image
           entity: sensor.pendants_dining_dim
@@ -1157,7 +1137,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 5
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1168,7 +1147,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Kitchen pendants
         - type: image
           entity: sensor.pendants_kitchen_dim
@@ -1177,7 +1155,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 6
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1188,7 +1165,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Kitchen spottrack
         - type: image
           entity: sensor.spottrack_kitchen_dim
@@ -1197,7 +1173,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 7
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1208,7 +1183,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Kitchen lightstrip
         - type: image
           entity: sensor.lightstrip_undershelf_kitchen_dim
@@ -1217,7 +1191,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 8
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1228,7 +1201,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Storage room
         - type: image
           entity: sensor.ceiling_light_storage_dim
@@ -1237,7 +1209,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1248,7 +1219,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        
         # Veranda
         - type: image
           entity: sensor.wall_lantern_veranda_dim
@@ -1257,7 +1227,6 @@ cards:
             left: 50%
             top: 50%
             width: 100%
-            #z-index: 2
             mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
@@ -1269,98 +1238,14 @@ cards:
             "75": opacity(85%)
             "100": opacity(100%)
 
-        # ###########################################################
-        # ROOM SELECT OVERLAYS FOR CLEANING  - Z-index: 11 -> 14
+        # #####################################################################
+        # SELECT MULT. ROOMS CLEANING: CLICKABLE ZONES, OUTLINES & OVERLAYS
         - type: conditional
           conditions:
             - entity: input_boolean.select_rooms_cleaning
               state: "on"
           elements:
-          # Entry
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_entry_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 61%
-              top: 57%
-              opacity: 0
-              #z-index: 13
-              color: pink
-              '--mdc-icon-size': 120px
-              transform: 'scaleX(1.6) scaleY(1)'
-          # Bedroom
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_bedroom_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 2%
-              top: 73%
-              opacity: 0
-              #z-index: 13
-              color: blue
-              '--mdc-icon-size': 209px
-              transform: 'scaleX(0.85) scaleY(1.1)'
-          # Office
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_office_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 37%
-              top: 75%
-              opacity: 0
-              #z-index: 14
-              color: violet
-              '--mdc-icon-size': 170px
-              transform: 'scaleX(0.75) scaleY(1.3)'
-          # Guest
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_guest_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 61%
-              top: 74%
-              opacity: 0
-              #z-index: 12
-              color: orange
-              '--mdc-icon-size': 190px
-              transform: 'scaleX(0.7) scaleY(1.2)'
-          # Kitchen
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_kitchen_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 53.3%
-              top: 10%
-              opacity: 0
-              #z-index: 13
-              color: green
-              '--mdc-icon-size': 177px
-              transform: 'scaleX(1) scaleY(1.2)'
-          # Living room
-          - type: icon
-            icon: mdi:selection
-            entity: input_boolean.floorplan_living_selected
-            tap_action:
-              action: toggle
-            style:
-              left: 5%
-              top: 24%
-              opacity: 0
-              #z-index: 12
-              color: red
-              '--mdc-icon-size': 250px
-              transform: 'scaleX(0.9) scaleY(2.03)'
-          # SELECTED ROOM OVERLAYS AND OUTLINES - Z-index: 9 & 10
+          # SELECTED ROOM OVERLAYS AND OUTLINES
           # BEDROOM
           - type: image
             entity: input_boolean.floorplan_bedroom_selected
@@ -1372,7 +1257,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1387,7 +1271,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
@@ -1404,7 +1287,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1419,7 +1301,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
@@ -1436,7 +1317,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1451,7 +1331,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
@@ -1468,7 +1347,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1483,7 +1361,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
@@ -1500,7 +1377,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1515,7 +1391,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
@@ -1532,7 +1407,6 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
             tap_action:
               action: none
             hold_action:
@@ -1547,22 +1421,93 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               opacity: 20%
             tap_action:
               action: none
             hold_action:
-              action: none
-        
+              action: none       
+          # HIDDEN, CLICKABLE ZONES AS ICONS - Handles selecting
+          # Entry
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_entry_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 61%
+              top: 57%
+              opacity: 0
+              '--mdc-icon-size': 120px
+              transform: 'scaleX(1.6) scaleY(1)'
+          # Bedroom
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_bedroom_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 2%
+              top: 73%
+              opacity: 0
+              '--mdc-icon-size': 209px
+              transform: 'scaleX(0.85) scaleY(1.1)'
+          # Office
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_office_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 37%
+              top: 75%
+              opacity: 0
+              '--mdc-icon-size': 170px
+              transform: 'scaleX(0.75) scaleY(1.3)'
+          # Guest
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_guest_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 61%
+              top: 74%
+              opacity: 0
+              '--mdc-icon-size': 190px
+              transform: 'scaleX(0.7) scaleY(1.2)'
+          # Kitchen
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_kitchen_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 53.3%
+              top: 10%
+              opacity: 0
+              '--mdc-icon-size': 177px
+              transform: 'scaleX(1) scaleY(1.2)'
+          # Living room
+          - type: icon
+            icon: mdi:selection
+            entity: input_boolean.floorplan_living_selected
+            tap_action:
+              action: toggle
+            style:
+              left: 5%
+              top: 24%
+              opacity: 0
+              '--mdc-icon-size': 250px
+              transform: 'scaleX(0.9) scaleY(2.03)'
+          
         # ###########################################################
-        # OUTLINES HIDDEN SELECT ICONS - Z-index: 11 -> 14
+        # SELECT ROOMS: CLICKABLE ZONES, OUTLINES & OVERLAYS
         - type: conditional
           conditions:
             - entity: input_boolean.select_rooms_cleaning
               state: "off"
           elements:
-          # ###########################################################
-          # SELECTED ROOM OUTLINES - Z-index: 9 & 10
+          # SELECTED ROOM OUTLINE
           - type: image
             entity: input_select.floorplan_select_state
             state_image:
@@ -1581,13 +1526,12 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 10
               filter: hue-rotate(199deg)
             tap_action:
               action: none
             hold_action:
               action: none
-          # SELECTED ROOM OVERLAYS
+          # SELECTED ROOM OVERLAY
           - type: image
             entity: input_select.floorplan_select_state
             state_image:
@@ -1606,13 +1550,13 @@ cards:
               left: 50%
               top: 50%
               width: 100%
-              #z-index: 9
               filter: hue-rotate(199deg)
               opacity: 20%
             tap_action:
               action: none
             hold_action:
               action: none
+          # CLICKABLE ZONES AS HIDDEN ICONS
           # Veranda
           - type: icon
             icon: mdi:selection
@@ -1625,8 +1569,6 @@ cards:
               left: 34.5%
               top: 0%
               opacity: 0
-              #z-index: 13
-              color: grey
               '--mdc-icon-size': 65px
               transform: 'scaleX(4.5) scaleY(1)'
           # Storage
@@ -1641,8 +1583,6 @@ cards:
               left: 73.2%
               top: 0%
               opacity: 0
-              #z-index: 14
-              color: purple
               '--mdc-icon-size': 66px
               transform: 'scaleX(1.3) scaleY(1)'
           # Kitchen
@@ -1657,8 +1597,6 @@ cards:
               left: 53.3%
               top: 10%
               opacity: 0
-              #z-index: 13
-              color: green
               '--mdc-icon-size': 177px
               transform: 'scaleX(1) scaleY(1.2)'
           # Living room
@@ -1673,8 +1611,6 @@ cards:
               left: 5%
               top: 24%
               opacity: 0
-              #z-index: 12
-              color: red
               '--mdc-icon-size': 250px
               transform: 'scaleX(0.9) scaleY(2.03)'
           # Bath
@@ -1689,8 +1625,6 @@ cards:
               left: 53%
               top: 34%
               opacity: 0
-              #z-index: 13
-              color: yellow
               '--mdc-icon-size': 185px
               transform: 'scaleX(1) scaleY(1)'
           # Toilet
@@ -1705,8 +1639,6 @@ cards:
               left: 76.5%
               top: 46.75%
               opacity: 0
-              #z-index: 14
-              color: teal
               '--mdc-icon-size': 80px
               transform: 'scaleX(1) scaleY(1.15)'
           # Entry
@@ -1721,8 +1653,6 @@ cards:
               left: 61%
               top: 57%
               opacity: 0
-              #z-index: 13
-              color: pink
               '--mdc-icon-size': 120px
               transform: 'scaleX(1.6) scaleY(1)'
           # Bedroom
@@ -1737,8 +1667,6 @@ cards:
               left: 2%
               top: 73%
               opacity: 0
-              #z-index: 13
-              color: blue
               '--mdc-icon-size': 209px
               transform: 'scaleX(0.85) scaleY(1.1)'
           # Office
@@ -1753,8 +1681,6 @@ cards:
               left: 37%
               top: 75%
               opacity: 0
-              #z-index: 14
-              color: violet
               '--mdc-icon-size': 170px
               transform: 'scaleX(0.75) scaleY(1.3)'
           # Guest
@@ -1769,14 +1695,11 @@ cards:
               left: 61%
               top: 74%
               opacity: 0
-              #z-index: 12
-              color: orange
               '--mdc-icon-size': 190px
               transform: 'scaleX(0.7) scaleY(1.2)'
-          
- 
+
         # ###########################################################
-        # HIDE ICON / LAYERS + UNSELECT ICON - Z-index: 15
+        # HIDE ICON / LAYERS + UNSELECT ICON
         - type: conditional
           conditions:
             - entity: input_select.floorplan_select_state
@@ -1792,7 +1715,6 @@ cards:
               style:
                 left: 94%
                 top: 7%
-                #z-index: 15
                 color: '#03A9F4'
                 '--mdc-icon-size': 30px
             - type: icon
@@ -1804,7 +1726,6 @@ cards:
                 left: 0%
                 top: 46%
                 opacity: 0
-                #z-index: 11
                 color: white
                 '--mdc-icon-size': 100px
                 transform: 'scaleX(1) scaleY(8.3)'
@@ -1817,7 +1738,6 @@ cards:
                 left: 88%
                 top: 42%
                 opacity: 0
-                #z-index: 11
                 color: white
                 '--mdc-icon-size': 135px
                 transform: 'scaleX(1) scaleY(6.3)'
@@ -1836,7 +1756,6 @@ cards:
               style:
                 left: 94%
                 top: 2%
-                #z-index: 15
                 color: white
                 '--mdc-icon-size': 30px
                 '--state-active-color': white
@@ -1855,11 +1774,10 @@ cards:
               style:
                 left: 94%
                 top: 2%
-                #z-index: 15
                 '--mdc-icon-size': 30px
  
         # ###########################################################
-        # DEVICE ICONS - Z-index: 15
+        # DEVICE ICONS
         - type: conditional
           conditions:
             - entity: input_boolean.floorplan_show_icons
@@ -1872,23 +1790,13 @@ cards:
               style:
                 left: 27%
                 top: 80%
-                #z-index: 15
             # OFFICE PENDANTS ICON
             - type: custom:button-card
-              #type: state-icon
               entity: light.pendants_office
               template: light
               style:
                 left: 54%
                 top: 80%
-                #z-index: 15
-              #  '--mdc-icon-size': 25px
-              #icon: mdi:lightbulb
-              #icon: mdi:ceiling-light-multiple
-              #tap_action:
-              #  action: toggle
-              #hold_action:
-              #  action: more-info
             # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
             # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
             #- type: custom:button-card
@@ -1897,7 +1805,6 @@ cards:
             #  style:
             #      left: 31%
             #      top: 86%
-            #      z-index: 15
             # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_bedroom
@@ -1905,7 +1812,6 @@ cards:
               style:
                   left: 23%
                   top: 97%
-                  #z-index: 15
             # GUEST PENDANT ICON
             - type: custom:button-card
               template: light
@@ -1913,7 +1819,6 @@ cards:
               style:
                 left: 75%
                 top: 80%
-                #z-index: 15
             # GUEST HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_guest
@@ -1921,7 +1826,6 @@ cards:
               style:
                 left: 75%
                 top: 97%
-                #z-index: 15
             # ENTRY DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
@@ -1929,7 +1833,6 @@ cards:
               style:
                 left: 71.75%
                 top: 64%
-                #z-index: 15
             # TOILET DOWNLIGHT ICON
             - type: custom:button-card
               template: light
@@ -1937,7 +1840,6 @@ cards:
               style:
                 left: 85%
                 top: 52%
-                #z-index: 15
             # BATH DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
@@ -1945,7 +1847,6 @@ cards:
               style:
                 left: 64%
                 top: 54%
-                #z-index: 15
             # BATH LIGHTSTRIP ICON
             - type: custom:button-card
               template: light
@@ -1956,7 +1857,6 @@ cards:
               style:
                 left: 89%
                 top: 41%
-                #z-index: 15
             # BATH FLOOR HEAT ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.floor_heat_bath
@@ -1964,7 +1864,6 @@ cards:
               style:
                 left: 64%
                 top: 47%
-                #z-index: 15
             # LIVING ROOM SPOTTRACK ICON
             - type: custom:button-card
               template: light
@@ -1972,7 +1871,6 @@ cards:
               style:
                 left: 41%
                 top: 44%
-                #z-index: 15
             # LIVING ROOM DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
@@ -1980,7 +1878,6 @@ cards:
               style:
                 left: 14%
                 top: 45%
-                #z-index: 15
             # LIVING ROOM MUSHROOM LAMP
             - type: custom:button-card
               template: light
@@ -1988,7 +1885,6 @@ cards:
               style:
                 left: 50%
                 top: 51%
-                #z-index: 15
             # LIVING ROOM MOOD BALL
             - type: custom:button-card
               template: light
@@ -1996,7 +1892,6 @@ cards:
               style:
                 left: 50%
                 top: 38%
-                #z-index: 15
             # LIVING ROOM GLOBE LAMP
             - type: custom:button-card
               template: light
@@ -2004,7 +1899,6 @@ cards:
               style:
                 left: 18%
                 top: 67%
-                #z-index: 15
             # LIVING HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_living
@@ -2012,7 +1906,6 @@ cards:
               style:
                 left: 17%
                 top: 28%
-                #z-index: 15
             # DINING PENDANTS ICON
             - type: custom:button-card
               template: light
@@ -2020,7 +1913,6 @@ cards:
               style:
                 left: 34.5%
                 top: 20%
-                #z-index: 15
             # KITCHEN PENDANTS ICON
             - type: custom:button-card
               template: light
@@ -2028,7 +1920,6 @@ cards:
               style:
                 left: 61%
                 top: 20%
-                #z-index: 15
             # KITCHEN SPOTTRACK ICON
             - type: custom:button-card
               template: light
@@ -2036,7 +1927,6 @@ cards:
               style:
                 left: 74%
                 top: 20%
-                #z-index: 15
             # KITCHEN LIGHTSTRIP UNDER-SHELF
             - type: custom:button-card
               template: light
@@ -2047,7 +1937,6 @@ cards:
               style:
                 left: 86.5%
                 top: 32%
-                #z-index: 15
             # KITCHEN HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_kitchen
@@ -2055,19 +1944,11 @@ cards:
               style:
                 left: 61%
                 top: 14%
-                #z-index: 15
-            # STORAGE ROOM CEILING LIGHT
-            # - Removed to save space on a small location of the 3D-floorplan
-            # Light-timer countdown with MM:SS-label when on:
-            # - COMMENTED OUT BECAUSE IT UPDATES TOO SLOWLY, ABOUT 30-40S
-            #   It is hard to make a timer-sensor that updates every second in HA
             # VERANDA WALL LANTERN
             - type: custom:button-card
               template: light
               entity: light.wall_light_veranda
               style:
                 left: 53.5%
-                top: 6.5%
-                #z-index: 15
-        
+                top: 6.5%   
     # ----------------------------------------------- END OF 3D FLOORPLAN
