@@ -1049,3 +1049,11 @@ system_restart_zigbee2mqtt:
     data: {}
   mode: single
   icon: mdi:restart
+system_restart_rpi:
+  alias: System - Restart RPi
+  sequence:
+  - service: shell_command.restart_rpi_server
+    metadata: {}
+    data: {}
+  mode: single
+  icon: mdi:restart
