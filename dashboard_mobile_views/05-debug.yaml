@@ -34,7 +34,7 @@ cards:
     # REPAIR
     # Title
     - type: custom:mushroom-title-card
-      title: Repair
+      title: Feilsøking
     - type: custom:mushroom-entity-card
       entity: script.system_restart_home_assistant
       secondary_info: none
@@ -59,3 +59,15 @@ cards:
         service: shell_command.restart_zigbee2mqtt
         confirmation:
           text: Are you sure you want to restart the container?
+    - type: custom:mushroom-entity-card
+      entity: script.system_restart_rpi
+      secondary_info: none
+      name: Restart Raspberry Pi
+      icon: mdi:restart
+      icon_color: light-blue
+      layout: horizontal
+      tap_action:
+        action: call-service
+        service: script.system_restart_rpi
+        confirmation:
+          text: Are you sure you want to restart the RPi Server?
