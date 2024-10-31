@@ -1238,6 +1238,7 @@ cards:
             "75": opacity(85%)
             "100": opacity(100%)
 
+        
         # #####################################################################
         # SELECT MULT. ROOMS CLEANING: CLICKABLE ZONES, OUTLINES & OVERLAYS
         - type: conditional
@@ -1775,7 +1776,49 @@ cards:
                 left: 94%
                 top: 2%
                 '--mdc-icon-size': 30px
- 
+
+        # Living room curtains
+        - type: custom:button-card
+          entity: cover.curtain_living
+          show_name: false
+          show_icon: false
+          custom_fields:
+            curtains: |
+              [[[
+                let state = (entity.attributes.position / 100) * 75 + 25;
+                
+                return `
+                <div style="overflow: visible;">
+                  <img  src="/local/floorplan/curtains-rotated.png" 
+                        style="height: 74px; width:${state}%; float: left; display: block; 
+                        transform: perspective(350px) rotateX(140deg) skewX(-10deg) scaleY(1.1); 
+                        margin-left: 14px">
+                  </img>
+                </div>
+                `
+              ]]]
+          # scaleY(1.1);
+          styles:
+            card:
+              - background: transparent
+              - padding: 0px
+              - height: 74px
+              - width: 190px
+              - border: none
+              - margin: 0px
+              - border-radius: 0px
+            custom_fields:
+              curtains:
+                - border-radius: 0px
+                - background: transparent
+                - opacity: 90%
+                - filter: brightness(70%) sepia(20%)
+          style:
+            left: 32%
+            top: 13% 
+          tap_action:
+            action: none
+        
         # ###########################################################
         # DEVICE ICONS
         - type: conditional
