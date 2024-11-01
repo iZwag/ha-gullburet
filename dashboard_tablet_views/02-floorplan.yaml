@@ -1843,11 +1843,11 @@ cards:
             # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
             # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
             #- type: custom:button-card
-            #  entity: switch.heated_sheet_switch
-            #  template: heat_device
-            #  style:
-            #      left: 31%
-            #      top: 86%
+              #  entity: switch.heated_sheet_switch
+              #  template: heat_device
+              #  style:
+              #      left: 31%
+              #      top: 86%
             # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_bedroom
@@ -1942,20 +1942,100 @@ cards:
               style:
                 left: 18%
                 top: 67%
-            # LIVING HEATER ICON (ONLY DISPLAYS WHEN ON)
+            # LIVING ROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_living
               template: heat_device
               style:
                 left: 17%
                 top: 28%
-            # DINING PENDANTS ICON
+            # LIVING ROOM PENDANTS ICON (DINING TABLE)
             - type: custom:button-card
               template: light
               entity: light.pendants_living
               style:
                 left: 34.5%
                 top: 20%
+            # LIVING ROOM CURTAINS - MOVE LEFT
+            # "Close"
+            - type: custom:button-card
+              entity: cover.curtain_living
+              icon: mdi:arrow-left-thin
+              template:
+                - icon_main
+              show_name: false
+              size: 75%
+              tap_action:
+                action: call-service
+                service: |
+                  [[[
+                    if (entity.state === 'closing') return 'cover.stop_cover';
+                    return 'cover.close_cover';
+                  ]]]
+                target:
+                  entity_id: cover.curtain_living
+                haptic: medium
+              hold_action:
+                action: more-info
+              styles:
+                card:
+                  - width: 32px
+                  - height: 32px
+                  - border-radius: 18px
+                  - background-color: |
+                      [[[
+                        if (entity.state === 'closing') return 'rgba(255, 255, 255, 1.0)';
+                        return 'rgba(115, 115, 115, 0.6)'; 
+                      ]]]
+                icon:
+                  - color: |
+                      [[[
+                        if (entity.state === 'closing') return 'var(--color-primary)';
+                        return 'rgba(255, 255, 255, 1.0)'; 
+                      ]]]
+              style:
+                left: 20%
+                top: 11%
+            # LIVING ROOM CURTAINS - MOVE RIGHT
+            # "Open"
+            - type: custom:button-card
+              entity: cover.curtain_living
+              icon: mdi:arrow-right-thin
+              template:
+                - icon_main
+              show_name: false
+              size: 75%
+              tap_action:
+                action: call-service
+                service: |
+                  [[[
+                    if (entity.state === 'opening') return 'cover.stop_cover';
+                    return 'cover.open_cover';
+                  ]]] 
+                target:
+                  entity_id: cover.curtain_living
+                haptic: medium
+              hold_action:
+                action: more-info
+              styles:
+                card:
+                  - width: 32px
+                  - height: 32px
+                  - border-radius: 18px
+                  - background-color: |
+                      [[[
+                        if (entity.state === 'opening') return 'rgba(255, 255, 255, 1.0)';
+                        return 'rgba(115, 115, 115, 0.6)'; 
+                      ]]]
+                icon:
+                  - color: |
+                      [[[
+                        if (entity.state === 'opening') return 'var(--color-primary)';
+                        return 'rgba(255, 255, 255, 1.0)'; 
+                      ]]]
+              style:
+                left: 20%
+                top: 15%
             # KITCHEN PENDANTS ICON
             - type: custom:button-card
               template: light
