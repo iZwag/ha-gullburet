@@ -101,7 +101,6 @@ navbar_datestring:
   hold_action:
     action: none
 
-
 # LIGHT MODES: ALL ON, ALL OFF, BEDTIME ETC.
 # Vertically aligned with icon on top, name on bottom.
 light_mode:
@@ -332,13 +331,9 @@ light:
   template:
     - icon_main
     #- circle
-  show_state: false
-  show_icon: true
   show_name: false
-  show_label: false
   size: 60%
   color: auto
-  color_type: icon
   tap_action:
     action: toggle
     haptic: light
@@ -387,20 +382,16 @@ light_white:
   hold_action:
     action: more-info 
 
-
 #############################################################################
 # HEAT DEVICE ICON
+#   With pulse effect
 #############################################################################
 heat_device:
   template:
     - icon_main
-  show_state: false
-  show_icon: true
   show_name: false
-  show_label: false
   size: 60%
   color: auto
-  color_type: icon
   tap_action:
     action: more-info
   hold_action:
@@ -410,11 +401,11 @@ heat_device:
       0% {
         box-shadow: 0 0 0 0 rgba(255, 111, 0, 0.6);
       }
-      80% {
-        box-shadow: 0 0 0 8px rgba(255, 111, 0, 0.6);
+      70% {
+        box-shadow: 0 0 0 4px rgba(255, 111, 0, 0.6);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(255, 111, 0, 0);
+        box-shadow: 0 0 0 4px rgba(255, 111, 0, 0);
       }
     }
   styles:
@@ -460,6 +451,67 @@ heat_device:
             return 'rgba(115, 115, 115, 0.6)';
           ]]]
       - animation: pulse 3s ease-in infinite
+
+#############################################################################
+# SPEAKER DEVICE ICON
+#   With ping effect
+#   Input: entity
+#############################################################################
+speaker_device:
+  template:
+      - icon_main
+  show_name: false
+  size: 60%
+  color: auto
+  tap_action:
+    action: more-info
+  hold_action:
+    action: more-info
+  icon: |
+    [[[
+      if (entity.attributes.media_title === 'TV') {
+        return 'mdi:television';
+      }
+      return 'mdi:speaker';
+    ]]]
+  extra_styles: |
+    @keyframes ping {
+      0% {
+        box-shadow: 0 0 0 0 rgba(26, 200, 237, 0.6), 0 0 0 0 rgba(26, 200, 237, 0.4);
+      }
+      33% {
+        box-shadow: 0 0 0 3px rgba(26, 200, 237, 0.6), 0 0 0 6px rgba(26, 200, 237, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 0 4px rgba(26, 200, 237, 0), 0 0 0 10px rgba(26, 200, 237, 0);
+  styles:
+    icon:
+      - color: >
+          [[[ 
+            if (entity.state == 'playing') {
+              return '#1ac8ed';
+            }
+            return 'rgba(255, 255, 255, 1.0)';
+          ]]]
+    card:
+      - width: 3vw
+      - height: 3vw
+      - border-radius: 20vw
+      - display: >
+          [[[
+            if (entity.state == 'playing') {
+              return 'flex';
+            }
+            return 'none';
+          ]]]
+      - background-color: >
+          [[[ 
+            if (entity.state == 'playing') {
+              return 'rgba(26, 200, 237, 0.25)';
+            }
+            return 'rgba(115, 115, 115, 0.6)';
+          ]]]
+      - animation: ping 1.2s ease-in infinite
 
 #############################################################################
 # WI-FI QR CODE
