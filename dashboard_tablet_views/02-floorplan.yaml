@@ -1855,6 +1855,13 @@ cards:
               style:
                   left: 23%
                   top: 97%
+            # BEDROOM SONOS SPEAKER ICON (ONLY DISPLAYS WHEN ON)
+            - type: custom:button-card
+              template: speaker_device
+              entity: media_player.sonos_bedroom
+              style:
+                left: 10%
+                top: 91%
             # GUEST PENDANT ICON
             - type: custom:button-card
               template: light
@@ -1883,6 +1890,13 @@ cards:
               style:
                 left: 85%
                 top: 52%
+            # BATH SONOS SPEAKER ICON (ONLY DISPLAYS WHEN ON)
+            - type: custom:button-card
+              template: speaker_device
+              entity: media_player.sonos_move
+              style:
+                left: 60%
+                top: 38%
             # BATH DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
@@ -1942,6 +1956,13 @@ cards:
               style:
                 left: 18%
                 top: 67%
+            # LIVING ROOM SONOS SPEAKER ICON (ONLY DISPLAYS WHEN ON)
+            - type: custom:button-card
+              template: speaker_device
+              entity: media_player.sonos_living
+              style:
+                left: 50%
+                top: 44.5%
             # LIVING ROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_living
@@ -2036,6 +2057,13 @@ cards:
               style:
                 left: 20%
                 top: 15%
+            # KITCHEN SONOS SPEAKER ICON (ONLY DISPLAYS WHEN ON)
+            - type: custom:button-card
+              template: speaker_device
+              entity: media_player.sonos_kitchen
+              style:
+                left: 86.5%
+                top: 14%
             # KITCHEN PENDANTS ICON
             - type: custom:button-card
               template: light
