@@ -196,6 +196,9 @@ cards:
                 icon: mdi:key
                 entity: input_boolean.guest_show_wifi
                 icon_color: primary
+              - type: custom:button-card
+                template: section_text
+                name: A "Unifi" popup will appear. Click Login, no password required.
             - type: custom:button-card
               entity: input_boolean.guest_show_wifi
               template: wifi_qr_code
