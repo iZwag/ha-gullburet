@@ -880,3 +880,39 @@
         target:
           entity_id: input_boolean.floorplan_show_icons
   mode: single
+- id: '1732034860357'
+  alias: Lights - Bath strip OFF when spots OFF
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.downlights_bath
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: light.lightstrip_bath
+    state: 'on'
+  action:
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.lightstrip_bath
+  mode: single
+- id: '1732224070644'
+  alias: Heating - Handle heater calibrations
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.temperature_difference_office
+  condition: []
+  action:
+  - service: number.set_value
+    metadata: {}
+    data:
+      value: '{{ states(''temperature_difference_office'') | float(default=0)}}'
+    target:
+      entity_id: number.temperature_calibration_office
+  mode: single
