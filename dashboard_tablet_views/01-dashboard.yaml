@@ -551,7 +551,7 @@ cards:
               - color: '#ff9800'
             variables:
               dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
-              dotMidSeverity: 10
+              dotMidSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level_85 ]]]"
           # RADIAL BAR
           - type: custom:apexcharts-card
             card_mod:
