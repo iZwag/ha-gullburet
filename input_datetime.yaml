@@ -1,0 +1,5 @@
+
+power_monthly_maxhour_4:
+  name: Power - Monthly highest max-hour 4
+  has_date: true
+  has_time: true
