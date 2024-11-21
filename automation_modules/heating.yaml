@@ -215,7 +215,7 @@
     input:
       schedule_entity: schedule.heating_comfort_office
       schedule_type: Comfort
-      select_entity: input_select.heating_mode_kitchen
+      select_entity: input_select.heating_mode_office
       enabled_if: true
 
 # #############################################################################
