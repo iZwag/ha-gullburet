@@ -957,7 +957,7 @@ cards:
     # Automatic Z-index layering: The closer the element is declared from
     #   the "elements:"-keyword, the lower its assigned Z-index. 
     #   I.e. the further down in the "elements"-sequence they are defined
-    #   higher ("in front") they are represented in the image-stack. 
+    #   the higher ("in front") they are represented in the image-stack. 
     # ###################################################################
     - type: picture-elements
       # DARK, BASE-LAYER OF FLOORPLAN:
@@ -972,7 +972,25 @@ cards:
         # ###########################################################
         # LIGHT EFFECT LAYERS
         # Purely visual effects - not interactable. Only illustrates
-        #   state of lights with pre-rendered images. 
+        #   state of lights with pre-rendered images.
+        # Veranda
+        - type: image
+          entity: sensor.wall_lantern_veranda_dim
+          image: "/local/floorplan/common-veranda.png"
+          style:
+            left: 50%
+            top: 50%
+            width: 100%
+            mix-blend-mode: lighten
+          state_filter:
+            "0": opacity(0%)
+            "5": opacity(30%)
+            "10": opacity(40%)
+            "20": opacity(50%)
+            "30": opacity(60%)
+            "50": opacity(70%)
+            "75": opacity(85%)
+            "100": opacity(100%)
         # Bedroom
         - type: image
           entity: sensor.pendant_bedroom_dim
@@ -981,6 +999,7 @@ cards:
             left: 50%
             top: 50%
             width: 100%
+            mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -998,6 +1017,7 @@ cards:
             left: 50%
             top: 50%
             width: 100%
+            mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1015,6 +1035,7 @@ cards:
             left: 50%
             top: 50%
             width: 100%
+            mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1032,6 +1053,25 @@ cards:
             left: 50%
             top: 50%
             width: 100%
+            mix-blend-mode: lighten
+          state_filter:
+            "0": opacity(0%)
+            "5": opacity(30%)
+            "10": opacity(40%)
+            "20": opacity(50%)
+            "30": opacity(60%)
+            "50": opacity(70%)
+            "75": opacity(85%)
+            "100": opacity(100%)
+        # Bathroom lightstrip
+        - type: image
+          entity: sensor.lightstrip_bath_dim
+          image: "/local/floorplan/bath-lightstrip-v2.png"
+          style:
+            left: 50%
+            top: 50%
+            width: 100%
+            mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1059,23 +1099,6 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%) 
-        # Bathroom lightstrip
-        - type: image
-          entity: sensor.lightstrip_bath_dim
-          image: "/local/floorplan/bath-lightstrip-v2.png"
-          style:
-            left: 50%
-            top: 50%
-            width: 100%
-          state_filter:
-            "0": opacity(0%)
-            "5": opacity(30%)
-            "10": opacity(40%)
-            "20": opacity(50%)
-            "30": opacity(60%)
-            "50": opacity(70%)
-            "75": opacity(85%)
-            "100": opacity(100%)
         # Entry 
         - type: image
           entity: sensor.downlights_entry_dim
@@ -1084,6 +1107,7 @@ cards:
             left: 50%
             top: 50%
             width: 100%
+            mix-blend-mode: lighten
           state_filter:
             "0": opacity(0%)
             "5": opacity(30%)
@@ -1219,26 +1243,51 @@ cards:
             "50": opacity(70%)
             "75": opacity(85%)
             "100": opacity(100%)
-        # Veranda
-        - type: image
-          entity: sensor.wall_lantern_veranda_dim
-          image: "/local/floorplan/common-veranda.png"
-          style:
-            left: 50%
-            top: 50%
-            width: 100%
-            mix-blend-mode: lighten
-          state_filter:
-            "0": opacity(0%)
-            "5": opacity(30%)
-            "10": opacity(40%)
-            "20": opacity(50%)
-            "30": opacity(60%)
-            "50": opacity(70%)
-            "75": opacity(85%)
-            "100": opacity(100%)
 
-        
+        # #####################################################################
+        # OTHER 3D EFFECTS LAYERS
+        # Living room curtains
+        - type: custom:button-card
+          entity: cover.curtain_living
+          show_name: false
+          show_icon: false
+          custom_fields:
+            curtains: |
+              [[[
+                let state = (entity.attributes.position / 100) * 75 + 25;
+                
+                return `
+                <div style="overflow: visible;">
+                  <img  src="/local/floorplan/curtains-rotated.png" 
+                        style="height: 74px; width:${state}%; float: left; display: block; 
+                        transform: perspective(350px) rotateX(140deg) skewX(-10deg) scaleY(1.1); 
+                        margin-left: 14px">
+                  </img>
+                </div>
+                `
+              ]]]
+          # scaleY(1.1);
+          styles:
+            card:
+              - background: transparent
+              - padding: 0px
+              - height: 74px
+              - width: 190px
+              - border: none
+              - margin: 0px
+              - border-radius: 0px
+            custom_fields:
+              curtains:
+                - border-radius: 0px
+                - background: transparent
+                - opacity: 90%
+                - filter: brightness(70%) sepia(20%)
+          style:
+            left: 32%
+            top: 13% 
+          tap_action:
+            action: none
+
         # #####################################################################
         # SELECT MULT. ROOMS CLEANING: CLICKABLE ZONES, OUTLINES & OVERLAYS
         - type: conditional
@@ -1501,7 +1550,7 @@ cards:
               '--mdc-icon-size': 250px
               transform: 'scaleX(0.9) scaleY(2.03)'
           
-        # ###########################################################
+        # #####################################################################
         # SELECT ROOMS: CLICKABLE ZONES, OUTLINES & OVERLAYS
         - type: conditional
           conditions:
@@ -1699,7 +1748,7 @@ cards:
               '--mdc-icon-size': 190px
               transform: 'scaleX(0.7) scaleY(1.2)'
 
-        # ###########################################################
+        # #####################################################################
         # HIDE ICON / LAYERS + UNSELECT ICON
         - type: conditional
           conditions:
@@ -1776,48 +1825,6 @@ cards:
                 left: 94%
                 top: 2%
                 '--mdc-icon-size': 30px
-
-        # Living room curtains
-        - type: custom:button-card
-          entity: cover.curtain_living
-          show_name: false
-          show_icon: false
-          custom_fields:
-            curtains: |
-              [[[
-                let state = (entity.attributes.position / 100) * 75 + 25;
-                
-                return `
-                <div style="overflow: visible;">
-                  <img  src="/local/floorplan/curtains-rotated.png" 
-                        style="height: 74px; width:${state}%; float: left; display: block; 
-                        transform: perspective(350px) rotateX(140deg) skewX(-10deg) scaleY(1.1); 
-                        margin-left: 14px">
-                  </img>
-                </div>
-                `
-              ]]]
-          # scaleY(1.1);
-          styles:
-            card:
-              - background: transparent
-              - padding: 0px
-              - height: 74px
-              - width: 190px
-              - border: none
-              - margin: 0px
-              - border-radius: 0px
-            custom_fields:
-              curtains:
-                - border-radius: 0px
-                - background: transparent
-                - opacity: 90%
-                - filter: brightness(70%) sepia(20%)
-          style:
-            left: 32%
-            top: 13% 
-          tap_action:
-            action: none
         
         # ###########################################################
         # DEVICE ICONS
@@ -1840,6 +1847,13 @@ cards:
               style:
                 left: 54%
                 top: 80%
+            # OFFICE HEATER ICON (ONLY DISPLAYS WHEN ON)
+            - type: custom:button-card
+              entity: climate.heater_office
+              template: heat_device
+              style:
+                  left: 60%
+                  top: 97%
             # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
             # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
             #- type: custom:button-card
