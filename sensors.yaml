@@ -162,11 +162,13 @@
         {{ months[now().month-1] }}
     
     # Formats the week-day and date into a humanly readable sentence for UI, as sensor
+    # Ending with YEAR:
+    # {{ states('sensor.day') ~ ', ' ~ states('sensor.month') ~ ' ' ~ day ~ ordinal ~ now().strftime(' %Y') }}
     date_string:
       value_template: >
         {% set day = now().day %}
         {% set ordinal = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th') %}
-        {{ states('sensor.day') ~ ', ' ~ states('sensor.month') ~ ' ' ~ day ~ ordinal ~ now().strftime(' %Y') }}
+        {{ states('sensor.day') ~ ', ' ~ states('sensor.month') ~ ' ' ~ day ~ ordinal }}
 
     date_string_nor:
       friendly_name: "Full date, Norwegian"
@@ -304,19 +306,72 @@
       unit_of_measurement: W
       value_template: >
         {% if is_state('switch.lamp_mushroom_living', 'on') %}
-          3.3
+          4
+        {% else %}
+          0
+        {% endif %}
+    
+    # Measured to be 9W when on - Both Donut and Globe
+    power_globe_living:
+      friendly_name: "Power - Globe lamp, living"
+      device_class: power
+      unit_of_measurement: W
+      value_template: >
+        {% if is_state('switch.lamp_globe_living', 'on') %}
+          9
         {% else %}
           0
         {% endif %}
 
-    # Measured to be 3.3W when on
+    # Measured to be 7.1W when on
     power_stringlights_veranda:
       friendly_name: "String lights power, veranda"
       device_class: power
       unit_of_measurement: W
       value_template: >
         {% if is_state('switch.string_lights_veranda', 'on') %}
-          7.1
+          8
         {% else %}
           0
+        {% endif %}
+
+    # Measured to be around 1020W when on
+    power_heater_kitchen:
+      friendly_name: "Power - Panel heater, kitchen"
+      device_class: power
+      unit_of_measurement: W
+      value_template: >
+        {% if is_state('climate.heater_kitchen', 'heat') and 
+              is_state_attr('climate.heater_kitchen', 'hvac_action', 'heating') %}
+          1020
+        {% else %}
+          0
+        {% endif %}
+    
+    # sensor.power_heater_bedroom
+
+    # number.temperature_calibration_office
+
+# Temperature calibration
+- platform: template
+  sensors:
+    temperature_difference_office:
+      friendly_name: "Heating - Office temperature difference"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: >
+        {% set diff = (states('sensor.temperature_office') | float(default=0)) -
+          (state_attr('climate.heater_office', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.heater_office', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
         {% endif %}
