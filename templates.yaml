@@ -873,6 +873,7 @@
         states('sensor.power_lightstrip_bath') | float(default=0),
         states('sensor.power_lightstrip_kitchen') | float(default=0),
         states('sensor.power_mushroom_living') | float(default=0),
+        states('sensor.power_globe_living') | float(default=0),
         states('sensor.power_pendant_bedroom') | float(default=0),
         states('sensor.power_pendant_guest') | float(default=0),
         states('sensor.power_pendants_kitchen') | float(default=0),
@@ -893,7 +894,10 @@
       {% set sensors = [
         states('sensor.power_floor_heat_toilet') | float(default=0),
         states('sensor.power_floor_heat_bath') | float(default=0),
-        states('sensor.power_heater_guest') | float(default=0)
+        states('sensor.power_heater_guest') | float(default=0),
+        states('sensor.power_heater_bedroom') | float(default=0),
+        states('sensor.power_heater_office') | float(default=0),
+        states('sensor.power_heater_kitchen') | float(default=0)
       ] %}
       {{ sensors | sum }}
   
@@ -957,4 +961,8 @@
         {% set energy_level = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=0) %}
         {% set state = states('sensor.hour_progress') | float(default=0) %}
         {{ ((state / 100) * energy_level) | round(2) }}
+      of_energy_level_85: >
+        {% set energy_level = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=0) %}
+        {% set state = states('sensor.hour_progress') | float(default=0) %}
+        {{ ((state / 100) * energy_level) * 0.85 | round(2) }}
         
