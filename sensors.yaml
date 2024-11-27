@@ -365,9 +365,63 @@
         %}
         {% if (diff > -0.5) and (diff < 0.5) %}
           {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
         {% endif %}
         {% set cal = diff + 
           (state_attr('climate.heater_office', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+    
+    temperature_difference_guest:
+      friendly_name: "Heating - Guest temperature difference"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: >
+        {% set diff = (states('sensor.temperature_guest') | float(default=0)) -
+          (state_attr('climate.heater_guest', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.heater_guest', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+    
+    temperature_difference_bedroom:
+      friendly_name: "Heating - Bedroom temperature difference"
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: >
+        {% set diff = (states('sensor.temperature_bedroom') | float(default=0)) -
+          (state_attr('climate.heater_bedroom', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.heater_bedroom', 'local_temperature_calibration') | float(default=0)) %}
         {% if cal > 3 %}
           {{ 3 }}
         {% elif cal < -3 %}
