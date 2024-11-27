@@ -1856,12 +1856,12 @@ cards:
                   top: 97%
             # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
             # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
-            #- type: custom:button-card
-              #  entity: switch.heated_sheet_switch
-              #  template: heat_device
-              #  style:
-              #      left: 31%
-              #      top: 86%
+            - type: custom:button-card
+              entity: switch.plug_seasonal_heat
+              template: heat_device
+              style:
+                  left: 31%
+                  top: 86%
             # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
               entity: climate.heater_bedroom
