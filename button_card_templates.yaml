@@ -605,7 +605,7 @@ big_sensor_dot:
     custom_fields:
       dot:
         - justify-self: center
-        - width: 12px
+        - width: 28px
         - height: 12px
         - border-radius: 6px
         - background: |
@@ -781,6 +781,46 @@ chart_legend_line:
     grid:
       - grid-template-areas: '"dot n s"'
       - grid-template-columns: 36px 1fr 5em
+      - grid-template-rows: min-content
+    custom_fields:
+      dot:
+        - justify-self: center
+        - width: 12px
+        - height: 12px
+        - border-radius: 6px
+        - background-color: |
+            [[[
+              return variables.dotColor;
+            ]]]
+
+#############################################################################
+# CHART LEGEND ENTRY - One row for a legend with color-dot
+#############################################################################
+sensor_legend_line:
+  show_icon: false
+  show_state: true
+  variables:
+    dotColor: "white"
+  custom_fields:
+    dot: |
+      [[[
+        return `<div></div>`
+      ]]]
+  styles:
+    card:
+      - padding: 0px var(--ha-card-padding)
+    name:
+      - justify-self: start
+      - font-size: 12px
+      - font-family: var(--primary-font-family)
+    state:
+      - justify-self: end
+      - font-size: 12px
+      - font-weight: 600
+      - font-family: var(--primary-font-family)
+    grid:
+      - grid-template-areas: '"dot n s"'
+      - grid-template-columns: 30px 1fr 5em
       - grid-template-rows: min-content
     custom_fields:
       dot:
