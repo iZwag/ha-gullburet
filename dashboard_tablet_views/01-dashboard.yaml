@@ -300,9 +300,6 @@ cards:
                   font-weight: regular !important;
                   color: var(--primary-text-color) !important;
                 }
-                .apexcharts-legend {
-                  padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
-                }
             apex_config:
               legend:
                 show: false
@@ -423,9 +420,6 @@ cards:
                   font-weight: regular !important;
                   color: var(--primary-text-color) !important;
                 }
-                .apexcharts-legend {
-                  padding: var(--ha-card-padding) var(--ha-card-padding) 0px !important;
-                }
             apex_config:
               legend:
                 show: false
@@ -529,13 +523,14 @@ cards:
       
       # #################################################################
       # MOMENTARY ENERGY AND POWER
-      - type: horizontal-stack
-        cards:
-        # ENERGY-THIS-HOUR MINIGAME
-        # This shows a little apartment "mini-game" where the goal is to
-        # have the current hour energy consumption stay below the "Price level limit"
-        - type: custom:stack-in-card
-          mode: vertical
+      # ENERGY-THIS-HOUR MINIGAME
+      # This shows a little apartment "mini-game" where the goal is to
+      # have the current hour energy consumption stay below the "Price level limit"
+      - type: custom:stack-in-card
+        mode: horizontal
+        cards: 
+        # Sensor and legend
+        - type: vertical-stack
           cards:
           # SENSOR THIS HOUR ENERGY, WITH DOT
           - type: custom:button-card
@@ -552,65 +547,14 @@ cards:
             variables:
               dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
               dotMidSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level_85 ]]]"
-          # RADIAL BAR
-          - type: custom:apexcharts-card
-            card_mod:
-              style: |
-                ha-card {
-                  padding-top: 0px !important;
-                }
-                #spinner-wrapper {
-                  display: none !important;
-                }
-            chart_type: radialBar
-            apex_config:
-              dataLabels:
-                enabled: false
-              legend:
-                show: false
-                fontSize: '14px'
-                fontFamily: 'Open Sans'
-                horizontalAlign: left
-              chart:
-                height: 300px
-              plotOptions:
-                radialBar:
-                  inverseOrder: true
-                  hollow:
-                    image: '/local/ui/google-icon-sports-score-128px-1ac8ed.png'
-                    imageClipped: false
-                    imageWidth: 48
-                    imageHeight: 48
-                    size: 40%
-            header:
-              show: false
-              title: 'Current hour vs. price level'
-              show_states: true
-              colorize_states: true
-            series:
-              # Current hour (chart)
-              - entity: sensor.tibber_percentage_of_maxlevel
-                name: Energy consumed
-                show:
-                  in_header: false
-                  in_legend: false
-                color: '#ff9800'
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              # Max-hour average (chart)
-              - entity: sensor.hour_progress
-                name: "Time: Keep ahead of energy"
-                show:
-                  in_header: false
-                unit: ' %'
-                color: '#1ac8ed'
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
           # CUSTOM LEGEND
           - type: custom:button-card
-            template: chart_legend_line
+            color_type: blank-card
+            styles:
+              card:
+                - height: 12px
+          - type: custom:button-card
+            template: sensor_legend_line
             name: "Minutes, this hour"
             show_state: false
             variables:
@@ -618,9 +562,9 @@ cards:
             styles:
               grid:
                 - grid-template-areas: '"dot n"'
-                - grid-template-columns: 36px 1fr
+                - grid-template-columns: 30px 1fr
           - type: custom:button-card
-            template: chart_legend_line
+            template: sensor_legend_line
             name: "Limit, this hour:"
             entity: sensor.elvia_active_fixed_price_level
             state_display: |
@@ -638,22 +582,127 @@ cards:
                   - height: 8px
                   - border-radius: 6px
                   - border: solid 2px white
-        # MOMENTARY POWER CONSUMPTION CATEGORIES
-        - type: custom:stack-in-card
-          mode: vertical
+        # Radialbar
+        - type: custom:apexcharts-card
+          card_mod:
+            style: |
+              ha-card {
+                padding-top: 0px !important;
+              }
+              #spinner-wrapper {
+                display: none !important;
+              }
+          chart_type: radialBar
+          apex_config:
+            dataLabels:
+              enabled: false
+            legend:
+              show: false
+              fontSize: '14px'
+              fontFamily: 'Open Sans'
+              horizontalAlign: left
+            chart:
+              height: 300px
+            plotOptions:
+              radialBar:
+                inverseOrder: true
+                hollow:
+                  image: '/local/ui/google-icon-sports-score-128px-1ac8ed.png'
+                  imageClipped: false
+                  imageWidth: 48
+                  imageHeight: 48
+                  size: 40%
+          header:
+            show: false
+            title: 'Current hour vs. price level'
+            show_states: true
+            colorize_states: true
+          series:
+            # Current hour (chart)
+            - entity: sensor.tibber_percentage_of_maxlevel
+              name: Energy consumed
+              show:
+                in_header: false
+                in_legend: false
+              color: '#ff9800'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+            # Max-hour average (chart)
+            - entity: sensor.hour_progress
+              name: "Time: Keep ahead of energy"
+              show:
+                in_header: false
+              unit: ' %'
+              color: '#1ac8ed'
+              data_generator: |
+                const sensor_percent = parseFloat(entity.state);
+                return [[new Date().getTime(), sensor_percent]];
+      # MOMENTARY POWER CONSUMPTION CATEGORIES
+      - type: custom:stack-in-card
+        mode: horizontal
+        cards:
+        # SENSOR AND LEGEND
+        - type: vertical-stack
           cards:
+          # TOTAL MOMENTARY POWER
           - type: custom:button-card
-            template: big_sensor_bar
+            template: big_sensor_dot
             name: Power, realtime
             icon: mdi:home-lightning-bolt
             entity: sensor.tibber_power_consumption_realtime
             variables:
-              barMax: 8800
-              barHiSeverity: 5000
-              barMidSeverity: 2000
+              dotHiSeverity: 5000
+              dotMidSeverity: 2000
             styles:
               card:
-                - padding: var(--ha-card-padding) var(--ha-card-padding) 0px 
+                - padding: var(--ha-card-padding)
+          - type: custom:button-card
+            template: sensor_legend_line
+            name: "Lights"
+            entity: sensor.power_momentary_light_consumption
+            numeric_precision: 0
+            variables:
+              dotColor: "var(--color-primary)"
+          - type: custom:button-card
+            template: sensor_legend_line
+            name: "Static"
+            entity: sensor.power_momentary_static_consumption
+            numeric_precision: 0
+            variables:
+              dotColor: "var(--color-primary-dark)"
+          - type: custom:button-card
+            template: sensor_legend_line
+            name: "Dynamic"
+            entity: sensor.power_momentary_dynamic_consumption
+            numeric_precision: 0
+            variables:
+              dotColor: "var(--color-third)"
+          - type: custom:button-card
+            template: sensor_legend_line
+            name: "Heating"
+            entity: sensor.power_momentary_heating_consumption
+            numeric_precision: 0
+            variables:
+              dotColor: "var(--color-accent)"
+          - type: custom:button-card
+            template: sensor_legend_line
+            name: "Other"
+            entity: sensor.power_other_momentary_consumption
+            numeric_precision: 0
+            variables:
+              dotColor: '#343434'
+            styles:
+              card:
+                - padding-bottom: var(--ha-card-padding)
+        # DONUT CHART
+        - type: vertical-stack
+          cards:
+          - type: custom:button-card
+            color_type: blank-card
+            styles:
+              card:
+                - height: 4px
           - type: custom:apexcharts-card
             card_mod:
               style: |
@@ -674,7 +723,7 @@ cards:
             chart_type: donut
             apex_config:
               legend:
-                show: true
+                show: false
                 fontSize: '12px'
                 fontFamily: 'Open Sans'
                 horizontalAlign: left
