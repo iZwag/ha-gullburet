@@ -897,7 +897,8 @@
         states('sensor.power_heater_guest') | float(default=0),
         states('sensor.power_heater_bedroom') | float(default=0),
         states('sensor.power_heater_office') | float(default=0),
-        states('sensor.power_heater_kitchen') | float(default=0)
+        states('sensor.power_heater_kitchen') | float(default=0),
+        states('sensor.power_seasonal_heat') | float(default=0)
       ] %}
       {{ sensors | sum }}
   
