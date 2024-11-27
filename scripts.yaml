@@ -710,7 +710,7 @@ bedroom_heated_sheet_control:
         metadata: {}
         data: {}
         target:
-          entity_id: switch.heated_sheet_switch
+          entity_id: switch.plug_seasonal_heat
       - service: timer.start
         data:
           duration: '{{ increase }}'
@@ -725,7 +725,7 @@ bedroom_heated_sheet_control:
         metadata: {}
         data: {}
         target:
-          entity_id: switch.heated_sheet_switch
+          entity_id: switch.plug_seasonal_heat
       - service: timer.finish
         metadata: {}
         data: {}
@@ -831,36 +831,36 @@ bedroom_heated_sheet_control:
       - condition: template
         value_template: '{{ command == "toggle" }}'
       sequence:
-      - if:
+      - alias: IF ON
+        if:
         - condition: state
-          entity_id: switch.heated_sheet_switch
+          entity_id: switch.plug_seasonal_heat
           state: 'on'
         then:
         - service: switch.turn_off
           metadata: {}
           data: {}
           target:
-            entity_id: switch.heated_sheet_switch
+            entity_id: switch.plug_seasonal_heat
         - service: timer.finish
           metadata: {}
           data: {}
           target:
             entity_id: timer.heated_sheet_timer
-        alias: IF ON
-      - if:
+      - alias: IF OFF
+        if:
         - condition: state
-          entity_id: switch.heated_sheet_switch
+          entity_id: switch.plug_seasonal_heat
           state: 'off'
         then:
         - service: switch.turn_on
           metadata: {}
           data: {}
           target:
-            entity_id: switch.heated_sheet_switch
+            entity_id: switch.plug_seasonal_heat
         - service: timer.start
           data:
             duration: 00:30:00
-        alias: IF OFF
       alias: TOGGLE
   mode: queued
   icon: mdi:heating-coil
