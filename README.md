@@ -4,6 +4,26 @@ This repo contains (the shareable part of) my smart-home configuration. Orchestr
 
 What is *Gullburet*? It's the nickname of our apartment, and it means "the gold-cage".
 
+## Wall-mounted control tablet
+
+A tablet has been wall-mounted in the entry hall to serve easy control. It reduces the need to control everything with a mobile, which is also a lot easier for guests.
+
+The interface has been custom-made to fit the daily needs of the persons living there.
+
+Screenshots of the different tab-views:
+
+![Main, dashboard-view with weather forecast, public transportation realtime, energy prices and power consumption.](./docs/01-dashboard.png)
+
+![3D-Floorplan with detailed rooms, rendered light effects and per room device controls](./docs/02-floorplan.png)
+
+![Wake-up and bedtime](./docs/03-sleep.png)
+
+![Detailed energy consumption](./docs/04-energy.png)
+
+![Guest info](./docs/05-guestinfo.png)
+
+![Audio-listening interface](./docs/06-listen.png)
+
 ## Hardware
 
 The system is compromised of many hardware devices, obviously. 
@@ -67,11 +87,7 @@ To display relevant info about life in Oslo and Norway, here are some public API
 - Tibber: Local electricity ratings, including fees
 - Elvia: Electrical grid usage, variable and fixed price rating, including fees
 
-### Dashboard preview
 
-Here is how the main view of the wall-mounted tablet dashboard looks like.
-
-![Wall-mounted tablet dashboard main view](./www/docs/overview-dashboard.png)
 
 ### Floorplan
 
