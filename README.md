@@ -1,3 +1,5 @@
+**Please STAR this project if you find it useful or interesting.**  
+
 # Home Assistant // Gullburet
 
 This repo contains (the shareable part of) my smart-home configuration. Orchestration is handled by [Home Assistant](https://www.home-assistant.io/). 
@@ -62,13 +64,6 @@ The system is compromised of many hardware devices, obviously.
 - **Aqara** Temperature & Humidity T1 sensors
 - **Namron** Temperature & Humidity sensors. Wall-mounted panel heater.
 
-#### Tips on deploying a Zigbee network
-
-- To control the Zigbee-network, I considered: **ZHA** and **Zigbee2MQTT**. I chose Zigbee2MQTT the second time because it is compatible with more devices. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html).
-- Choose network channel to reduce Wi-Fi interference. [This article explains overlapping channels between Wi-Fi and Zigbee](https://www.metageek.com/training/resources/zigbee-wifi-coexistence/). I use Wi-Fi channels for 6 and 11 for my guest and IoT 2.4GHz Wi-Fis respectively, so I chose Zigbee-channel 11 to be as away from these as possible. Ideally I should have regarded surrounding Wi-Fis in my apartment building... oh, well. Whoopsies.
-- Connect the Zigbee coordinator with a 3m cable away from the host, as well as away from Wi-Fi APs and big metal objects.
-- Add relaying devices first to the network (devices powered by wire), starting with the closest ones to the coordinator first. Then add edge devices (powered by battery) last. This enables a strong mesh-network.
-
 ## Software 
 
 ### Containers in Docker
@@ -87,12 +82,18 @@ To display relevant info about life in Oslo and Norway, here are some public API
 - Tibber: Local electricity ratings, including fees
 - Elvia: Electrical grid usage, variable and fixed price rating, including fees
 
+#### How I made my Zigbee network more reliable
 
+- Switched to a PoE Zigbee coordinator, to escape the previous USB-stick solution which is at the mercy reliability-wise of its host's power management - which in the case of the RPi is horrible
+- Switched from **ZHA** to **Zigbee2MQTT** because it is compatible with more devices. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html), and it is more configurable.
+- Intentionally chose a specific Zigbee-channel to reduce interference with Wi-Fi. [This article explains overlapping channels between Wi-Fi and Zigbee](https://www.metageek.com/training/resources/zigbee-wifi-coexistence/). I use Wi-Fi channels 6 and 11 for guest and IoT 2.4GHz Wi-Fis respectively, so I chose Zigbee channel 11 (equal to Wi-Fi channel 1) to be as away from these as possible. 
+- Connected the Zigbee coordinator with a 3m cable away from the host, as well as away from Wi-Fi APs and big metal objects.
+- Add relaying devices first to the network (devices powered by wire), starting with the closest ones to the coordinator first. Then add edge devices (powered by battery) last. This enables a strong mesh-network.
 
-### Floorplan
+### How I made the 3D Floorplan
 
 The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a look in the `/www/floorplan`-directory of the repo to see the images. Images was created like this:
-1. Download and install the free, available software, Sweet Home 3D. Also get the available furniture/interior model packages that are also available for free, that must be downloaded separately.
+1. Download and install the free software, Sweet Home 3D. Also get the available furniture/interior model packages that are also available for free, that must be downloaded separately.
 2. Create the 2D floor plan of the house, and place furniture to cover your desired level of fidelity.
 3. In the 3D view, edit heights, depths, widths, material, shinyness, elevation, rotation and so on for furniture, walls, floors as your heart desires. Also add light sources.
 4. Find a nice point of view and save it. It will serve as the POV to make all renderings from.
@@ -106,13 +107,11 @@ The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a 
 12. Use Free-select tool to mark areas of each image/layer that is affected by that image light source, clearing everything else and making the other parts of image transparent.
 13. Export a base, dark image and each light source as their own indpendent PNG.
 
-## Learnings
+## Credits
 
-- Displaying time-left for a `timer`-helper in the Floorplan `picture-elements` rig does not as easily as I'd hoped. Just displaying it as an entity is pointless because it updates only once every 30-40s.
-- Using HA's native `conditional`-card to conditionally show certain cards (in this case the very reactive room-info column left of the Floorplan) leaves empty 12px transparent boxes if the cards are left out. This might be a weird interaction between the the `bootstrap`-card I use for laying out the columns.
-- I tried configuring a `custom:swipe-card` inside another `custom:swipe-card` (it's from HACS), where I attempted to swipe between different public transportation stops horizontally, and swiping vertical at each stop would show the map of the stop. After configuring this in the most minimal and efficient way, it just kept breaking the UI even though the intended functionality worked. Implemented in a different way.
-- It might be trivial to some, but the way I mentally separate concerns of *Automations* and *Scripts* is that Scripts are responsible for performing sequences that can be triggered by something explicitly defined, while Automations are more orchestrations that listen to changing/triggered entities and then run Scripts or other services.
-- In Template sensor (and other related Jinja-template instances), add default-values when casting string as floats to avoid issues if the value is `unknown` for some reason. Example: `"{{ states('sensor.temperature') | float(default=0) }}"`
-- The ApexCharts HACS-card is brilliant for timeseries data graphs, but does for some reason not support bar-graphs with categories (March 2024). There is support for column-timeseries, but I was unsuccessful in making discrete categories as bars. I wanted to display the entity-state of my top 3 monthly energy consumption "max-hours", and how rank between the fixed-price levels from the grid company. I instead went with a `radialBar` type chart instead.
-- 2024-09-04, Core HA v2024.4.0: Changing name and entity-id for a script does not change its internally stored unique ID, so it must still be referenced by its original id.
-- Tibber Pulse: Started being unresponsive and unstable after 2 months of perfect operation. Powering it with USB + PoE from HAN-port + restarting Wi-Fi router seems to make it better, but still unreliable.
+This project has been directly implemented by myself, but I want to extend some big, warm and grateful *thank you*s to the following resources on the internet:
+- [@lukevink's HA-config on GitHub](https://github.com/lukevink/hass-config-lajv): His clean tablet-dashboard has served as a huge inspiration for my tablet UI
+- [@HomeAutomationGuy on YouTube](https://www.youtube.com/@HomeAutomationGuy): Great, in-depth guides on many HA-related topics.
+- [@EverythingSmartHome](https://www.youtube.com/@EverythingSmartHome): A fantastic general resource on HA-related news and topics. 
+- [@My_Smart_Home on YouTube](https://www.youtube.com/@My_Smart_Home): To-the point and well-made vidoes on configuring components, down to the nitty-gritty details. Has taught me new things and provided inspiration!
+
