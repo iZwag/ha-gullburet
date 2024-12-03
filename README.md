@@ -28,7 +28,7 @@ Screenshots of the different tab-views:
 
 ## Hardware
 
-The system is compromised of many hardware devices, obviously. 
+The smarthome-system is compromised of many hardware devices, obviously. 
 
 ### Host system
 - Raspberry Pi 4 model B 2GB
@@ -36,7 +36,7 @@ The system is compromised of many hardware devices, obviously.
 - Home Assistant is running as Container, in a stack with `zwave-js-ui` (previously zwave2mqtt) and `vscode` in Docker
 - PSU: 5V/3A USB-C
 - Storage: Kingston KC600 256GB SSD, connected to RPi with SATA-to-USB3 adapter
-- Network: CAT-6 network to router
+- Network: CAT-6 networking to router
 - SMLIGHT SLZB-06M (PoE Zigbee coordinator)
 - USB: Aeotec Z-Stick 7 (as Z-Wave-controller)
 
@@ -46,23 +46,23 @@ The system is compromised of many hardware devices, obviously.
 - Unifi U6 Pro
 
 ### Wi-Fi/Network Devices
-- Heating: **Mill Heat** (panel heaters, movable floor-unit)
-- Lights: **Philips Hue** (bulbs, switches, sensors)(actually Zigbee, but on its own network)
-- Speakers: **Sonos** (Play:1, One, Beam)
-- Robot vacuum: **Roborock** S7 Plus
-- TV: **Samsung** The Frame 55"
-- Tablet, wall-mounted dashboard: **Lenovo** Tab M10 FHD Plus
-- **Shelly** Plug Plus S
-- Tibber Pulse - Realtime apartment power consumption meter. Uses the HAN-port.
+- **Mill Heat** panel heaters, movable floor-unit
+- **Sonos** speakers: Play:1, One, Beam, Move
+- **Roborock** S7 Plus, robot vacuum
+- **Samsung** The Frame 55" TV
+- **Lenovo** Tab M10 FHD Plus wall-mounted tablet
+- **Shelly** Plug Plus S for binary control and power-monitoring
+- **Tibber** Pulse - Realtime apartment power consumption meter. Uses the HAN-port.
 
 ### Z-Wave Devices
 - **Fibaro** Dimmer Switch 2, Switch 2
 - **Heat-it** Z-TRM3 Thermostat for floor heating
 
 ### Zigbee Devices
-- **IKEA** TRÅDFRI: Transformers, lightbulbs, sockets, switches
+- **IKEA** TRÅDFRI: Transformers, lightbulbs, smart plugs, switches
 - **Aqara** Temperature & Humidity T1 sensors
-- **Namron** Temperature & Humidity sensors. Wall-mounted panel heater.
+- **Namron** Temperature & Humidity sensors. Wall-mounted panel heaters.
+- **Philips Hue** (bulbs, switches, sensors)
 
 ## Software 
 
@@ -76,21 +76,22 @@ The host system for Home Assistant incorporates the following services running a
 - Mosquitto
 
 ### Dashboard services
-To display relevant info about life in Oslo and Norway, here are some public APIs that are being consumed:
+To display relevant info about life in Oslo, here are some public APIs that are being consumed:
 - Entur (Ruter): Public transportation
 - Met.no (Yr): Weather
 - Tibber: Local electricity ratings, including fees
 - Elvia: Electrical grid usage, variable and fixed price rating, including fees
 
-#### How I made my Zigbee network more reliable
+## How I made my Zigbee network more reliable
 
 - Switched to a PoE Zigbee coordinator, to escape the previous USB-stick solution which is at the mercy reliability-wise of its host's power management - which in the case of the RPi is horrible
-- Switched from **ZHA** to **Zigbee2MQTT** because it is compatible with more devices. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html), and it is more configurable.
+- Switched from ZHA to **Zigbee2MQTT** because it is compatible with more devices. [Check the compatibility list for Zigbee devices here](https://zigbee.blakadder.com/all.html), and it is more configurable.
 - Intentionally chose a specific Zigbee-channel to reduce interference with Wi-Fi. [This article explains overlapping channels between Wi-Fi and Zigbee](https://www.metageek.com/training/resources/zigbee-wifi-coexistence/). I use Wi-Fi channels 6 and 11 for guest and IoT 2.4GHz Wi-Fis respectively, so I chose Zigbee channel 11 (equal to Wi-Fi channel 1) to be as away from these as possible. 
 - Connected the Zigbee coordinator with a 3m cable away from the host, as well as away from Wi-Fi APs and big metal objects.
-- Add relaying devices first to the network (devices powered by wire), starting with the closest ones to the coordinator first. Then add edge devices (powered by battery) last. This enables a strong mesh-network.
+- Added relaying devices first to the network (devices powered by wire), starting with the closest ones to the coordinator first. Then addd edge devices (powered by battery) last. Its a best practice for a strong mesh-network.
+- With Z2M instead of ZHA, I could move Philips Hue-devices off its own bridge into the Zigbee-network, reducing interference.
 
-### How I made the 3D Floorplan
+## How I made the 3D Floorplan
 
 The Floorplan-view is built up of different layers of pre-rendered PNGs. Take a look in the `/www/floorplan`-directory of the repo to see the images. Images was created like this:
 1. Download and install the free software, Sweet Home 3D. Also get the available furniture/interior model packages that are also available for free, that must be downloaded separately.
