@@ -3,3 +3,18 @@ power_monthly_maxhour_4:
   name: Power - Monthly highest max-hour 4
   has_date: true
   has_time: true
+
+wakeup_15min_after:
+  name: Wakeup - 15min after
+  has_date: true
+  has_time: true
+
+wakeup_30min_after:
+  name: Wakeup - 30min after
+  has_date: true
+  has_time: true
+
+wakeup_60min_after:
+  name: Wakeup - 60min after
+  has_date: true
+  has_time: true
