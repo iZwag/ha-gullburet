@@ -295,50 +295,20 @@
     at: sensor.wakeup_next_alarm_time
     id: alarm
   - platform: time
-    at: sensor.wakeup_increase_time
+    at: input_datetime.wakeup_15min_after
     id: increase
   - platform: time
-    at: sensor.wakeup_last_call_time
+    at: input_datetime.wakeup_30min_after
     id: 30min-after
+  - platform: time
+    at: input_datetime.wakeup_60min_after
+    id: 60min-after
   condition:
   - condition: state
     entity_id: input_boolean.wakeup_alarm_active
     state: 'on'
   action:
   - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - increase
-      sequence:
-      - service: script.masterdim_script
-        data:
-          manual_override: false
-          light_entity: light.pendant_bedroom
-          brightness: 60
-      - service: media_player.volume_set
-        target:
-          entity_id:
-          - media_player.sonos_bedroom
-        data:
-          volume_level: 0.13
-    - conditions:
-      - condition: trigger
-        id:
-        - 30min-after
-      sequence:
-      - service: script.masterdim_script
-        data:
-          manual_override: '{{ is_state(''input_boolean.wakeup_alarm_active'', ''on'')
-            }}'
-          light_entity: light.pendant_bedroom
-          brightness: 100
-      - service: media_player.volume_set
-        metadata: {}
-        data:
-          volume_level: 0.18
-        target:
-          entity_id: media_player.sonos_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -350,6 +320,85 @@
           transition: 300
         target:
           entity_id: light.pendant_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm
+      sequence:
+      - service: input_datetime.set_datetime
+        metadata: {}
+        data:
+          datetime: '{{ (now() + timedelta(minutes=15)).strftime(''%Y-%m-%d %H:%M:%S'')
+            }}'
+        target:
+          entity_id: input_datetime.wakeup_15min_after
+      - service: input_datetime.set_datetime
+        metadata: {}
+        data:
+          datetime: '{{ (now() + timedelta(minutes=30)).strftime(''%Y-%m-%d %H:%M:%S'')
+            }}'
+        target:
+          entity_id: input_datetime.wakeup_30min_after
+      - service: input_datetime.set_datetime
+        metadata: {}
+        data:
+          datetime: '{{ (now() + timedelta(minutes=60)).strftime(''%Y-%m-%d %H:%M:%S'')
+            }}'
+        target:
+          entity_id: input_datetime.wakeup_60min_after
+    - conditions:
+      - condition: trigger
+        id:
+        - increase
+      sequence:
+      - service: script.masterdim_script
+        data:
+          manual_override: false
+          light_entity: light.pendant_bedroom
+          brightness: 60
+      - if:
+        - condition: state
+          entity_id: media_player.sonos_bedroom
+          state: playing
+        then:
+        - service: media_player.volume_set
+          target:
+            entity_id:
+            - media_player.sonos_bedroom
+          data:
+            volume_level: 0.13
+    - conditions:
+      - condition: trigger
+        id:
+        - 30min-after
+      sequence:
+      - service: script.masterdim_script
+        data:
+          manual_override: '{{ is_state(''input_boolean.wakeup_alarm_active'', ''on'')
+            }}'
+          light_entity: light.pendant_bedroom
+          brightness: 100
+      - if:
+        - condition: state
+          entity_id: media_player.sonos_bedroom
+          state: playing
+        then:
+        - service: media_player.volume_set
+          metadata: {}
+          data:
+            volume_level: 0.18
+          target:
+            entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - 60min-after
+      sequence:
+      - service: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.curtain_living
   mode: single
 - id: '1713471081102'
   alias: Wakeup - Update Sonos alarm when alarm settings change
@@ -543,7 +592,7 @@
     id: 30min-before
   condition:
   - condition: state
-    entity_id: input_boolean.bedtime_heating_sheet_enable
+    entity_id: input_boolean.bedtime_trigger_active
     state: 'on'
   action:
   - if:
@@ -551,12 +600,22 @@
       id:
       - 30min-before
     then:
-    - service: script.bedroom_heated_sheet_control
+    - service: cover.open_cover
       metadata: {}
-      data:
-        increase: 00:50:00
-        command: 'on'
-        decrease: 00:10:00
+      data: {}
+      target:
+        entity_id: cover.curtain_living
+    - if:
+      - condition: state
+        entity_id: input_boolean.bedtime_heating_sheet_enable
+        state: 'on'
+      then:
+      - service: script.bedroom_heated_sheet_control
+        metadata: {}
+        data:
+          increase: 00:50:00
+          command: 'on'
+          decrease: 00:10:00
   mode: single
 - id: '1716287088981'
   alias: Veranda lights automatic ON/OFF
@@ -963,3 +1022,31 @@
           entity_id: number.temperature_calibration_bedroom
   mode: queued
   max: 10
+- id: '1733252756139'
+  alias: Cleaning - Vacuum 12-00 Mon-Wed-Fri
+  description: ''
+  trigger:
+  - platform: time
+    at: '12:00:00'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - wed
+    - fri
+  action:
+  - service: script.set_fan_speed_roborock_wrapper
+    metadata: {}
+    data:
+      fan_speed: Max
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: vacuum.start
+    metadata: {}
+    data: {}
+    target:
+      entity_id: vacuum.esmeralda
+  mode: single
