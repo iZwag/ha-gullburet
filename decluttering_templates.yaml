@@ -127,7 +127,7 @@ cleaning_section:
       name: Cleaning
       styles:
         card:
-        - padding: 12px var(--ha-card-padding) 12px
+        - padding: 8px var(--ha-card-padding) 16px
         - height: 48px
     # Text
     - type: custom:button-card

@@ -238,7 +238,7 @@ class RuterStopInfo extends LitElement {
         font-size: 0.9em;
         flex-grow: 1;
         text-align: right;
-        color: var(--secondary-text-color)
+        color: var(--primary-text-color)
       }
       hr.divider {
         border-top: 1px solid white;

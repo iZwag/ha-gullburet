@@ -185,7 +185,7 @@ input_select_buttons:
   styles:
     card: 
       - padding: 7px # This makes it match 50px height
-      - margin: 0px
+      - margin: "0px !important"
       - background-color: >
           [[[
             if (variables.select_option == entity.state) return "var(--button-card-active-background)";
@@ -195,8 +195,9 @@ input_select_buttons:
     icon:
       - color: var(--primary-text-color)
     name:
-      - font-size: "0.8em"
+      - font-size: 14px
       - color: var(--secondary-text-color)
+      - font-family: var(--primary-font-family)
 
 vacuum_fan_speed:
   variables:

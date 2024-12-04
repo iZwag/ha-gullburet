@@ -138,6 +138,8 @@ ios-dark-mode:
   color-ok: '#1aff66'
   color-warning: '#fdca40'
   color-error: '#ff0000'
+  color-disabled: '#555555'
+  color-heat: rgba(255, 111, 0, 1.0)
 
   # For general card styling
   ha-card-padding: 12px # Actual custom field

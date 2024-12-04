@@ -670,7 +670,7 @@ cards:
             entity: sensor.power_momentary_static_consumption
             numeric_precision: 0
             variables:
-              dotColor: "var(--color-primary-dark)"
+              dotColor: "var(--color-primary-darker)"
           - type: custom:button-card
             template: sensor_legend_line
             name: "Dynamic"
@@ -791,3 +791,4 @@ cards:
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
+                  
