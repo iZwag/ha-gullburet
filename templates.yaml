@@ -705,48 +705,6 @@
       timestamp: >
         {{ ((state_attr('sensor.wakeup_light_start_time', 'hour') | int(default=0)) * 3600) + ((state_attr('sensor.wakeup_light_start_time', 'minute') | int(default=0)) * 60) }}
 
-  # Calculates the increase volume and light intensities time
-  # Takes the sensor.next_alarm_time and a number-helper (minutes) as inputs
-  - name: Wakeup - Increase time
-    unique_id: wakeup_increase_time
-    icon: mdi:volume-plus
-    device_class: timestamp
-    state: >
-      {% set adjustment = (states('input_number.wakeup_increase_minutes') | int(default=15)) * 60 %}
-      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) + adjustment %}
-      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
-    attributes:
-      time: >
-        {{ as_timestamp(states('sensor.wakeup_increase_time')) | timestamp_custom('%H:%M:%S', true) }}
-      hour: >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_increase_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int(default=0) }}
-      minute:  >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_increase_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int(default=0) }}
-      second: 0
-      timestamp: >
-        {{ ((state_attr('sensor.wakeup_increase_time', 'hour') | int(default=0)) * 3600) + ((state_attr('sensor.wakeup_increase_time', 'minute') | int(default=0)) * 60) }}
-
-  # Calculates the wakeup "last call" time, at which light and sound is maxed
-  # Takes the sensor.next_alarm_time and a number-helper (minutes) as inputs
-  - name: Wakeup - Last call time
-    unique_id: wakeup_last_call_time
-    icon: mdi:bed-clock
-    device_class: timestamp
-    state: >
-      {% set adjustment = (states('input_number.wakeup_last_call_minutes') | int(default=30)) * 60 %}
-      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) + adjustment %}
-      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
-    attributes:
-      time: >
-        {{ as_timestamp(states('sensor.wakeup_last_call_time')) | timestamp_custom('%H:%M:%S', true) }}
-      hour: >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_last_call_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int(default=0) }}
-      minute:  >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_last_call_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int(default=0) }}
-      second: 0
-      timestamp: >
-        {{ ((state_attr('sensor.wakeup_last_call_time', 'hour') | int(default=0)) * 3600) + ((state_attr('sensor.wakeup_last_call_time', 'minute') | int(default=0)) * 60) }}
-
   # Sets the next bedtime-time, taking two helper-datetimes and the current
   #  weekday as inputs. Checks if today's bedtime has passed or not and what
   #  day it is, to determine the next bedtime.
