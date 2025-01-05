@@ -66,11 +66,10 @@ cards:
         navigation_path: /dashboard-tablet/audio
     # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
     - type: custom:button-card
-      color_type: blank_card
+      color_type: blank-card
       styles:
         card:
           - height: 25vh
-          - background-color: transparent
     - type: custom:mushroom-chips-card
       alignment: center
       card_mod:
@@ -90,7 +89,7 @@ cards:
       - type: weather
         entity: weather.yr_weather_home
         show_temperature: true
-        show_conditions: true
+        show_conditions: false
 
   # MAIN VIEW CONTENT
   - type: custom:mod-card
@@ -106,122 +105,171 @@ cards:
       # FIRST COLUMN
       - type: vertical-stack
         cards:
+        # MOMENTARY POWER CONSUMPTION CATEGORIES
         - type: custom:stack-in-card
-          mode: vertical
+          mode: horizontal
           cards:
-          # REALTIME APARTMENT POWER CONSUMPTION WITH BAR
-          - type: custom:button-card
-            template: big_sensor_bar
-            name: Apartment power, realtime
-            icon: mdi:home-lightning-bolt
-            entity: sensor.tibber_power_consumption_realtime
-            variables:
-              barMax: 8800
-              barHiSeverity: 5000
-              barMidSeverity: 2000
-            styles:
-              card:
-                - padding: var(--ha-card-padding) var(--ha-card-padding) 0px         
-          # MOMENTARY POWER CONSUMPTION CATEGORIES DONUT
-          - type: custom:apexcharts-card
-            card_mod:
-              style: |
-                ha-card {
-                  padding-bottom: var(--ha-card-padding) !important;
-                }
-                #spinner-wrapper {
-                  display: none !important;
-                }
-                .apexcharts-legend {
-                  padding: 0 var(--ha-card-padding) !important;
-                }
-            chart_type: donut
-            apex_config:
-              legend:
-                show: true
-                fontSize: '14px'
-                fontFamily: 'Open Sans'
-                horizontalAlign: left
-              dataLabels:
-                enabled: false  
-              #chart:
-              #  height: 300px
-            header:
-              show: false
-            series:
-              - entity: sensor.power_momentary_light_consumption
-                name: Lights
-                color: '#1ac8ed'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_static_consumption
-                name: Static
-                color: '#0B758C'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_dynamic_consumption
-                name: Dynamic
-                color: '#d24dff'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_heating_consumption
-                name: Heating
-                color: '#ff9800'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];    
-              - entity: sensor.power_other_momentary_consumption
-                name: Other
-                color: '#343434'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
+          # SENSOR AND LEGEND
+          - type: vertical-stack
+            cards:
+            # TOTAL MOMENTARY POWER
+            - type: custom:button-card
+              template: big_sensor_bar
+              name: Power, realtime
+              icon: mdi:home-lightning-bolt
+              entity: sensor.tibber_power_consumption_realtime
+              variables:
+                barMax: 8800
+                barHiSeverity: 5000
+                barMidSeverity: 2000
+              styles:
+                card:
+                  - padding: var(--ha-card-padding)
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Lights"
+              entity: sensor.power_momentary_light_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-primary)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Static"
+              entity: sensor.power_momentary_static_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-primary-darker)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Dynamic"
+              entity: sensor.power_momentary_dynamic_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-third)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Heating"
+              entity: sensor.power_momentary_heating_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-accent)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Other"
+              entity: sensor.power_other_momentary_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: '#343434'
+              styles:
+                card:
+                  - padding-bottom: var(--ha-card-padding)
+          # DONUT CHART
+          - type: vertical-stack
+            cards:
+            - type: custom:button-card
+              color_type: blank-card
+              styles:
+                card:
+                  - height: 19px
+            - type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  ha-card {
+                    padding-top: 0px !important;
+                  }
+                  #spinner-wrapper {
+                    display: none !important;
+                  }
+                  #header {
+                    padding: 0 16px !important;
+                  }
+                  #header__title {
+                    font-size: 1em !important;
+                    font-weight: regular !important;
+                    color: var(--primary-text-color) !important;
+                  } 
+              chart_type: donut
+              apex_config:
+                legend:
+                  show: false
+                  fontSize: '12px'
+                  fontFamily: 'Open Sans'
+                  horizontalAlign: left
+                  markers:
+                    size: 5
+                  itemMargin:
+                    horizontal: 3
+                dataLabels:
+                  enabled: false 
+                chart:
+                  height: 300px
+              header:
+                show: false
+                title: Power distribution
+                show_states: true
+                colorize_states: true
+              series:
+                - entity: sensor.power_momentary_light_consumption
+                  name: Lights
+                  color: '#1ac8ed'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_static_consumption
+                  name: Static
+                  color: '#0B758C'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_dynamic_consumption
+                  name: Dynamic
+                  color: '#d24dff'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_heating_consumption
+                  name: Heating
+                  color: '#ff9800'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_other_momentary_consumption
+                  name: Other
+                  color: '#343434'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+        # MIN AND MAX POWER CONSUMPTIONS
         - type: horizontal-stack
           cards:
           - type: custom:button-card
-            template: big_sensor_dot
-            entity: sensor.tibber_energy_consumption_this_month
-            name: So far this month
-            numeric_precision: 0
-            variables:
-              dotHiSeverity: 900
-              dotMidSeverity: 400
+            template: big_sensor
+            entity: sensor.tibber_min_power_daily
+            name: Lowest power today
           - type: custom:button-card
-            template: big_sensor_dot
-            entity: sensor.tibber_energy_consumption_current_day
-            #entity: sensor.elvia_active_fixed_price_level
-            name: So far today
-            numeric_precision: 1
-            variables:
-              dotHiSeverity: 21
-              dotMidSeverity: 10
-            #state_display: |
-            #  [[[
-            #    return states['sensor.elvia_active_fixed_price_level'].attributes.level_max + ' kWh';
-            #  ]]]
+            template: big_sensor
+            entity: sensor.tibber_max_power_daily
+            name: Highest power today
         # 10DAYS ENERGY CONSUMPTION COLUMNS CHART
         - type: custom:stack-in-card
           cards:
@@ -237,7 +285,7 @@ cards:
               legend:
                 show: false
               chart:
-                height: 170px
+                height: 200px
             header:
               show: false
               title: Daily Energy Consumption
@@ -262,7 +310,26 @@ cards:
                 group_by:
                   func: last
                   duration: 1d
-            
+                # MONTH AND DAY ENERGY CONSUMED            
+        # ENERGY CONSUMPTION: MONTH AND DAY
+        - type: horizontal-stack
+          cards:
+          - type: custom:button-card
+            template: big_sensor_dot
+            entity: sensor.tibber_energy_consumption_this_month
+            name: So far this month
+            numeric_precision: 0
+            variables:
+              dotHiSeverity: 900
+              dotMidSeverity: 400
+          - type: custom:button-card
+            template: big_sensor_dot
+            entity: sensor.tibber_energy_consumption_current_day
+            name: So far today
+            numeric_precision: 1
+            variables:
+              dotHiSeverity: 21
+              dotMidSeverity: 10    
 
       # SECOND COLUMN
       - type: vertical-stack

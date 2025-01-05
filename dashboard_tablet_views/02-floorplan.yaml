@@ -71,11 +71,10 @@ cards:
         navigation_path: /dashboard-tablet/audio
     # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
     - type: custom:button-card
-      color_type: blank_card
+      color_type: blank-card
       styles:
         card:
           - height: 25vh
-          - background-color: transparent
     # Bottom chips
     - type: custom:mushroom-chips-card
       alignment: center
@@ -96,7 +95,7 @@ cards:
       - type: weather
         entity: weather.yr_weather_home
         show_temperature: true
-        show_conditions: true
+        show_conditions: false
 
   # MAIN SECTION CONTENTS    
   - type: horizontal-stack
@@ -394,10 +393,7 @@ cards:
                     state_not: "on"
                   card:
                     type: custom:button-card
-                    color_type: blank
-                    styles:
-                      card:
-                      - background: transparent
+                    color_type: blank-card
                 - type: conditional
                   conditions:
                   - type: state
