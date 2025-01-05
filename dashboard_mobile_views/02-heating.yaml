@@ -72,6 +72,42 @@ cards:
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_living
+    # Mode select
+    - type: custom:stack-in-card
+      mode: vertical
+      cards:
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          grid-gap: "0px var(--ha-card-padding)"
+          grid-template-columns: 1fr 1fr 1fr 1fr
+          margin: 0px
+          padding: var(--ha-card-padding)
+        cards:
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_living
+          icon: mdi:emoticon
+          variables:
+            select_option: "Comfort"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_living
+          icon: mdi:power-sleep
+          variables:
+            select_option: "Sleep"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_living
+          icon: mdi:home-export-outline
+          variables:
+            select_option: "Away"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_living
+          icon: mdi:alpha-m-box
+          variables:
+            select_option: "Manual"
     # Heating mode temperature constants
     - type: custom:mushroom-number-card
       entity: input_number.temperature_comfort_living
@@ -130,6 +166,114 @@ cards:
       show_temperature_control: true
       layout: horizontal
     
+    # OFFICE
+    # Title
+    - type: custom:mushroom-title-card
+      title: Kontor
+    # Chips
+    - type: custom:mushroom-chips-card
+      alignment: start
+      card_mod:
+        style: |
+          ha-card {
+            --chip-background: rgba(25, 25, 25, 0.2);
+            --primary-text-color: var(--secondary-text-color);
+          }
+      chips:
+      - type: entity
+        entity: sensor.temperature_office
+      - type: entity
+        entity: sensor.humidity_office
+      - type: entity
+        icon: mdi:heat-wave
+        entity: input_select.heating_mode_office
+    # Mode select
+    - type: custom:stack-in-card
+      mode: vertical
+      cards:
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          grid-gap: "0px var(--ha-card-padding)"
+          grid-template-columns: 1fr 1fr 1fr 1fr
+          margin: 0px
+          padding: var(--ha-card-padding)
+        cards:
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_office
+          icon: mdi:emoticon
+          variables:
+            select_option: "Comfort"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_office
+          icon: mdi:power-sleep
+          variables:
+            select_option: "Sleep"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_office
+          icon: mdi:home-export-outline
+          variables:
+            select_option: "Away"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_office
+          icon: mdi:alpha-m-box
+          variables:
+            select_option: "Manual"
+    # Heating mode temperature constants
+    - type: custom:mushroom-number-card
+      entity: input_number.temperature_comfort_office
+      name: Komfort temp.
+      display_mode: buttons
+      layout: horizontal
+      icon_color: accent
+      primary_info: name
+      secondary_info: none
+    - type: custom:mushroom-number-card
+      entity: input_number.temperature_sleep_office
+      name: Natt temp.
+      display_mode: buttons
+      layout: horizontal
+      icon_color: accent
+      primary_info: name
+      secondary_info: none
+    - type: custom:mushroom-number-card
+      entity: input_number.temperature_away_office
+      name: Borte temp.
+      display_mode: buttons
+      layout: horizontal
+      icon_color: accent
+      primary_info: name
+      secondary_info: none
+    - type: entities
+      entities:
+        - entity: schedule.heating_comfort_office
+          name: Komfort temp. tidsplan
+          secondary_info: none
+          tap_action:
+            action: more-info
+          hold_action:
+            action: more-info
+        - entity: schedule.heating_sleep_office
+          name: Natt temp. tidsplan
+          tap_action:
+            action: more-info
+          hold_action:
+            action: more-info
+    # Panel heater
+    - type: custom:mushroom-climate-card
+      entity: climate.heater_office
+      name: Panelovn
+      hvac_modes:
+        - heat
+        - 'off'
+      show_temperature_control: true
+      layout: horizontal
+    
+
     # SOVEROM
     # Title
     - type: custom:mushroom-title-card
@@ -151,6 +295,38 @@ cards:
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bedroom
+    # Mode select
+    - type: custom:stack-in-card
+      mode: vertical
+      cards:
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          grid-gap: "0px var(--ha-card-padding)"
+          grid-template-columns: 1fr 1fr 1fr 1fr
+          margin: 0px
+          padding: var(--ha-card-padding)
+        cards:
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bedroom
+          icon: mdi:power-sleep
+          variables:
+            select_option: "Sleep"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bedroom
+          icon: mdi:home-export-outline
+          variables:
+            select_option: "Away"
+        - type: custom:button-card
+          color_type: blank-card
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bedroom
+          icon: mdi:alpha-m-box
+          variables:
+            select_option: "Manual"
     # Heating mode temperature constants
     - type: custom:mushroom-number-card
       entity: input_number.temperature_sleep_bedroom
@@ -205,6 +381,42 @@ cards:
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bath
+    # Mode select
+    - type: custom:stack-in-card
+      mode: vertical
+      cards:
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          grid-gap: "0px var(--ha-card-padding)"
+          grid-template-columns: 1fr 1fr 1fr 1fr
+          margin: 0px
+          padding: var(--ha-card-padding)
+        cards:
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bath
+          icon: mdi:emoticon
+          variables:
+            select_option: "Comfort"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bath
+          icon: mdi:power-sleep
+          variables:
+            select_option: "Sleep"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bath
+          icon: mdi:home-export-outline
+          variables:
+            select_option: "Away"
+        - type: custom:button-card
+          template: input_select_icon
+          entity: input_select.heating_mode_bath
+          icon: mdi:alpha-m-box
+          variables:
+            select_option: "Manual"
     # Heating mode temperature constants
     - type: custom:mushroom-number-card
       entity: input_number.temperature_comfort_bath
