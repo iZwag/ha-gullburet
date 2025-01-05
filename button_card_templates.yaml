@@ -162,14 +162,19 @@ thermostat_program:
       - background: var(--button-card-background)
       - border-radius: var(--button-card-border-radius)
 
-# Button template that represents one option of an input_select entity
-# Give entity as part of card definition, and also set variable to the
-#  target option, such that if its active it gets highlighted.
+#############################################################################
+# INPUT_SELECT_BUTTONS - Represents one option of an input_select entity
+# Selected option gets highlighted
+#############################################################################
+# INPUTS
+# - entity: input_select-entity to display option
+# - name: A name that is displayed in the card
+# - variables: 
+#     select_option: The option-string to display/select if pressed
 input_select_buttons:
   variables:
     select_option: "off"
   size: 20px
-  #show_name: false
   show_state: false
   tap_action:
     action: call-service
@@ -198,6 +203,43 @@ input_select_buttons:
       - font-size: 14px
       - color: var(--secondary-text-color)
       - font-family: var(--primary-font-family)
+
+#############################################################################
+# INPUT_SELECT_ICONS - Represents one option of an input_select entity
+# Only icon, no name. Selected option gets highlighted
+#############################################################################
+# INPUTS
+# - entity: input_select-entity to display option
+# - variables: 
+#     select_option: The option-string to display/select if pressed
+input_select_icon:
+  variables:
+    select_option: "off"
+  size: 26px
+  show_name: false
+  tap_action:
+    action: call-service
+    service: input_select.select_option
+    target:
+      entity_id: '[[[ return entity.entity_id ]]]'
+    data:
+      option: >
+        [[[
+          if (variables.select_option == entity.state) return "off";
+          return variables.select_option;
+        ]]]
+  styles:
+    card: 
+      - padding: var(--ha-card-padding)
+      - margin: 0px
+      - background-color: >
+          [[[
+            if (variables.select_option == entity.state) return "var(--button-card-active-background)";
+            return "var(--button-card-background)";
+          ]]]
+      - border-radius: var(--button-card-border-radius)
+    icon:
+      - color: var(--primary-text-color)
 
 vacuum_fan_speed:
   variables:
@@ -384,9 +426,9 @@ light_white:
     action: more-info 
 
 #############################################################################
-# HEAT DEVICE ICON
-#   With pulse effect
+# HEAT DEVICE ICON - With orange pulse effect when on, off if not
 #############################################################################
+# Inputs: [entity] = climate or toggle-entity to display state for
 heat_device:
   template:
     - icon_main
@@ -454,10 +496,9 @@ heat_device:
       - animation: pulse 3s ease-in infinite
 
 #############################################################################
-# SPEAKER DEVICE ICON
-#   With ping effect
-#   Input: entity
+# SPEAKER DEVICE ICON - With blue ping effect when on, off if not
 #############################################################################
+# Inputs: [entity] = media_player-entity to display state for
 speaker_device:
   template:
       - icon_main
@@ -693,6 +734,7 @@ big_sensor_bar:
               if (variables.showLimit == false) return "none";
             ]]]
 
+# EXTRA BAR - Adds nicely below BIG SENSOR CARD WITH BAR
 extra_bar:
   show_units: true
   show_state: true
