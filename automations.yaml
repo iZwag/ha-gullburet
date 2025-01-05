@@ -799,6 +799,7 @@
           - climate.heater_guest
           - climate.heater_kitchen
           - climate.heater_living
+          - climate.heater_office
     - conditions:
       - condition: trigger
         id:
@@ -816,6 +817,7 @@
           - climate.heater_guest
           - climate.heater_kitchen
           - climate.heater_living
+          - climate.heater_office
   mode: single
 - id: '1727445980885'
   alias: Energy - Time triggered pause heating checks
@@ -826,8 +828,20 @@
     minutes: '0'
     id: hour-start
   - platform: time_pattern
-    minutes: '40'
+    minutes: '35'
+    id: 35min
+  - platform: time_pattern
     id: 40min
+    minutes: '40'
+  - platform: time_pattern
+    minutes: '45'
+    id: 45min
+  - platform: time_pattern
+    id: 50min
+    minutes: '50'
+  - platform: time_pattern
+    minutes: '55'
+    id: 55min
   condition: []
   action:
   - choose:
@@ -847,6 +861,10 @@
         - condition: trigger
           id:
           - 40min
+          - 35min
+          - 45min
+          - 50min
+          - 55min
         - condition: template
           value_template: '{{ ( states(''sensor.tibber_energy_consumption_current_hour'')
             | float ) > state_attr(''sensor.hour_progress'', ''of_energy_level'')
@@ -1049,4 +1067,82 @@
     data: {}
     target:
       entity_id: vacuum.esmeralda
+  mode: single
+- id: '1736011246760'
+  alias: Special - Handle vacation mode ON/OFF
+  description: Reacts to changes of the input_boolean.vacation_mode_enable, handling
+    both when it is turned ON (enabled) and OFF (disabled).
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.vacation_mode_enable
+    from: 'off'
+    to: 'on'
+    id: enabled
+  - platform: state
+    entity_id:
+    - input_boolean.vacation_mode_enable
+    from: 'on'
+    to: 'off'
+    id: disabled
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - enabled
+      sequence:
+      - service: light.turn_off
+        target:
+          entity_id: light.lightstrip_closet_bedroom
+        data: {}
+      - service: input_boolean.turn_off
+        target:
+          entity_id:
+          - input_boolean.guest_mode_enable
+          - input_boolean.bedtime_trigger_active
+          - input_boolean.wakeup_alarm_active
+        data: {}
+      - service: script.heating_set_mode_all_thermostats
+        data:
+          control_mode: Vacation
+    - conditions:
+      - condition: trigger
+        id:
+        - disabled
+      sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id:
+          - input_boolean.wakeup_alarm_active
+          - input_boolean.bedtime_trigger_active
+        data: {}
+      - service: light.turn_on
+        target:
+          entity_id: light.lightstrip_closet_bedroom
+        data: {}
+      - if:
+        - condition: template
+          value_template: '{{ is_state(''input_select.climate_season_select'', ''Cold'')
+            }}'
+        then:
+        - service: script.heating_set_warmest_mode_all_thermostats
+          data: {}
+      - if:
+        - condition: time
+          after: 09:00:00
+          before: '21:30:00'
+        then:
+        - service: script.set_fan_speed_roborock_wrapper
+          data:
+            fan_speed: Max
+        else:
+        - service: script.set_fan_speed_roborock_wrapper
+          data:
+            fan_speed: Quiet
+      - service: vacuum.start
+        target:
+          entity_id: vacuum.esmeralda
+        data: {}
   mode: single

@@ -4,6 +4,7 @@
 
 - id: "1702582088817"
   alias: Spot-track6 to Lightstrip shelf ON/OFF/DIM
+  mode: restart
   description:
     Handles the mirroring of turning ON/OFF and dimming the brightness
     of the shelf lightning when the Spot-track is interacted with.
@@ -40,7 +41,6 @@
                 entity_id: light.lightstrip_undershelf_kitchen
               data:
                 brightness: "{{ trigger.to_state.attributes.brightness }}"
-  mode: single
 - id: "1702642524314"
   alias: Tablet motion turns screen ON/OFF
   description: ""
@@ -78,82 +78,6 @@
               service: switch.turn_off
               target:
                 entity_id: switch.lenovo_tab_m10_screen
-  mode: single
-
-- id: '1708597925586'
-  alias: Special - Handle vacation mode ON/OFF
-  description: Reacts to changes of the input_boolean.vacation_mode_enable, handling
-    both when it is turned ON (enabled) and OFF (disabled).
-  trigger:
-  - platform: state
-    entity_id:
-    - input_boolean.vacation_mode_enable
-    from: 'off'
-    to: 'on'
-    id: enabled
-  - platform: state
-    entity_id:
-    - input_boolean.vacation_mode_enable
-    from: 'on'
-    to: 'off'
-    id: disabled
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - enabled
-      sequence:
-      - service: light.turn_off
-        target:
-          entity_id: light.lightstrip_closet_bedroom
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.guest_mode_enable
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.bedtime_alarm_active
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.wakeup_alarm_active
-      - service: script.heating_set_mode_all_thermostats
-        data:
-          control_mode: Vacation
-    - conditions:
-      - condition: trigger
-        id:
-        - disabled
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.bedtime_alarm_active
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.wakeup_alarm_active
-      - service: light.turn_on
-        target:
-          entity_id: light.lightstrip_closet_bedroom
-      - if:
-        - condition: template
-          value_template: "{{ is_state('input_select.climate_season_select', 'Cold') }}"
-        then:
-        - service: script.heating_set_warmest_mode_all_thermostats
-      - if:
-        - condition: time
-          after: 09:00:00
-          before: '21:30:00'
-        then:
-        - service: script.set_fan_speed_roborock_wrapper
-          data:
-            fan_speed: Max
-        else:
-        - service: script.set_fan_speed_roborock_wrapper
-          data:
-            fan_speed: Quiet
-      - service: vacuum.start
-        target:
-          entity_id: vacuum.esmeralda
   mode: single
   
 - id: '1708602051833'
