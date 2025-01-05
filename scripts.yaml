@@ -557,6 +557,7 @@ heating_set_mode_all_thermostats:
       - input_select.heating_mode_kitchen
       - input_select.heating_mode_living
       - input_select.heating_mode_toilet
+      - input_select.heating_mode_office
   mode: single
   icon: mdi:thermostat
   fields:
@@ -580,18 +581,21 @@ heating_set_warmest_mode_all_thermostats:
       entity_id:
       - input_select.heating_mode_bath
       - input_select.heating_mode_kitchen
-      - input_select.heating_mode_toilet
       - input_select.heating_mode_living
   - service: input_select.select_option
     data:
       option: Sleep
     target:
-      entity_id: input_select.heating_mode_bedroom
+      entity_id:
+      - input_select.heating_mode_bedroom
+      - input_select.heating_mode_office
   - service: input_select.select_option
     data:
       option: Away
     target:
-      entity_id: input_select.heating_mode_guest
+      entity_id:
+      - input_select.heating_mode_guest
+      - input_select.heating_mode_toilet
   mode: single
   icon: mdi:thermostat
 set_fan_speed_roborock_wrapper:
@@ -888,42 +892,6 @@ bedroom_heated_sheet_control:
         time: {}
       name: decrease
       default: 00:10:00
-office_control_homey_ledring:
-  alias: Office - Control Homey Ledring
-  sequence:
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ setting == ''off'' }}'
-      sequence:
-      - service: rest_command.ledring_off
-        data: {}
-    - conditions:
-      - condition: template
-        value_template: '{{ setting == ''focus'' }}'
-      sequence:
-      - service: rest_command.ledring_focus
-        data: {}
-    - conditions:
-      - condition: template
-        value_template: '{{ setting == ''gaming'' }}'
-      sequence:
-      - service: rest_command.ledring_gaming
-        data: {}
-  mode: restart
-  icon: mdi:dots-circle
-  fields:
-    setting:
-      selector:
-        select:
-          options:
-          - 'off'
-          - focus
-          - gaming
-          - rainbow
-          - weather
-      name: Setting
-      default: 'off'
 bathroom_control_light_mode:
   alias: Bathroom - Control light mode
   sequence:
