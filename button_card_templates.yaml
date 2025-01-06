@@ -837,6 +837,34 @@ chart_legend_line:
             ]]]
 
 #############################################################################
+# DATA LABEL LINE - A small data label on a line, similar to chart legend,
+#                   but no color-dot or icon
+#############################################################################
+data_label_line:
+  show_icon: false
+  show_state: true
+  styles:
+    card:
+      - padding: 0px
+      - border-radius: 0px
+      - border: 0px
+      - background: transparent
+    name:
+      - justify-self: start
+      - font-size: 12px
+      - font-family: var(--primary-font-family)
+      - color: var(--secondary-text-color)
+    state:
+      - justify-self: end
+      - font-size: 12px
+      - font-weight: 600
+      - font-family: var(--primary-font-family)
+    grid:
+      - grid-template-areas: '"n s"'
+      - grid-template-columns: 1fr 5em
+      - grid-template-rows: min-content
+
+#############################################################################
 # CHART LEGEND ENTRY - One row for a legend with color-dot
 #############################################################################
 sensor_legend_line:
@@ -1045,3 +1073,70 @@ room_title:
       - font-weight: 300
       - color: var(--primary-text-color)
       - justify-self: start
+
+
+robot_glance:
+  show_name: false
+  show_state: false
+  show_entity_picture: true
+  entity_picture: |
+    [[[
+      if (entity.state === 'docked') return '/local/ui/robot_icon_disable.png';
+      return '/local/ui/robot_icon.png';
+    ]]]
+  custom_fields:
+    charging_icon: |
+      [[[ 
+        return (entity.state === 'docked') ? `<ha-icon icon="mdi:battery-charging"></ha-icon>` : ``; 
+      ]]]
+    battery_icon: |
+      [[[ 
+        let battery = entity.attributes.battery_level - (entity.attributes.battery_level % 10);
+        return (entity.state === 'cleaning') ? `<ha-icon icon="mdi:battery-${battery}"></ha-icon>` : ``; 
+      ]]]
+  extra_styles: |
+    @keyframes scrub {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(30deg);
+      }
+      75% {
+        transform: rotate(-30deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+  styles:
+    card:
+      - background-color: transparent
+      - padding: 0px
+    entity_picture:
+      - width: 100%
+      - animation: |
+          [[[
+            if (entity.state === 'cleaning') return 'scrub 1.4s infinite linear';
+            return 'none';
+          ]]]
+    custom_fields:
+      charging_icon:
+        - position: absolute
+        - top: 55%
+        - left: 50%
+        - transform: translate(-50%, -50%)
+        - color: var(--color-ok)
+        - width: 16px
+      battery_icon:
+        - position: absolute
+        - top: 10%
+        - left: 24px
+        - transform: translate(-50%, -50%) rotate(90deg)
+        - color: |
+            [[[ 
+              if (entity.attributes.battery_level < 30) return 'var(--color-error)';
+              if (entity.attributes.battery_level < 65) return 'var(--color-warning)';
+              return 'var(--color-ok)';
+            ]]]
+        - width: 12px
