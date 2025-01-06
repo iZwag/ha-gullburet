@@ -323,6 +323,12 @@ cards:
                       }
                   # background-color: var(--nested-card-background);
             # HOME-VIEW: CLEANING
+            # At rest, charging.          state: "docked" status: "Charging"
+            # Cleaning selected room(s).  state: "cleaning" status: "Segment cleaning"
+            # When returning:             state "returning" status: "Returning home"
+            # After returning to dock:    state "docked" status: "Emptying the bin" 
+            # state "cleaning" status: Cleaning
+            # state "idle" status: "Idle" 
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -338,7 +344,7 @@ cards:
                 cards:
                 - type: custom:button-card
                   template: section_title
-                  name: Cleaning
+                  name: Esmeralda
                 - type: custom:button-card
                   template: text_chip
                   icon: mdi:fan
@@ -359,21 +365,81 @@ cards:
                     ]]]
                   tap_action:
                     action: none
-              - type: custom:mushroom-vacuum-card
+              #- type: custom:mushroom-vacuum-card
+              #  entity: vacuum.esmeralda
+              #  icon_animation: true
+              #  icon_color: accent
+              #  commands:
+              #    - start_pause
+              #    - stop
+              #    - return_home
+              #  layout: horizontal
+              #  card_mod:
+              #    style: |
+              #      ha-card {
+              #        background-color: var(--nested-card-background);
+              #        font-family: var(--primary-font-family) !important;
+              #      }
+              - type: custom:state-switch
                 entity: vacuum.esmeralda
-                icon_animation: true
-                icon_color: accent
-                commands:
-                  - start_pause
-                  - stop
-                  - return_home
-                layout: horizontal
-                card_mod:
-                  style: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                      font-family: var(--primary-font-family) !important;
-                    }
+                default: 'docked'
+                states:
+                  docked:
+                    type: vertical-stack
+                    cards:
+                    - type: custom:layout-card
+                      layout_type: custom:grid-layout
+                      layout:
+                        margin: 0px
+                        grid-gap: "0px 24px"
+                        padding: var(--ha-card-padding)
+                        grid-template-rows: min-content
+                        grid-template-columns: 60% 1fr
+                      cards:
+                      # Last cleaning stats
+                      - type: vertical-stack
+                        cards:
+                        # State label - consider?
+                        - type: custom:button-card
+                          template: data_label_line
+                          entity: vacuum.esmeralda
+                          name: State
+                        # Last cleaning time
+                        - type: custom:button-card
+                          template: data_label_line
+                          entity: sensor.esmeralda_last_clean_start
+                          name: Last cleaning
+                          state_display: >
+                            [[[
+                              return helpers.formatShortDateTime(entity.state);
+                            ]]]
+                        # TODO: Rooms
+                        # TODO: Cleaning mode
+                        # - Vac (Turbo)
+                        # - Mop (Deep)
+                        # - Vac (Turbo) + Mop (Deep) 
+                        # Cleaning duration
+                        - type: custom:button-card
+                          template: data_label_line
+                          entity: sensor.esmeralda_last_clean_duration
+                          name: Cleaning duration
+                          state_display: >
+                            [[[
+                              if (entity.state < 60) return `${entity.state}s`;
+                              let min = Math.floor(entity.state/60);
+                              let sec = entity.state % 60;
+                              return `${min}m ${sec}s`;
+                            ]]]
+                        # Cleaned area
+                        - type: custom:button-card
+                          template: data_label_line
+                          entity: sensor.esmeralda_last_clean_area
+                          name: Cleaned area
+                          numeric_precision: 1
+                      # Robot at Glance
+                      - type: custom:button-card
+                        template: robot_glance
+                        entity: vacuum.esmeralda
               - type: custom:layout-card
                 layout_type: grid
                 layout:
@@ -382,10 +448,6 @@ cards:
                   margin: 0px
                   padding: 2px var(--ha-card-padding) 2px
                 cards:
-                - type: custom:button-card
-                  template: light_mode_toggle
-                  entity: input_boolean.select_rooms_cleaning
-                  name: Select rooms
                 - type: conditional
                   conditions:
                   - type: state
@@ -393,7 +455,14 @@ cards:
                     state_not: "on"
                   card:
                     type: custom:button-card
-                    color_type: blank-card
+                    template: light_mode
+                    icon: mdi:play
+                    name: Clean everywhere
+                    tap_action:
+                      action: call-service
+                      service: vacuum.start
+                      target:
+                        entity_id: vacuum.esmeralda
                 - type: conditional
                   conditions:
                   - type: state
@@ -407,6 +476,11 @@ cards:
                     tap_action:
                       action: call-service
                       service: script.clean_selected_rooms
+                - type: custom:button-card
+                  template: light_mode_toggle
+                  entity: input_boolean.select_rooms_cleaning
+                  name: Select rooms
+                
               - type: conditional
                 conditions:
                   - type: state
