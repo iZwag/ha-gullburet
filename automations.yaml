@@ -1146,3 +1146,103 @@
           entity_id: vacuum.esmeralda
         data: {}
   mode: single
+- id: '1736529421955'
+  alias: Cleaning - Handle mop session select
+  description: Reacts to changes in the cleaning_mop_session input_select
+  trigger:
+  - platform: state
+    entity_id:
+    - input_select.vacuum_mop_session
+    to: Vacuum
+    id: vac
+  - platform: state
+    entity_id:
+    - input_select.vacuum_mop_session
+    to: Mop
+    id: mop
+  - platform: state
+    entity_id:
+    - input_select.vacuum_mop_session
+    to: VacMop
+    id: vacmop
+  - platform: state
+    entity_id:
+    - input_select.vacuum_mop_session
+    to: 2xDeep
+    id: 2xdeep
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - mop
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.mop_after_vacuum
+      - service: script.robot_set_mop_mode
+        metadata: {}
+        data:
+          mopping_mode: High
+          mopping_route: DeepPlus
+    - conditions:
+      - condition: trigger
+        id:
+        - vacmop
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.mop_after_vacuum
+      - service: script.set_fan_speed_roborock_wrapper
+        metadata: {}
+        data:
+          fan_speed: Turbo
+      - service: script.robot_set_mop_mode
+        metadata: {}
+        data:
+          mopping_mode: Medium
+          mopping_route: None
+    - conditions:
+      - condition: trigger
+        id:
+        - 2xdeep
+      sequence:
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.mop_after_vacuum
+      - service: script.set_fan_speed_roborock_wrapper
+        metadata: {}
+        data:
+          fan_speed: Max
+      - service: script.robot_set_mop_mode
+        metadata: {}
+        data:
+          mopping_mode: 'Off'
+          mopping_route: None
+    - conditions:
+      - condition: trigger
+        id:
+        - vac
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.mop_after_vacuum
+      - service: script.set_fan_speed_roborock_wrapper
+        metadata: {}
+        data:
+          fan_speed: Max
+      - service: script.robot_set_mop_mode
+        metadata: {}
+        data:
+          mopping_mode: 'Off'
+          mopping_route: None
+  mode: single
