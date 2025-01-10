@@ -1,4 +1,18 @@
+# Stores a list of room IDs to be cleaned when selected
+# A text string is used in lack of list/array support
 selected_room_ids_cleaning:
   name: "Cleaning - Selected room IDs"
   initial: "[]"
+  max: 255
+
+# A readible string of which rooms where cleaned last robot run
+last_cleaned_rooms:
+  name: "Cleaning - Last cleaned rooms"
+  icon: mdi:floor-plan
+  max: 255
+
+# A readible string of what cleaning mode the robot vacuum was last run on
+last_cleaning_mode:
+  name: "Cleaning - Last cleaning mode"
+  icon: mdi:robot-vacuum
   max: 255

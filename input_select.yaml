@@ -8,3 +8,44 @@ heating_mode_office:
     - Sleep
     - Comfort
     - Vacation
+
+# Vacuum robot fan-mode - Options are the app-names, comments API-names.
+vacuum_fan_mode:
+  name: "Cleaning - Fan mode"
+  icon: mdi:fan
+  options:
+    - "Off"
+    - Quiet       # Silent
+    - Balanced    # Standard
+    - Turbo       # Medium
+    - Max         # Turbo
+
+# Vacuum robot mop-mode - Options are the app-names, comments API-names.
+vacuum_mop_mode:
+  name: "Cleaning - Mop mode"
+  icon: mdi:robot-vacuum
+  options:
+    - "Off"     
+    - Mild        # Low
+    - Moderate    # Medium
+    - Intense     # High
+
+# Vacuum robot mop route - Options are the app-names, comments API-names.
+vacuum_mop_route:
+  name: "Cleaning - Mop route"
+  icon: mdi:robot-vacuum
+  options:
+    - None
+    - Standard
+    - Deep
+    - DeepPlus
+
+# Vacuum robot mop session alternatives - Automation handles changes
+vacuum_mop_session:
+  name: "Cleaning - Mop session"
+  icon: mdi:robot-vacuum
+  options:
+    - Vacuum
+    - Mop
+    - VacMop
+    - 2xDeep

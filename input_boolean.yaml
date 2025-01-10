@@ -36,3 +36,7 @@ floorplan_office_selected:
   name: Floorplan - Office selected
   icon: mdi:gesture-tap
 
+# If set to true, runs the robot on deep clean mop setting after vacuuming
+mop_after_vacuum:
+  name: "Cleaning - Mop after vacuum"
+  icon: mdi:water-check
