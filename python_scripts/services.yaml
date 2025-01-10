@@ -73,3 +73,21 @@ cleaning_room_remove:
     room_id:
       description: The integer number id that represents the room to remove
       example: 16
+
+vacuum_list_to_string:
+  name: Vacuum list to string
+  description: Turns a boolean list of rooms to a string of readable room names
+  fields:
+    kitchen:
+      description: Is kitchen among the target rooms, true/false
+    living:
+      description: Is living room among the target rooms, true/false
+    entry:
+      description: Is entry among the target rooms, true/false
+    bedroom:
+      description: Is bedroom among the target rooms, true/false
+    office:
+      description: Is office among the target rooms, true/false
+    guest:
+      description: Is guest room among the target rooms, true/false
+  
