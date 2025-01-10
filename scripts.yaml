@@ -429,8 +429,7 @@ robot_set_mop_mode:
   - alias: If Map route has been given
     if:
     - condition: template
-      value_template: '{{ mopping_route is not none and mopping_route | trim != ''''
-        }}'
+      value_template: '{{ mopping_route != ''None'' and mopping_mode != ''Off'' }}'
     then:
     - service: vacuum.send_command
       data:
@@ -448,36 +447,55 @@ robot_set_mop_mode:
       target:
         entity_id: vacuum.esmeralda
       alias: Send command Mop route
-    else:
-    - service: vacuum.set_fan_speed
+    - service: input_select.select_option
+      metadata: {}
       data:
-        fan_speed: '{{ fan_speed }}'
+        option: 'Off'
       target:
-        entity_id: vacuum.esmeralda
+        entity_id: input_select.vacuum_fan_mode
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: "{% if mopping_mode == 'Off' %}\n  Off\n{% elif mopping_mode == 'Low'%}
+        \   \n  Mild\n{% elif mopping_mode == 'Medium' %}     \n  Moderate   \n{%
+        elif mopping_mode == 'High' %}\n  Intense\n{% endif %}\n"
+    target:
+      entity_id: input_select.vacuum_mop_mode
+  - service: input_select.select_option
+    metadata: {}
+    data:
+      option: '{{ mopping_route }}'
+    target:
+      entity_id: input_select.vacuum_mop_route
   mode: restart
   icon: mdi:robot-vacuum
   fields:
     mopping_mode:
       selector:
-        text:
+        select:
+          options:
+          - 'Off'
+          - Low
+          - Medium
+          - High
       name: Mopping mode
       description: 'The scrubbing intensity of mopping. Values: Off, Low, Medium,
         High.'
-      default: Medium
       required: true
+      default: Medium
     mopping_route:
       selector:
-        text:
+        select:
+          options:
+          - None
+          - Standard
+          - Deep
+          - DeepPlus
       name: Mopping route
-      description: 'The deeper the route, the slower and more thorough it cleans.
-        Values: Standard, Deep, DeepPlus. '
-    fan_speed:
-      selector:
-        text:
-      name: Fan speed
-      description: 'Sets the vacuum fan speed for vacuum & mop. Values: SIlent, Standard,
-        Medium and Turbo'
-      default: Standard
+      description: The deeper the route, the slower and more thorough it cleans. Setting
+        this to other than "None" will make it ONLY MOP.
+      default: None
+      required: true
 heating_set_thermostat_mode:
   alias: Heating - Set thermostat mode
   sequence:
@@ -599,7 +617,7 @@ heating_set_warmest_mode_all_thermostats:
   mode: single
   icon: mdi:thermostat
 set_fan_speed_roborock_wrapper:
-  alias: Robot clean - Set fan speed Roborock wrapper
+  alias: Robot clean - Set fan mode
   sequence:
   - choose:
     - conditions:
@@ -611,6 +629,12 @@ set_fan_speed_roborock_wrapper:
           fan_speed: Silent
         target:
           entity_id: vacuum.esmeralda
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Quiet
+        target:
+          entity_id: input_select.vacuum_fan_mode
       alias: If Quiet, set Silent
     - conditions:
       - condition: template
@@ -621,6 +645,12 @@ set_fan_speed_roborock_wrapper:
           fan_speed: Standard
         target:
           entity_id: vacuum.esmeralda
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Balanced
+        target:
+          entity_id: input_select.vacuum_fan_mode
       alias: If Balanced, set Standard
     - conditions:
       - condition: template
@@ -631,6 +661,12 @@ set_fan_speed_roborock_wrapper:
           fan_speed: Medium
         target:
           entity_id: vacuum.esmeralda
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Turbo
+        target:
+          entity_id: input_select.vacuum_fan_mode
       alias: If Turbo, set Medium
     - conditions:
       - condition: template
@@ -641,6 +677,12 @@ set_fan_speed_roborock_wrapper:
           fan_speed: Turbo
         target:
           entity_id: vacuum.esmeralda
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Max
+        target:
+          entity_id: input_select.vacuum_fan_mode
       alias: If Max, set Turbo
   mode: queued
   icon: mdi:robot-vacuum
@@ -655,6 +697,8 @@ set_fan_speed_roborock_wrapper:
           - Max
       name: Fan speed
       description: Accepts the inputs in the terminology of the Roborock-app.
+      default: Balanced
+  max: 10
 lights_kitchen_cooking_mood:
   alias: Lights - Kitchen Cooking mood
   sequence:
@@ -986,21 +1030,38 @@ speakers_group_living_kitchen:
   mode: restart
   icon: mdi:speaker-multiple
 clean_selected_rooms:
-  alias: Clean selected rooms
+  alias: Robot clean - Clean selected rooms
   sequence:
+  - service: python_script.vacuum_list_to_string
+    data:
+      kitchen: '{{ states(''input_boolean.floorplan_kitchen_selected'') }}'
+      living: '{{ states(''input_boolean.floorplan_living_selected'') }}'
+      entry: '{{ states(''input_boolean.floorplan_entry_selected'') }}'
+      bedroom: '{{ states(''input_boolean.floorplan_bedroom_selected'') }}'
+      office: '{{ states(''input_boolean.floorplan_office_selected'') }}'
+      guest: '{{ states(''input_boolean.floorplan_guest_selected'') }}'
+    response_variable: script_output
+  - service: input_text.set_value
+    data:
+      value: '{{ script_output[''rooms_str''] }}'
+    target:
+      entity_id: input_text.last_cleaned_rooms
   - service: xiaomi_miio.vacuum_clean_segment
     metadata: {}
     data:
       segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
     target:
       entity_id: vacuum.esmeralda
+  - service: script.robot_clean_create_mode_string
+    metadata: {}
+    data: {}
   - service: input_boolean.turn_off
     metadata: {}
     data: {}
     target:
       entity_id: input_boolean.select_rooms_cleaning
   mode: single
-  icon: mdi:vacuum
+  icon: mdi:robot-vacuum
 system_restart_home_assistant:
   alias: System - Restart Home Assistant
   sequence:
@@ -1025,3 +1086,35 @@ system_restart_rpi:
     data: {}
   mode: single
   icon: mdi:restart
+robot_clean_clean_all_rooms:
+  alias: Robot clean - Clean all rooms
+  sequence:
+  - service: vacuum.start
+    metadata: {}
+    data: {}
+  - service: input_text.set_value
+    metadata: {}
+    data:
+      value: Everywhere
+    target:
+      entity_id: input_text.last_cleaned_rooms
+  - service: script.robot_clean_create_mode_string
+    metadata: {}
+    data: {}
+  mode: single
+  icon: mdi:robot-vacuum
+robot_clean_create_mode_string:
+  alias: Robot clean - Create mode string
+  sequence:
+  - service: input_text.set_value
+    metadata: {}
+    data:
+      value: "{% set fan_mode = states('input_select.vacuum_fan_mode') %}\n{% set
+        mop_mode = states('input_select.vacuum_mop_mode') %}\n{% set mop_route = states('input_select.vacuum_mop_route')
+        %}\n{% if mop_mode == 'Off' %}\n  Vac:{{ fan_mode }}\n{% elif fan_mode ==
+        'Off' %}\n  Mop:{{mop_mode}}/{{mop_route}}\n{% else %}\n  Vac:{{ fan_mode
+        }} & Mop:{{mop_mode}}\n{% endif %}\n"
+    target:
+      entity_id: input_text.last_cleaning_mode
+  mode: single
+  icon: mdi:robot-vacuum
