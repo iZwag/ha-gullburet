@@ -132,7 +132,7 @@ cleaning_section:
     # Text
     - type: custom:button-card
       template: section_text
-      name: Immediately send Esmeralda to clean ONLY this room.
+      name: Immediately send Vaskepott to clean ONLY this room.
     # Fan buttons
     - type: custom:layout-card
       layout_type: grid
@@ -170,4 +170,132 @@ cleaning_section:
         variables:
           fan_speed: "Turbo"
           target_room: '[[xiaomi_room_id]]'
-    
+
+last_cleaning_section:
+  card:
+    type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      margin: 0px
+      grid-gap: "0px 24px"
+      padding: var(--ha-card-padding)
+      grid-template-rows: min-content
+      grid-template-columns: 60% 1fr
+    cards:
+    # Last cleaning stats
+    - type: vertical-stack
+      cards:
+      # Last cleaning time
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_last_clean_start
+        name: Last cleaning
+        state_display: >
+          [[[
+            return helpers.formatShortDateTime(entity.state);
+          ]]]
+      # Cleaning mode
+      - type: custom:button-card
+        template: data_label_line
+        entity: input_text.last_cleaning_mode
+        name: Mode
+        styles:
+          grid:
+            - grid-template-columns: 1fr 9em
+      # Cleaning duration
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_last_clean_duration
+        name: Duration
+        state_display: >
+          [[[
+            if (entity.state < 60) return `${entity.state}s`;
+            let min = Math.floor(entity.state/60);
+            let sec = entity.state % 60;
+            return `${min}m ${sec}s`;
+          ]]]
+      # Cleaned area
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_last_clean_area
+        name: Cleaned area
+        numeric_precision: 1
+      # Last cleaned rooms
+      - type: custom:button-card
+        template: data_label_line
+        entity: input_text.last_cleaned_rooms
+        name: Rooms
+        styles:
+          state:
+            - white-space: normal
+            - word-break: break-word
+            - text-align: right
+          grid:
+            - grid-template-columns: 1fr 9em
+    # Robot at Glance
+    - type: custom:button-card
+      template: robot_glance
+      entity: vacuum.esmeralda
+
+current_cleaning_section:
+  card:
+    type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      margin: 0px
+      grid-gap: "0px 24px"
+      padding: var(--ha-card-padding)
+      grid-template-rows: min-content
+      grid-template-columns: 60% 1fr
+    cards:
+    # Current cleaning stats
+    - type: vertical-stack
+      cards:
+      # Currently cleaning rooms
+      - type: custom:button-card
+        template: data_label_line
+        entity: input_text.last_cleaned_rooms
+        name: Cleaning
+        styles:
+          state:
+            - white-space: normal
+            - word-break: break-word
+            - text-align: right
+          grid:
+            - grid-template-columns: 1fr 9em
+      # Cleaning mode
+      - type: custom:button-card
+        template: data_label_line
+        entity: input_text.last_cleaning_mode
+        name: Mode
+        styles:
+          grid:
+            - grid-template-columns: 1fr 9em
+      # Cleaning duration
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_current_clean_duration
+        name: Duration
+        state_display: >
+          [[[
+            if (entity.state < 60) return `${entity.state}s`;
+            let min = Math.floor(entity.state/60);
+            let sec = entity.state % 60;
+            return `${min}m ${sec}s`;
+          ]]]
+      # Cleaned area
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_current_clean_area
+        name: Cleaned area
+        numeric_precision: 1
+      # Battery percent
+      - type: custom:button-card
+        template: data_label_line
+        entity: sensor.esmeralda_battery
+        name: Battery
+        numeric_precision: 0
+    # Robot at Glance
+    - type: custom:button-card
+      template: robot_glance
+      entity: vacuum.esmeralda
