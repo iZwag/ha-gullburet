@@ -169,6 +169,7 @@ thermostat_program:
 # INPUTS
 # - entity: input_select-entity to display option
 # - name: A name that is displayed in the card
+# - icon: Icon that will be displayed (optional)
 # - variables: 
 #     select_option: The option-string to display/select if pressed
 input_select_buttons:
@@ -210,6 +211,7 @@ input_select_buttons:
 #############################################################################
 # INPUTS
 # - entity: input_select-entity to display option
+# - icon: Icon that will be displayed (optional)
 # - variables: 
 #     select_option: The option-string to display/select if pressed
 input_select_icon:
@@ -1089,6 +1091,10 @@ robot_glance:
       [[[ 
         return (entity.state === 'docked') ? `<ha-icon icon="mdi:battery-charging"></ha-icon>` : ``; 
       ]]]
+    returning_icon: |
+      [[[ 
+        return (entity.state === 'returning') ? `<ha-icon icon="mdi:home-import-outline"></ha-icon>` : ``; 
+      ]]]
     battery_icon: |
       [[[ 
         let battery = entity.attributes.battery_level - (entity.attributes.battery_level % 10);
@@ -1108,11 +1114,22 @@ robot_glance:
       100% {
         transform: rotate(0deg);
       }
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
     }
   styles:
     card:
       - background-color: transparent
       - padding: 0px
+      - border-radius: 0px
     entity_picture:
       - width: 100%
       - animation: |
@@ -1122,16 +1139,25 @@ robot_glance:
           ]]]
     custom_fields:
       charging_icon:
+        - animation: pulse 2.5s infinite linear
         - position: absolute
         - top: 55%
         - left: 50%
         - transform: translate(-50%, -50%)
         - color: var(--color-ok)
-        - width: 16px
+        - width: 24px
+      returning_icon:
+        - animation: pulse 2s infinite linear
+        - position: absolute
+        - top: 55%
+        - left: 50%
+        - transform: translate(-50%, -50%)
+        - color: var(--color-primary)
+        - width: 24px
       battery_icon:
         - position: absolute
-        - top: 10%
-        - left: 24px
+        - top: 12px
+        - left: 12px
         - transform: translate(-50%, -50%) rotate(90deg)
         - color: |
             [[[ 
@@ -1139,4 +1165,4 @@ robot_glance:
               if (entity.attributes.battery_level < 65) return 'var(--color-warning)';
               return 'var(--color-ok)';
             ]]]
-        - width: 12px
+        - width: 20px
