@@ -1118,3 +1118,23 @@ robot_clean_create_mode_string:
       entity_id: input_text.last_cleaning_mode
   mode: single
   icon: mdi:robot-vacuum
+robot_clean_stop_and_return:
+  alias: Robot clean - Stop and return
+  sequence:
+  - service: vacuum.stop
+    metadata: {}
+    data: {}
+    target:
+      entity_id: vacuum.esmeralda
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: vacuum.return_to_base
+    metadata: {}
+    data: {}
+    target:
+      entity_id: vacuum.esmeralda
+  mode: single
+  icon: mdi:home-import-outline
