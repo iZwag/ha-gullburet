@@ -100,7 +100,6 @@ cards:
           padding: 0px 5vw;
         }
     card:
-      # BEDTIME COLUMN
       type: vertical-stack
       cards:
         - type: horizontal-stack
@@ -403,6 +402,16 @@ cards:
                     data:
                       command: down
                       decrease: 00:10:00
+            - type: custom:button-card
+              icon: mdi:bed
+              name: Bedtime
+              template: light_mode
+              entity: script.bedtime_lights
+              tap_action:
+                action: call-service
+                service: script.turn_on
+                data:
+                  entity_id: script.bedtime_lights
           - type: vertical-stack
             cards:
             # WAKE-UP INFO
