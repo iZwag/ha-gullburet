@@ -323,12 +323,6 @@ cards:
                       }
                   # background-color: var(--nested-card-background);
             # HOME-VIEW: CLEANING
-            # At rest, charging.          state: "docked" status: "Charging"
-            # Cleaning selected room(s).  state: "cleaning" status: "Segment cleaning"
-            # When returning:             state "returning" status: "Returning home"
-            # After returning to dock:    state "docked" status: "Emptying the bin" 
-            # state "cleaning" status: Cleaning
-            # state "idle" status: "Idle" 
             - type: custom:stack-in-card
               mode: vertical
               cards:
@@ -344,7 +338,7 @@ cards:
                 cards:
                 - type: custom:button-card
                   template: section_title
-                  name: Esmeralda
+                  name: Vaskepott
                 - type: custom:button-card
                   template: text_chip
                   icon: mdi:fan
@@ -365,224 +359,246 @@ cards:
                     ]]]
                   tap_action:
                     action: none
-              #- type: custom:mushroom-vacuum-card
-              #  entity: vacuum.esmeralda
-              #  icon_animation: true
-              #  icon_color: accent
-              #  commands:
-              #    - start_pause
-              #    - stop
-              #    - return_home
-              #  layout: horizontal
-              #  card_mod:
-              #    style: |
-              #      ha-card {
-              #        background-color: var(--nested-card-background);
-              #        font-family: var(--primary-font-family) !important;
-              #      }
               - type: custom:state-switch
                 entity: vacuum.esmeralda
-                default: 'docked'
+                default: 'other'
                 states:
                   docked:
                     type: vertical-stack
                     cards:
+                    # Stats and Graphics glance
+                    - type: custom:decluttering-card
+                      template: last_cleaning_section
+                    # Start Cleaning button and Select Rooms buton
                     - type: custom:layout-card
-                      layout_type: custom:grid-layout
+                      layout_type: grid
                       layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr
                         margin: 0px
-                        grid-gap: "0px 24px"
-                        padding: var(--ha-card-padding)
-                        grid-template-rows: min-content
-                        grid-template-columns: 60% 1fr
+                        padding: 2px var(--ha-card-padding) 2px
                       cards:
-                      # Last cleaning stats
-                      - type: vertical-stack
-                        cards:
-                        # State label - consider?
-                        - type: custom:button-card
-                          template: data_label_line
-                          entity: vacuum.esmeralda
-                          name: State
-                        # Last cleaning time
-                        - type: custom:button-card
-                          template: data_label_line
-                          entity: sensor.esmeralda_last_clean_start
-                          name: Last cleaning
-                          state_display: >
-                            [[[
-                              return helpers.formatShortDateTime(entity.state);
-                            ]]]
-                        # TODO: Rooms
-                        # TODO: Cleaning mode
-                        # - Vac (Turbo)
-                        # - Mop (Deep)
-                        # - Vac (Turbo) + Mop (Deep) 
-                        # Cleaning duration
-                        - type: custom:button-card
-                          template: data_label_line
-                          entity: sensor.esmeralda_last_clean_duration
-                          name: Cleaning duration
-                          state_display: >
-                            [[[
-                              if (entity.state < 60) return `${entity.state}s`;
-                              let min = Math.floor(entity.state/60);
-                              let sec = entity.state % 60;
-                              return `${min}m ${sec}s`;
-                            ]]]
-                        # Cleaned area
-                        - type: custom:button-card
-                          template: data_label_line
-                          entity: sensor.esmeralda_last_clean_area
-                          name: Cleaned area
-                          numeric_precision: 1
-                      # Robot at Glance
+                      - type: conditional
+                        conditions:
+                        - type: state
+                          entity: input_boolean.select_rooms_cleaning
+                          state_not: "on"
+                        card:
+                          type: custom:button-card
+                          template: light_mode
+                          icon: mdi:play
+                          name: Clean everywhere
+                          tap_action:
+                            action: call-service
+                            service: script.robot_clean_clean_all_rooms
+                      - type: conditional
+                        conditions:
+                        - type: state
+                          entity: input_boolean.select_rooms_cleaning
+                          state: "on"
+                        card:
+                          type: custom:button-card
+                          template: light_mode
+                          icon: mdi:play
+                          name: Clean selected rooms
+                          tap_action:
+                            action: call-service
+                            service: script.clean_selected_rooms
                       - type: custom:button-card
-                        template: robot_glance
-                        entity: vacuum.esmeralda
-              - type: custom:layout-card
-                layout_type: grid
-                layout:
-                  grid-gap: "0px var(--ha-card-padding)"
-                  grid-template-columns: 1fr 1fr
-                  margin: 0px
-                  padding: 2px var(--ha-card-padding) 2px
-                cards:
-                - type: conditional
-                  conditions:
-                  - type: state
-                    entity: input_boolean.select_rooms_cleaning
-                    state_not: "on"
-                  card:
-                    type: custom:button-card
-                    template: light_mode
-                    icon: mdi:play
-                    name: Clean everywhere
-                    tap_action:
-                      action: call-service
-                      service: vacuum.start
-                      target:
-                        entity_id: vacuum.esmeralda
-                - type: conditional
-                  conditions:
-                  - type: state
-                    entity: input_boolean.select_rooms_cleaning
-                    state: "on"
-                  card:
-                    type: custom:button-card
-                    template: light_mode
-                    icon: mdi:play
-                    name: Clean selected rooms
-                    tap_action:
-                      action: call-service
-                      service: script.clean_selected_rooms
-                - type: custom:button-card
-                  template: light_mode_toggle
-                  entity: input_boolean.select_rooms_cleaning
-                  name: Select rooms
-                
-              - type: conditional
-                conditions:
-                  - type: state
-                    entity: binary_sensor.esmeralda_mop_ready
-                    state_not: "on"
-                card:
-                  type: custom:layout-card
-                  layout_type: grid
-                  layout:
-                    grid-gap: "0px var(--ha-card-padding)"
-                    grid-template-columns: 1fr 1fr 1fr 1fr
-                    margin: 0px
-                    padding: 2px var(--ha-card-padding) var(--ha-card-padding)
-                  cards:
-                  - type: custom:button-card
-                    entity: vacuum.esmeralda
-                    icon: mdi:power-sleep
-                    template: vacuum_fan_speed
-                    variables:
-                      fan_speed: "Silent"
-                  - type: custom:button-card
-                    icon: mdi:fan
-                    entity: vacuum.esmeralda
-                    template: vacuum_fan_speed
-                    variables:
-                      fan_speed: "Standard"
-                  - type: custom:button-card
-                    icon: mdi:fan-plus
-                    entity: vacuum.esmeralda
-                    template: vacuum_fan_speed
-                    variables:
-                      fan_speed: "Medium"
-                  - type: custom:button-card
-                    icon: mdi:fan-speed-3
-                    entity: vacuum.esmeralda
-                    template: vacuum_fan_speed
-                    variables:
-                      fan_speed: "Turbo"
-              - type: conditional
-                conditions:
-                - type: state
-                  entity: binary_sensor.esmeralda_mop_ready
-                  state: "on"
-                card:
-                  type: "custom:layout-card"
-                  layout_type: grid
-                  layout:
-                    grid-gap: "0px var(--ha-card-padding)"
-                    grid-template-columns: 1fr 1fr 1fr 1fr
-                    margin: 0px
-                    padding: 2px var(--ha-card-padding) var(--ha-card-padding)
-                  cards:
-                  - type: custom:button-card
-                    entity: script.robot_set_mop_mode
-                    icon: mdi:power-sleep
-                    template: vacuum_mopping
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      data:
-                        entity_id: script.robot_set_mop_mode
-                        variables:
-                          mopping_mode: Low
-                          fan_speed: Silent
-                  - type: custom:button-card
-                    entity: script.robot_set_mop_mode
-                    icon: mdi:fan
-                    template: vacuum_mopping
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      data:
-                        entity_id: script.robot_set_mop_mode
-                        variables:
-                          mopping_mode: Medium
-                          fan_speed: Standard
-                  - type: "custom:button-card"
-                    icon: mdi:water
-                    name: "Only"
-                    entity: script.robot_set_mop_mode
-                    template: light_mode
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      data:
-                        entity_id: script.robot_set_mop_mode
-                        variables:
-                          mopping_mode: Medium
-                          mopping_route: Deep
-                  - type: "custom:button-card"
-                    icon: mdi:creation
-                    name: "Deep+"
-                    entity: script.robot_set_mop_mode
-                    template: light_mode
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      data:
-                        entity_id: script.robot_set_mop_mode
-                        variables:
-                          mopping_mode: High
-                          mopping_route: DeepPlus
+                        template: light_mode_toggle
+                        entity: input_boolean.select_rooms_cleaning
+                        name: Select rooms
+                    # Mode Select for Vacuum / Mop      
+                    - type: conditional
+                      conditions:
+                        - type: state
+                          entity: binary_sensor.esmeralda_mop_ready
+                          state_not: "on"
+                      card:
+                        type: custom:layout-card
+                        layout_type: grid
+                        layout:
+                          grid-gap: "0px var(--ha-card-padding)"
+                          grid-template-columns: 1fr 1fr 1fr 1fr
+                          margin: 0px
+                          padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                        # Vacuum modes: Off, Quiet, Balanced, Turbo, Max
+                        cards:
+                        - type: custom:button-card
+                          template: input_select_icon
+                          entity: input_select.vacuum_fan_mode
+                          icon: mdi:power-sleep
+                          variables:
+                            select_option: "Quiet"
+                        - type: custom:button-card
+                          template: input_select_icon
+                          entity: input_select.vacuum_fan_mode
+                          icon: mdi:fan
+                          variables:
+                            select_option: "Balanced"
+                        - type: custom:button-card
+                          template: input_select_icon
+                          entity: input_select.vacuum_fan_mode
+                          icon: mdi:fan-plus
+                          variables:
+                            select_option: "Turbo"
+                        - type: custom:button-card
+                          template: input_select_icon
+                          entity: input_select.vacuum_fan_mode
+                          icon: mdi:fan-speed-3
+                          variables:
+                            select_option: "Max"
+                    - type: conditional
+                      conditions:
+                      - type: state
+                        entity: binary_sensor.esmeralda_mop_ready
+                        state: "on"
+                      card:
+                        type: "custom:layout-card"
+                        layout_type: grid
+                        layout:
+                          grid-gap: "0px var(--ha-card-padding)"
+                          grid-template-columns: 1fr 1fr 1fr 1fr
+                          margin: 0px
+                          padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                        # Mop modes: Vacuum, Mop, VacMop, 2xDeep
+                        cards:
+                        - type: custom:button-card
+                          template: input_select_buttons
+                          entity: input_select.vacuum_mop_session
+                          name: Vac
+                          icon: mdi:fan-speed-3
+                          variables:
+                            select_option: "Vacuum"
+                        - type: custom:button-card
+                          template: input_select_buttons
+                          entity: input_select.vacuum_mop_session
+                          name: Mop
+                          icon: mdi:water
+                          variables:
+                            select_option: "Mop"
+                        - type: custom:button-card
+                          template: input_select_buttons
+                          entity: input_select.vacuum_mop_session
+                          name: Vac/Mop
+                          icon: mdi:flash
+                          variables:
+                            select_option: "VacMop"
+                        - type: custom:button-card
+                          template: input_select_buttons
+                          entity: input_select.vacuum_mop_session
+                          name: 2x Deep
+                          icon: mdi:creation
+                          variables:
+                            select_option: "2xDeep"
+                  cleaning:
+                    type: vertical-stack
+                    cards:
+                    # Stats and Graphics glance
+                    - type: custom:decluttering-card
+                      template: current_cleaning_section
+                    # Pause Cleaning button and Return button
+                    - type: custom:layout-card
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr
+                        margin: 0px
+                        padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:pause
+                        name: Pause cleaning
+                        tap_action:
+                          action: call-service
+                          service: vacuum.pause
+                          target:
+                            entity_id: vacuum.esmeralda
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:home-import-outline
+                        name: Return to dock
+                        tap_action:
+                          action: call-service
+                          service: script.robot_clean_stop_and_return
+                  returning:
+                    type: vertical-stack
+                    cards:
+                    # Stats and Graphics glance
+                    - type: custom:decluttering-card
+                      template: last_cleaning_section
+                    # Disabled button
+                    - type: custom:layout-card
+                      layout_type: grid
+                      layout:
+                        grid-template-columns: 1fr
+                        margin: 0px
+                        padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:home-import-outline
+                        name: Returning to dock
+                        styles:
+                          icon:
+                            - color: var(--color-disabled)
+                          name:
+                            - color: var(--color-disabled)
+                        tap_action:
+                          action: none                  
+                  paused:
+                    type: vertical-stack
+                    cards:
+                    # Stats and Graphics glance
+                    - type: custom:decluttering-card
+                      template: current_cleaning_section
+                    # Continue Cleaning button and Return button
+                    - type: custom:layout-card
+                      layout_type: grid
+                      layout:
+                        grid-gap: "0px var(--ha-card-padding)"
+                        grid-template-columns: 1fr 1fr
+                        margin: 0px
+                        padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:play
+                        name: Continue cleaning
+                        tap_action:
+                          action: call-service
+                          service: vacuum.start
+                          target:
+                            entity_id: vacuum.esmeralda
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:home-import-outline
+                        name: Return to dock
+                        tap_action:
+                          action: call-service
+                          service: script.robot_clean_stop_and_return
+                  other:
+                    type: vertical-stack
+                    cards:
+                    # Stats and Graphics glance
+                    - type: custom:decluttering-card
+                      template: last_cleaning_section
+                    # Return to dock button
+                    - type: custom:layout-card
+                      layout_type: grid
+                      layout:
+                        grid-template-columns: 1fr
+                        margin: 0px
+                        padding: 2px var(--ha-card-padding) var(--ha-card-padding)
+                      cards:
+                      - type: custom:button-card
+                        template: light_mode
+                        icon: mdi:home-import-outline
+                        name: Return to dock
+                        tap_action:
+                          action: call-service
+                          service: script.robot_clean_stop_and_return
               # AUDIO
               #- type: custom:stack-in-card
               #  mode: vertical
