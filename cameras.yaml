@@ -1,0 +1,92 @@
+# --- 
+# ROBOROCK ROOM MAPPING FROM miiocli
+# Roborock = Xiaomi . miiocli is a Xiaomi tool.
+# If room mappings change: Check room_numbers attribute of camera-entity from
+#   xiaomi_cloud_map_extractor (room_numbers must be defined among attributes
+#   of its configuration)
+# -------------------
+# CURRENT ROOM IDS:
+# Entry: 16
+# Kitchen: 17
+# Living room: 18
+# Guest room: 19
+# Bedroom: 20
+# Office: 21
+# -------------------
+## Fan options - Xiaomi API
+# Silent, Standard, Medium, Turbo
+## Fan options - Roborock app names
+# Quiet, Balanced, Turbo, Max
+# -------------------
+# Observations:
+# Vacuuming entry, kitchen, living room and bedroom on MAX with chairs on floor
+#   takes 4488s = 74m 48s
+- platform: xiaomi_cloud_map_extractor
+  host: !secret xiaomi_vacuum_host
+  token: !secret xiaomi_vacuum_token
+  username: !secret xiaomi_cloud_username
+  password: !secret xiaomi_cloud_password
+  name: vaskepott_path
+  country: "de"
+  draw:
+    - charger
+    - mop_path
+    - path
+    - vacuum_position
+  map_transformation:
+    rotate: 270
+    trim: 
+      top: 15
+      left: 29
+      right: 3
+      bottom: 33
+  attributes:
+    - cleaned_rooms
+    - room_numbers
+    - vacuum_room
+    - vacuum_room_name
+  sizes:
+    charger_radius: 5
+    vacuum_radius: 5
+    path_width: 1
+    mop_path_width: 1
+  colors:
+    color_map_inside: [0, 0, 0, 0]
+    color_map_outside: [0, 0, 0, 0]
+    color_map_wall: [0, 0, 0, 0]
+    color_map_wall_v2: [0, 0, 0, 0]
+    color_grey_wall: [0, 0, 0, 0]
+    color_ignored_obstacle: [0, 0, 0, 0]
+    color_ignored_obstacle_with_photo: [0, 0, 0, 0]
+    color_obstacle: [0, 0, 0, 0]
+    color_obstacle_with_photo: [0, 0, 0, 0]
+    color_path: [220, 220, 220, 90] # [22, 196, 127, 188]
+    color_mop_path: [220, 220, 220, 90]
+    color_goto_path: [0, 0, 0, 0]
+    color_predicted_path: [0, 0, 0, 0]
+    color_cleaned_area: [0, 0, 0, 0]
+    color_zones: [0, 0, 0, 0]
+    color_zones_outline: [0, 0, 0, 0]
+    color_virtual_walls: [0, 0, 0, 0]
+    color_carpets: [0, 0, 0, 0]
+    color_no_carpet_zones: [0, 0, 0, 0]
+    color_no_carpet_zones_outline: [0, 0, 0, 0]
+    color_new_discovered_area: [0, 0, 0, 0]
+    color_no_go_zones: [0, 0, 0, 0]
+    color_no_go_zones_outline: [0, 0, 0, 0]
+    color_no_mop_zones: [0, 0, 0, 0]
+    color_no_mop_zones_outline: [0, 0, 0, 0]
+    #color_charger: [108, 239, 186]
+    #color_robo: [108, 239, 186]
+    color_charger: [108, 239, 186]
+    color_robo: [108, 239, 186]
+    color_room_names: [0, 0, 0, 0]
+    color_unknown: [0, 0, 0, 0]
+    color_scan: [0, 0, 0, 0]
+  room_colors:
+    16: [0, 0, 0, 0]
+    17: [0, 0, 0, 0]
+    18: [0, 0, 0, 0]
+    19: [0, 0, 0, 0]
+    20: [0, 0, 0, 0]
+    21: [0, 0, 0, 0]
