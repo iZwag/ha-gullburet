@@ -111,8 +111,8 @@ cards:
         # 3% on right side since the 3D-floorplan has inherit 2% l-padding
         style: |
           ha-card {
-            padding-left: 5vw;
-            padding-right: 3vw;
+            padding-left: 4vw;
+            padding-right: 2vw;
           }
       card:
         # #################################################################
@@ -191,11 +191,9 @@ cards:
                   entity: input_boolean.auto_suncycle_masterdim
                   state: "on"
                 card:
-                  type: custom:mushroom-entity-card
+                  type: custom:button-card
+                  template: big_sensor
                   entity: input_text.sun_cycle_next_event
-                  primary_info: state
-                  secondary_info: name
-                  icon_color: primary
                   name: Next automatic dim event
                   icon: mdi:brightness-auto
                   tap_action:
@@ -203,17 +201,6 @@ cards:
                     service: input_boolean.toggle
                     target:
                       entity_id: input_boolean.auto_suncycle_masterdim
-                  icon_tap_action:
-                    action: call-service
-                    service: input_boolean.toggle
-                    target:
-                      entity_id: input_boolean.auto_suncycle_masterdim
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: var(--nested-card-background);
-                        font-family: var(--primary-font-family) !important;
-                      }
               - type: conditional
                 conditions:
                 - condition: state
@@ -340,9 +327,12 @@ cards:
                   template: section_title
                   name: Vaskepott
                 - type: custom:button-card
+                  template: icon_chip
+                  entity: input_boolean.show_vacuum_map
+                - type: custom:button-card
                   template: text_chip
                   icon: mdi:fan
-                  entity: sensor.esmeralda_fan_speed
+                  entity: input_select.vacuum_fan_mode
                   tap_action:
                     action: none
                 - type: custom:button-card
@@ -1912,6 +1902,21 @@ cards:
                 top: 2%
                 '--mdc-icon-size': 30px
         
+        # ROBOT VACUUM PATH
+        - type: conditional
+          conditions:
+          - entity: input_boolean.show_vacuum_map
+            state: "on"
+          elements:
+          - type: image
+            entity: camera.vaskepott_path
+            camera_image: camera.vaskepott_path
+            style:
+              left: 36%
+              top: 37%
+              opacity: 1
+              transform: 'scaleX(2.6) scaleY(2.55) perspective(300px) rotateX(10deg)'
+              mix-blend-mode: hard-light  # options: hard-light, luminosity, overlay
         # ###########################################################
         # DEVICE ICONS
         - type: conditional
