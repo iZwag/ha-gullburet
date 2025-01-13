@@ -231,3 +231,11 @@
     input:
       selected_boolean: input_boolean.floorplan_office_selected
       room_id: "21"
+
+- id: 'disable_vacuum_map_updates'
+  alias: Cleaning - Disable map updates after docking
+  use_blueprint:
+    path: homeassistant/disable-vacuum-map-updates.yaml
+    input:
+      vacuum: vacuum.esmeralda
+      camera: camera.vaskepott_path
