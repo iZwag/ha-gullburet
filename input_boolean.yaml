@@ -40,3 +40,8 @@ floorplan_office_selected:
 mop_after_vacuum:
   name: "Cleaning - Mop after vacuum"
   icon: mdi:water-check
+
+# Toggles showing map in 3D-model on/off
+show_vacuum_map:
+  name: "Cleaning - Show vacuum map"
+  icon: mdi:map-marker-path
