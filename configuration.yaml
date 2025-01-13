@@ -14,6 +14,7 @@ input_select: !include input_select.yaml
 input_text: !include input_text.yaml
 input_datetime: !include input_datetime.yaml
 shell_command: !include shell_commands.yaml
+camera: !include cameras.yaml
 
 # TEXT TO SPEECH
 tts:
@@ -45,6 +46,7 @@ lovelace:
   resources:
     - url: /local/community/decluttering-card/decluttering-card.js
       type: module
+    
 
 # PYTHON SCRIPTS
 # Add scripts to <config>/python_scripts. Also add its entry to services.yaml in same folder.
@@ -52,7 +54,9 @@ lovelace:
 python_script:
 # Enables logging from Python-scripts.
 logger:
-  default: info
+  default: warning
+  logs:
+    homeassistant.components.python_script: debug
 
 zone:
   - name: Home
@@ -61,23 +65,3 @@ zone:
     radius: 20
     icon: mdi:home
 
-# --- 
-# ROBOROCK ROOM MAPPING FROM miiocli
-# Roborock = Xiaomi . miiocli is a Xiaomi tool.
-# If room mappings change, search around how to do it again.
-# Custom integration such as 'xiaomi_cloud_map_extractor' has been removed
-# ROOMS:
-# Entry: 16, '107001052585' 
-# Kitchen: 17, '107001052584'
-# Living room: 18, '107001074474'
-# Guest room: 19, '107001074480' 
-# Bedroom: 20, '107001052586'
-# Office: 21, '107001074479'
-# ---
-## Fan options - Xiaomi
-# Silent, Standard, Medium, Turbo
-## Fan options - Roborock equivalent
-# Quiet, Balanced, Turbo, Max
-## Statuses
-# "Returning home", "Segment cleaning"
-# ---
