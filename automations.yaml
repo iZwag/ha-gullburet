@@ -936,12 +936,6 @@
           - input_boolean.floorplan_kitchen_selected
           - input_boolean.floorplan_living_selected
           - input_boolean.floorplan_office_selected
-      - service: input_text.set_value
-        metadata: {}
-        data:
-          value: '[]'
-        target:
-          entity_id: input_text.selected_room_ids_cleaning
       - service: input_boolean.turn_on
         metadata: {}
         data: {}
@@ -1053,20 +1047,20 @@
     - wed
     - fri
   action:
-  - service: script.set_fan_speed_roborock_wrapper
+  - service: input_select.select_option
     metadata: {}
     data:
-      fan_speed: Max
+      option: 2xDeep
+    target:
+      entity_id: input_select.vacuum_mop_session
   - delay:
       hours: 0
       minutes: 0
       seconds: 3
       milliseconds: 0
-  - service: vacuum.start
+  - service: script.robot_clean_clean_all_rooms
     metadata: {}
     data: {}
-    target:
-      entity_id: vacuum.esmeralda
   mode: single
 - id: '1736011246760'
   alias: Special - Handle vacation mode ON/OFF
@@ -1198,10 +1192,12 @@
         data: {}
         target:
           entity_id: input_boolean.mop_after_vacuum
-      - service: script.set_fan_speed_roborock_wrapper
+      - service: input_select.select_option
         metadata: {}
         data:
-          fan_speed: Turbo
+          option: Turbo
+        target:
+          entity_id: input_select.vacuum_fan_mode
       - service: script.robot_set_mop_mode
         metadata: {}
         data:
@@ -1217,10 +1213,12 @@
         data: {}
         target:
           entity_id: input_boolean.mop_after_vacuum
-      - service: script.set_fan_speed_roborock_wrapper
+      - service: input_select.select_option
         metadata: {}
         data:
-          fan_speed: Max
+          option: Max
+        target:
+          entity_id: input_select.vacuum_fan_mode
       - service: script.robot_set_mop_mode
         metadata: {}
         data:
@@ -1236,13 +1234,207 @@
         data: {}
         target:
           entity_id: input_boolean.mop_after_vacuum
-      - service: script.set_fan_speed_roborock_wrapper
+      - service: input_select.select_option
         metadata: {}
         data:
-          fan_speed: Max
+          option: Max
+        target:
+          entity_id: input_select.vacuum_fan_mode
       - service: script.robot_set_mop_mode
         metadata: {}
         data:
           mopping_mode: 'Off'
           mopping_route: None
+  mode: single
+- id: '1736710457472'
+  alias: Cleaning - Handle fan mode changes
+  description: Handles changes to input_select that holds the fan modes for the robot
+    vacuum
+  trigger:
+  - platform: state
+    entity_id:
+    - input_select.vacuum_fan_mode
+    to: Quiet
+    id: quiet
+  - platform: state
+    entity_id:
+    - input_select.vacuum_fan_mode
+    to: Balanced
+    id: balanced
+  - platform: state
+    entity_id:
+    - input_select.vacuum_fan_mode
+    to: Turbo
+    id: turbo
+  - platform: state
+    entity_id:
+    - input_select.vacuum_fan_mode
+    to: Max
+    id: max
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - quiet
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Silent
+        target:
+          entity_id: vacuum.esmeralda
+    - conditions:
+      - condition: trigger
+        id:
+        - balanced
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Standard
+        target:
+          entity_id: vacuum.esmeralda
+    - conditions:
+      - condition: trigger
+        id:
+        - turbo
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Medium
+        target:
+          entity_id: vacuum.esmeralda
+    - conditions:
+      - condition: trigger
+        id:
+        - max
+      sequence:
+      - service: vacuum.set_fan_speed
+        metadata: {}
+        data:
+          fan_speed: Turbo
+        target:
+          entity_id: vacuum.esmeralda
+  mode: single
+- id: '1736713687559'
+  alias: Cleaning - Handle mop ready changes
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.esmeralda_mop_ready
+    from: 'on'
+    to: 'off'
+    id: turned-off
+  - platform: state
+    entity_id:
+    - binary_sensor.esmeralda_mop_ready
+    from: 'off'
+    to: 'on'
+    id: turned-on
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-off
+      sequence:
+      - service: script.robot_set_mop_mode
+        metadata: {}
+        data:
+          mopping_mode: 'Off'
+          mopping_route: None
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-on
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: VacMop
+        target:
+          entity_id: input_select.vacuum_mop_session
+  mode: single
+- id: '1736716190594'
+  alias: Cleaning - Handle 2x deep clean
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - vacuum.esmeralda
+    from: returning
+    to: docked
+    id: returned
+  condition: []
+  action:
+  - if:
+    - condition: and
+      conditions:
+      - condition: trigger
+        id:
+        - returned
+      - condition: state
+        entity_id: input_boolean.mop_after_vacuum
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.esmeralda_mop_ready
+        state: 'on'
+    then:
+    - wait_for_trigger:
+      - platform: state
+        entity_id:
+        - vacuum.esmeralda
+        attribute: status
+        to: Emptying the bin
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 15
+      timeout:
+        hours: 0
+        minutes: 0
+        seconds: 30
+        milliseconds: 0
+    - service: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.mop_after_vacuum
+    - service: input_text.set_value
+      metadata: {}
+      data:
+        value: 2x deep clean vac & mop
+      target:
+        entity_id: input_text.last_cleaning_mode
+    - service: script.robot_set_mop_mode
+      metadata: {}
+      data:
+        mopping_mode: High
+        mopping_route: DeepPlus
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 2
+        milliseconds: 0
+    - if:
+      - condition: template
+        value_template: '{{ is_state(''input_text.selected_room_ids_cleaning'', "[]")
+          }}'
+      then:
+      - service: vacuum.start
+        metadata: {}
+        data: {}
+        target:
+          entity_id: vacuum.esmeralda
+      else:
+      - service: xiaomi_miio.vacuum_clean_segment
+        data:
+          segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
+        target:
+          entity_id: vacuum.esmeralda
   mode: single
