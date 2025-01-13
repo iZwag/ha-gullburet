@@ -1060,6 +1060,11 @@ clean_selected_rooms:
     data: {}
     target:
       entity_id: input_boolean.select_rooms_cleaning
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.show_vacuum_map
   mode: single
   icon: mdi:robot-vacuum
 system_restart_home_assistant:
@@ -1092,6 +1097,8 @@ robot_clean_clean_all_rooms:
   - service: vacuum.start
     metadata: {}
     data: {}
+    target:
+      entity_id: vacuum.esmeralda
   - service: input_text.set_value
     metadata: {}
     data:
@@ -1101,6 +1108,11 @@ robot_clean_clean_all_rooms:
   - service: script.robot_clean_create_mode_string
     metadata: {}
     data: {}
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.show_vacuum_map
   mode: single
   icon: mdi:robot-vacuum
 robot_clean_create_mode_string:
