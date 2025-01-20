@@ -588,56 +588,7 @@ cards:
                         name: Return to dock
                         tap_action:
                           action: call-service
-                          service: script.robot_clean_stop_and_return
-              # AUDIO
-              #- type: custom:stack-in-card
-              #  mode: vertical
-              #  cards:
-              #  - type: custom:mushroom-media-player-card
-              #    entity: media_player.sonos_living
-              #    layout: horizontal
-              #    name: Common-rooms
-              #    volume_controls:
-              #      - volume_set
-              #    media_controls:
-              #      - previous
-              #      - next
-              #      - play_pause_stop
-              #    icon_type: icon
-              #    primary_info: name
-              #    card_mod:
-              #      style: |
-              #        ha-card {
-              #          background-color: var(--nested-card-background);
-              #        }
-              #  - type: "custom:layout-card"
-              #    layout_type: grid
-              #    layout:
-              #      grid-gap: "0px var(--ha-card-padding)"
-              #      grid-template-columns: 1fr 1fr
-              #      margin: 0px
-              #      padding: var(--ha-card-padding)
-              #    cards:
-              #    - type: "custom:button-card"
-              #      icon: mdi:speaker-multiple
-              #      name: "Group"
-              #      entity: script.speakers_join_all
-              #      template: light_mode
-              #      tap_action:
-              #        action: call-service
-              #        service: script.turn_on
-              #        data:
-              #          entity_id: script.speakers_join_all
-              #    - type: "custom:button-card"
-              #      icon: mdi:speaker
-              #      name: "Ungroup"
-              #      entity: script.speakers_unjoin_all
-              #      template: light_mode
-              #      tap_action:
-              #        action: call-service
-              #        service: script.turn_on
-              #        data:
-              #          entity_id: script.speakers_unjoin_all     
+                          service: script.robot_clean_stop_and_return   
           # ###############################################################
           # BATHROOM VIEW
           bath:
