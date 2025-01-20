@@ -1363,6 +1363,21 @@ cards:
             top: 13% 
           tap_action:
             action: none
+        # Robot vacuum path
+        - type: conditional
+          conditions:
+          - entity: input_boolean.show_vacuum_map
+            state: "on"
+          elements:
+          - type: image
+            entity: camera.vaskepott_path
+            camera_image: camera.vaskepott_path
+            style:
+              left: 36%
+              top: 37%
+              opacity: 1
+              transform: 'scaleX(2.6) scaleY(2.55) perspective(300px) rotateX(10deg)'
+              mix-blend-mode: hard-light  # options: hard-light, luminosity, overlay
 
         # #####################################################################
         # SELECT MULT. ROOMS CLEANING: CLICKABLE ZONES, OUTLINES & OVERLAYS
@@ -1902,21 +1917,6 @@ cards:
                 top: 2%
                 '--mdc-icon-size': 30px
         
-        # ROBOT VACUUM PATH
-        - type: conditional
-          conditions:
-          - entity: input_boolean.show_vacuum_map
-            state: "on"
-          elements:
-          - type: image
-            entity: camera.vaskepott_path
-            camera_image: camera.vaskepott_path
-            style:
-              left: 36%
-              top: 37%
-              opacity: 1
-              transform: 'scaleX(2.6) scaleY(2.55) perspective(300px) rotateX(10deg)'
-              mix-blend-mode: hard-light  # options: hard-light, luminosity, overlay
         # ###########################################################
         # DEVICE ICONS
         - type: conditional
