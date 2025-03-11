@@ -327,8 +327,15 @@ cards:
                   template: section_title
                   name: Vaskepott
                 - type: custom:button-card
-                  template: icon_chip
+                  template: text_chip
+                  icon: mdi:map-marker-path
+                  state_display: | 
+                    [[[
+                      return "Map";
+                    ]]]
                   entity: input_boolean.show_vacuum_map
+                  tap_action:
+                    action: toggle
                 - type: custom:button-card
                   template: text_chip
                   icon: mdi:fan
@@ -337,15 +344,20 @@ cards:
                     action: none
                 - type: custom:button-card
                   template: text_chip
-                  icon: mdi:water
+                  icon: |
+                    [[[
+                      let ready = states['binary_sensor.esmeralda_mop_ready'].state
+                      if (ready == "on") return "mdi:water";
+                      return "mdi:water-off";
+                    ]]]
                   state_display: |
                     [[[
-                      var mop = states['binary_sensor.esmeralda_mop_attached'].state
-                      var box = states['binary_sensor.esmeralda_water_box_attached'].state
+                      let mop = states['binary_sensor.esmeralda_mop_attached'].state
+                      let box = states['binary_sensor.esmeralda_water_box_attached'].state
 
-                      if (mop == "off") return "Mop removed";
-                      if (box == "off") return "Tank removed";
-                      return "Mop ready";
+                      if (mop == "off") return "No mop";
+                      if (box == "off") return "No tank";
+                      return "Ready";
                     ]]]
                   tap_action:
                     action: none
