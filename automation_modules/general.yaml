@@ -166,6 +166,8 @@
       top_maxhour_time_2: 'input_datetime.power_monthly_highest_max_hour_2'
       top_maxhour_val_3: 'input_number.power_monthly_highest_max_hour_3'
       top_maxhour_time_3: 'input_datetime.power_monthly_highest_max_hour_3'
+      top_maxhour_val_4: 'input_number.power_monthly_highest_max_hour_4'
+      top_maxhour_time_4: 'input_datetime.power_monthly_highest_max_hour_4'
   mode: single
 
 - id: '1710100627159'

@@ -1,6 +1,7 @@
 
-power_monthly_maxhour_4:
+power_monthly_highest_max_hour_4:
   name: Power - Monthly highest max-hour 4
+  icon: mdi:lightning-bolt
   has_date: true
   has_time: true
 
