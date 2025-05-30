@@ -2,6 +2,7 @@
 navbar_button:
   variables:
     link_active: "false"
+    link_name: "dashboard"
   layout: icon_name_state
   custom_fields:
     dot: |
@@ -15,7 +16,7 @@ navbar_button:
     card:
       - background-color: >
           [[[
-            if (variables.link_active == "true") return "var(--button-card-active-background)";
+            if (variables.link_active == variables.link_name) return "var(--button-card-active-background)";
             return "transparent";
           ]]]
       #return "var(--button-card-background)";
@@ -25,7 +26,7 @@ navbar_button:
       - height: 26px
       - color: >
           [[[ 
-            if (variables.link_active == "true") return "var(--primary-text-color)";
+            if (variables.link_active == variables.link_name) return "var(--primary-text-color)";
             return "var(--secondary-text-color)";
           ]]]
     name:
@@ -34,7 +35,7 @@ navbar_button:
       - font-family: var(--primary-font-family)
       - color: >
           [[[ 
-            if (variables.link_active == "true") return "var(--primary-text-color)";
+            if (variables.link_active == variables.link_name) return "var(--primary-text-color)";
             return "var(--secondary-text-color)";
           ]]]
     custom_fields:
@@ -46,7 +47,7 @@ navbar_button:
         - background: |
             [[[
               var color = "rgba(0,0,0,0)";
-              if (variables.link_active == "true") color = "var(--accent-color)";
+              if (variables.link_active == variables.link_name) color = "var(--accent-color)";
               return color;
             ]]]
 
@@ -1211,3 +1212,116 @@ robot_glance:
               return 'var(--color-ok)';
             ]]]
         - width: 20px
+
+#############################################################################
+# TIME CHANGE CHEVRON - Chevron that adjusts minutes up/down
+#############################################################################
+# Inputs: [entity] = input_datetime in time-mode, that should be changed
+# Variables: 
+# - [delta_min]: Amount of minutes to adjust up/down. Down = negative numbers
+# - [direction]: Controls chevron direction. Accepts: "up"/"down"
+time_change_chevron:
+  variables:
+    delta_min: 5
+    direction: "up"
+  icon: >
+    [[[
+      if (variables.direction === "up") return "mdi:chevron-up";
+      return "mdi:chevron-down";
+    ]]]
+  show_units: false
+  show_name: false
+  styles:
+    card:
+      - border-radius: >
+          [[[
+            if (variables.direction === "up") return "22px 22px 0px 0px";
+            return "0px 0px 22px 22px";
+          ]]]
+      - border: none
+      - background-color: "var(--button-card-background)"
+      - width: 36px
+      - height: 36px
+      - margin: 0 auto
+    icon:
+      - width: 28px
+  tap_action:
+    action: call-service
+    service: python_script.change_time
+    data:
+      delta_minutes: "[[[ return variables.delta_min ]]]"
+      entity_id: '[[[ return entity.entity_id ]]]'
+
+#############################################################################
+# TIME PICKER CARD - Custom toggleable button chip, with only icon
+#############################################################################
+# Inputs: [entity] = input_datetime in time-mode, that should be changed
+time_picker_card:
+  show_name: false
+  show_state: true
+  show_icon: false
+  state_display: |
+    [[[
+      var time = entity.state
+      var hours = time.split(":")[0]
+      var minutes = time.split(":")[1]
+      
+      return hours + ":" + minutes
+    ]]]
+  custom_fields:
+    up_hour:
+      card:
+        type: custom:button-card
+        template: time_change_chevron
+        entity: '[[[ return entity.entity_id ]]]'
+        variables:
+          delta_min: 60
+          direction: "up"
+    down_hour:
+      card:
+        type: custom:button-card
+        template: time_change_chevron
+        entity: '[[[ return entity.entity_id ]]]'
+        variables:
+          delta_min: -60
+          direction: "down"
+    up_min:
+      card:
+        type: custom:button-card
+        template: time_change_chevron
+        entity: '[[[ return entity.entity_id ]]]'
+        variables:
+          delta_min: 5
+          direction: "up"
+    down_min:
+      card:
+        type: custom:button-card
+        template: time_change_chevron
+        entity: '[[[ return entity.entity_id ]]]'
+        variables:
+          delta_min: -5
+          direction: "down"
+  styles:
+    grid:
+      - grid-template-areas: '"up_hour s up_min" "down_hour s down_min"'
+      - grid-template-columns: 25% 1fr 25%
+      - grid-gap: 2px
+      - align-items: center
+    state:
+      - text-align: center
+      - font-size: 48px
+      - font-family: var(--primary-font-family)
+      - font-weight: 300
+    custom_fields:
+      up_hour:
+        - display: flex
+        - justify-content: right
+      down_hour:
+        - display: flex
+        - justify-content: right
+      up_min:
+        - display: flex
+        - justify-content: left
+      down_min:
+        - display: flex
+        - justify-content: left

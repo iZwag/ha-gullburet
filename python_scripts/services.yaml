@@ -96,4 +96,14 @@ vacuum_list_to_string:
       description: Is office among the target rooms, true/false
     guest:
       description: Is guest room among the target rooms, true/false
-  
+
+change_time:
+  name: Change time
+  description: The time-entity is updated by adding/subtracting delta_minutes to/from the entity.
+  fields:
+    delta_minutes:
+      description: Minutes to add/subtract
+      example: -5
+    entity_id:
+      description: The input_datetime helper that should store the result
+      example: input_datetime.wakeup_alarm_weekdays

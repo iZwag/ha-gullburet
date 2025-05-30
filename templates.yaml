@@ -381,7 +381,7 @@
           states('light.pendant_guest'),
           states('light.pendants_kitchen'),
           states('light.pendants_living'),
-          states('light.pendants_office'),
+          states('light.pendant_office'),
           states('light.spottrack4_living'),
           states('light.spottrack6_kitchen'),
           states('light.wall_light_veranda'),
@@ -799,8 +799,25 @@
       {{ ((sensor_1 + sensor_2 + sensor_3) / 3) | round(0) }}
 
 - sensor:
+  # current_day == 4 : is friday
   - name: Bedtime - Display time
     unique_id: bedtime_display_time
+    state: >
+      {% set current_time = now() %}
+      {% set current_day = current_time.weekday() %}
+      {% set current_hour = current_time.hour %}
+      {% if current_day == 4 and current_hour >= 04 %}
+        weekend
+      {% elif current_day == 5 %}
+        weekend
+      {% elif current_day == 6 and current_hour < 04 %}
+        weekend
+      {% else %}
+        weekday
+      {% endif %}
+
+  - name: Wakeup - Display time
+    unique_id: wakeup_display_time
     state: >
       {% set current_time = now() %}
       {% set current_day = current_time.weekday() %}
@@ -836,7 +853,7 @@
         states('sensor.power_pendant_guest') | float(default=0),
         states('sensor.power_pendants_kitchen') | float(default=0),
         states('sensor.power_pendants_living') | float(default=0),
-        states('sensor.power_pendants_office') | float(default=0),
+        states('sensor.power_pendant_office') | float(default=0),
         states('sensor.power_spottrack_kitchen') | float(default=0),
         states('sensor.power_spottrack_living') | float(default=0),
         states('sensor.power_stringlights_veranda') | float(default=0)
