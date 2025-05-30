@@ -105,13 +105,11 @@ cards:
         - type: horizontal-stack
           cards:
           # BEDTIME TITLE
-          - type: custom:button-card
-            template: room_title
-            name: Bedtime
+          - type: picture
+            image: /local/ui/bedtime-vibe.png
           # WAKE-UP TITLE
-          - type: custom:button-card
-            template: room_title
-            name: Wake-up
+          - type: picture
+            image: /local/ui/wakeup-vibe.png
         - type: horizontal-stack
           cards:  
           # BEDTIME CONTROLS
@@ -348,60 +346,60 @@ cards:
                         background-color: transparent !important;
                       }
             # HEATED SHEET CONTROL
-            - type: custom:stack-in-card
-              mode: vertical
-              cards:
-              - type: custom:timer-bar-card
-                entity: timer.heated_sheet_timer
-                name: "Heated sheet timer"
-                invert: true
-                bar_direction: rtl
-                mushroom:
-                  layout: horizontal
-                  color: deep-orange
-                card_mod:
-                  style: |
-                    ha-card {
-                      background-color: var(--nested-card-background);
-                    }
-              - type: horizontal-stack
-                cards:
-                - type: tile
-                  entity: script.bedroom_heated_sheet_control
-                  color: white
-                  icon: mdi:chevron-up
-                  hide_state: true
-                  name: Timer +30 min
-                  tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: up
-                      increase: 00:30:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: up
-                      increase: 00:30:00
-                - type: tile
-                  entity: script.bedroom_heated_sheet_control
-                  color: white
-                  icon: mdi:chevron-down
-                  hide_state: true
-                  name: Timer -10 min
-                  tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: down
-                      decrease: 00:10:00
-                  icon_tap_action:
-                    action: call-service
-                    service: script.bedroom_heated_sheet_control
-                    data:
-                      command: down
-                      decrease: 00:10:00
+            #- type: custom:stack-in-card
+            #  mode: vertical
+            #  cards:
+            #  - type: custom:timer-bar-card
+            #    entity: timer.heated_sheet_timer
+            #    name: "Heated sheet timer"
+            #    invert: true
+            #    bar_direction: rtl
+            #    mushroom:
+            #      layout: horizontal
+            #      color: deep-orange
+            #    card_mod:
+            #      style: |
+            #        ha-card {
+            #          background-color: var(--nested-card-background);
+            #        }
+            #  - type: horizontal-stack
+            #    cards:
+            #    - type: tile
+            #      entity: script.bedroom_heated_sheet_control
+            #      color: white
+            #      icon: mdi:chevron-up
+            #      hide_state: true
+            #      name: Timer +30 min
+            #      tap_action:
+            #        action: call-service
+            #        service: script.bedroom_heated_sheet_control
+            #        data:
+            #          command: up
+            #          increase: 00:30:00
+            #      icon_tap_action:
+            #        action: call-service
+            #        service: script.bedroom_heated_sheet_control
+            #        data:
+            #          command: up
+            #          increase: 00:30:00
+            #    - type: tile
+            #      entity: script.bedroom_heated_sheet_control
+            #      color: white
+            #      icon: mdi:chevron-down
+            #      hide_state: true
+            #      name: Timer -10 min
+            #      tap_action:
+            #        action: call-service
+            #        service: script.bedroom_heated_sheet_control
+            #        data:
+            #          command: down
+            #          decrease: 00:10:00
+            #      icon_tap_action:
+            #        action: call-service
+            #        service: script.bedroom_heated_sheet_control
+            #        data:
+            #          command: down
+            #          decrease: 00:10:00
             - type: custom:button-card
               icon: mdi:bed
               name: Bedtime
