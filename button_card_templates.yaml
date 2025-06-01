@@ -868,7 +868,7 @@ data_label_line:
       - grid-template-rows: min-content
 
 #############################################################################
-# CHART LEGEND ENTRY - One row for a legend with color-dot
+# SENSOR LEGEND ENTRY - One row for a legend with color-dot
 #############################################################################
 sensor_legend_line:
   show_icon: false
@@ -1100,6 +1100,52 @@ icon_chip:
   tap_action:
     action: toggle
 
+# ICON CHIP, LARGE
+icon_chip_large:
+  show_state: false
+  show_name: false
+  variables:
+    iconColor: '#FFFFFF'
+    onIcon: 'mdi:power-plug'
+    offIcon: 'mdi:power-plug-off'
+  icon: >
+    [[[
+      if (entity.state === 'on') return variables.onIcon;
+      return variables.offIcon;
+    ]]]
+  styles:
+    grid:
+      - grid-template-areas: '"i"'
+      - grid-template-rows: min-content
+      - grid-template-columns: 40px
+    card:
+      - padding: 0px
+      - border-radius: 22px
+      - border: none
+      - height: 40px
+      - width: 100%
+      - background: |
+          [[[
+            if (entity.state != "on") return "var(--button-card-background)";
+            var color = variables.iconColor;
+            var r = parseInt(color.slice(1, 3), 16);
+            var g = parseInt(color.slice(3, 5), 16);
+            var b = parseInt(color.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, 0.2)`;
+          ]]]
+    img_cell:
+      - width: 40px
+      - height: 40px
+    icon:
+      - width: 28px
+      - height: 28px
+      - color: |
+          [[[
+            return variables.iconColor;
+          ]]]
+  tap_action:
+    action: toggle
+
 #############################################################################
 # ROOM TITLE - Initially created for the Floorplan info sections
 #############################################################################
@@ -1252,6 +1298,24 @@ time_change_chevron:
       delta_minutes: "[[[ return variables.delta_min ]]]"
       entity_id: '[[[ return entity.entity_id ]]]'
 
+time_subtitle:
+  show_icon: false
+  show_state: true
+  show_name: false
+  state_display: |
+    [[[
+      if (entity.state === "on") return "Alarm set";
+      return "Alarm disabled";
+    ]]]
+  styles:
+    card:
+      - padding: 0px
+      - border: none
+      - background: transparent
+    state:
+      - font-size: 12px
+      - font-weight: 300
+
 #############################################################################
 # TIME PICKER CARD - Custom toggleable button chip, with only icon
 #############################################################################
@@ -1268,6 +1332,11 @@ time_picker_card:
       
       return hours + ":" + minutes
     ]]]
+  variables:
+    enableEntity: "" 
+    enableIconColor: ""
+    enableOnIcon: ""
+    enableOffIcon: "" 
   custom_fields:
     up_hour:
       card:
@@ -1301,12 +1370,37 @@ time_picker_card:
         variables:
           delta_min: -5
           direction: "down"
+    chip:
+      card:
+        type: custom:button-card
+        template: icon_chip_large
+        entity: "[[[ return variables.enableEntity; ]]]"
+        variables:
+          iconColor: "[[[ return variables.enableIconColor; ]]]"
+          onIcon: "[[[ return variables.enableOnIcon; ]]]"
+          offIcon: "[[[ return variables.enableOffIcon; ]]]"
+    sub:
+      card:
+        type: custom:button-card
+        template: time_subtitle
+        entity: "[[[ return variables.enableEntity; ]]]"
+    blank:
+      card:
+        type: custom:button-card
+        color_type: blank-card
+        styles:
+          card:
+            - height: 12px
   styles:
     grid:
-      - grid-template-areas: '"up_hour s up_min" "down_hour s down_min"'
-      - grid-template-columns: 25% 1fr 25%
+      - grid-template-areas: >
+          "chip blank blank blank aux" "chip up_hour s up_min aux" "chip
+          down_hour s down_min aux" "chip abc sub bcd aux"
+      - grid-template-columns: 15% 10% 1fr 10% 15%
       - grid-gap: 2px
       - align-items: center
+    card:
+      - padding: 12px 0px
     state:
       - text-align: center
       - font-size: 48px
@@ -1325,3 +1419,52 @@ time_picker_card:
       down_min:
         - display: flex
         - justify-content: left
+      chip:
+        - display: flex
+        - justify-content: center
+
+
+#############################################################################
+# SLEEP SCHEDULE LINE - One line for wake-up/bedtime schedules, with icon
+#############################################################################
+# Inputs: 
+# [entity] = The datetime entity to derive time from
+# [name] = Optional: More control of what is displayed
+# [icon] = Optionmal: More control of which icon is displayed
+sleep_schedule_line:
+  show_state: true
+  state_display: >
+    [[[
+      const date = new Date(entity.state);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    ]]]
+  styles:
+    grid:
+      - grid-template-areas: '"i n s"'
+      - grid-template-columns: 15% 1fr 20%
+    card:
+      - background-color: transparent
+      - padding: 6px 0px
+    icon:
+      - width: 22px
+      - height: 22px
+      - color: var(--secondary-text-color)
+    name:
+      - align-self: middle
+      - justify-self: start
+      - font-size: 16px
+      - font-weight: 300
+      - font-family: var(--primary-font-family)
+      - color: var(--secondary-text-color)
+    state:
+      - display: flex
+      - font-size: 16px
+      - font-weight: 400
+      - justify-self: left
+      - color: var(--secondary-text-color)
+  tap_action:
+    action: none
+  hold_action:
+    action: none

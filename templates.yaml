@@ -806,11 +806,11 @@
       {% set current_time = now() %}
       {% set current_day = current_time.weekday() %}
       {% set current_hour = current_time.hour %}
-      {% if current_day == 4 and current_hour >= 04 %}
+      {% if current_day == 4 and current_hour >= 4 %}
         weekend
       {% elif current_day == 5 %}
         weekend
-      {% elif current_day == 6 and current_hour < 04 %}
+      {% elif current_day == 6 and current_hour < 4 %}
         weekend
       {% else %}
         weekday
