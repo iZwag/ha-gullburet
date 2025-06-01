@@ -99,71 +99,14 @@ cards:
       - type: entity
         entity: sensor.tibber_power_consumption_realtime
     # Aktivere vekkerutine
-    - type: horizontal-stack
-      cards:
-      - type: tile
-        entity: input_boolean.wakeup_alarm_active
-        name: Vekkerutine aktiv
-        color: accent
-        vertical: true
-        tap_action:
-          action: toggle
-      - type: conditional
-        conditions:
-          - condition: state
-            entity: sensor.bedtime_display_time
-            state: weekday
-        card:
-          type: custom:time-picker-card
-          entity: input_datetime.wakeup_alarm_weekdays
-          hour_mode: 24
-          hour_step: 1
-          minute_step: 5
-          layout:
-            hour_mode: double
-            align_controls: center
-            name: header
-            embedded: false
-            thin: true
-          hide:
-            seconds: true
-            name: true
-            icon: true
-          link_values: true
-          card_mod:
-          style: |
-            ha-card {
-              --tpc-elements-background-color: var(--button-card-background) !important;
-              --tpc-icon-color: var(--secondary-text-color);
-            }
-      - type: conditional
-        conditions:
-          - condition: state
-            entity: sensor.bedtime_display_time
-            state: weekend
-        card:
-          type: custom:time-picker-card
-          entity: input_datetime.wakeup_alarm_weekends
-          hour_mode: 24
-          hour_step: 1
-          minute_step: 5
-          layout:
-            hour_mode: double
-            align_controls: center
-            name: header
-            embedded: false
-            thin: true
-          hide:
-            seconds: true
-            name: true
-            icon: true
-          link_values: true
-          card_mod:
-          style: |
-            ha-card {
-              --tpc-elements-background-color: var(--button-card-background) !important;
-              --tpc-icon-color: var(--secondary-text-color);
-            }
+    - type: tile
+      entity: input_boolean.wakeup_alarm_active
+      name: Vekkerutine aktiv
+      color: accent
+      vertical: false
+      tap_action:
+        action: toggle
+    # Wake-up routine times
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
@@ -482,7 +425,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendants_office
+        entity: light.pendant_office
         name: Pendler
         color: accent
         tap_action:
