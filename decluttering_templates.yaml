@@ -215,11 +215,11 @@ last_cleaning_section:
             return `${min}m ${sec}s`;
           ]]]
       # Cleaned area
-      - type: custom:button-card
-        template: data_label_line
-        entity: sensor.esmeralda_last_clean_area
-        name: Cleaned area
-        numeric_precision: 1
+      #- type: custom:button-card
+      #  template: data_label_line
+      #  entity: sensor.esmeralda_last_clean_area
+      #  name: Cleaned area
+      #  numeric_precision: 1
       # Last cleaned rooms
       - type: custom:button-card
         template: data_label_line
@@ -284,11 +284,11 @@ current_cleaning_section:
             return `${min}m ${sec}s`;
           ]]]
       # Cleaned area
-      - type: custom:button-card
-        template: data_label_line
-        entity: sensor.esmeralda_current_clean_area
-        name: Cleaned area
-        numeric_precision: 1
+      #- type: custom:button-card
+      #  template: data_label_line
+      #  entity: sensor.esmeralda_current_clean_area
+      #  name: Cleaned area
+      #  numeric_precision: 1
       # Battery percent
       - type: custom:button-card
         template: data_label_line
@@ -299,3 +299,119 @@ current_cleaning_section:
     - type: custom:button-card
       template: robot_glance
       entity: vacuum.esmeralda
+
+# TABLET DASHBOARD - SIDEBAR FOR ALL VIEWS
+# Variables:
+# - active_link: set to which link is active for that view. Possible values:
+#     "dashboard" | "floorplan" | "sleep" | "energy" | "guests" | "audio"
+tablet_sidebar:
+  default:
+    - active_link: dashboard
+  card:
+    type: custom:mod-card
+    view_layout:
+      grid-area: sidebar
+    card_mod:
+      style: |
+        ha-card {
+          padding: 0px 12px;
+        }
+    card:
+      type: vertical-stack
+      cards:
+      # Display Clock
+      - type: custom:button-card
+        entity: sensor.time
+        template: navbar_clock
+      # Display Date string
+      - type: custom:button-card
+        entity: sensor.date_string
+        template: navbar_datestring
+      # NAVBUTTONS
+      # Dashboard
+      - type: custom:button-card
+        template: navbar_button
+        name: Dashboard
+        icon: mdi:home
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "dashboard"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/dashboard
+      - type: custom:button-card
+        template: navbar_button
+        name: Floorplan control
+        icon: mdi:floor-plan
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "floorplan"      
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/floorplan
+      - type: custom:button-card
+        template: navbar_button
+        name: Bedtime & wake-up
+        icon: mdi:bed
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "sleep"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/sleep
+      - type: custom:button-card
+        icon: mdi:lightning-bolt
+        name: Energy
+        template: navbar_button
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "energy"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/consumption
+      - type: custom:button-card
+        icon: mdi:information-slab-circle
+        name: Guest info
+        template: navbar_button
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "guests"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/guests
+      - type: custom:button-card
+        icon: mdi:speaker
+        name: Listen
+        template: navbar_button
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "audio"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/audio
+      # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
+      - type: custom:button-card
+        color_type: blank-card
+        styles:
+          card:
+            - height: 25vh
+      - type: custom:mushroom-chips-card
+        alignment: center
+        card_mod:
+          style: |
+            ha-card {
+              --chip-background: rgba(25, 25, 25, 0.2);
+              --primary-text-color: var(--secondary-text-color);
+            }
+        chips:
+        - type: action
+          tap_action:
+            action: navigate
+            navigation_path: /lovelace/0
+          icon: mdi:cog
+        - type: entity
+          entity: sensor.temperature_apartment_avg
+        - type: weather
+          entity: weather.yr_weather_home
+          show_temperature: true
+          show_conditions: false
