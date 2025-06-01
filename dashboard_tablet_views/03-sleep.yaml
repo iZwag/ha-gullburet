@@ -105,38 +105,16 @@ cards:
         # IMAGE/TITLE CARDS
         - type: horizontal-stack
           cards:
-          # BEDTIME TITLE
-          - type: picture
-            image: /local/ui/bedtime-vibe.png
           # WAKE-UP TITLE
           - type: picture
             image: /local/ui/wakeup-vibe.png
+          # BEDTIME TITLE
+          - type: picture
+            image: /local/ui/bedtime-vibe.png
+          
         # TIMER-PICKERS
         - type: horizontal-stack
-          cards:  
-          # BEDTIME TIME-TRIGGER
-          - type: custom:state-switch
-            entity: sensor.bedtime_display_time
-            default: 'weekday'
-            states:
-              weekday:
-                type: custom:button-card
-                template: time_picker_card
-                entity: input_datetime.bedtime_trigger_weekdays
-                variables:
-                  enableEntity: "input_boolean.bedtime_trigger_active"
-                  enableIconColor: "#1ac8ed"
-                  enableOnIcon: 'mdi:bed-clock' 
-                  enableOffIcon: 'mdi:bed-empty'
-              weekend:
-                type: custom:button-card
-                template: time_picker_card
-                entity: input_datetime.bedtime_trigger_weekends
-                variables:
-                  enableEntity: "input_boolean.bedtime_trigger_active"
-                  enableIconColor: "#1ac8ed"
-                  enableOnIcon: 'mdi:bed-clock' 
-                  enableOffIcon: 'mdi:bed-empty'
+          cards:
           # WAKE-UP TIME-PICKER
           - type: custom:state-switch
             entity: sensor.wakeup_display_time
@@ -160,75 +138,99 @@ cards:
                   enableIconColor: "#ff9800"
                   enableOnIcon: 'mdi:alarm-check' 
                   enableOffIcon: 'mdi:alarm-off'
+          # BEDTIME TIME-TRIGGER
+          - type: custom:state-switch
+            entity: sensor.bedtime_display_time
+            default: 'weekday'
+            states:
+              weekday:
+                type: custom:button-card
+                template: time_picker_card
+                entity: input_datetime.bedtime_trigger_weekdays
+                variables:
+                  enableEntity: "input_boolean.bedtime_trigger_active"
+                  enableIconColor: "#1ac8ed"
+                  enableOnIcon: 'mdi:bed-clock' 
+                  enableOffIcon: 'mdi:bed-empty'
+              weekend:
+                type: custom:button-card
+                template: time_picker_card
+                entity: input_datetime.bedtime_trigger_weekends
+                variables:
+                  enableEntity: "input_boolean.bedtime_trigger_active"
+                  enableIconColor: "#1ac8ed"
+                  enableOnIcon: 'mdi:bed-clock' 
+                  enableOffIcon: 'mdi:bed-empty'
+          
         # SCHEDULES
         - type: horizontal-stack
           cards:
-          # BEDTIME SCHEDULE
-          - type: vertical-stack
-            cards:
-            # BEDTIME INFO
-            - type: custom:stack-in-card
-              mode: vertical
-              keep:
-                background: false
+          # WAKE-UP SCHEDULE
+          - type: custom:mod-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: var(--ha-card-background);
+                }
+            card:
+              type: custom:layout-card
+              layout_type: vertical
+              layout:
+                margin: 0px
+                padding: var(--ha-card-padding) 0px
               cards:
-                - type: custom:mushroom-template-card
-                  entity: input_boolean.bedtime_heating_sheet_enable
+                # Wake-up light start
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: sensor.wakeup_light_start_time
+                  name: Wake-up light
+                  icon: mdi:sun-angle
+                # Alarm time: Sound start
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: sensor.wakeup_next_alarm_time
+                  name: Wake-up audio
+                  icon: mdi:alarm-note
+                # Alarm intensifies
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: input_datetime.wakeup_15min_after
+                  name: Blinds + audio intensifies
+                  icon: mdi:roller-shade
+          # BEDTIME SCHEDULE
+          - type: custom:mod-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: var(--ha-card-background);
+                }
+            card:
+              type: custom:layout-card
+              layout_type: vertical
+              layout:
+                margin: 0px
+                padding: var(--ha-card-padding) 0px
+              cards:
+                # 1. Heated sheet start
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: sensor.bedtime_heated_sheet_start_time
+                  name: Heated sheet preheating
                   icon: mdi:heating-coil
-                  primary: Automatic heated sheet
-                  secondary: |-
-                    {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
-                      Starts preheating {{ (state_attr('sensor.bedtime_heated_sheet_start_time', 'time')).split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if (is_state('input_boolean.bedtime_trigger_active', 'on') and is_state('input_boolean.bedtime_heating_sheet_enable', 'on') ) %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-1-circle
-                  badge_color: black
-                  tap_action:
-                    action: toggle
-                  hold_action:
-                    action: more-info
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
-                - type: custom:mushroom-template-card
-                  entity: input_boolean.bedtime_trigger_active
+                # 2. Curtains close
+                # 3. Bedtime target
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: sensor.bedtime_next_trigger_time
+                  name: Bedtime goal
                   icon: mdi:bed
-                  primary: Bedtime goal
-                  secondary: |-
-                    {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                      {% set weekday_trigger = states('input_datetime.bedtime_trigger_weekdays') %}
-                      {% set weekend_trigger = states('input_datetime.bedtime_trigger_weekends') %}
-                      {% set trigger_time = weekend_trigger if (3 < now().weekday() < 6) else weekday_trigger  %}
-                      {{ trigger_time.split(':')[0:2] | join(':') }}
-                    {% else %}
-                      Not active
-                    {% endif %}
-                  icon_color: |-
-                    {% if is_state('input_boolean.bedtime_trigger_active', 'on') %}
-                      white
-                    {% else %}
-                      disabled
-                    {% endif %}
-                  badge_icon: mdi:numeric-2-circle
-                  badge_color: black
-                  tap_action:
-                    action: none
-                  hold_action:
-                    action: none
-                  card_mod:
-                    style: |
-                      ha-card {
-                        background-color: transparent !important;
-                      }
+                # 4. Bedtime light reminder
+                #- type: custom:button-card
+                #  template: sleep_schedule_line
+                #  entity: input_datetime.bedtime_trigger_weekends
+                #  name: Blinds + audio intensifies
+                #  icon: mdi:roller-shade
+         
             # HEATED SHEET CONTROL
             #- type: custom:stack-in-card
             #  mode: vertical
@@ -284,6 +286,14 @@ cards:
             #        data:
             #          command: down
             #          decrease: 00:10:00
+        # CONTROLS
+        - type: horizontal-stack
+          cards:
+            - type: custom:button-card
+              color_type: blank
+              styles:
+                card:
+                  - background: transparent
             - type: custom:button-card
               icon: mdi:bed
               name: Bedtime
@@ -294,64 +304,33 @@ cards:
                 service: script.turn_on
                 data:
                   entity_id: script.bedtime_lights
-          # WAKE-UP SCHEDULE
-          - type: custom:mod-card
-            card_mod:
-              style: |
-                ha-card {
-                  background: var(--ha-card-background);
-                }
-            card:
-              type: custom:layout-card
-              layout_type: vertical
-              layout:
-                margin: 0px
-                padding: var(--ha-card-padding) 0px
-              cards:
-                # Wake-up light start
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: sensor.wakeup_light_start_time
-                  name: Wake-up light
-                  icon: mdi:sun-angle
-                # Alarm time: Sound start
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: sensor.wakeup_next_alarm_time
-                  name: Wake-up audio
-                  icon: mdi:alarm-note
-                # Alarm intensifies
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_15min_after
-                  name: Blinds + audio intensifies
-                  icon: mdi:roller-shade
-              #- type: custom:mushroom-template-card
-              #  entity: input_boolean.wakeup_alarm_active
-              #  icon: mdi:alarm-note
-              #  primary: Wake-up audio
-              #  secondary: |-
-              #    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-              #      {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
-              #      Starts at {{ alarm_time.split(':')[0:2] | join(':') }}
-              #    {% else %}
-              #      Not active
-              #    {% endif %}
-              #  icon_color: |-
-              #    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
-              #      white
-              #    {% else %}
-              #      disabled
-              #    {% endif %}
-              #  badge_icon: mdi:numeric-2-circle
-              #  badge_color: black
-              #  tap_action:
-              #    action: none
-              #  hold_action:
-              #    action: none
-              #  card_mod:
-              #    style: |
-              #      ha-card {
-              #        background-color: transparent !important;
-              #      }
+
+#- type: custom:mushroom-template-card
+#  entity: input_boolean.wakeup_alarm_active
+#  icon: mdi:alarm-note
+#  primary: Wake-up audio
+#  secondary: |-
+#    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+#      {% set alarm_time = state_attr('switch.sonos_alarm_72', 'time') %}
+#      Starts at {{ alarm_time.split(':')[0:2] | join(':') }}
+#    {% else %}
+#      Not active
+#    {% endif %}
+#  icon_color: |-
+#    {% if is_state('input_boolean.wakeup_alarm_active', 'on') %}
+#      white
+#    {% else %}
+#      disabled
+#    {% endif %}
+#  badge_icon: mdi:numeric-2-circle
+#  badge_color: black
+#  tap_action:
+#    action: none
+#  hold_action:
+#    action: none
+#  card_mod:
+#    style: |
+#      ha-card {
+#        background-color: transparent !important;
+#      }
  
