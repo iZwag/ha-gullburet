@@ -1,21 +1,94 @@
-
+# Power - Stores the date & time for the month's 4th highest maxhour energy
 power_monthly_highest_max_hour_4:
   name: Power - Monthly highest max-hour 4
   icon: mdi:lightning-bolt
   has_date: true
   has_time: true
 
+# TODO: Remove
 wakeup_15min_after:
   name: Wakeup - 15min after
   has_date: true
   has_time: true
 
+# TODO: Remove
 wakeup_30min_after:
   name: Wakeup - 30min after
   has_date: true
   has_time: true
 
+# TODO: Remove
 wakeup_60min_after:
   name: Wakeup - 60min after
+  has_date: true
+  has_time: true
+
+# Bedtime routine - Trigger time weekdays
+bedtime_trigger_weekdays:
+  name: Bedtime - Trigger time weekdays
+  icon: mdi:bed-clock
+  has_date: false
+  has_time: true
+
+# Bedtime routine - Trigger time weekends
+bedtime_trigger_weekends:
+  name: Bedtime - Trigger time weekends
+  icon: mdi:bed-clock
+  has_date: false
+  has_time: true
+
+# Wakeup routine - Alarm time weekdays
+wakeup_alarm_weekdays:
+  name: Wakeup - Alarm time weekdays
+  icon: mdi:alarm
+  has_date: false
+  has_time: true
+
+# Wakeup routine - Alarm time weekends
+wakeup_alarm_weekends:
+  name: Wakeup - Alarm time weekends
+  icon: mdi:alarm
+  has_date: false
+  has_time: true
+
+# Wakeup routine - Time light starts ahead of alarm/audio
+wakeup_light_start:
+  name: Wakeup - Light start
+  icon: mdi:sun-angle
+  has_date: true
+  has_time: true
+
+# Wakeup routine - Calculated alarm time from time-pickers/input_helpers
+wakeup_alarm_time:
+  name: Wakeup - Alarm time
+  icon: mdi:alarm-check
+  has_date: true
+  has_time: true
+
+# Wakeup routine - Time blinds open
+wakeup_blinds_open:
+  name: Wakeup - Blinds open
+  icon: mdi:roller-shade
+  has_date: true
+  has_time: true
+
+# Wakeup routine - Audio amplifies
+wakeup_audio_amp:
+  name: Wakeup - Audio amplifies
+  icon: mdi:volume-medium
+  has_date: true
+  has_time: true
+
+# Wakeup routine - Audio gets loud
+wakeup_audio_loud:
+  name: Wakeup - Audio gets loud
+  icon: mdi:volume-high
+  has_date: true
+  has_time: true
+
+# Wakeup routine - Routine ends
+wakeup_ends:
+  name: Wakeup - Routine ends
+  icon: mdi:alarm-off
   has_date: true
   has_time: true

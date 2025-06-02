@@ -18,12 +18,14 @@
       - input_number.power_monthly_highest_max_hour_2
       - input_number.power_monthly_highest_max_hour_3
       - input_number.power_grid_monthly_variable_price
+      - input_number.power_monthly_highest_max_hour_4
   - service: input_datetime.set_datetime
     target:
       entity_id:
       - input_datetime.power_monthly_highest_max_hour_1
       - input_datetime.power_monthly_highest_max_hour_2
       - input_datetime.power_monthly_highest_max_hour_3
+      - input_datetime.power_monthly_highest_max_hour_4
     data:
       timestamp: '{{ now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
         }}'
@@ -173,61 +175,6 @@
     target:
       entity_id: input_select.audio_speaker_select
   mode: single
-- id: '1712148158938'
-  alias: Office - Handle Light mode change
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - input_select.office_mode_select
-  condition: []
-  action:
-  - service: script.office_control_homey_ledring
-    data:
-      setting: '{{ states(''input_select.office_mode_select'') }}'
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ is_state(''input_select.office_mode_select'', ''off'')
-          }}'
-      sequence:
-      - service: light.turn_off
-        target:
-          entity_id:
-          - light.pendants_office
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.lights_override_office
-      alias: 'off'
-    - conditions:
-      - condition: template
-        value_template: '{{ is_state(''input_select.office_mode_select'', ''focus'')
-          }}'
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 50
-        target:
-          entity_id: light.pendants_office
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.lights_override_office
-      alias: focus
-    - conditions:
-      - condition: template
-        value_template: '{{ is_state(''input_select.office_mode_select'', ''gaming'')
-          }}'
-      sequence:
-      - service: light.turn_on
-        data:
-          brightness_pct: 10
-        target:
-          entity_id: light.pendants_office
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.lights_override_office
-      alias: gaming
-  mode: single
 - id: '1712303592468'
   alias: Bathroom - Handle light mode change
   description: ''
@@ -284,7 +231,7 @@
         domain: switch
   mode: single
 - id: '1713360573726'
-  alias: Wake-up alarm - Time triggered actions
+  alias: Wake-up alarm - Time triggered actions (old)
   description: Handles all time-triggered actions associated with the wake-up alarm,
     such as turning on the lights and audio media.
   trigger:
@@ -366,7 +313,12 @@
             entity_id:
             - media_player.sonos_bedroom
           data:
-            volume_level: 0.13
+            volume_level: 0.16
+      - service: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.left_blind_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -386,7 +338,7 @@
         - service: media_player.volume_set
           metadata: {}
           data:
-            volume_level: 0.18
+            volume_level: 0.2
           target:
             entity_id: media_player.sonos_bedroom
     - conditions:
@@ -402,20 +354,8 @@
   mode: single
 - id: '1713471081102'
   alias: Wakeup - Update Sonos alarm when alarm settings change
-  description: ''
+  description: Old
   trigger:
-  - platform: state
-    entity_id:
-    - input_boolean.wakeup_alarm_active
-    from: 'off'
-    to: 'on'
-    id: 'on'
-  - platform: state
-    entity_id:
-    - input_boolean.wakeup_alarm_active
-    from: 'on'
-    to: 'off'
-    id: 'off'
   - platform: state
     entity_id:
     - input_datetime.wakeup_alarm_weekdays
@@ -427,32 +367,6 @@
   condition: []
   action:
   - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - 'on'
-      sequence:
-      - service: sonos.update_alarm
-        data:
-          alarm_id: 72
-          enabled: true
-          time: '{{ state_attr(''sensor.wakeup_next_alarm_time'', ''time'') }}
-
-            '
-          volume: 0.08
-        target:
-          entity_id: media_player.sonos_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - 'off'
-      sequence:
-      - service: sonos.update_alarm
-        data:
-          alarm_id: 72
-          enabled: false
-        target:
-          entity_id: media_player.sonos_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -476,7 +390,7 @@
             time: '{{ state_attr(''sensor.wakeup_next_alarm_time'', ''time'') }}
 
               '
-            volume: 0.08
+            volume: 0.11
           target:
             entity_id: media_player.sonos_bedroom
   mode: single
@@ -595,27 +509,36 @@
     entity_id: input_boolean.bedtime_trigger_active
     state: 'on'
   action:
-  - if:
-    - condition: trigger
-      id:
-      - 30min-before
-    then:
-    - service: cover.open_cover
-      metadata: {}
-      data: {}
-      target:
-        entity_id: cover.curtain_living
-    - if:
-      - condition: state
-        entity_id: input_boolean.bedtime_heating_sheet_enable
-        state: 'on'
-      then:
-      - service: script.bedroom_heated_sheet_control
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 30min-before
+      sequence:
+      - service: cover.open_cover
         metadata: {}
-        data:
-          increase: 00:50:00
-          command: 'on'
-          decrease: 00:10:00
+        data: {}
+        target:
+          entity_id: cover.curtain_living
+      - if:
+        - condition: state
+          entity_id: input_boolean.bedtime_heating_sheet_enable
+          state: 'on'
+        then:
+        - service: script.bedroom_heated_sheet_control
+          metadata: {}
+          data:
+            increase: 00:50:00
+            command: 'on'
+            decrease: 00:10:00
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm
+      sequence:
+      - service: script.bedtime_lights_adjust_off
+        metadata: {}
+        data: {}
   mode: single
 - id: '1716287088981'
   alias: Veranda lights automatic ON/OFF
@@ -1128,16 +1051,21 @@
           after: 09:00:00
           before: '21:30:00'
         then:
-        - service: script.set_fan_speed_roborock_wrapper
+        - service: input_select.select_option
+          metadata: {}
           data:
-            fan_speed: Max
+            option: 2xDeep
+          target:
+            entity_id: input_select.vacuum_mop_session
         else:
-        - service: script.set_fan_speed_roborock_wrapper
+        - service: input_select.select_option
+          metadata: {}
           data:
-            fan_speed: Quiet
-      - service: vacuum.start
-        target:
-          entity_id: vacuum.esmeralda
+            option: Quiet
+          target:
+            entity_id: input_select.vacuum_fan_mode
+      - service: script.robot_clean_clean_all_rooms
+        metadata: {}
         data: {}
   mode: single
 - id: '1736529421955'
@@ -1372,6 +1300,11 @@
     id: returned
   condition: []
   action:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.show_vacuum_map
   - if:
     - condition: and
       conditions:
@@ -1431,10 +1364,523 @@
         data: {}
         target:
           entity_id: vacuum.esmeralda
-      else:
-      - service: xiaomi_miio.vacuum_clean_segment
-        data:
-          segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
-        target:
-          entity_id: vacuum.esmeralda
+      else: []
+    - service: xiaomi_miio.vacuum_clean_segment
+      data:
+        segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
+      target:
+        entity_id: vacuum.esmeralda
+    else: []
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.mop_after_vacuum
   mode: single
+- id: '1737378519092'
+  alias: Floorplan - Handle show/hide icons
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.floorplan_show_icons
+    from: 'on'
+    to: 'off'
+    id: turned-off
+  - platform: state
+    entity_id:
+    - input_boolean.floorplan_show_icons
+    from: 'off'
+    to: 'on'
+    id: turned-on
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-off
+      sequence:
+      - service: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.show_vacuum_map
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-on
+      sequence:
+      - service: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.show_vacuum_map
+  mode: single
+- id: '1741555462102'
+  alias: Bathroom - Pause SONOS on lights off
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.downlights_bath
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id:
+    - light.lightstrip_bath
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: light.downlights_bath
+      state: 'off'
+    - condition: state
+      entity_id: light.lightstrip_bath
+      state: 'off'
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: input_boolean.party_mode_enable
+        state: 'on'
+  action:
+  - service: media_player.media_pause
+    metadata: {}
+    data: {}
+    target:
+      entity_id: media_player.sonos_move
+  mode: single
+- id: '1744142825753'
+  alias: Lights - Office pendants link
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - light.pendant_office
+    from: 'on'
+    to: 'off'
+    id: 'off'
+  - platform: state
+    entity_id:
+    - light.pendant_office
+    from: 'off'
+    to: 'on'
+    id: 'on'
+  - platform: time
+    at: 07:30:00
+    id: focus
+  - platform: time
+    at: '14:30:00'
+    id: bright
+  - platform: time
+    at: '17:00:00'
+    id: chill
+  - platform: time
+    at: '21:30:00'
+    id: night
+  - platform: state
+    entity_id:
+    - input_select.office_mode_select
+    id: mode-change
+  - platform: state
+    entity_id:
+    - light.pendant_office
+    attribute: brightness
+    id: brightness
+  condition: []
+  action:
+  - variables:
+      focus_dim: 191
+      focus_temp: 6535
+      bright_dim: 70
+      bright_temp: 4016
+      chill_dim: 51
+      chill_temp: 2604
+      night_dim: 13
+      night_temp: 2202
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - service: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.pendants_office
+    - conditions:
+      - condition: trigger
+        id:
+        - 'off'
+      sequence:
+      - service: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.pendants_office
+    - conditions:
+      - condition: trigger
+        id:
+        - focus
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Focus
+        target:
+          entity_id: input_select.office_mode_select
+    - conditions:
+      - condition: trigger
+        id:
+        - bright
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Bright
+        target:
+          entity_id: input_select.office_mode_select
+    - conditions:
+      - condition: trigger
+        id:
+        - chill
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Chill
+        target:
+          entity_id: input_select.office_mode_select
+    - conditions:
+      - condition: trigger
+        id:
+        - night
+      sequence:
+      - service: input_select.select_option
+        metadata: {}
+        data:
+          option: Night
+        target:
+          entity_id: input_select.office_mode_select
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - mode-change
+        - condition: state
+          entity_id: light.pendants_office
+          state: 'on'
+      sequence:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: input_select.office_mode_select
+            state: Focus
+          sequence:
+          - service: light.turn_on
+            metadata: {}
+            data:
+              kelvin: 6500
+              brightness_pct: 75
+            target:
+              entity_id: light.pendants_office
+        - conditions:
+          - condition: state
+            entity_id: input_select.office_mode_select
+            state: Bright
+          sequence:
+          - service: light.turn_on
+            metadata: {}
+            data:
+              kelvin: 4003
+              brightness_pct: 50
+            target:
+              entity_id: light.pendants_office
+        - conditions:
+          - condition: state
+            entity_id: input_select.office_mode_select
+            state: Chill
+          sequence:
+          - service: light.turn_on
+            metadata: {}
+            data:
+              kelvin: 2603
+              brightness_pct: 20
+            target:
+              entity_id: light.pendants_office
+        - conditions:
+          - condition: state
+            entity_id: input_select.office_mode_select
+            state: Night
+          sequence:
+          - service: light.turn_on
+            metadata: {}
+            data:
+              kelvin: 2000
+              brightness_pct: 5
+            target:
+              entity_id: light.pendants_office
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - brightness
+        - condition: state
+          entity_id: light.pendants_office
+          state: 'on'
+      sequence:
+      - service: light.turn_on
+        metadata: {}
+        data:
+          brightness_pct: '{{ state_attr(''light.pendant_office'', ''brightness'')
+            }}'
+        target:
+          entity_id: light.pendants_office
+  mode: queued
+  max: 10
+- id: '1746371725883'
+  alias: Bedroom - Handle LEFT blind
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.left_blind_control_action
+    to: open
+    id: open
+  - platform: state
+    entity_id:
+    - sensor.left_blind_control_action
+    to: close
+    id: close
+  - platform: state
+    entity_id:
+    - sensor.left_blind_control_action
+    to: hold
+    id: stop
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - open
+      sequence:
+      - service: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.left_blind_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - close
+      sequence:
+      - service: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.left_blind_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - stop
+      sequence:
+      - service: cover.stop_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.left_blind_bedroom
+  mode: single
+- id: '1748878472149'
+  alias: Wakeup - Handle input changes
+  description: Reacts to changes done to UI-inputs related to Wakeup. Must not validate
+    enable-toggle.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_number.wakeup_audio_amp_delay
+    id: amp-delay
+  - platform: state
+    entity_id:
+    - input_number.wakeup_audio_loud_delay
+    id: loud-delay
+  - platform: state
+    entity_id:
+    - input_number.wakeup_blinds_open_delay
+    id: blinds-delay
+  - platform: state
+    entity_id:
+    - input_number.wakeup_light_start_advance
+    id: light-advance
+  - platform: state
+    entity_id:
+    - input_number.wakeup_audio_start_volume
+    id: start-vol
+  - platform: state
+    entity_id:
+    - input_datetime.wakeup_alarm_weekdays
+    id: alarm-weekdays
+  - platform: state
+    entity_id:
+    - input_datetime.wakeup_alarm_weekends
+    id: alarm-weekends
+  - platform: state
+    entity_id:
+    - input_boolean.wakeup_alarm_active
+    from: 'off'
+    to: 'on'
+    id: alarm-enabled
+  - platform: state
+    entity_id:
+    - input_boolean.wakeup_alarm_active
+    from: 'on'
+    to: 'off'
+    id: alarm-disabled
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - amp-delay
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+          delta_minutes: '{{ states(''input_number.wakeup_audio_amp_delay'') | float(0)
+            }}'
+          target_entity: input_datetime.wakeup_audio_amp
+    - conditions:
+      - condition: trigger
+        id:
+        - loud-delay
+      sequence:
+      - if:
+        - condition: template
+          value_template: '{% set amp_delay = states(''input_number.wakeup_audio_amp_delay'')
+            | float(15) %}
+
+            {% set loud_delay = states(''input_number.wakeup_audio_loud_delay'') |
+            float(30) %}
+
+            {{ loud_delay > amp_delay }}'
+        then:
+        - service: script.adjust_datetime
+          data:
+            base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+            delta_minutes: '{{ states(''input_number.wakeup_audio_loud_delay'') |
+              float(0) }}'
+            target_entity: input_datetime.wakeup_audio_loud
+    - conditions:
+      - condition: trigger
+        id:
+        - blinds-delay
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+          delta_minutes: '{{ states(''input_number.wakeup_blinds_open_delay'') | float(0)
+            }}'
+          target_entity: input_datetime.wakeup_blinds_open
+    - conditions:
+      - condition: trigger
+        id:
+        - light-advance
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+          delta_minutes: '{{ states(''input_number.wakeup_light_start_advance'') |
+            float(0) }}'
+          target_entity: input_datetime.wakeup_light_start
+    - conditions:
+      - condition: trigger
+        id:
+        - start-vol
+      sequence:
+      - service: sonos.update_alarm
+        data:
+          alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
+          volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+            }}'
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm-enabled
+      sequence:
+      - service: sonos.update_alarm
+        metadata: {}
+        data:
+          enabled: true
+          alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
+          volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+            }}'
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm-disabled
+      sequence:
+      - service: sonos.update_alarm
+        metadata: {}
+        data:
+          enabled: false
+          alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
+        target:
+          entity_id: media_player.sonos_bedroom
+  mode: queued
+  max: 10
+- id: '1748890659372'
+  alias: Wakeup - Handle alarm-time changes
+  description: When the main wakeup alarm-time changes, it should set the other trigger
+    times as well. Must not validate enable-toggle.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_datetime.wakeup_alarm_time
+  condition: []
+  action:
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+      delta_minutes: '{{ states(''input_number.wakeup_light_start_advance'') | float(0)
+        }}
+
+        '
+      target_entity: input_datetime.wakeup_light_start
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+      delta_minutes: '{{ states(''input_number.wakeup_blinds_open_delay'') | float(0)
+        }}
+
+        '
+      target_entity: input_datetime.wakeup_blinds_open
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+      delta_minutes: '{{ states(''input_number.wakeup_audio_amp_delay'') | float(0)
+        }}'
+      target_entity: input_datetime.wakeup_audio_amp
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+      delta_minutes: '{{ states(''input_number.wakeup_audio_loud_delay'') | float(0)
+        }}
+
+        '
+      target_entity: input_datetime.wakeup_audio_loud
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
+      delta_minutes: 60
+      target_entity: input_datetime.wakeup_ends
+  mode: restart

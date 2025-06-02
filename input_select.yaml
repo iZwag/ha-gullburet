@@ -49,3 +49,19 @@ vacuum_mop_session:
     - Mop
     - VacMop
     - 2xDeep
+
+# Bedtime routine - Which bedtime trigger time-picker to show
+bedtime_display_time:
+  name: "Bedtime - Display time"
+  icon: mdi:bed
+  options:
+    - weekday
+    - weekend
+
+# Wakeup routine - Which wakeup alarm time-picker to show
+wakeup_display_time:
+  name: "Wakeup - Display time"
+  icon: mdi:alarm
+  options:
+    - weekday
+    - weekend

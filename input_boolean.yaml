@@ -45,3 +45,8 @@ mop_after_vacuum:
 show_vacuum_map:
   name: "Cleaning - Show vacuum map"
   icon: mdi:map-marker-path
+
+# Wakeup routine - Alarm enabled/disabled
+wakeup_alarm_active:
+  name: "Wakeup - Alarm enabled"
+  icon: mdi:alarm-check

@@ -78,6 +78,7 @@ all_lights_on:
   - service: switch.turn_on
     target:
       entity_id: switch.lamp_globe_living
+    data: {}
   - service: light.turn_on
     data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
@@ -91,6 +92,7 @@ all_lights_on:
   - service: switch.turn_on
     target:
       entity_id: switch.lamp_mushroom_living
+    data: {}
   - service: light.turn_on
     data:
       color_temp: 400
@@ -118,16 +120,6 @@ all_lights_on:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlights_bath
-  - service: light.turn_on
-    data:
-      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
-    target:
-      entity_id: light.downlight_toilet
-  - service: light.turn_on
-    data:
-      brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
-    target:
-      entity_id: light.wall_lantern_veranda
 calculate_risenoon:
   alias: Sun-cycle - Calculates RiseNoon-time
   mode: single
@@ -154,21 +146,32 @@ bedtime_lights:
   - service: scene.turn_on
     target:
       entity_id: scene.toilet_lights_off
+    data: {}
   - service: scene.turn_on
     target:
       entity_id: scene.bathroom_lights_off
+    data: {}
   - service: scene.turn_on
     target:
       entity_id: scene.office_lights_off
+    data: {}
   - service: scene.turn_on
     target:
       entity_id: scene.entry_lights_off
+    data: {}
   - service: scene.turn_on
     target:
       entity_id: scene.living_room_lights_off
+    data: {}
   - service: scene.turn_on
     target:
       entity_id: scene.kitchen_lights_off
+    data: {}
+  - service: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      entity_id: cover.left_blind_bedroom
   mode: single
   icon: mdi:bed
 select_floorplan_room:
@@ -209,12 +212,13 @@ storage_room_light_on_auto:
       duration: 00:03:00
     target:
       entity_id: timer.storage_room_light_timer
-  - type: turn_on
-    device_id: 91c9c36e238ec41947f52b0f55c97036
-    entity_id: 4ad13a64085d45c3fca12e71fa3ba5c1
-    domain: light
-    brightness_pct: 100
-  mode: single
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.ceiling_light_storage
+  mode: parallel
   icon: mdi:lightbulb-auto
 masterdim_script:
   alias: Lights - Masterdim light
@@ -408,10 +412,11 @@ storage_room_light_off_finish_timer:
     target:
       entity_id: timer.storage_room_light_timer
     data: {}
-  - type: turn_off
-    device_id: 91c9c36e238ec41947f52b0f55c97036
-    entity_id: 4ad13a64085d45c3fca12e71fa3ba5c1
-    domain: light
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.ceiling_light_storage
   mode: single
   icon: mdi:lightbulb-off
 robot_set_mop_mode:
@@ -728,6 +733,11 @@ lights_dinner_mood:
 lights_tv_mood:
   alias: Lights - TV Mood
   sequence:
+  - service: cover.open_cover
+    metadata: {}
+    data: {}
+    target:
+      entity_id: cover.curtain_living
   - service: scene.turn_on
     metadata: {}
     target:
@@ -1123,8 +1133,8 @@ robot_clean_create_mode_string:
     data:
       value: "{% set fan_mode = states('input_select.vacuum_fan_mode') %}\n{% set
         mop_mode = states('input_select.vacuum_mop_mode') %}\n{% set mop_route = states('input_select.vacuum_mop_route')
-        %}\n{% if mop_mode == 'Off' %}\n  Vac:{{ fan_mode }}\n{% elif fan_mode ==
-        'Off' %}\n  Mop:{{mop_mode}}/{{mop_route}}\n{% else %}\n  Vac:{{ fan_mode
+        %}\n{% if mop_mode == 'Off' %}\n  Vacuum: {{ fan_mode }}\n{% elif fan_mode
+        == 'Off' %}\n  Mop: {{mop_mode}}/{{mop_route}}\n{% else %}\n  Vac:{{ fan_mode
         }} & Mop:{{mop_mode}}\n{% endif %}\n"
     target:
       entity_id: input_text.last_cleaning_mode
@@ -1150,3 +1160,67 @@ robot_clean_stop_and_return:
       entity_id: vacuum.esmeralda
   mode: single
   icon: mdi:home-import-outline
+bedtime_lights_adjust_off:
+  alias: Bedtime - Lights adjust/off
+  sequence:
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.mood_lamp_living
+      - light.pendants_living
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - switch.lamp_mushroom_living
+      - switch.lamp_globe_living
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: '{{ states(''input_number.dimconstant_lowest'') }}'
+    target:
+      entity_id: input_number.apartment_dimmer
+  mode: single
+  icon: mdi:power-sleep
+adjust_datetime:
+  alias: Utility - Adjust datetime
+  mode: single
+  fields:
+    base_datetime:
+      name: Base datetime
+      selector:
+        datetime: {}
+      default: '2025-06-01 12:00:00'
+      description: A string datetime-value to base it off
+      required: true
+    delta_minutes:
+      name: Delta minutes
+      selector:
+        number:
+          min: -1440
+          max: 1440
+          step: 1
+      required: true
+      default: 0
+      description: Minutes to add/subtract
+    target_entity:
+      name: Target entity
+      selector:
+        entity:
+          domain: input_datetime
+      description: Entity to store the new datetime
+      required: true
+  sequence:
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: '{{ target_entity }}'
+    data:
+      datetime: '{% set base_ts = as_timestamp(as_datetime(base_datetime)) %} {% set
+        new_ts = base_ts + (delta_minutes * 60) %} {{ new_ts | timestamp_custom("%Y-%m-%d
+        %H:%M:%S") }}
+
+        '
+  icon: mdi:clock

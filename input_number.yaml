@@ -1,3 +1,6 @@
+# mode: box | slider
+# initial: null
+
 # "Constant" holding the away temperature for office
 temperature_away_office:
   name: "Heating - Office - Away temperature"
@@ -27,3 +30,72 @@ temperature_sleep_office:
   unit_of_measurement: "℃"
   mode: box
   step: 0.5
+
+# Holding the 4th highest max-hour energy record
+power_monthly_highest_max_hour_4:
+  name: Power - Monthly highest max-hour 4
+  icon: mdi:lightning-bolt
+  min: 0.0
+  max: 30.0
+  unit_of_measurement: "kWh"
+  step: 0.01
+  mode: box
+
+# Minutes of wakeup light
+# TODO: Remove input_number.wakeup_minutes_of_light from sensor/templates
+wakeup_light_start_advance:
+  name: Wakeup - Light start advance
+  icon: mdi:sun-angle
+  min: -30
+  max: -1
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Wakeup routine - audio start volume, at wakeup alarm
+wakeup_audio_start_volume:
+  name: Wakeup - Audio start volume
+  icon: mdi:volume-low
+  min: 0.08
+  max: 0.25
+  step: 0.01
+  mode: box
+
+# Wakeup routine - time before blinds go up, after wakeup alarm
+wakeup_blinds_open_delay:
+  name: Wakeup - Blinds open delay
+  icon: mdi:roller-shade
+  min: 0
+  max: 30
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Wakeup routine - time before audio amplifies, after wakeup alarm
+wakeup_audio_amp_delay:
+  name: Wakeup - Audio amplifies delay
+  icon: mdi:volume-medium
+  min: 1
+  max: 30
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Wakeup routine - time before audio amplifies, after wakeup alarm
+wakeup_audio_loud_delay:
+  name: Wakeup - Audio get loud delay
+  icon: mdi:volume-high
+  min: 15
+  max: 45
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Wakeup routine - Sonos alarm ID constant
+wakeup_sonos_alarm_id:
+  name: Wakeup - Sonos alarm ID
+  icon: mdi:speaker
+  min: 1
+  max: 10000
+  step: 1
+  mode: box

@@ -1,3 +1,5 @@
+# This script adjusts the time of a time-entity _in-place_ by the input minutes
+
 DAY_IN_SECONDS = 60 * 60 * 24
 
 # Get the input values from the data dictionary
