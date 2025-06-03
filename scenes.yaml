@@ -29,16 +29,37 @@
       supported_features: 32
       state: 'off'
     switch.lamp_mushroom_living:
+      linkquality: 236
+      power_on_behavior: previous
+      update:
+        installed_version: 536974883
+        latest_version: 587765297
+        state: available
+      update_available: true
+      device_class: switch
+      icon: mdi:lamp
       friendly_name: Lamp, mushroom
-      state: unavailable
+      state: 'off'
     light.mood_lamp_living:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
       min_mireds: 153
       max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
       supported_color_modes:
       - color_temp
       - xy
+      effect:
       color_mode:
       brightness:
       color_temp_kelvin:
@@ -46,14 +67,27 @@
       hs_color:
       rgb_color:
       xy_color:
-      mode: normal
-      dynamics: none
-      friendly_name: Mood ball
-      supported_features: 40
+      linkquality: 255
+      power_on_behavior:
+      update:
+        installed_version: -1
+        latest_version: -1
+        state:
+      update_available:
+      friendly_name: Lamp, mood
+      supported_features: 44
       state: 'off'
     switch.lamp_globe_living:
-      friendly_name: Lamp, globe
-      state: unavailable
+      linkquality: 200
+      power_on_behavior: previous
+      update:
+        installed_version: 536974883
+        latest_version: 587765297
+        state: available
+      update_available: true
+      icon: mdi:lamp
+      friendly_name: Lamp globe, living
+      state: 'off'
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1690996655003'
@@ -147,7 +181,7 @@
 - id: '1691001316665'
   name: Office - OFF
   entities:
-    light.pendants_office:
+    light.pendant_office:
       supported_color_modes:
       - brightness
       color_mode:

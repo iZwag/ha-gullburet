@@ -61,7 +61,7 @@
   - service: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_office', 'on') }}"
-      light_entity: light.pendants_office
+      light_entity: light.pendant_office
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Office pendants
   - service: script.masterdim_script
@@ -368,6 +368,10 @@
       - service: script.lights_tv_mood
   mode: queued
 
+# HANDLE FIBARO DIMMER DOUBLE-CLICK
+# - First, configure the relevant Dimmer Switch device to:
+#   - Parameter 23: Double Click Sets Brightness to 100% - disable
+#   - Parameter 28: Scene Activation Functionality - enable
 # To find the required event_data for the double-click triggers,
 # use HA Developer Tools to listen for Z-wave events with trigger:
 #  'zwave_js_value_notification'. Then physically double-click the target 
@@ -430,6 +434,15 @@
       value: 14
     id: living-track4-2x
     alias: Listen for Fibaro Dimmer living track4 2x
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 3
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: living-downlights-2x
+    alias: Listen for Fibaro Dimmer living downlights 2x
   condition: []
   action:
   - choose:
@@ -480,6 +493,13 @@
       - condition: trigger
         id:
         - living-track4-2x
+      sequence:
+      - service: script.all_lights_on
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - living-downlights-2x
       sequence:
       - service: input_boolean.turn_on
         target:
