@@ -52,6 +52,9 @@ cards:
           name: Jon's iPhone
         - entity: sensor.curtains_battery_living
           name: Gardinrobot, stue
+        - entity: sensor.left_blind_bedroom_battery
+          name: Venstre rullgardin, soverom
+    # CR2032 batteries
     - type: entities
       title: CR2032
       show_header_toggle: false
@@ -67,6 +70,9 @@ cards:
           name: Sensor, stue
         - entity: sensor.remote_battery_veranda
           name: Gardinknapper
+        - entity: sensor.left_blind_control_battery
+          name: Venstre rullgardin bryter
+    # CR2450 batteries
     - type: entities
       title: CR2450
       show_header_toggle: false
@@ -74,18 +80,21 @@ cards:
       entities:
         # Hue Dimmer Switches
         - entity: sensor.temperature_battery_guest
-          name: Sensor, guest room
+          name: Sensor, gjesterom
         - entity: sensor.temperature_battery_office
-          name: Sensor, office
+          name: Sensor, kontor
         - entity: sensor.alarm_remote_battery
           name: Vekkerklokke kontroll
         - entity: sensor.sheet_remote_battery
           name: Varmelaken kontroll
+    # AAA batteries
     - type: entities
       title: AAA
       show_header_toggle: false
       state_color: true
       entities:  
         - entity: sensor.motion_battery_storage
-          name: Sensor, storage
+          name: Sensor, bod
+        - entity: sensor.light_remote_office_battery
+          name: Lyskontroll, kontor
     
