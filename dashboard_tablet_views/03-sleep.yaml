@@ -45,7 +45,7 @@ cards:
           cards:
           # WAKE-UP TIME-PICKER
           - type: custom:state-switch
-            entity: sensor.wakeup_display_time
+            entity: input_select.wakeup_display_time
             default: 'weekday'
             states:
               weekday:
@@ -110,21 +110,39 @@ cards:
                 # Wake-up light start
                 - type: custom:button-card
                   template: sleep_schedule_line
-                  entity: sensor.wakeup_light_start_time
-                  name: Wake-up light
+                  entity: input_datetime.wakeup_light_start
+                  name: Wake-up light starts
                   icon: mdi:sun-angle
                 # Alarm time: Sound start
                 - type: custom:button-card
                   template: sleep_schedule_line
-                  entity: sensor.wakeup_next_alarm_time
-                  name: Wake-up audio
+                  entity: input_datetime.wakeup_alarm_time
+                  name: Sonos audio starts
                   icon: mdi:alarm-note
+                # Blinds open
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: input_datetime.wakeup_blinds_open
+                  name: Blinds open
+                  icon: mdi:roller-shade
                 # Alarm intensifies
                 - type: custom:button-card
                   template: sleep_schedule_line
-                  entity: input_datetime.wakeup_15min_after
-                  name: Blinds + audio intensifies
-                  icon: mdi:roller-shade
+                  entity: input_datetime.wakeup_audio_amp
+                  name: Audio amplifies
+                  icon: mdi:volume-medium
+                # Alarm gets loud
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: input_datetime.wakeup_audio_loud
+                  name: Audio gets loud
+                  icon: mdi:volume-high
+                # Routine ends
+                - type: custom:button-card
+                  template: sleep_schedule_line
+                  entity: input_datetime.wakeup_ends
+                  name: Curtains open, living room
+                  icon: mdi:curtains
           # BEDTIME SCHEDULE
           - type: custom:mod-card
             card_mod:
@@ -214,14 +232,19 @@ cards:
             #        data:
             #          command: down
             #          decrease: 00:10:00
+        
         # CONTROLS
         - type: horizontal-stack
           cards:
-            - type: custom:button-card
-              color_type: blank
-              styles:
-                card:
-                  - background: transparent
+            # WAKEUP CONTROLS
+            # SONOS START VOLUME
+            - type: custom:numberbox-card
+              border: false
+              entity: input_number.wakeup_audio_start_volume
+              unit: '%'
+              icon: false
+              name: Volume
+            # BEDTIME CONTROLS
             - type: custom:button-card
               icon: mdi:bed
               name: Bedtime

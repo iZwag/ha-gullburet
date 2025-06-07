@@ -74,6 +74,39 @@ cards:
       entities:
         - entity: input_select.climate_season_select
           name: Cold/warm season select
+    
+
+    # WAKEUP CONTROL INPUTS
+    # Title
+    - type: custom:mushroom-title-card
+      title: Oppvåknignsrutine variabler
+    - type: custom:numberbox-card
+      border: false
+      entity: input_number.wakeup_audio_start_volume
+      unit: '%'
+      icon: false
+      name: Startvolum
+    # BLINDS OPEN DELAY
+    - type: custom:numberbox-card
+      border: false
+      entity: input_number.wakeup_blinds_open_delay
+      unit: min
+      name: Persienner åpnes, forsinkelse
+      icon: false
+    # Audio amplifies delay
+    - type: custom:numberbox-card
+      border: false
+      entity: input_number.wakeup_audio_amp_delay
+      unit: min
+      name: Høyere volum, forsinkelse
+      icon: false
+    # AUDIO GETS LOUD DELAY
+    - type: custom:numberbox-card
+      border: false
+      entity: input_number.wakeup_audio_loud_delay
+      unit: min
+      name: Høyest volum, forsinkelse
+      icon: false
 
     # AUTO-DIM BRIGHTNESS LEVELS
     # Title
