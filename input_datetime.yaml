@@ -5,24 +5,6 @@ power_monthly_highest_max_hour_4:
   has_date: true
   has_time: true
 
-# TODO: Remove
-wakeup_15min_after:
-  name: Wakeup - 15min after
-  has_date: true
-  has_time: true
-
-# TODO: Remove
-wakeup_30min_after:
-  name: Wakeup - 30min after
-  has_date: true
-  has_time: true
-
-# TODO: Remove
-wakeup_60min_after:
-  name: Wakeup - 60min after
-  has_date: true
-  has_time: true
-
 # Bedtime routine - Trigger time weekdays
 bedtime_trigger_weekdays:
   name: Bedtime - Trigger time weekdays

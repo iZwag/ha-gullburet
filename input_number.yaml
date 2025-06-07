@@ -42,7 +42,6 @@ power_monthly_highest_max_hour_4:
   mode: box
 
 # Minutes of wakeup light
-# TODO: Remove input_number.wakeup_minutes_of_light from sensor/templates
 wakeup_light_start_advance:
   name: Wakeup - Light start advance
   icon: mdi:sun-angle

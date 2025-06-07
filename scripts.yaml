@@ -1224,3 +1224,34 @@ adjust_datetime:
 
         '
   icon: mdi:clock
+utility_set_alarm_time:
+  alias: Utility - Set alarm time
+  mode: queued
+  icon: mdi:alarm
+  fields:
+    time_input:
+      selector:
+        time: {}
+      name: Time input
+      description: The HH:MM:SS time input that the alarm should be set to. Results
+        in the next occurring time ahead within 24 hours.
+      default: '12:34:56'
+      required: true
+    alarm_entity:
+      selector:
+        datetime: {}
+      name: Alarm entity
+      description: The datetime entity to be set.
+      required: true
+  sequence:
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: '{{ alarm_entity }}'
+    data:
+      datetime: "{% set now = now() %} {% set parts = time_input.split(':') %} {%
+        set hour = parts[0] | int %} {% set minute = parts[1] | int %} {% set today_str
+        = now.strftime('%Y-%m-%d') %} {% set target_str = today_str ~ ' ' ~ '%02d:%02d:%02d'
+        | format(hour, minute, 0) %} {% set target_dt = as_local(as_datetime(target_str))
+        %} {% if target_dt > now %}\n  {{ target_dt.strftime('%Y-%m-%d %H:%M:%S')
+        }}\n{% else %}\n  {{ (target_dt + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+        }}\n{% endif %}\n"

@@ -655,56 +655,6 @@
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {{ ((estimate / limit) * 100 ) | round(2) }}
 
-# Sets the next alarm time, taking two helper-datetimes and the current weekday
-#  as inputs. Checks if today's alarm has passed or not and what day it is, to
-#  determine the next alarm time.
-- sensor:
-  - name: Wakeup - Next alarm time
-    unique_id: wakeup_next_alarm_time
-    icon: mdi:alarm
-    device_class: timestamp
-    state: >
-      {% set weekday_alarm = states('input_datetime.wakeup_alarm_weekdays') %}
-      {% set weekend_alarm = states('input_datetime.wakeup_alarm_weekends') %}
-      {# Set the correct alarm_time assuming it is today, adjust below #}
-      {% set alarm_time = weekday_alarm if now().weekday() < 5 else weekend_alarm %}
-      {% set alarm_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ alarm_time), '%Y-%m-%d %H:%M:%S')) %}
-      {# Checks if today's alarm time has passed or not #}
-      {% if now().timestamp() > alarm_dt %}
-        {# Check tomorrow day & select correct alarm #}
-        {% if 3 < now().weekday() < 6 %}
-          {% set alarm_time = weekend_alarm %}
-        {% else %}
-          {% set alarm_time = weekday_alarm %}
-        {% endif %}
-        {% set alarm_dt = as_timestamp(strptime( (now().strftime('%Y-%m-%d') ~ ' ' ~ alarm_time), '%Y-%m-%d %H:%M:%S')) + 86400 %}
-      {% endif %}
-      {{ alarm_dt | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
-    attributes:
-      time: >
-        {{ as_timestamp(states('sensor.wakeup_next_alarm_time')) | timestamp_custom('%H:%M:%S', true) }}
-    
-  # Calculates the wakeup-light start time
-  # Takes the sensor.next_alarm_time and a number-helper (minutes) as inputs
-  - name: Wakeup - Light start time
-    unique_id: wakeup_light_start_time
-    icon: mdi:sun-clock
-    device_class: timestamp
-    state: >
-      {% set adjustment = (states('input_number.wakeup_minutes_of_light') | int(default=10)) * 60 %}
-      {% set adjusted_time = as_timestamp(states('sensor.wakeup_next_alarm_time')) - adjustment %}
-      {{ adjusted_time | timestamp_custom('%Y-%m-%dT%H:%M:%S+00:00', false) }}
-    attributes:
-      time: >
-        {{ as_timestamp(states('sensor.wakeup_light_start_time')) | timestamp_custom('%H:%M:%S', true) }}
-      hour: >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_light_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%H', true)) | int(default=0) }}
-      minute:  >
-        {{ (as_timestamp(strptime(state_attr('sensor.wakeup_light_start_time', 'time'), '%H:%M:%S')) | timestamp_custom('%M', true)) | int(default=0) }}
-      second: 0
-      timestamp: >
-        {{ ((state_attr('sensor.wakeup_light_start_time', 'hour') | int(default=0)) * 3600) + ((state_attr('sensor.wakeup_light_start_time', 'minute') | int(default=0)) * 60) }}
-
   # Sets the next bedtime-time, taking two helper-datetimes and the current
   #  weekday as inputs. Checks if today's bedtime has passed or not and what
   #  day it is, to determine the next bedtime.
@@ -811,22 +761,6 @@
       {% elif current_day == 5 %}
         weekend
       {% elif current_day == 6 and current_hour < 4 %}
-        weekend
-      {% else %}
-        weekday
-      {% endif %}
-
-  - name: Wakeup - Display time
-    unique_id: wakeup_display_time
-    state: >
-      {% set current_time = now() %}
-      {% set current_day = current_time.weekday() %}
-      {% set current_hour = current_time.hour %}
-      {% if current_day == 4 and current_hour >= 20 %}
-        weekend
-      {% elif current_day == 5 %}
-        weekend
-      {% elif current_day == 6 and current_hour < 20 %}
         weekend
       {% else %}
         weekday

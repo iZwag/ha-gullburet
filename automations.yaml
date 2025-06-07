@@ -231,25 +231,28 @@
         domain: switch
   mode: single
 - id: '1713360573726'
-  alias: Wake-up alarm - Time triggered actions (old)
-  description: Handles all time-triggered actions associated with the wake-up alarm,
-    such as turning on the lights and audio media.
+  alias: Wakeup - Time triggered actions
+  description: Handles all time-triggered actions associated with the wakeup rotuine
+    (lights, audio, blinds etc.). Enable-toggle must be ON.
   trigger:
   - platform: time
-    at: sensor.wakeup_light_start_time
-    id: 10min-before
+    at: input_datetime.wakeup_light_start
+    id: light-start
   - platform: time
-    at: sensor.wakeup_next_alarm_time
+    at: input_datetime.wakeup_alarm_time
     id: alarm
   - platform: time
-    at: input_datetime.wakeup_15min_after
-    id: increase
+    at: input_datetime.wakeup_blinds_open
+    id: blinds-open
   - platform: time
-    at: input_datetime.wakeup_30min_after
-    id: 30min-after
+    at: input_datetime.wakeup_audio_amp
+    id: amplify-audio
   - platform: time
-    at: input_datetime.wakeup_60min_after
-    id: 60min-after
+    at: input_datetime.wakeup_audio_loud
+    id: audio-loud
+  - platform: time
+    at: input_datetime.wakeup_ends
+    id: routine-ends
   condition:
   - condition: state
     entity_id: input_boolean.wakeup_alarm_active
@@ -259,11 +262,11 @@
     - conditions:
       - condition: trigger
         id:
-        - 10min-before
+        - light-start
       sequence:
       - service: light.turn_on
         data:
-          brightness_pct: 25
+          brightness_pct: 40
           transition: 300
         target:
           entity_id: light.pendant_bedroom
@@ -272,48 +275,17 @@
         id:
         - alarm
       sequence:
-      - service: input_datetime.set_datetime
-        metadata: {}
+      - service: light.turn_on
         data:
-          datetime: '{{ (now() + timedelta(minutes=15)).strftime(''%Y-%m-%d %H:%M:%S'')
-            }}'
+          brightness_pct: 100
+          transition: 300
         target:
-          entity_id: input_datetime.wakeup_15min_after
-      - service: input_datetime.set_datetime
-        metadata: {}
-        data:
-          datetime: '{{ (now() + timedelta(minutes=30)).strftime(''%Y-%m-%d %H:%M:%S'')
-            }}'
-        target:
-          entity_id: input_datetime.wakeup_30min_after
-      - service: input_datetime.set_datetime
-        metadata: {}
-        data:
-          datetime: '{{ (now() + timedelta(minutes=60)).strftime(''%Y-%m-%d %H:%M:%S'')
-            }}'
-        target:
-          entity_id: input_datetime.wakeup_60min_after
+          entity_id: light.pendant_bedroom
     - conditions:
       - condition: trigger
         id:
-        - increase
+        - blinds-open
       sequence:
-      - service: script.masterdim_script
-        data:
-          manual_override: false
-          light_entity: light.pendant_bedroom
-          brightness: 60
-      - if:
-        - condition: state
-          entity_id: media_player.sonos_bedroom
-          state: playing
-        then:
-        - service: media_player.volume_set
-          target:
-            entity_id:
-            - media_player.sonos_bedroom
-          data:
-            volume_level: 0.16
       - service: cover.open_cover
         metadata: {}
         data: {}
@@ -322,78 +294,70 @@
     - conditions:
       - condition: trigger
         id:
-        - 30min-after
+        - amplify-audio
       sequence:
-      - service: script.masterdim_script
-        data:
-          manual_override: '{{ is_state(''input_boolean.wakeup_alarm_active'', ''on'')
-            }}'
-          light_entity: light.pendant_bedroom
-          brightness: 100
       - if:
         - condition: state
           entity_id: media_player.sonos_bedroom
           state: playing
         then:
         - service: media_player.volume_set
-          metadata: {}
+          target:
+            entity_id: media_player.sonos_bedroom
           data:
-            volume_level: 0.2
+            volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
+              | float(0.08)) + 0.05 }}'
+    - conditions:
+      - condition: trigger
+        id:
+        - audio-loud
+      sequence:
+      - if:
+        - condition: state
+          entity_id: media_player.sonos_bedroom
+          state: playing
+        then:
+        - service: media_player.volume_set
+          data:
+            volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
+              | float(0.08)) + 0.1 }}'
           target:
             entity_id: media_player.sonos_bedroom
     - conditions:
       - condition: trigger
         id:
-        - 60min-after
+        - routine-ends
       sequence:
       - service: cover.close_cover
         metadata: {}
         data: {}
         target:
           entity_id: cover.curtain_living
-  mode: single
-- id: '1713471081102'
-  alias: Wakeup - Update Sonos alarm when alarm settings change
-  description: Old
-  trigger:
-  - platform: state
-    entity_id:
-    - input_datetime.wakeup_alarm_weekdays
-    id: weekday-changes
-  - platform: state
-    entity_id:
-    - input_datetime.wakeup_alarm_weekends
-    id: weekend-changes
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - weekday-changes
-        - weekend-changes
-      sequence:
-      - if:
-        - condition: state
-          entity_id: input_boolean.wakeup_alarm_active
-          state: 'on'
-        then:
-        - delay:
-            hours: 0
-            minutes: 0
-            seconds: 2
-            milliseconds: 0
-        - service: sonos.update_alarm
-          data:
-            alarm_id: 72
-            enabled: true
-            time: '{{ state_attr(''sensor.wakeup_next_alarm_time'', ''time'') }}
-
-              '
-            volume: 0.11
-          target:
-            entity_id: media_player.sonos_bedroom
-  mode: single
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 4 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekend
+            target:
+              entity_id: input_select.wakeup_display_time
+          alias: Test if its friday
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 6 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekday
+            target:
+              entity_id: input_select.wakeup_display_time
+          alias: Test if its sunday
+  mode: queued
+  max: 10
 - id: '1713970599927'
   alias: Bedroom - Handle remote presses for light/alarm
   description: ''
@@ -1741,6 +1705,21 @@
     from: 'on'
     to: 'off'
     id: alarm-disabled
+  - platform: time
+    at: '20:00:00'
+    id: display-check
+  - platform: state
+    entity_id:
+    - input_select.wakeup_display_time
+    to: weekend
+    from: weekday
+    id: to-weekend
+  - platform: state
+    entity_id:
+    - input_select.wakeup_display_time
+    id: to-weekday
+    from: weekend
+    to: weekday
   condition: []
   action:
   - choose:
@@ -1836,6 +1815,80 @@
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
         target:
           entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm-weekdays
+        - to-weekday
+      sequence:
+      - service: script.utility_set_alarm_time
+        data:
+          time_input: '{{ states(''input_datetime.wakeup_alarm_weekdays'') }}'
+          alarm_entity: input_datetime.wakeup_alarm_time
+      - service: sonos.update_alarm
+        data:
+          alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
+          volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+            }}'
+          time: '{% set alarm = states(''input_datetime.wakeup_alarm_weekdays'') %}
+            {% set time = alarm.split('':'') %} {% set hour = time[0] | int %} {%
+            set minute = time[1] | int %} {{ ''%02d:%02d'' | format(hour, minute)
+            }}
+
+            '
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm-weekends
+        - to-weekend
+      sequence:
+      - service: script.utility_set_alarm_time
+        data:
+          time_input: '{{ states(''input_datetime.wakeup_alarm_weekends'') }}'
+          alarm_entity: input_datetime.wakeup_alarm_time
+      - service: sonos.update_alarm
+        data:
+          alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
+          volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+            }}'
+          time: '{% set alarm = states(''input_datetime.wakeup_alarm_weekends'') %}
+            {% set time = alarm.split('':'') %} {% set hour = time[0] | int %} {%
+            set minute = time[1] | int %} {{ ''%02d:%02d'' | format(hour, minute)
+            }}
+
+            '
+        target:
+          entity_id: media_player.sonos_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - display-check
+      sequence:
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 4 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekend
+            target:
+              entity_id: input_select.wakeup_display_time
+          alias: Test if its friday
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 6 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekday
+            target:
+              entity_id: input_select.wakeup_display_time
+          alias: Test if its sunday
   mode: queued
   max: 10
 - id: '1748890659372'
@@ -1884,3 +1937,54 @@
       delta_minutes: 60
       target_entity: input_datetime.wakeup_ends
   mode: restart
+- id: '1749107493109'
+  alias: Office - Light remote presses
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.light_remote_office_action
+    to: arrow_left_click
+    id: left
+  - platform: state
+    entity_id:
+    - sensor.light_remote_office_action
+    to: arrow_right_click
+    id: right
+  - platform: state
+    entity_id:
+    - sensor.light_remote_office_action
+    id: up
+    to: 'on'
+  - platform: state
+    entity_id:
+    - sensor.light_remote_office_action
+    to: 'off'
+    id: down
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - up
+      sequence:
+      - service: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: 10
+        target:
+          entity_id: light.pendants_office
+    - conditions:
+      - condition: trigger
+        id:
+        - down
+      sequence:
+      - service: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: -8
+        target:
+          entity_id: light.pendants_office
+  mode: queued
+  max: 10
