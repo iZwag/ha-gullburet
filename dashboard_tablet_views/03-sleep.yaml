@@ -25,7 +25,7 @@ cards:
       # Add 5% padding on both sides of the main content
       style: |
         ha-card {
-          padding: 12px 5vw;
+          padding: 3vw 4vw 0px;
         }
     card:
       type: vertical-stack
@@ -39,7 +39,6 @@ cards:
           # BEDTIME TITLE
           - type: picture
             image: /local/ui/bedtime-vibe.png
-          
         # TIMER-PICKERS
         - type: horizontal-stack
           cards:
@@ -57,6 +56,10 @@ cards:
                   enableIconColor: "#ff9800"
                   enableOnIcon: 'mdi:alarm-check' 
                   enableOffIcon: 'mdi:alarm-off'
+                custom_fields:
+                  date:
+                    card:
+                      entity: input_datetime.wakeup_alarm_time
               weekend:
                 type: custom:button-card
                 template: time_picker_card
@@ -66,9 +69,13 @@ cards:
                   enableIconColor: "#ff9800"
                   enableOnIcon: 'mdi:alarm-check' 
                   enableOffIcon: 'mdi:alarm-off'
+                custom_fields:
+                  date:
+                    card:
+                      entity: input_datetime.wakeup_alarm_time
           # BEDTIME TIME-TRIGGER
           - type: custom:state-switch
-            entity: sensor.bedtime_display_time
+            entity: input_select.bedtime_display_time
             default: 'weekday'
             states:
               weekday:
@@ -80,6 +87,24 @@ cards:
                   enableIconColor: "#1ac8ed"
                   enableOnIcon: 'mdi:bed-clock' 
                   enableOffIcon: 'mdi:bed-empty'
+                custom_fields:
+                  aux:
+                    card:
+                      type: custom:button-card
+                      template: icon_chip_large
+                      entity: input_boolean.bedtime_heating_sheet_enable
+                      variables:
+                        iconColor: "#FF6F00"
+                        onIcon: "mdi:heating-coil"
+                        offIcon: "mdi:heating-coil"
+                  date:
+                    card:
+                      entity: input_datetime.bedtime_trigger_time
+                styles:
+                  custom_fields:
+                    aux:
+                      - display: flex
+                      - justify-content: center
               weekend:
                 type: custom:button-card
                 template: time_picker_card
@@ -88,174 +113,232 @@ cards:
                   enableEntity: "input_boolean.bedtime_trigger_active"
                   enableIconColor: "#1ac8ed"
                   enableOnIcon: 'mdi:bed-clock' 
-                  enableOffIcon: 'mdi:bed-empty'
-          
+                  enableOffIcon: 'mdi:bed-empty'    
+                custom_fields:
+                  aux:
+                    card:
+                      type: custom:button-card
+                      template: icon_chip_large
+                      entity: input_boolean.bedtime_heating_sheet_enable
+                      variables:
+                        iconColor: "#FF6F00"
+                        onIcon: "mdi:heating-coil"
+                        offIcon: "mdi:heating-coil"
+                  date:
+                    card:
+                      entity: input_datetime.bedtime_trigger_time
+                styles:
+                  custom_fields:
+                    aux:
+                      - display: flex
+                      - justify-content: center
         # SCHEDULES
         - type: horizontal-stack
           cards:
           # WAKE-UP SCHEDULE
-          - type: custom:mod-card
-            card_mod:
-              style: |
-                ha-card {
-                  background: var(--ha-card-background);
-                }
-            card:
-              type: custom:layout-card
-              layout_type: vertical
-              layout:
-                margin: 0px
-                padding: var(--ha-card-padding) 0px
-              cards:
-                # Wake-up light start
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_light_start
-                  name: Wake-up light starts
-                  icon: mdi:sun-angle
-                # Alarm time: Sound start
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_alarm_time
-                  name: Sonos audio starts
-                  icon: mdi:alarm-note
-                # Blinds open
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_blinds_open
-                  name: Blinds open
-                  icon: mdi:roller-shade
-                # Alarm intensifies
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_audio_amp
-                  name: Audio amplifies
-                  icon: mdi:volume-medium
-                # Alarm gets loud
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_audio_loud
-                  name: Audio gets loud
-                  icon: mdi:volume-high
-                # Routine ends
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: input_datetime.wakeup_ends
-                  name: Curtains open, living room
-                  icon: mdi:curtains
-          # BEDTIME SCHEDULE
-          - type: custom:mod-card
-            card_mod:
-              style: |
-                ha-card {
-                  background: var(--ha-card-background);
-                }
-            card:
-              type: custom:layout-card
-              layout_type: vertical
-              layout:
-                margin: 0px
-                padding: var(--ha-card-padding) 0px
-              cards:
-                # 1. Heated sheet start
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: sensor.bedtime_heated_sheet_start_time
-                  name: Heated sheet preheating
-                  icon: mdi:heating-coil
-                # 2. Curtains close
-                # 3. Bedtime target
-                - type: custom:button-card
-                  template: sleep_schedule_line
-                  entity: sensor.bedtime_next_trigger_time
-                  name: Bedtime goal
-                  icon: mdi:bed
-                # 4. Bedtime light reminder
-                #- type: custom:button-card
-                #  template: sleep_schedule_line
-                #  entity: input_datetime.bedtime_trigger_weekends
-                #  name: Blinds + audio intensifies
-                #  icon: mdi:roller-shade
-         
-            # HEATED SHEET CONTROL
-            #- type: custom:stack-in-card
-            #  mode: vertical
-            #  cards:
-            #  - type: custom:timer-bar-card
-            #    entity: timer.heated_sheet_timer
-            #    name: "Heated sheet timer"
-            #    invert: true
-            #    bar_direction: rtl
-            #    mushroom:
-            #      layout: horizontal
-            #      color: deep-orange
-            #    card_mod:
-            #      style: |
-            #        ha-card {
-            #          background-color: var(--nested-card-background);
-            #        }
-            #  - type: horizontal-stack
-            #    cards:
-            #    - type: tile
-            #      entity: script.bedroom_heated_sheet_control
-            #      color: white
-            #      icon: mdi:chevron-up
-            #      hide_state: true
-            #      name: Timer +30 min
-            #      tap_action:
-            #        action: call-service
-            #        service: script.bedroom_heated_sheet_control
-            #        data:
-            #          command: up
-            #          increase: 00:30:00
-            #      icon_tap_action:
-            #        action: call-service
-            #        service: script.bedroom_heated_sheet_control
-            #        data:
-            #          command: up
-            #          increase: 00:30:00
-            #    - type: tile
-            #      entity: script.bedroom_heated_sheet_control
-            #      color: white
-            #      icon: mdi:chevron-down
-            #      hide_state: true
-            #      name: Timer -10 min
-            #      tap_action:
-            #        action: call-service
-            #        service: script.bedroom_heated_sheet_control
-            #        data:
-            #          command: down
-            #          decrease: 00:10:00
-            #      icon_tap_action:
-            #        action: call-service
-            #        service: script.bedroom_heated_sheet_control
-            #        data:
-            #          command: down
-            #          decrease: 00:10:00
-        
-        # CONTROLS
-        - type: horizontal-stack
-          cards:
-            # WAKEUP CONTROLS
-            # SONOS START VOLUME
-            - type: custom:numberbox-card
-              border: false
-              entity: input_number.wakeup_audio_start_volume
-              unit: '%'
-              icon: false
-              name: Volume
+          - type: custom:state-switch
+            entity: input_boolean.wakeup_alarm_active
+            default: "on"
+            states:
+              "on":
+                type: custom:mod-card
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: var(--ha-card-background);
+                    }
+                card:
+                  type: custom:layout-card
+                  layout_type: vertical
+                  layout:
+                    margin: 0px
+                    padding: var(--ha-card-padding) 0px
+                  cards:
+                    # Wake-up light start
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_light_start
+                      name: Wake-up light starts
+                      icon: mdi:sun-angle
+                    # Alarm time: Sound start
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_alarm_time
+                      name: Sonos audio starts
+                      icon: mdi:alarm-note
+                    # Blinds open
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_blinds_open
+                      name: Blinds open
+                      icon: mdi:roller-shade
+                    # Alarm intensifies
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_audio_amp
+                      name: Audio amplifies
+                      icon: mdi:volume-medium
+                    # Alarm gets loud
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_audio_loud
+                      name: Audio gets loud
+                      icon: mdi:volume-high
+                    # Routine ends
+                    - type: custom:button-card
+                      template: sleep_schedule_line
+                      entity: input_datetime.wakeup_ends
+                      name: Curtains open, living room
+                      icon: mdi:curtains
+              "off":
+                type: custom:button-card
+                template: time_subtitle
+                name: Wake-up routine disabled  
+          # BEDTIME SCHEDULE & CONTROLS
+          - type: vertical-stack
+            cards:
+            # BEDTIME SCHEDULE
+            - type: custom:state-switch
+              entity: input_boolean.bedtime_trigger_active
+              default: 'on'
+              states:
+                "on":
+                  type: custom:mod-card
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background: var(--ha-card-background);
+                      }
+                  card:
+                    type: custom:layout-card
+                    layout_type: vertical
+                    layout:
+                      margin: 0px
+                      padding: var(--ha-card-padding) 0px
+                    cards:
+                      # Heated sheet preheat start
+                      - type: custom:state-switch
+                        entity: input_boolean.bedtime_heating_sheet_enable
+                        default: "on"
+                        states:
+                          "on":
+                            type: custom:button-card
+                            template: sleep_schedule_line
+                            entity: input_datetime.bedtime_sheet_preheating
+                            name: Sheet preheating starts
+                            icon: mdi:heating-coil
+                          "off":
+                            type: custom:button-card
+                            template: sleep_schedule_line
+                            entity: input_datetime.bedtime_sheet_preheating
+                            name: Sheet preheating
+                            icon: mdi:heating-coil
+                            state_display: "Disabled"
+                      # Curtains close
+                      - type: custom:button-card
+                        template: sleep_schedule_line
+                        entity: input_datetime.bedtime_sheet_preheating
+                        name: Curtains close
+                        icon: mdi:curtains
+                      # Reminder before
+                      - type: custom:button-card
+                        template: sleep_schedule_line
+                        entity: input_datetime.bedtime_reminder_before
+                        name: Reminder before
+                        icon: mdi:bed-empty
+                      # Main trigger time
+                      - type: custom:button-card
+                        template: sleep_schedule_line
+                        entity: input_datetime.bedtime_trigger_time
+                        name: Bedtime goal
+                        icon: mdi:bed-clock
+                      # Reminder after
+                      - type: custom:button-card
+                        template: sleep_schedule_line
+                        entity: input_datetime.bedtime_reminder_after
+                        name: Reminder after
+                        icon: mdi:bed     
+                "off":
+                  type: custom:button-card
+                  template: time_subtitle
+                  name: Bedtime routine disabled  
             # BEDTIME CONTROLS
             - type: custom:button-card
               icon: mdi:bed
               name: Bedtime
               template: light_mode
               entity: script.bedtime_lights
+              styles:
+                card:
+                  - background: var(--ha-card-background)
               tap_action:
                 action: call-service
                 service: script.turn_on
                 data:
                   entity_id: script.bedtime_lights
-
+# 4. Bedtime light reminder
+#- type: custom:button-card
+#  template: sleep_schedule_line
+#  entity: input_datetime.bedtime_trigger_weekends
+#  name: Blinds + audio intensifies
+#  icon: mdi:roller-shade
+  
+# HEATED SHEET CONTROL
+#- type: custom:stack-in-card
+#  mode: vertical
+#  cards:
+#  - type: custom:timer-bar-card
+#    entity: timer.heated_sheet_timer
+#    name: "Heated sheet timer"
+#    invert: true
+#    bar_direction: rtl
+#    mushroom:
+#      layout: horizontal
+#      color: deep-orange
+#    card_mod:
+#      style: |
+#        ha-card {
+#          background-color: var(--nested-card-background);
+#        }
+#  - type: horizontal-stack
+#    cards:
+#    - type: tile
+#      entity: script.bedroom_heated_sheet_control
+#      color: white
+#      icon: mdi:chevron-up
+#      hide_state: true
+#      name: Timer +30 min
+#      tap_action:
+#        action: call-service
+#        service: script.bedroom_heated_sheet_control
+#        data:
+#          command: up
+#          increase: 00:30:00
+#      icon_tap_action:
+#        action: call-service
+#        service: script.bedroom_heated_sheet_control
+#        data:
+#          command: up
+#          increase: 00:30:00
+#    - type: tile
+#      entity: script.bedroom_heated_sheet_control
+#      color: white
+#      icon: mdi:chevron-down
+#      hide_state: true
+#      name: Timer -10 min
+#      tap_action:
+#        action: call-service
+#        service: script.bedroom_heated_sheet_control
+#        data:
+#          command: down
+#          decrease: 00:10:00
+#      icon_tap_action:
+#        action: call-service
+#        service: script.bedroom_heated_sheet_control
+#        data:
+#          command: down
+#          decrease: 00:10:00   
+          
 #- type: custom:mushroom-template-card
 #  entity: input_boolean.wakeup_alarm_active
 #  icon: mdi:alarm-note

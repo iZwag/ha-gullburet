@@ -50,3 +50,13 @@ show_vacuum_map:
 wakeup_alarm_active:
   name: "Wakeup - Alarm enabled"
   icon: mdi:alarm-check
+
+# Bedtime routine - Trigger enabled/disabled
+bedtime_trigger_active:
+  name: "Bedtime - Enable trigger"
+  icon: mdi:bed
+
+# Bedtime routine - Heated sheet enable/disable
+bedtime_heating_sheet_enable:
+  name: "Bedtime - Heating sheet enable"
+  icon: mdi:heating-coil

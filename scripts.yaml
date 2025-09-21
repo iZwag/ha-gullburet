@@ -167,11 +167,6 @@ bedtime_lights:
     target:
       entity_id: scene.kitchen_lights_off
     data: {}
-  - service: cover.close_cover
-    metadata: {}
-    data: {}
-    target:
-      entity_id: cover.left_blind_bedroom
   mode: single
   icon: mdi:bed
 select_floorplan_room:
@@ -1255,3 +1250,34 @@ utility_set_alarm_time:
         %} {% if target_dt > now %}\n  {{ target_dt.strftime('%Y-%m-%d %H:%M:%S')
         }}\n{% else %}\n  {{ (target_dt + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
         }}\n{% endif %}\n"
+lights_blink_lights_common_room:
+  alias: Lights - Blink lights common room
+  sequence:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      flash: long
+      brightness_pct: 100
+    target:
+      entity_id:
+      - light.pendants_office
+      - light.mood_lamp_living
+  mode: queued
+  icon: mdi:alarm-light
+bedtime_blink_lights:
+  alias: Bedtime - Blink lights
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/Pendant_office_right/set
+      payload: '{"effect":"okay"}'
+      qos: 0
+      retain: false
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/Lamp_mood/set
+      payload: '{"effect":"okay"}'
+      qos: 0
+      retain: false
+  mode: single
+  icon: mdi:alarm-light

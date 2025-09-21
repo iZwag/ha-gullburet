@@ -5,20 +5,7 @@ power_monthly_highest_max_hour_4:
   has_date: true
   has_time: true
 
-# Bedtime routine - Trigger time weekdays
-bedtime_trigger_weekdays:
-  name: Bedtime - Trigger time weekdays
-  icon: mdi:bed-clock
-  has_date: false
-  has_time: true
-
-# Bedtime routine - Trigger time weekends
-bedtime_trigger_weekends:
-  name: Bedtime - Trigger time weekends
-  icon: mdi:bed-clock
-  has_date: false
-  has_time: true
-
+# WAKEUP ROUTINE ==============================================================
 # Wakeup routine - Alarm time weekdays
 wakeup_alarm_weekdays:
   name: Wakeup - Alarm time weekdays
@@ -72,5 +59,55 @@ wakeup_audio_loud:
 wakeup_ends:
   name: Wakeup - Routine ends
   icon: mdi:alarm-off
+  has_date: true
+  has_time: true
+
+# BEDTIME ROUTINE =============================================================
+# Bedtime routine - Trigger time weekdays
+bedtime_trigger_weekdays:
+  name: Bedtime - Trigger time weekdays
+  icon: mdi:bed-clock
+  has_date: false
+  has_time: true
+
+# Bedtime routine - Trigger time weekends
+bedtime_trigger_weekends:
+  name: Bedtime - Trigger time weekends
+  icon: mdi:bed-clock
+  has_date: false
+  has_time: true
+
+# Bedtime routine - Main trigger
+bedtime_trigger_time:
+  name: Bedtime - Main trigger
+  icon: mdi:bed-clock
+  has_date: true
+  has_time: true
+
+# Bedtime routine - Heated sheet preheating
+bedtime_sheet_preheating:
+  name: Bedtime - Heated sheet preheating
+  icon: mdi:heating-coil
+  has_date: true
+  has_time: true
+
+# Bedtime routine - Curtains close
+bedtime_curtains_close:
+  name: Bedtime - Curtains close
+  icon: mdi:curtains
+  has_date: true
+  has_time: true
+
+# Bedtime routine - Reminder before
+bedtime_reminder_before:
+  name: Bedtime - Reminder before
+  icon: mdi:bed-empty
+  has_date: true
+  has_time: true
+
+# Bedtime routine - Reminder after
+bedtime_reminder_after:
+  name: Bedtime - Reminder after
+  icon: mdi:bed
   has_date: true
   has_time: true

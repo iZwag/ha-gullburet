@@ -41,6 +41,7 @@ power_monthly_highest_max_hour_4:
   step: 0.01
   mode: box
 
+# WAKE-UP ROUTINE =============================================================
 # Minutes of wakeup light
 wakeup_light_start_advance:
   name: Wakeup - Light start advance
@@ -98,3 +99,44 @@ wakeup_sonos_alarm_id:
   max: 10000
   step: 1
   mode: box
+
+# BEDTIME ROUTINE =============================================================
+# Bedtime routine - Heated sheet start preheating minutees of advance
+bedtime_sheet_preheat_advance:
+  name: Bedtime - Heated sheet preheat advance
+  icon: mdi:heating-coil
+  min: -45
+  max: -1
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Bedtime routine - Curtains close, minutees of advance
+bedtime_curtains_close_advance:
+  name: Bedtime - Curtains close advance
+  icon: mdi:curtains
+  min: -45
+  max: -1
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Bedtime routine - Reminder before trigger, minutes of advance
+bedtime_reminder_before_advance:
+  name: Bedtime - Reminder before advance
+  icon: mdi:bed-empty
+  min: -30
+  max: -1
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# Bedtime routine - Reminder after trigger, minutes of delay
+bedtime_reminder_after_delay:
+  name: Bedtime - Reminder after delay
+  icon: mdi:bed
+  min: 1
+  max: 45
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"

@@ -290,7 +290,9 @@
         metadata: {}
         data: {}
         target:
-          entity_id: cover.left_blind_bedroom
+          entity_id:
+          - cover.left_blind_bedroom
+          - cover.right_blind_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -356,6 +358,18 @@
             target:
               entity_id: input_select.wakeup_display_time
           alias: Test if its sunday
+      - if:
+        - condition: state
+          entity_id: input_select.climate_season_select
+          state: Warm
+        then:
+        - service: cover.close_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id:
+            - cover.left_blind_bedroom
+            - cover.right_blind_bedroom
   mode: queued
   max: 10
 - id: '1713970599927'
@@ -461,48 +475,85 @@
   description: If automatic bedtime is toggled ON, then certain actions are automatically
     started. For winter, heated sheet is turned on 30 min ahead. Lights are automatically
     turned off.
-  trigger:
-  - platform: time
-    at: sensor.bedtime_next_trigger_time
-    id: alarm
-  - platform: time
-    at: sensor.bedtime_heated_sheet_start_time
-    id: 30min-before
-  condition:
+  triggers:
+  - id: sheet-preheating
+    at: input_datetime.bedtime_sheet_preheating
+    trigger: time
+  - at: input_datetime.bedtime_curtains_close
+    id: curtains-close
+    trigger: time
+  - at: input_datetime.bedtime_trigger_time
+    id: main-trigger
+    trigger: time
+  - at: input_datetime.bedtime_reminder_before
+    id: reminder-before
+    trigger: time
+  - at: input_datetime.bedtime_reminder_after
+    id: reminder-after
+    trigger: time
+  conditions:
   - condition: state
     entity_id: input_boolean.bedtime_trigger_active
     state: 'on'
-  action:
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
-        - 30min-before
+        - sheet-preheating
       sequence:
-      - service: cover.open_cover
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.curtain_living
       - if:
         - condition: state
           entity_id: input_boolean.bedtime_heating_sheet_enable
           state: 'on'
         then:
-        - service: script.bedroom_heated_sheet_control
-          metadata: {}
+        - metadata: {}
           data:
             increase: 00:50:00
             command: 'on'
             decrease: 00:10:00
+          action: script.bedroom_heated_sheet_control
     - conditions:
       - condition: trigger
         id:
-        - alarm
+        - curtains-close
       sequence:
-      - service: script.bedtime_lights_adjust_off
-        metadata: {}
+      - metadata: {}
         data: {}
+        target:
+          entity_id: cover.curtain_living
+        action: cover.open_cover
+    - conditions:
+      - condition: trigger
+        id:
+        - main-trigger
+      sequence:
+      - metadata: {}
+        data: {}
+        target:
+          entity_id: switch.string_lights_veranda
+        action: switch.turn_off
+      - metadata: {}
+        data: {}
+        target:
+          entity_id: light.wall_light_veranda
+        action: light.turn_off
+    - conditions:
+      - condition: trigger
+        id:
+        - reminder-before
+      sequence:
+      - metadata: {}
+        data: {}
+        action: script.bedtime_blink_lights
+    - conditions:
+      - condition: trigger
+        id:
+        - reminder-after
+      sequence:
+      - metadata: {}
+        data: {}
+        action: script.bedtime_lights_adjust_off
   mode: single
 - id: '1716287088981'
   alias: Veranda lights automatic ON/OFF
@@ -1608,31 +1659,46 @@
   mode: queued
   max: 10
 - id: '1746371725883'
-  alias: Bedroom - Handle LEFT blind
+  alias: Bedroom - Handle blinds control
   description: ''
   trigger:
   - platform: state
     entity_id:
     - sensor.left_blind_control_action
     to: open
-    id: open
+    id: left-open
   - platform: state
     entity_id:
     - sensor.left_blind_control_action
     to: close
-    id: close
+    id: left-close
   - platform: state
     entity_id:
     - sensor.left_blind_control_action
     to: hold
-    id: stop
+    id: left-stop
+  - platform: state
+    entity_id:
+    - sensor.right_blind_control_action
+    to: hold
+    id: right-stop
+  - platform: state
+    entity_id:
+    - sensor.right_blind_control_action
+    to: close
+    id: right-close
+  - platform: state
+    entity_id:
+    - sensor.right_blind_control_action
+    to: open
+    id: right-open
   condition: []
   action:
   - choose:
     - conditions:
       - condition: trigger
         id:
-        - open
+        - left-open
       sequence:
       - service: cover.open_cover
         metadata: {}
@@ -1642,7 +1708,7 @@
     - conditions:
       - condition: trigger
         id:
-        - close
+        - left-close
       sequence:
       - service: cover.close_cover
         metadata: {}
@@ -1652,13 +1718,43 @@
     - conditions:
       - condition: trigger
         id:
-        - stop
+        - left-stop
       sequence:
       - service: cover.stop_cover
         metadata: {}
         data: {}
         target:
           entity_id: cover.left_blind_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - right-open
+      sequence:
+      - service: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.right_blind_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - right-close
+      sequence:
+      - service: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.right_blind_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - right-stop
+      sequence:
+      - service: cover.stop_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.right_blind_bedroom
   mode: single
 - id: '1748878472149'
   alias: Wakeup - Handle input changes
@@ -1889,6 +1985,51 @@
             target:
               entity_id: input_select.wakeup_display_time
           alias: Test if its sunday
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
+      - if:
+        - condition: state
+          entity_id: input_select.wakeup_display_time
+          state: weekday
+        then:
+        - service: script.utility_set_alarm_time
+          data:
+            time_input: '{{ states(''input_datetime.wakeup_alarm_weekdays'') }}'
+            alarm_entity: input_datetime.wakeup_alarm_time
+        - service: sonos.update_alarm
+          data:
+            alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
+            volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+              }}'
+            time: '{% set alarm = states(''input_datetime.wakeup_alarm_weekdays'')
+              %} {% set time = alarm.split('':'') %} {% set hour = time[0] | int %}
+              {% set minute = time[1] | int %} {{ ''%02d:%02d'' | format(hour, minute)
+              }}
+
+              '
+          target:
+            entity_id: media_player.sonos_bedroom
+        else:
+        - service: script.utility_set_alarm_time
+          data:
+            time_input: '{{ states(''input_datetime.wakeup_alarm_weekends'') }}'
+            alarm_entity: input_datetime.wakeup_alarm_time
+        - service: sonos.update_alarm
+          data:
+            alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
+            volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
+              }}'
+            time: '{% set alarm = states(''input_datetime.wakeup_alarm_weekends'')
+              %} {% set time = alarm.split('':'') %} {% set hour = time[0] | int %}
+              {% set minute = time[1] | int %} {{ ''%02d:%02d'' | format(hour, minute)
+              }}
+
+              '
+          target:
+            entity_id: media_player.sonos_bedroom
   mode: queued
   max: 10
 - id: '1748890659372'
@@ -1988,3 +2129,225 @@
           entity_id: light.pendants_office
   mode: queued
   max: 10
+- id: '1749332974341'
+  alias: Bedtime - Handle input changes
+  description: Reacts to changes done to UI-inputs related to Bedtime. Must not validate
+    enable-toggle.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_number.bedtime_reminder_after_delay
+    id: reminder-delay
+  - platform: state
+    entity_id:
+    - input_number.bedtime_reminder_before_advance
+    id: reminder-advance
+  - platform: state
+    entity_id:
+    - input_number.bedtime_sheet_preheat_advance
+    id: preheat-advance
+  - platform: state
+    entity_id:
+    - input_boolean.bedtime_heating_sheet_enable
+    id: sheet-on
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id:
+    - input_boolean.bedtime_heating_sheet_enable
+    id: sheet-off
+    from: 'on'
+    to: 'off'
+  - platform: state
+    entity_id:
+    - input_datetime.bedtime_trigger_weekdays
+    id: trigger-weekdays
+  - platform: state
+    entity_id:
+    - input_datetime.bedtime_trigger_weekends
+    id: trigger-weekends
+  - platform: state
+    entity_id:
+    - input_boolean.bedtime_trigger_active
+    from: 'off'
+    to: 'on'
+    id: trigger-enabled
+  - platform: state
+    entity_id:
+    - input_boolean.bedtime_trigger_active
+    from: 'on'
+    to: 'off'
+    id: trigger-disabled
+  - platform: time
+    at: 08:00:00
+    id: display-check
+  - platform: state
+    entity_id:
+    - input_select.bedtime_display_time
+    to: weekend
+    from: weekday
+    id: to-weekend
+  - platform: state
+    entity_id:
+    - input_select.bedtime_display_time
+    id: to-weekday
+    from: weekend
+    to: weekday
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - preheat-advance
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+          delta_minutes: '{{ states(''input_number.bedtime_sheet_preheat_advance'')
+            | int }}'
+          target_entity: input_datetime.bedtime_sheet_preheating
+    - conditions:
+      - condition: trigger
+        id:
+        - reminder-advance
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+          delta_minutes: '{{ states(''input_number.bedtime_reminder_before_advance'')
+            | int }}'
+          target_entity: input_datetime.bedtime_reminder_before
+    - conditions:
+      - condition: trigger
+        id:
+        - reminder-delay
+      sequence:
+      - service: script.adjust_datetime
+        data:
+          base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+          delta_minutes: '{{ states(''input_number.bedtime_reminder_after_delay'')
+            | int }}'
+          target_entity: input_datetime.bedtime_reminder_after
+    - conditions:
+      - condition: trigger
+        id:
+        - trigger-enabled
+      sequence: []
+    - conditions:
+      - condition: trigger
+        id:
+        - trigger-disabled
+      sequence: []
+    - conditions:
+      - condition: trigger
+        id:
+        - to-weekday
+        - trigger-weekdays
+      sequence:
+      - service: script.utility_set_alarm_time
+        data:
+          time_input: '{{ states(''input_datetime.bedtime_trigger_weekdays'') }}'
+          alarm_entity: input_datetime.bedtime_trigger_time
+    - conditions:
+      - condition: trigger
+        id:
+        - alarm-weekends
+        - to-weekend
+      sequence:
+      - service: script.utility_set_alarm_time
+        data:
+          time_input: '{{ states(''input_datetime.bedtime_trigger_weekends'') }}'
+          alarm_entity: input_datetime.bedtime_trigger_time
+    - conditions:
+      - condition: trigger
+        id:
+        - display-check
+      sequence:
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 4 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekend
+            target:
+              entity_id:
+              - input_select.bedtime_display_time
+          alias: Test if its friday
+        - conditions:
+          - condition: template
+            value_template: '{{ now().weekday() == 6 }}'
+          sequence:
+          - service: input_select.select_option
+            metadata: {}
+            data:
+              option: weekday
+            target:
+              entity_id:
+              - input_select.bedtime_display_time
+          alias: Test if its sunday
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
+      - if:
+        - condition: state
+          entity_id: input_select.bedtime_display_time
+          state: weekday
+        then:
+        - service: script.utility_set_alarm_time
+          data:
+            time_input: '{{ states(''input_datetime.bedtime_trigger_weekdays'') }}'
+            alarm_entity: input_datetime.bedtime_trigger_time
+        else:
+        - service: script.utility_set_alarm_time
+          data:
+            time_input: '{{ states(''input_datetime.bedtime_trigger_weekends'') }}'
+            alarm_entity: input_datetime.bedtime_trigger_time
+  mode: queued
+  max: 10
+- id: '1749370122769'
+  alias: Bedtime - Handle main trigger time change
+  description: When the main bedtime trigger-time changes, it should set the other
+    trigger times as well. Must not validate enable-toggle.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_datetime.bedtime_trigger_time
+  condition: []
+  action:
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+      delta_minutes: '{{ states(''input_number.bedtime_sheet_preheat_advance'') |
+        int }}
+
+        '
+      target_entity: input_datetime.bedtime_sheet_preheating
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+      delta_minutes: '{{ states(''input_number.bedtime_curtains_close_advance'') |
+        int }}
+
+        '
+      target_entity: input_datetime.bedtime_curtains_close
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+      delta_minutes: '{{ states(''input_number.bedtime_reminder_before_advance'')
+        | int }}
+
+        '
+      target_entity: input_datetime.bedtime_reminder_before
+  - service: script.adjust_datetime
+    data:
+      base_datetime: '{{ states(''input_datetime.bedtime_trigger_time'') }}'
+      delta_minutes: '{{ states(''input_number.bedtime_reminder_after_delay'') | int
+        }}'
+      target_entity: input_datetime.bedtime_reminder_after
+  mode: restart
