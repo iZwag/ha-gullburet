@@ -315,6 +315,9 @@ tablet_sidebar:
       style: |
         ha-card {
           padding: 0px 12px;
+          background: var(--sidebar-background);
+          height: 100vh;
+          border-radius: 0px;
         }
     card:
       type: vertical-stack

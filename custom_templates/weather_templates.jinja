@@ -1,0 +1,105 @@
+{% macro translate_condition_no(state) %}
+{% set conditions = {
+    'clear': 'Klar himmel',
+    'clear-night': 'Klar himmel',
+    'cloudy': 'Overskyet',
+    'exceptional': 'Ekstremvær',
+    'fog': 'Tåke',
+    'hail': 'Hagl',
+    'lightning': 'Lyn & torden',
+    'lightning-rainy': 'Regn & torden',
+    'partlycloudy': 'Delvis overskyet',
+    'pouring': 'Pøsregn',
+    'rainy': 'Regn',
+    'snowy': 'Snø',
+    'snowy-rainy': 'Sludd',
+    'sunny': 'Sol',
+    'windy': 'Vind',
+    'windy-variant': 'Blåser'
+} %}
+{{ conditions[state] if state in conditions else 'Ukjent vær' }}
+{% endmacro %}
+
+{% macro translate_condition_en(state) %}
+{% set conditions = {
+    'clear': 'Clear skies',
+    'clear-night': 'Clear skies',
+    'cloudy': 'Cloudy',
+    'exceptional': 'Extreme weather',
+    'fog': 'Foggy',
+    'hail': 'Hail',
+    'lightning': 'Thunder & lightning',
+    'lightning-rainy': 'Rain & thunder',
+    'partlycloudy': 'Partly cloudy',
+    'pouring': 'Pouring rain',
+    'rainy': 'Rainy',
+    'snowy': 'Snow',
+    'snowy-rainy': 'Sleet',
+    'sunny': 'Sunny',
+    'windy': 'Windy',
+    'windy-variant': 'Cloudy & windy'
+} %}
+{{ conditions[state] if state in conditions else 'Unknown' }}
+{% endmacro %}
+
+{% macro get_wind_description(speed) %}
+{% set descriptions = [
+    (0, 1, 'Stille'),
+    (1, 7, 'Lett luft'),
+    (7, 12, 'Svak bris'),
+    (12, 20, 'Svak vind'),
+    (20, 30, 'Moderat bris'),
+    (30, 40, 'Frisk bris'),
+    (40, 51, 'Sterk bris'),
+    (51, 63, 'Nesten kuling'),
+    (63, 76, 'Kuling'),
+    (76, 88, 'Sterk kuling'),
+    (88, 103, 'Storm'),
+    (103, 118, 'Voldsom storm')
+] %}
+{% for low, high, desc in descriptions %}
+    {% if speed >= low and speed < high %}
+        {{ desc }}
+        {% break %}
+    {% endif %}
+{% endfor %}
+{% if speed >= 118 %}Orkan{% endif %}
+{% endmacro %}
+
+{% macro get_wind_direction(bearing) %}
+{% set directions = [
+    'N', 'NNØ', 'NØ', 'ØNØ',
+    'Ø', 'ØSØ', 'SØ', 'SSØ',
+    'S', 'SSV', 'SV', 'VSV',
+    'V', 'VNV', 'NV', 'VNV'
+] %}
+{% set index = ((bearing + 11.25) / 22.5) | int %}
+{{ directions[index % 16] }}
+{% endmacro %}
+
+
+{# Temp in [C], speed in [m/s] and humidity in [%] #}
+{% macro get_temp_feels_like(temp, speed, humidity) %}
+
+{% set T = temp | float(0) %}
+{% set K = speed | float(0) %}
+{% set V = K * 3.6 %}  {# wind in km/h #}
+{% set R = humidity | float(0) %}
+
+{% if T <= 10 and V >= 4.8 %}
+    {# Wind chill formula (Canada) #}
+    {% set feels = 13.12 + 0.6215*T - 11.37*(V**0.16) + 0.3965*T*(V**0.16) %}
+{% elif T >= 27 and R >= 40 %}
+    {# Heat index formula (NOAA, Celsius) #}
+    {% set feels = -8.784695 + 1.61139411*T + 2.33854900*R
+                    - 0.14611605*T*R - 0.012308094*(T**2)
+                    - 0.016424828*(R**2) + 0.002211732*(T**2)*R
+                    + 0.00072546*T*(R**2) - 0.000003582*(T**2)*(R**2) %}
+{% else %}
+    {# Otherwise, just use the actual temperature #}
+    {% set feels = T %}
+{% endif %}
+
+{{ feels }}
+
+{% endmacro %}

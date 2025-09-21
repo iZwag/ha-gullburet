@@ -1,98 +1,26 @@
 # CONSUMPTION VIEW
 title: Consumption
 path: consumption
-type: sidebar
+type: custom:grid-layout
 theme: ios-dark-mode
 background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+layout: 
+  grid-template-columns: 24% 1fr
+  grid-template-areas: '"sidebar main"'
+  grid-template-rows: min-content
+  padding: 0px
+  margin: 0px
 cards:
   # SIDEBAR CONTENTS
-  - type: vertical-stack
-    view_layout:
-      position: sidebar
-    cards:
-    # Display Clock
-    - type: custom:button-card
-      entity: sensor.time
-      template: navbar_clock
-    # Display Date string
-    - type: custom:button-card
-      entity: sensor.date_string
-      template: navbar_datestring
-    # NAVBUTTONS
-    # Dashboard
-    - type: custom:button-card
-      template: navbar_button
-      name: Dashboard
-      icon: mdi:home
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/dashboard
-    - type: custom:button-card
-      template: navbar_button
-      name: Floorplan control
-      icon: mdi:floor-plan      
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/floorplan
-    - type: custom:button-card
-      template: navbar_button
-      name: Bedtime & wake-up
-      icon: mdi:bed
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/sleep
-    - type: custom:button-card
-      icon: mdi:lightning-bolt
-      name: Energy
-      template: navbar_button
-      variables:
-        link_active: "true"
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/consumption
-    - type: custom:button-card
-      icon: mdi:information-slab-circle
-      name: Guest info
-      template: navbar_button
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/guests
-    - type: custom:button-card
-      icon: mdi:speaker
-      name: Listen
-      template: navbar_button
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/audio
-    # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
-    - type: custom:button-card
-      color_type: blank-card
-      styles:
-        card:
-          - height: 25vh
-    - type: custom:mushroom-chips-card
-      alignment: center
-      card_mod:
-        style: |
-          ha-card {
-            --chip-background: rgba(25, 25, 25, 0.2);
-            --primary-text-color: var(--secondary-text-color);
-          }
-      chips:
-      - type: action
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/0
-        icon: mdi:cog
-      - type: entity
-        entity: sensor.temperature_apartment_avg
-      - type: weather
-        entity: weather.yr_weather_home
-        show_temperature: true
-        show_conditions: false
+  - type: custom:decluttering-card
+    template: tablet_sidebar
+    variables:
+      - active_link: "energy"
 
   # MAIN VIEW CONTENT
   - type: custom:mod-card
+    view_layout:
+      grid-area: main
     card_mod:
       # Add padding on both sides of the main content
       style: |
@@ -202,7 +130,7 @@ cards:
                 dataLabels:
                   enabled: false 
                 chart:
-                  height: 300px
+                  height: 180px
               header:
                 show: false
                 title: Power distribution
@@ -357,7 +285,7 @@ cards:
               - type: custom:button-card
                 template: chart_legend_line
                 name: "Elvia"
-                entity: sensor.elvia_variable_kwh_pricing_current_hour
+                entity: sensor.elvia_variable_pricing_this_hour
                 variables:
                   dotColor: "var(--color-accent)"
                 state_display: |
@@ -440,7 +368,7 @@ cards:
                   min: ~0
               update_interval: 1h
               series:
-                - entity: sensor.elvia_variable_pricing
+                - entity: sensor.elvia_full_variable_pricing
                   name: Elvia
                   show:
                     in_header: false
@@ -458,10 +386,10 @@ cards:
                     const prices = entity.attributes.hours
                     const data = [];
                     for(let i = 0; i < prices.length; i++) {
-                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
+                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].priceTotal * 100])
                     }
                     return data;
-                - entity: sensor.elvia_variable_kwh_pricing_current_hour
+                - entity: sensor.elvia_variable_pricing_this_hour
                   name: Elvia
                   color: '#ff9800'
                   opacity: 0
@@ -563,7 +491,7 @@ cards:
                   min: 0
               update_interval: 1h
               series:
-                - entity: sensor.elvia_variable_pricing
+                - entity: sensor.elvia_full_variable_pricing
                   name: Elvia
                   color: '#ff9800'
                   show:
@@ -581,10 +509,10 @@ cards:
                     const prices = entity.attributes.hours
                     const data = [];
                     for(let i = 0; i < prices.length; i++) {
-                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
+                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].priceTotal * 100])
                     }
                     return data;
-                - entity: sensor.elvia_variable_kwh_pricing_current_hour
+                - entity: sensor.elvia_variable_pricing_this_hour
                   name: Elvia
                   color: '#ff9800'
                   opacity: 0

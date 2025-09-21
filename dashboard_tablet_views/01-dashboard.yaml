@@ -1,709 +1,594 @@
 # DASHBOARD/INFORMATION VIEW
 title: Dashboard
 path: dashboard
-type: sidebar
+type: custom:grid-layout
 theme: ios-dark-mode
 background: center / cover no-repeat url("/local/ui/bg-gradient3.png") fixed
+layout: 
+  grid-template-columns: 24% 76%
+  grid-template-areas: '"sidebar main"'
+  grid-template-rows: min-content
+  padding: 0px
+  margin: 0px
 cards:
   # SIDEBAR CONTENTS
-  - type: vertical-stack
-    view_layout:
-      position: sidebar
-    cards:
-    # Display Clock
-    - type: custom:button-card
-      entity: sensor.time
-      template: navbar_clock
-    # Display Date string
-    - type: custom:button-card
-      entity: sensor.date_string
-      template: navbar_datestring
-    # NAVBUTTONS
-    # Dashboard
-    - type: custom:button-card
-      template: navbar_button
-      name: Dashboard
-      icon: mdi:home
-      variables:
-        link_active: "true"
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/dashboard
-    - type: custom:button-card
-      template: navbar_button
-      name: Floorplan control
-      icon: mdi:floor-plan      
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/floorplan
-    - type: custom:button-card
-      template: navbar_button
-      name: Bedtime & wake-up
-      icon: mdi:bed
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/sleep
-    - type: custom:button-card
-      icon: mdi:lightning-bolt
-      name: Energy
-      template: navbar_button
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/consumption
-    - type: custom:button-card
-      icon: mdi:information-slab-circle
-      name: Guest info
-      template: navbar_button
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/guests
-    - type: custom:button-card
-      icon: mdi:speaker
-      name: Listen
-      template: navbar_button
-      tap_action:
-        action: navigate
-        navigation_path: /dashboard-tablet/audio
-    # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
-    - type: custom:button-card
-      color_type: blank-card
-      styles:
-        card:
-          - height: 25vh
-    - type: custom:mushroom-chips-card
-      alignment: center
-      card_mod:
-        style: |
-          ha-card {
-            --chip-background: rgba(25, 25, 25, 0.2);
-            --primary-text-color: var(--secondary-text-color);
-          }
-      chips:
-      - type: action
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/0
-        icon: mdi:cog
-      - type: entity
-        entity: sensor.temperature_apartment_avg
-      - type: weather
-        entity: weather.yr_weather_home
-        show_temperature: true
-        show_conditions: false
+  - type: custom:decluttering-card
+    template: tablet_sidebar
+    variables:
+      - active_link: "dashboard"
 
   # MAIN VIEW CONTENT
-  - type: horizontal-stack
-    cards:
-    # Left column
-    - type: vertical-stack
+  - type: custom:mod-card
+    view_layout:
+      grid-area: main
+    card_mod:
+      # Add padding on both sides of the main content
+      style: |
+        ha-card {
+          padding: var(--ha-card-padding) var(--ha-card-padding) 0px;
+        }
+    card:
+      type: horizontal-stack
+      view_layout:
+        grid-area: main
       cards:
-      # #####################################################################
-      # WEATHER FORECAST SECTION
-      - type: custom:stack-in-card
-        mode: vertical
-        #card_mod:
-        #  style: |
-        #    ha-card {
-        #      background-color: transparent !important;
-        #    }
-        cards: 
-        # Weather now and 5-day forecast with high & low temperatures
-        # and precipitation
-        # Note: The weather-card used here is no longer maintained by the 
-        # original author, so I have made edits myself.
-        # Newer forks of the card that is maintained can be found in HACS. 
-        - type: custom:weather-card
-          entity: sensor.combined_weather_info
-          name: Oslo
-          details: false
-          hide_precipitation: false
-          card_mod:
-            style: |
-              ha-card {
-                padding: var(--ha-card-padding) var(--ha-card-padding) 0 !important;
-                background-color: transparent !important;
-              }
-        # Next 24h temperature and precipitation forecast as graph
-        - type: custom:apexcharts-card
-          card_mod:
-            style: |
-              ha-card {
-                padding: 0 var(--ha-card-padding) !important;
-                background-color: transparent !important;
-              }
-          apex_config:
-            legend:
-              show: false
-            chart:
-              height: 160px
-            markers:
-              size: 3
-              strokeColors: '#000'
-              strokeOpacity: 0
-            grid:
-              show: false
-          graph_span: 23h
-          span:
-            start: hour
-          header:
-            show: false
-            title: 'Weather forecast next 24hours'
-            show_states: false
-          yaxis:
-          - id: temp
-            decimals: 1
-            apex_config:
-              tickAmount: 4
-            min: ~0
-          - id: precip
-            decimals: 1
-            opposite: true
-            show: false
-            min: 0
-            max: ~2
-            apex_config:
-              tickAmount: 4
-          update_interval: 1h
-          series:
-            - entity: sensor.yr_weather_forecast_hourly
-              name: Temperatur
-              yaxis_id: temp
-              unit: ' °C'
-              stroke_width: 3
-              float_precision: 1
-              data_generator: |
-                return entity.attributes.forecast.map((entry) => {
-                  return [new Date(entry.datetime).getTime(), entry.temperature];
-                });
-            - entity: sensor.yr_weather_forecast_hourly
-              name: Nedbør
-              yaxis_id: precip
-              type: column
-              unit: ' mm'
-              float_precision: 1
-              data_generator: |
-                return entity.attributes.forecast.map((entry) => {
-                  return [new Date(entry.datetime).getTime(), entry.precipitation];
-                });
-    
-      # #################################################################
-      # PUBLIC TRANSPORT SECTION
-      # Swipe-carousel. Shows nearby stops with totally custom card:
-      # ruter-stop-info. This uses info retrieved with the Entur-platform
-      # integration. Departure-info at stops are retrieved as entities and
-      # passed to the custom card. 
-      # Ruter is the public transport operator in Oslo. 
-      - type: custom:swipe-card
-        start_card: 1
-        reset_after: 600
+      # Left column
+      - type: vertical-stack
         cards:
-        # Sandaker Senter, trikk
-        - type: custom:ruter-stop-info
-          entities:
-            - sensor.ruter_sandaker_senter_platform_11752
-            - sensor.ruter_sandaker_senter_platform_11755
-          show_departures: 3
-          walking_distance: 4
-        # Torshov, buss
-        - type: "custom:ruter-stop-info"
-          entities:
-            - sensor.ruter_torshov_platform_11734
-            - sensor.ruter_torshov_platform_11733
-          show_departures: 3
-          walking_distance: 7
-        # Storo, t-bane
-        - type: custom:ruter-stop-info
-          entities:
-            - sensor.ruter_storo_platform_1
-            - sensor.ruter_storo_platform_2
-          show_departures: 3
-          walking_distance: 7
-        # Haarklous plass, buss
-        - type: "custom:ruter-stop-info"
-          entities:
-            - sensor.ruter_haarklous_plass_platform_11766
-            - sensor.ruter_haarklous_plass_platform_11768
-          show_departures: 3
-          walking_distance: 5          
-      
-    # Right column
-    - type: vertical-stack
-      cards:
-      # Energy prices (now) today & tomorrow
-      # Two different views are shown conditionally depending on time:
-      # - 24h-view before 13:00, tomorrow's prices are not ready
-      # - 48h-view after 13:00, when tomorrow's Tibber forecast arrives
-      - type: custom:stack-in-card
-        mode: vertical
-        cards:
-        - type: horizontal-stack
-          cards:
-          # Total price, this hour
+        # #####################################################################
+        # WEATHER FORECAST SECTION
+        - type: custom:stack-in-card
+          mode: vertical
+          cards: 
+          # WEATHER FORECAST NOW STATS
           - type: custom:button-card
-            template: big_sensor
-            name: Total price, this hour
-            icon: mdi:cash
-            entity: sensor.energy_price_hourly_total
-            state_display: |
-              [[[
-                return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
-              ]]]
-          # Custom legend for chart
+            entity: sensor.weather_now_extra
+            name: Oslo
+            show_icon: false
+            show_label: false
+            tap_action:
+              action: none
+            styles:
+              grid:
+                - grid-template-areas: |
+                    "icon n temp unit rain rain_unit"
+                    "icon desc fl_temp wind_desc wind_desc wind_desc"
+                - grid-template-columns: min-content 1fr min-content min-content 1fr min-content
+                - column-gap: 6px
+                - row-gap: 0px
+              card:
+                - padding: 0px 12px 12px
+                - margin: 0px
+              name:
+                - justify-self: start
+                - align-self: end
+                - font-size: 28px
+                - font-weight: 300
+                - font-family: var(--primary-font-family)
+              custom_fields:
+                temp:
+                  - justify-self: end
+                  - align-self: end
+                  - font-size: 28px
+                  - font-weight: 500
+                  - font-family: var(--primary-font-family)
+                unit:
+                  - justify-self: start
+                  - align-self: end
+                  - font-size: 20px
+                  - font-weight: 300
+                  - font-family: var(--primary-font-family)
+                desc:
+                  - justify-self: start
+                  - align-self: start
+                  - font-size: 14px
+                  - color: var(--secondary-text-color)
+                  - font-family: var(--primary-font-family)
+                fl_temp:
+                  - justify-self: end
+                  - align-self: start
+                  - font-size: 14px
+                  - color: var(--secondary-text-color)
+                  - font-family: var(--primary-font-family)
+                rain:
+                  - justify-self: end
+                  - align-self: end
+                  - font-size: 28px
+                  - font-weight: 500
+                  - font-family: Open Sans
+                rain_unit:
+                  - justify-self: start
+                  - align-self: end
+                  - font-size: 20px
+                  - font-weight: 300
+                  - font-family: Open Sans
+                wind_desc:
+                  - justify-self: end
+                  - align-self: start
+                  - font-size: 14px
+                  - color: var(--secondary-text-color)
+                  - font-family: var(--primary-font-family)
+            custom_fields:
+              desc: Nå
+              wind_desc: |
+                [[[
+                  var wind = entity.attributes.wind_desc;
+                  var rain = entity.attributes.this_hour_precipitation;;
+                  if (rain == 0) return wind + ", opphold";
+                  return wind;
+                ]]]
+              rain: |
+                [[[
+                  return entity.attributes.this_hour_precipitation
+                ]]]
+              rain_unit: mm
+              icon: |
+                [[[ 
+                  return '<img src="' + entity.attributes.icon + '" width="84" height="84">'
+                ]]]
+              temp: |
+                [[[ return entity.attributes.temperature ]]]
+              unit: "°C"
+              fl_temp: |
+                [[[ return "(" + entity.attributes.feels_like + ")" ]]]
+
+          # WEATHER FORECAST CHART
+          # Next 24h temperature and precipitation forecast as graph
+          - type: custom:apexcharts-card
+            card_mod:
+              style: |
+                ha-card {
+                  padding: 0 var(--ha-card-padding) !important;
+                  background-color: transparent !important;
+                }
+            apex_config:
+              legend:
+                show: false
+              chart:
+                height: 160px
+              markers:
+                size: 3
+                strokeColors: '#000'
+                strokeOpacity: 0
+              grid:
+                show: false
+            graph_span: 23h
+            span:
+              start: hour
+            header:
+              show: false
+              title: 'Weather forecast next 24hours'
+              show_states: false
+            yaxis:
+            - id: temp
+              decimals: 1
+              apex_config:
+                tickAmount: 4
+              min: ~0
+            - id: precip
+              decimals: 1
+              opposite: true
+              show: false
+              min: 0
+              max: ~2
+              apex_config:
+                tickAmount: 4
+            update_interval: 1h
+            series:
+              - entity: sensor.yr_weather_forecast_hourly
+                name: Temperatur
+                yaxis_id: temp
+                unit: ' °C'
+                stroke_width: 3
+                float_precision: 1
+                data_generator: |
+                  return entity.attributes.forecast.map((entry) => {
+                    return [new Date(entry.datetime).getTime(), entry.temperature];
+                  });
+              - entity: sensor.yr_weather_forecast_hourly
+                name: Nedbør
+                yaxis_id: precip
+                type: column
+                unit: ' mm'
+                float_precision: 1
+                data_generator: |
+                  return entity.attributes.forecast.map((entry) => {
+                    return [new Date(entry.datetime).getTime(), entry.precipitation];
+                  });
+      
+        # #################################################################
+        # PUBLIC TRANSPORT SECTION
+        # Swipe-carousel. Shows nearby stops with totally custom card:
+        # ruter-stop-info. This uses info retrieved with the Entur-platform
+        # integration. Departure-info at stops are retrieved as entities and
+        # passed to the custom card. 
+        # Ruter is the public transport operator in Oslo. 
+        - type: custom:simple-swipe-card
+          show_pagination: true
+          loop_mode: loopback
+          enable_auto_swipe: true
+          auto_swipe_interval: 8000
+          cards:
+          # Sandaker Senter, trikk
+          - type: custom:ruter-stop-info
+            entities:
+              - sensor.ruter_sandaker_senter_platform_11752
+              - sensor.ruter_sandaker_senter_platform_11755
+            show_departures: 3
+            walking_distance: 4
+          # Torshov, buss
+          - type: "custom:ruter-stop-info"
+            entities:
+              - sensor.ruter_torshov_platform_11734
+              - sensor.ruter_torshov_platform_11733
+            show_departures: 3
+            walking_distance: 7
+          # Haarklous plass, buss
+          - type: "custom:ruter-stop-info"
+            entities:
+              - sensor.ruter_haarklous_plass_platform_11766
+              - sensor.ruter_haarklous_plass_platform_11768
+            show_departures: 3
+            walking_distance: 5          
+        
+      # Right column
+      - type: vertical-stack
+        cards:
+        # Energy prices (now) today & tomorrow
+        # Two different views are shown conditionally depending on time:
+        # - 24h-view before 13:00, tomorrow's prices are not ready
+        # - 48h-view after 13:00, when tomorrow's Tibber forecast arrives
+        - type: custom:stack-in-card
+          mode: vertical
+          cards:
+          - type: horizontal-stack
+            cards:
+            # Total price, this hour
+            - type: custom:button-card
+              template: big_sensor
+              name: Total price, this hour
+              icon: mdi:cash
+              entity: sensor.energy_price_hourly_total
+              state_display: |
+                [[[
+                  return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+                ]]]
+            # Custom legend for chart
+            - type: vertical-stack
+              cards:
+              # Elvia price legend
+              - type: custom:button-card
+                template: chart_legend_line
+                name: "Elvia"
+                entity: sensor.elvia_variable_pricing_this_hour
+                variables:
+                  dotColor: "var(--color-accent)"
+                state_display: |
+                  [[[
+                    return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+                  ]]]
+                styles:
+                  card:
+                    - padding-top: 20px
+              # Tibber price legend
+              - type: custom:button-card
+                template: chart_legend_line
+                name: "Tibber"
+                entity: sensor.tibber_energy_price_hourly
+                variables:
+                  dotColor: "var(--color-primary)"
+                state_display: |
+                  [[[
+                    return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+                  ]]]
+                styles:
+                  card:
+                    - padding-bottom: var(--ha-card-padding)
+          - type: conditional
+            conditions:
+            - condition: "state"
+              entity: sensor.power_price_chart_state
+              state: 24h
+            card:
+              type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  ha-card {
+                    padding-top: 0px !important;
+                    background-color: transparent !important;
+                  }
+                  #header {
+                    padding: 0 16px !important;
+                  }
+                  #header__title {
+                    font-size: 1em !important;
+                    font-weight: regular !important;
+                    color: var(--primary-text-color) !important;
+                  }
+              apex_config:
+                legend:
+                  show: false
+                  fontSize: '14px'
+                  fontFamily: 'Open Sans'
+                  horizontalAlign: center
+                grid:
+                  show: false
+                chart:
+                  height: 220px
+                tooltip:
+                  enabled: true
+                  shared: true
+                  followCursor: true
+                  enabledOnSeries:
+                    - 0
+                    - 2
+              header:
+                show: false
+                title: 'Energy prices now & today'
+                show_states: true
+                colorize_states: true
+              now:
+                show: true
+                color: '#ffffff'
+              graph_span: 23h
+              span:
+                start: day
+              yaxis:
+                - id: kwh
+                  decimals: 0
+                  apex_config:
+                    tickAmount: 5
+                  min: ~0
+              update_interval: 1h
+              series:
+                - entity: sensor.elvia_full_variable_pricing
+                  name: Elvia
+                  show:
+                    in_header: false
+                    in_legend: false
+                  type: line
+                  color: '#ff9800'
+                  unit: ' øre/kWh'
+                  curve: stepline
+                  yaxis_id: kwh
+                  stroke_width: 3
+                  float_precision: 0
+                  data_generator: |
+                    const midnight = new Date()
+                    midnight.setHours(0, 0, 0, 0)
+                    const prices = entity.attributes.hours
+                    const data = [];
+                    for(let i = 0; i < prices.length; i++) {
+                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].priceTotal * 100])
+                    }
+                    return data;
+                - entity: sensor.elvia_variable_pricing_this_hour
+                  name: Elvia
+                  color: '#ff9800'
+                  opacity: 0
+                  show:
+                    in_header: false
+                  unit: ' øre/kWh'
+                  float_precision: 0
+                  data_generator: |
+                    const price = parseFloat(entity.state);
+                    return [[new Date().getTime(), price * 100]]; 
+                - entity: sensor.tibber_prices
+                  name: Tibber
+                  show:
+                    in_header: false
+                    in_legend: false
+                  color: '#1ac8ed'
+                  type: line
+                  unit: ' øre/kWh'
+                  curve: stepline
+                  yaxis_id: kwh
+                  stroke_width: 3
+                  float_precision: 0
+                  data_generator: |
+                    const noon = new Date()
+                    noon.setHours(0, 0, 0, 0)
+                    const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                    const data = [];
+                    for(let i = 0; i < prices.length; i++) {
+                      data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                    }
+                    return data;
+                - entity: sensor.tibber_energy_price_hourly
+                  name: Tibber
+                  color: '#1ac8ed'
+                  opacity: 0
+                  show:
+                    in_header: false
+                  unit: ' øre/kWh'
+                  float_precision: 0
+                  data_generator: |
+                    const price = parseFloat(entity.state);
+                    return [[new Date().getTime(), price * 100]]; 
+          - type: conditional
+            conditions:
+            - condition: "state"
+              entity: sensor.power_price_chart_state
+              state: 48h
+            card:
+              type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  ha-card {
+                    padding-top: 0px !important;
+                    background-color: transparent !important;
+                  }
+                  #header {
+                    padding: 0 16px !important;
+                  }
+                  #header__title {
+                    font-size: 1em !important;
+                    font-weight: regular !important;
+                    color: var(--primary-text-color) !important;
+                  }
+              apex_config:
+                legend:
+                  show: false
+                  fontSize: '14px'
+                  fontFamily: 'Open Sans'
+                  horizontalAlign: center
+                grid:
+                  show: false
+                chart:
+                  height: 220px
+                tooltip:
+                  enabled: true
+                  shared: true
+                  followCursor: true
+                  enabledOnSeries:
+                    - 0
+                    - 2
+              header:
+                show: false
+                title: 'Energy prices today & tomorrow'
+                show_states: true
+                colorize_states: true
+              now:
+                show: true
+                color: '#ffffff'
+              graph_span: 48h
+              span:
+                start: day
+              yaxis:
+                - id: kwh
+                  decimals: 0
+                  apex_config:
+                    tickAmount: 5
+                  min: 0
+              update_interval: 1h
+              series:
+                - entity: sensor.elvia_full_variable_pricing
+                  name: Elvia
+                  color: '#ff9800'
+                  show:
+                    in_header: false
+                    in_legend: false
+                  type: line
+                  unit: ' øre/kWh'
+                  curve: stepline
+                  yaxis_id: kwh
+                  stroke_width: 3
+                  float_precision: 0
+                  data_generator: |
+                    const midnight = new Date()
+                    midnight.setHours(0, 0, 0, 0)
+                    const prices = entity.attributes.hours
+                    const data = [];
+                    for(let i = 0; i < prices.length; i++) {
+                      data.push([midnight.getTime() + i * 1000 * 3600, prices[i].priceTotal * 100])
+                    }
+                    return data;
+                - entity: sensor.elvia_variable_pricing_this_hour
+                  name: Elvia
+                  color: '#ff9800'
+                  opacity: 0
+                  show:
+                    in_header: false
+                  unit: ' øre/kWh'
+                  float_precision: 0
+                  data_generator: |
+                    const price = parseFloat(entity.state);
+                    return [[new Date().getTime(), price * 100]]; 
+                - entity: sensor.tibber_prices
+                  name: Tibber
+                  color: '#1ac8ed'
+                  show:
+                    in_header: false
+                    in_legend: false
+                  type: line
+                  unit: ' øre/kWh'
+                  curve: stepline
+                  yaxis_id: kwh
+                  stroke_width: 3
+                  float_precision: 0
+                  data_generator: |
+                    const noon = new Date()
+                    noon.setHours(0, 0, 0, 0)
+                    const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
+                    const data = [];
+                    for(let i = 0; i < prices.length; i++) {
+                      data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
+                    }
+                    return data;
+                - entity: sensor.tibber_energy_price_hourly
+                  name: Tibber
+                  color: '#1ac8ed'
+                  opacity: 0
+                  show:
+                    in_header: false
+                  unit: ' øre/kWh'
+                  float_precision: 0
+                  data_generator: |
+                    const price = parseFloat(entity.state);
+                    return [[new Date().getTime(), price * 100]]; 
+        
+        # #################################################################
+        # MOMENTARY ENERGY AND POWER
+        # ENERGY-THIS-HOUR MINIGAME
+        # This shows a little apartment "mini-game" where the goal is to
+        # have the current hour energy consumption stay below the "Price level limit"
+        - type: custom:stack-in-card
+          mode: horizontal
+          cards: 
+          # Sensor and legend
           - type: vertical-stack
             cards:
-            # Elvia price legend
+            # SENSOR THIS HOUR ENERGY, WITH DOT
             - type: custom:button-card
-              template: chart_legend_line
-              name: "Elvia"
-              entity: sensor.elvia_variable_kwh_pricing_current_hour
-              variables:
-                dotColor: "var(--color-accent)"
-              state_display: |
-                [[[
-                  return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
-                ]]]
+              template: big_sensor_dot
+              entity: sensor.tibber_energy_consumption_current_hour
+              icon: mdi:lightning-bolt-circle
+              name: Energy, this hour
+              numeric_precision: 2
               styles:
                 card:
-                  - padding-top: 20px
-            # Tibber price legend
-            - type: custom:button-card
-              template: chart_legend_line
-              name: "Tibber"
-              entity: sensor.tibber_energy_price_hourly
+                - padding: var(--ha-card-padding)
+                icon:
+                - color: '#ff9800'
               variables:
-                dotColor: "var(--color-primary)"
+                dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
+                dotMidSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level_85 ]]]"
+            # CUSTOM LEGEND
+            - type: custom:button-card
+              color_type: blank-card
+              styles:
+                card:
+                  - height: 12px
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Minutes, this hour"
+              show_state: false
+              variables:
+                dotColor: "#1ac8ed"
+              styles:
+                grid:
+                  - grid-template-areas: '"dot n"'
+                  - grid-template-columns: 30px 1fr
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Limit, this hour:"
+              entity: sensor.elvia_active_fixed_price_level
               state_display: |
                 [[[
-                  return (parseFloat(entity.state)*100).toFixed(0) + ' øre/kWh';
+                  return entity.attributes.level_max + " kWh" 
                 ]]]
+              variables:
+                dotColor: "transparent"
               styles:
                 card:
                   - padding-bottom: var(--ha-card-padding)
-        - type: conditional
-          conditions:
-          - condition: "state"
-            entity: sensor.power_price_chart_state
-            state: 24h
-          card:
-            type: custom:apexcharts-card
-            card_mod:
-              style: |
-                ha-card {
-                  padding-top: 0px !important;
-                  background-color: transparent !important;
-                }
-                #header {
-                  padding: 0 16px !important;
-                }
-                #header__title {
-                  font-size: 1em !important;
-                  font-weight: regular !important;
-                  color: var(--primary-text-color) !important;
-                }
-            apex_config:
-              legend:
-                show: false
-                fontSize: '14px'
-                fontFamily: 'Open Sans'
-                horizontalAlign: center
-              grid:
-                show: false
-              chart:
-                height: 220px
-              tooltip:
-                enabled: true
-                shared: true
-                followCursor: true
-                enabledOnSeries:
-                  - 0
-                  - 2
-            header:
-              show: false
-              title: 'Energy prices now & today'
-              show_states: true
-              colorize_states: true
-            now:
-              show: true
-              color: '#ffffff'
-            graph_span: 23h
-            span:
-              start: day
-            yaxis:
-              - id: kwh
-                decimals: 0
-                apex_config:
-                  tickAmount: 5
-                min: ~0
-            update_interval: 1h
-            series:
-              - entity: sensor.elvia_variable_pricing
-                name: Elvia
-                show:
-                  in_header: false
-                  in_legend: false
-                type: line
-                color: '#ff9800'
-                unit: ' øre/kWh'
-                curve: stepline
-                yaxis_id: kwh
-                stroke_width: 3
-                float_precision: 0
-                data_generator: |
-                  const midnight = new Date()
-                  midnight.setHours(0, 0, 0, 0)
-                  const prices = entity.attributes.hours
-                  const data = [];
-                  for(let i = 0; i < prices.length; i++) {
-                    data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
-                  }
-                  return data;
-              - entity: sensor.elvia_variable_kwh_pricing_current_hour
-                name: Elvia
-                color: '#ff9800'
-                opacity: 0
-                show:
-                  in_header: false
-                unit: ' øre/kWh'
-                float_precision: 0
-                data_generator: |
-                  const price = parseFloat(entity.state);
-                  return [[new Date().getTime(), price * 100]]; 
-              - entity: sensor.tibber_prices
-                name: Tibber
-                show:
-                  in_header: false
-                  in_legend: false
-                color: '#1ac8ed'
-                type: line
-                unit: ' øre/kWh'
-                curve: stepline
-                yaxis_id: kwh
-                stroke_width: 3
-                float_precision: 0
-                data_generator: |
-                  const noon = new Date()
-                  noon.setHours(0, 0, 0, 0)
-                  const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
-                  const data = [];
-                  for(let i = 0; i < prices.length; i++) {
-                    data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
-                  }
-                  return data;
-              - entity: sensor.tibber_energy_price_hourly
-                name: Tibber
-                color: '#1ac8ed'
-                opacity: 0
-                show:
-                  in_header: false
-                unit: ' øre/kWh'
-                float_precision: 0
-                data_generator: |
-                  const price = parseFloat(entity.state);
-                  return [[new Date().getTime(), price * 100]]; 
-        - type: conditional
-          conditions:
-          - condition: "state"
-            entity: sensor.power_price_chart_state
-            state: 48h
-          card:
-            type: custom:apexcharts-card
-            card_mod:
-              style: |
-                ha-card {
-                  padding-top: 0px !important;
-                  background-color: transparent !important;
-                }
-                #header {
-                  padding: 0 16px !important;
-                }
-                #header__title {
-                  font-size: 1em !important;
-                  font-weight: regular !important;
-                  color: var(--primary-text-color) !important;
-                }
-            apex_config:
-              legend:
-                show: false
-                fontSize: '14px'
-                fontFamily: 'Open Sans'
-                horizontalAlign: center
-              grid:
-                show: false
-              chart:
-                height: 220px
-              tooltip:
-                enabled: true
-                shared: true
-                followCursor: true
-                enabledOnSeries:
-                  - 0
-                  - 2
-            header:
-              show: false
-              title: 'Energy prices today & tomorrow'
-              show_states: true
-              colorize_states: true
-            now:
-              show: true
-              color: '#ffffff'
-            graph_span: 48h
-            span:
-              start: day
-            yaxis:
-              - id: kwh
-                decimals: 0
-                apex_config:
-                  tickAmount: 5
-                min: 0
-            update_interval: 1h
-            series:
-              - entity: sensor.elvia_variable_pricing
-                name: Elvia
-                color: '#ff9800'
-                show:
-                  in_header: false
-                  in_legend: false
-                type: line
-                unit: ' øre/kWh'
-                curve: stepline
-                yaxis_id: kwh
-                stroke_width: 3
-                float_precision: 0
-                data_generator: |
-                  const midnight = new Date()
-                  midnight.setHours(0, 0, 0, 0)
-                  const prices = entity.attributes.hours
-                  const data = [];
-                  for(let i = 0; i < prices.length; i++) {
-                    data.push([midnight.getTime() + i * 1000 * 3600, prices[i].energyPrice.total * 100])
-                  }
-                  return data;
-              - entity: sensor.elvia_variable_kwh_pricing_current_hour
-                name: Elvia
-                color: '#ff9800'
-                opacity: 0
-                show:
-                  in_header: false
-                unit: ' øre/kWh'
-                float_precision: 0
-                data_generator: |
-                  const price = parseFloat(entity.state);
-                  return [[new Date().getTime(), price * 100]]; 
-              - entity: sensor.tibber_prices
-                name: Tibber
-                color: '#1ac8ed'
-                show:
-                  in_header: false
-                  in_legend: false
-                type: line
-                unit: ' øre/kWh'
-                curve: stepline
-                yaxis_id: kwh
-                stroke_width: 3
-                float_precision: 0
-                data_generator: |
-                  const noon = new Date()
-                  noon.setHours(0, 0, 0, 0)
-                  const prices = entity.attributes.today.concat(entity.attributes.tomorrow);
-                  const data = [];
-                  for(let i = 0; i < prices.length; i++) {
-                    data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
-                  }
-                  return data;
-              - entity: sensor.tibber_energy_price_hourly
-                name: Tibber
-                color: '#1ac8ed'
-                opacity: 0
-                show:
-                  in_header: false
-                unit: ' øre/kWh'
-                float_precision: 0
-                data_generator: |
-                  const price = parseFloat(entity.state);
-                  return [[new Date().getTime(), price * 100]]; 
-      
-      # #################################################################
-      # MOMENTARY ENERGY AND POWER
-      # ENERGY-THIS-HOUR MINIGAME
-      # This shows a little apartment "mini-game" where the goal is to
-      # have the current hour energy consumption stay below the "Price level limit"
-      - type: custom:stack-in-card
-        mode: horizontal
-        cards: 
-        # Sensor and legend
-        - type: vertical-stack
-          cards:
-          # SENSOR THIS HOUR ENERGY, WITH DOT
-          - type: custom:button-card
-            template: big_sensor_dot
-            entity: sensor.tibber_energy_consumption_current_hour
-            icon: mdi:lightning-bolt-circle
-            name: Energy, this hour
-            numeric_precision: 2
-            styles:
-              card:
-              - padding: var(--ha-card-padding)
-              icon:
-              - color: '#ff9800'
-            variables:
-              dotHiSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level ]]]"
-              dotMidSeverity: "[[[ return states['sensor.hour_progress'].attributes.of_energy_level_85 ]]]"
-          # CUSTOM LEGEND
-          - type: custom:button-card
-            color_type: blank-card
-            styles:
-              card:
-                - height: 12px
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Minutes, this hour"
-            show_state: false
-            variables:
-              dotColor: "#1ac8ed"
-            styles:
-              grid:
-                - grid-template-areas: '"dot n"'
-                - grid-template-columns: 30px 1fr
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Limit, this hour:"
-            entity: sensor.elvia_active_fixed_price_level
-            state_display: |
-              [[[
-                return entity.attributes.level_max + " kWh" 
-              ]]]
-            variables:
-              dotColor: "transparent"
-            styles:
-              card:
-                - padding-bottom: var(--ha-card-padding)
-              custom_fields:
-                dot:
-                  - width: 8px
-                  - height: 8px
-                  - border-radius: 6px
-                  - border: solid 2px white
-        # Radialbar
-        - type: custom:apexcharts-card
-          card_mod:
-            style: |
-              ha-card {
-                padding-top: 0px !important;
-              }
-              #spinner-wrapper {
-                display: none !important;
-              }
-          chart_type: radialBar
-          apex_config:
-            dataLabels:
-              enabled: false
-            legend:
-              show: false
-              fontSize: '14px'
-              fontFamily: 'Open Sans'
-              horizontalAlign: left
-            chart:
-              height: 300px
-            plotOptions:
-              radialBar:
-                inverseOrder: true
-                hollow:
-                  image: '/local/ui/google-icon-sports-score-128px-1ac8ed.png'
-                  imageClipped: false
-                  imageWidth: 48
-                  imageHeight: 48
-                  size: 40%
-          header:
-            show: false
-            title: 'Current hour vs. price level'
-            show_states: true
-            colorize_states: true
-          series:
-            # Current hour (chart)
-            - entity: sensor.tibber_percentage_of_maxlevel
-              name: Energy consumed
-              show:
-                in_header: false
-                in_legend: false
-              color: '#ff9800'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-            # Max-hour average (chart)
-            - entity: sensor.hour_progress
-              name: "Time: Keep ahead of energy"
-              show:
-                in_header: false
-              unit: ' %'
-              color: '#1ac8ed'
-              data_generator: |
-                const sensor_percent = parseFloat(entity.state);
-                return [[new Date().getTime(), sensor_percent]];
-      # MOMENTARY POWER CONSUMPTION CATEGORIES
-      - type: custom:stack-in-card
-        mode: horizontal
-        cards:
-        # SENSOR AND LEGEND
-        - type: vertical-stack
-          cards:
-          # TOTAL MOMENTARY POWER
-          - type: custom:button-card
-            template: big_sensor_dot
-            name: Power, realtime
-            icon: mdi:home-lightning-bolt
-            entity: sensor.tibber_power_consumption_realtime
-            variables:
-              dotHiSeverity: 5000
-              dotMidSeverity: 2000
-            styles:
-              card:
-                - padding: var(--ha-card-padding)
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Lights"
-            entity: sensor.power_momentary_light_consumption
-            numeric_precision: 0
-            variables:
-              dotColor: "var(--color-primary)"
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Static"
-            entity: sensor.power_momentary_static_consumption
-            numeric_precision: 0
-            variables:
-              dotColor: "var(--color-primary-darker)"
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Dynamic"
-            entity: sensor.power_momentary_dynamic_consumption
-            numeric_precision: 0
-            variables:
-              dotColor: "var(--color-third)"
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Heating"
-            entity: sensor.power_momentary_heating_consumption
-            numeric_precision: 0
-            variables:
-              dotColor: "var(--color-accent)"
-          - type: custom:button-card
-            template: sensor_legend_line
-            name: "Other"
-            entity: sensor.power_other_momentary_consumption
-            numeric_precision: 0
-            variables:
-              dotColor: '#343434'
-            styles:
-              card:
-                - padding-bottom: var(--ha-card-padding)
-        # DONUT CHART
-        - type: vertical-stack
-          cards:
-          - type: custom:button-card
-            color_type: blank-card
-            styles:
-              card:
-                - height: 4px
+                custom_fields:
+                  dot:
+                    - width: 8px
+                    - height: 8px
+                    - border-radius: 6px
+                    - border: solid 2px white
+          # Radialbar
           - type: custom:apexcharts-card
             card_mod:
               style: |
@@ -713,83 +598,203 @@ cards:
                 #spinner-wrapper {
                   display: none !important;
                 }
-                #header {
-                  padding: 0 16px !important;
-                }
-                #header__title {
-                  font-size: 1em !important;
-                  font-weight: regular !important;
-                  color: var(--primary-text-color) !important;
-                } 
-            chart_type: donut
+            chart_type: radialBar
             apex_config:
+              dataLabels:
+                enabled: false
               legend:
                 show: false
-                fontSize: '12px'
+                fontSize: '14px'
                 fontFamily: 'Open Sans'
                 horizontalAlign: left
-                markers:
-                  size: 5
-                itemMargin:
-                  horizontal: 3
-              dataLabels:
-                enabled: false 
               chart:
-                height: 300px
+                height: 200px
+              plotOptions:
+                radialBar:
+                  inverseOrder: true
+                  hollow:
+                    image: '/local/ui/google-icon-sports-score-128px-1ac8ed.png'
+                    imageClipped: false
+                    imageWidth: 48
+                    imageHeight: 48
+                    size: 40%
             header:
               show: false
-              title: Power distribution
+              title: 'Current hour vs. price level'
               show_states: true
               colorize_states: true
             series:
-              - entity: sensor.power_momentary_light_consumption
-                name: Lights
-                color: '#1ac8ed'
+              # Current hour (chart)
+              - entity: sensor.tibber_percentage_of_maxlevel
+                name: Energy consumed
                 show:
                   in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_static_consumption
-                name: Static
-                color: '#0B758C'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_dynamic_consumption
-                name: Dynamic
-                color: '#d24dff'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
-                data_generator: |
-                  const sensor_percent = parseFloat(entity.state);
-                  return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_momentary_heating_consumption
-                name: Heating
+                  in_legend: false
                 color: '#ff9800'
-                show:
-                  in_header: false
-                unit: ' W'
-                float_precision: 0
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
-              - entity: sensor.power_other_momentary_consumption
-                name: Other
-                color: '#343434'
+              # Max-hour average (chart)
+              - entity: sensor.hour_progress
+                name: "Time: Keep ahead of energy"
                 show:
                   in_header: false
-                unit: ' W'
-                float_precision: 0
+                unit: ' %'
+                color: '#1ac8ed'
                 data_generator: |
                   const sensor_percent = parseFloat(entity.state);
                   return [[new Date().getTime(), sensor_percent]];
-                  
+        # MOMENTARY POWER CONSUMPTION CATEGORIES
+        - type: custom:stack-in-card
+          mode: horizontal
+          cards:
+          # SENSOR AND LEGEND
+          - type: vertical-stack
+            cards:
+            # TOTAL MOMENTARY POWER
+            - type: custom:button-card
+              template: big_sensor_dot
+              name: Power, realtime
+              icon: mdi:home-lightning-bolt
+              entity: sensor.tibber_power_consumption_realtime
+              variables:
+                dotHiSeverity: 5000
+                dotMidSeverity: 2000
+              styles:
+                card:
+                  - padding: var(--ha-card-padding)
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Lights"
+              entity: sensor.power_momentary_light_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-primary)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Static"
+              entity: sensor.power_momentary_static_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-primary-darker)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Dynamic"
+              entity: sensor.power_momentary_dynamic_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-third)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Heating"
+              entity: sensor.power_momentary_heating_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: "var(--color-accent)"
+            - type: custom:button-card
+              template: sensor_legend_line
+              name: "Other"
+              entity: sensor.power_other_momentary_consumption
+              numeric_precision: 0
+              variables:
+                dotColor: '#343434'
+              styles:
+                card:
+                  - padding-bottom: var(--ha-card-padding)
+          # DONUT CHART
+          - type: vertical-stack
+            cards:
+            - type: custom:button-card
+              color_type: blank-card
+              styles:
+                card:
+                  - height: 4px
+            - type: custom:apexcharts-card
+              card_mod:
+                style: |
+                  ha-card {
+                    padding-top: 0px !important;
+                  }
+                  #spinner-wrapper {
+                    display: none !important;
+                  }
+                  #header {
+                    padding: 0 16px !important;
+                  }
+                  #header__title {
+                    font-size: 1em !important;
+                    font-weight: regular !important;
+                    color: var(--primary-text-color) !important;
+                  } 
+              chart_type: donut
+              apex_config:
+                legend:
+                  show: false
+                  fontSize: '12px'
+                  fontFamily: 'Open Sans'
+                  horizontalAlign: left
+                  markers:
+                    size: 5
+                  itemMargin:
+                    horizontal: 3
+                dataLabels:
+                  enabled: false 
+                chart:
+                  height: 180px
+              header:
+                show: false
+                title: Power distribution
+                show_states: true
+                colorize_states: true
+              series:
+                - entity: sensor.power_momentary_light_consumption
+                  name: Lights
+                  color: '#1ac8ed'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_static_consumption
+                  name: Static
+                  color: '#0B758C'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_dynamic_consumption
+                  name: Dynamic
+                  color: '#d24dff'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_momentary_heating_consumption
+                  name: Heating
+                  color: '#ff9800'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                - entity: sensor.power_other_momentary_consumption
+                  name: Other
+                  color: '#343434'
+                  show:
+                    in_header: false
+                  unit: ' W'
+                  float_precision: 0
+                  data_generator: |
+                    const sensor_percent = parseFloat(entity.state);
+                    return [[new Date().getTime(), sensor_percent]];
+                    

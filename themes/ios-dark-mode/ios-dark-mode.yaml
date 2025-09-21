@@ -121,6 +121,7 @@ ios-dark-mode:
   # ALL BELOW THIS LINE ARE @iZwag's ADDED/CHANGED STYLES
   # Added to style HA Dashboard HACS interface
   #sidebar-background: "#00FF00"
+  sidebar-background: rgba(0,0,0, 0.15)
   #sidebar-min-width: 100px
   #sidebar-max-width: 700px
   #sidebar-relative-width: 24%

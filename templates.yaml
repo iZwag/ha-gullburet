@@ -578,65 +578,136 @@
         48h
       {% endif %}
 
-# Entity to store _hourly_ weather forecast from Met-integration (Met.no)
+# WEATHER
+# Entities to store _hourly_ and _daily_ weather forecast from Met-integration (Met.no)
+#  * Used to be included in the weather-entity provided by Met, but as of 
+#    March 2024 it is no longer provided.
+# Also summarizes interesting weather now & today
+# TODO: "Feels like" temperatures only consider "cold temperatures",
+#       should accommodate for warm temperatures as well. Look it up.
+# TODO: "Use the Norwegian translations for weather_conditions"
 - trigger:
   - platform: time_pattern
-    minutes: /30
+    hours: /1
+  - platform: homeassistant
+    event: start
   action:
-    service: weather.get_forecasts
+  - action: weather.get_forecasts
     data:
       type: hourly
     target:
       entity_id: weather.yr_weather_home
-    response_variable: forecast_data
-  sensor:
-    name: YR Weather forecast, hourly
-    unique_id: yr_weather_forecast_hourly
-    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
-    attributes:
-      forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
-
-# Entity to store _daily_ weather forecast from Met-integration (Met.no)
-#  * Used to be included in the weather-entity provided by Met, but as of 
-#    March 2024 it is no longer provided. 
-- trigger:
-  - platform: time_pattern
-    minutes: /30
-  action:
-    service: weather.get_forecasts
+    response_variable: hourly_data
+  - action: weather.get_forecasts
     data:
       type: daily
     target:
       entity_id: weather.yr_weather_home
-    response_variable: forecast_data
+    response_variable: daily_data
   sensor:
-    name: YR Weather forecast, daily
+  - name: YR Weather forecast, hourly
+    unique_id: yr_weather_forecast_hourly
+    state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
+    attributes:
+      forecast: "{{ hourly_data['weather.yr_weather_home'].forecast }}"
+  - name: YR Weather forecast, daily
     unique_id: yr_weather_forecast_daily
     state: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) }}"
     attributes:
-      forecast: "{{ forecast_data['weather.yr_weather_home'].forecast }}"
-
-# Combines the current weather and its attributes, appending the forecast as attributes
-- sensor:
-  - name: Combined Weather and Forecast
-    unique_id: combined_weather_info
-    state: "{{ states('weather.yr_weather_home') }}"
+      forecast: "{{ daily_data['weather.yr_weather_home'].forecast }}"
+  - name: YR Weather custom
+    unique_id: yr_weather_custom
+    state: "{{ now().isoformat() }}"
     attributes:
-      attribution: "{{ state_attr('weather.yr_weather_home', 'attribution') }}"
-      cloud_coverage: "{{ state_attr('weather.yr_weather_home', 'cloud_coverage') }}"
-      dew_point: "{{ state_attr('weather.yr_weather_home', 'dew_point') }}"
-      humidity: "{{ state_attr('weather.yr_weather_home', 'humidity') }}"
-      precipitation_unit: "{{ state_attr('weather.yr_weather_home', 'precipitation_unit') }}"
-      pressure: "{{ state_attr('weather.yr_weather_home', 'pressure') }}"
-      pressure_unit: "{{ state_attr('weather.yr_weather_home', 'pressure_unit') }}"
-      temperature: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
-      temperature_unit: "{{ state_attr('weather.yr_weather_home', 'temperature_unit') }}"
-      visibility_unit: "{{ state_attr('weather.yr_weather_home', 'visibility_unit') }}"
-      wind_bearing: "{{ state_attr('weather.yr_weather_home', 'wind_bearing') }}"
-      wind_gust_speed: "{{ state_attr('weather.yr_weather_home', 'wind_gust_speed') }}"
-      wind_speed: "{{ state_attr('weather.yr_weather_home', 'wind_speed') }}"
-      wind_speed_unit: "{{ state_attr('weather.yr_weather_home', 'wind_speed_unit') }}"
-      forecast: "{{ state_attr('sensor.yr_weather_forecast_daily', 'forecast') }}"
+      this_hour_condition: >
+        {% from 'weather_templates.jinja' import translate_condition_en %}
+        {{ translate_condition_en(hourly_data['weather.yr_weather_home'].forecast[0].condition) }}
+      this_hour_icon: >
+        {% set weather = hourly_data['weather.yr_weather_home'].forecast[0].condition  %}
+        {% if is_state('sun.sun', 'above_horizon') %}
+        {{ '/local/ui/weather/' + weather + '.svg' }}
+        {% else %}
+        {{ '/local/ui/weather/' + weather + '_night.svg' }}
+        {% endif %}
+      this_hour_temp: "{{ hourly_data['weather.yr_weather_home'].forecast[0].temperature | float(default=0) | round(1) }}"
+      this_hour_wind_speed: "{{ (hourly_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0)) | round(1) }}"
+      this_hour_wind_bearing: "{{ hourly_data['weather.yr_weather_home'].forecast[0].wind_bearing }}"
+      this_hour_wind_direction: >
+        {% from 'weather_templates.jinja' import get_wind_direction %}
+        {% set bearing = hourly_data['weather.yr_weather_home'].forecast[0].wind_bearing | float(default=0) %}
+        {{ get_wind_direction(bearing) }}
+      this_hour_wind_desc: >
+        {% from 'weather_templates.jinja' import get_wind_description %}
+        {{ get_wind_description((hourly_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0))) }}
+      this_hour_precipitation: "{{ (hourly_data['weather.yr_weather_home'].forecast[0].precipitation | float(default=0)) | round(1) }}"
+      this_hour_precipitation_probability: >
+        {{ (hourly_data['weather.yr_weather_home'].forecast[0].precipitation_probability | float(default=0)) | round(0) }}
+      this_hour_humidity: "{{ (hourly_data['weather.yr_weather_home'].forecast[0].humidity | float(default=0)) | round(0) }}"
+      this_hour_feels_like: >
+        {% from 'weather_templates.jinja' import get_temp_feels_like %}
+        {% set T = hourly_data['weather.yr_weather_home'].forecast[0].temperature | float(default=0) %}
+        {% set W = hourly_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0) %}
+        {% set H = hourly_data['weather.yr_weather_home'].forecast[0].humidity | float(default=0) %}
+        {{ get_temp_feels_like(T, W, H) | round(1) }}
+      today_condition: >
+        {% from 'weather_templates.jinja' import translate_condition_en %}
+        {{ translate_condition_en(daily_data['weather.yr_weather_home'].forecast[0].condition) }}
+      today_icon: >
+        {% set weather = daily_data['weather.yr_weather_home'].forecast[0].condition  %}
+        {{ '/local/ui/weather/' + weather + '.svg' }}
+      today_temp: "{{ daily_data['weather.yr_weather_home'].forecast[0].temperature | float(default=0) | round(1) }}"
+      today_wind_speed: "{{ daily_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0) | round(1) }}"
+      today_wind_bearing: "{{ daily_data['weather.yr_weather_home'].forecast[0].wind_bearing | int(default=0) }}"
+      today_wind_direction: >
+        {% from 'weather_templates.jinja' import get_wind_direction %}
+        {% set bearing = daily_data['weather.yr_weather_home'].forecast[0].wind_bearing | float(default=0) %}
+        {{ get_wind_direction(bearing) }}
+      today_wind_desc: >
+        {% from 'weather_templates.jinja' import get_wind_description %}
+        {{ get_wind_description((daily_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0))) }}
+      today_precipitation: "{{ daily_data['weather.yr_weather_home'].forecast[0].precipitation | float(default=0) | round(1) }}"
+      today_precipitation_probability: >
+        {{ daily_data['weather.yr_weather_home'].forecast[0].precipitation_probability | float(default=0) | round(0) }}
+      today_humidity: "{{ daily_data['weather.yr_weather_home'].forecast[0].humidity | float(default=0) | round(0) }}"
+      today_feels_like: >
+        {% from 'weather_templates.jinja' import get_temp_feels_like %}
+        {% set T = daily_data['weather.yr_weather_home'].forecast[0].temperature | float(default=0) %}
+        {% set W = daily_data['weather.yr_weather_home'].forecast[0].wind_speed | float(default=0) %}
+        {% set H = daily_data['weather.yr_weather_home'].forecast[0].humidity | float(default=0) %}
+        {{ get_temp_feels_like(T, W, H) | round(1) }}
+
+# The main weather-entity is considered "now"-values. This sensor augments
+#     the "now" weather with extra fields.
+- sensor:
+  - name: Weather now extra
+    unique_id: weather_now_extra
+    state: >
+      {% from 'weather_templates.jinja' import translate_condition_en %}
+      {{ translate_condition_en(states('weather.yr_weather_home')) }}
+    attributes:
+      temperature: "{{ state_attr('weather.yr_weather_home', 'temperature') | float(default=0) | round(1) }}"
+      wind_speed: "{{ state_attr('weather.yr_weather_home', 'wind_speed')| float(default=0) | round(1) }}"
+      icon: >
+        {% set weather = states('weather.yr_weather_home') %}
+        {% if is_state('sun.sun', 'above_horizon') %}
+        {{ '/local/ui/weather/' + weather + '.svg' }}
+        {% else %}
+        {{ '/local/ui/weather/' + weather + '_night.svg' }}
+        {% endif %}
+      feels_like: >
+        {% from 'weather_templates.jinja' import get_temp_feels_like %}
+        {% set T = state_attr('weather.yr_weather_home', 'temperature') | float(default=0) %}
+        {% set W = state_attr('weather.yr_weather_home', 'wind_speed')| float(default=0) %}
+        {% set H = state_attr('weather.yr_weather_home', 'humidity') | float(default=0) %}
+        {{ get_temp_feels_like(T, W, H) | round(1) }}
+      wind_desc: >
+        {% from 'weather_templates.jinja' import get_wind_description %}
+        {{ get_wind_description(state_attr('weather.yr_weather_home', 'wind_speed') | float(default=0)) }}
+      wind_direction: >
+        {% from 'weather_templates.jinja' import get_wind_direction %}
+        {% set bearing = state_attr('weather.yr_weather_home', 'wind_bearing') | float(default=0) %}
+        {{ get_wind_direction(bearing) }}
+      this_hour_precipitation: "{{ state_attr('sensor.yr_weather_custom', 'this_hour_precipitation') | float(default=0) | round(1) }}"
 
 # Holds the current hour's accumulated energy consumption as percentage of the current
 #  fixed price max-level. Does the same for the estimated hour total
@@ -875,4 +946,32 @@
         {% set energy_level = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=0) %}
         {% set state = states('sensor.hour_progress') | float(default=0) %}
         {{ ((state / 100) * energy_level) * 0.85 | round(2) }}
-        
+
+# ELVIA VARIABLE PRICING - FULL LIST OF HOURS UNTIL TOMORROW 23:00-00:00
+#  Reduced list of info with only useful fields
+# - Add this to template to include price excl. VAT:
+#   "priceTotalExVat": {{ h.energyPrice.totalExVat }}
+- sensor:
+    - name: "Elvia full variable pricing"
+      unique_id: elvia_full_variable_pricing
+      icon: mdi:transmission-tower
+      state: >
+        {% set hour = now().hour %}
+        {% set raw = state_attr('sensor.elvia_variable_pricing_full_list','hours') %}
+        {{ raw[hour].energyPrice.total if raw is not none else 'unavailable' }}
+      attributes:
+        hours: >
+          {% set raw = state_attr('sensor.elvia_variable_pricing_full_list','hours') %}
+          {% if raw is none %}
+            []
+          {% else %}
+            [
+            {%- for h in raw %}
+              {
+                "startTime": "{{ h.startTime }}",
+                "shortName": "{{ h.shortName }}",
+                "priceTotal": {{ h.energyPrice.total }}
+              }{{ "," if not loop.last else "" }}
+            {%- endfor %}
+            ]
+          {% endif %}

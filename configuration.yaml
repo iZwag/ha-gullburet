@@ -58,6 +58,11 @@ logger:
   logs:
     homeassistant.components.python_script: debug
 
+# CUSTOM JINJA2 TEMPLATES
+# Templates stored in this directory can be used for Jinja templating
+custom_templates:
+
+# HOME MAP INDICATOR
 zone:
   - name: Home
     latitude: !secret home_latitude
@@ -65,3 +70,27 @@ zone:
     radius: 20
     icon: mdi:home
 
+# IGNORE STATE HISTORY COLLECTION
+recorder:
+  db_url: sqlite:///home-assistant_v2.db
+  purge_keep_days: 10
+  auto_purge: true
+  commit_interval: 1
+  exclude:
+    entities:
+      - sensor.elvia_variable_pricing_full_list
+      - sensor.time
+      - sensor.time_date
+      - sensor.time_utc
+      - sensor.date
+      - sensor.date_string
+      - sensor.date_string_nor
+      - sensor.date_time
+      - sensor.date_time_iso
+      - sensor.date_time_utc
+    domains:
+      - automation
+      - updater
+      - camera
+      - media_player
+      - weather 

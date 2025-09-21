@@ -8,7 +8,7 @@
     - "NSR:StopPlace:58185" # Sandaker senter
     - "NSR:StopPlace:58256" # Torshov
     - "NSR:StopPlace:6404" # Haarklous plass
-    - "NSR:StopPlace:58195" # Storo
+    #- "NSR:StopPlace:58195" # Storo
 
 # Tibber future prices - Electricity provider
 - platform: rest
@@ -30,10 +30,8 @@
 
 # Elvia grid company - "Fastledd" ("fixedPrice") limits and prices
 # Requests should not exceed 200/hour
-# Questions for Are:
-# - is version "1.0" the latest?
 # - 2024-03-11T15:00:00 - 2024-03-11T16:00:00 fungerer som StartTime - EndTime, men da får jeg tilbake 16-17
-# 2024-03-11T15:00:00+01:00 - 2024-03-11T16:00:00+01:00 derimot gir errors. "is not valid for EndTime."
+# - 2024-03-11T15:00:00+01:00 - 2024-03-11T16:00:00+01:00 derimot gir errors. "is not valid for EndTime."
 - platform: rest
   name: Elvia fixed (fastprisledd) limits and prices for today
   unique_id: elvia_fixed_prices
@@ -62,8 +60,8 @@
 # This API request fetches the price dynamically for the current hour
 # It will automatically get new prices when the original model is outdated.
 - platform: rest
-  name: Elvia variable kWh pricing, current hour
-  unique_id: elvia_hourly_variable_price
+  name: Elvia variable pricing, this hour
+  unique_id: elvia_variable_pricing_this_hour
   icon: mdi:transmission-tower
   scan_interval: 60
   # Request
@@ -92,10 +90,10 @@
   - expiredAt
   - isPublicHoliday
 
-# Elvia variable prices 48h forecast: Today & tomorrow
+# Elvia variable prices full list, every hour forecast: Today & tomorrow
 - platform: rest
-  name: 'Elvia variable kWh pricing: Now, today and tomorrow'
-  unique_id: elvia_variable_price
+  name: Elvia variable pricing, full list
+  unique_id: elvia_variable_pricing_full_list
   icon: mdi:transmission-tower
   scan_interval: 60
   # Request
@@ -132,7 +130,6 @@
     - "time_date"
     - "time_utc"
 
-# All template sensors
 - platform: template
   sensors:
     # Readable string for week-day, as sensor
@@ -266,7 +263,7 @@
       unit_of_measurement: NOK/kWh
       value_template: >
         {% set energy = states('sensor.tibber_prices') | float(default=0) %}
-        {% set grid = states('sensor.elvia_variable_pricing') | float(default=0) %}
+        {% set grid = states('sensor.elvia_variable_pricing_this_hour') | float(default=0) %}
         {{ energy + grid }}
 
     # Always 0 humidity placeholder
