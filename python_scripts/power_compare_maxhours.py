@@ -49,6 +49,17 @@ maxhours = [
 
 inserted = False
 
+# Check if same date already exists
+same_date_index = None
+for i in range(len(maxhours)):
+    if get_date(maxhours[i]['time']) == get_date(newhour_time):
+        same_date_index = i
+        break
+
+# If same date exists and the new value is not higher, skip insertion
+if same_date_index is not None and newhour_value <= maxhours[same_date_index]['power']:
+    inserted = False  
+
 # Loop through the list of maxhours, descending
 for i in range(len(maxhours)):
 

@@ -1,3 +1,28 @@
+# =========================================================================== #
+#
+#   PYTHON SCRIPTS
+#   --------------
+# 
+#   Pre-requisites:
+#     - Initialize Python Scripts in configuration.yaml
+#     - Just declare the line "python_script:" and its done
+#
+#   Creating new Python Scripts:
+#     - Create the file with filename <filename>.py
+#     - Code the script
+#     - Declare the script here, where the object's name = <filename>
+#
+#   Good practices:
+#     - Python scripts made this way have a very limited, sandbox environment
+#     - Its good for simple logic tasks that are too complex for native HA,
+#       and that can be achieved with basic Python functions
+#     - 'import' is not allowed in this environment, and thus more complex
+#       tasks are maybe more worthwhile with other solutions
+#     - Example: Many datetime-functions doesn't work, but some are available
+#       through the embedded 'dt_util' module.
+#
+# =========================================================================== #
+
 calculate_middle_time:
   name: Calculate middle time
   description: Takes two times as input, the 1st one must before the 2nd, and finds the middle time between those
