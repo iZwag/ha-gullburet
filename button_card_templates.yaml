@@ -602,7 +602,7 @@ big_sensor:
     name:
       - justify-self: start
       - font-size: 14px
-      - opacity: '0.7'
+      - color: var(--secondary-text-color)
       - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"i s" "i n"'
@@ -641,7 +641,7 @@ big_sensor_dot:
     name:
       - justify-self: start
       - font-size: 14px
-      - opacity: '0.7'
+      - color: var(--secondary-text-color)
       - font-family: var(--primary-font-family)
     grid:
       - grid-template-areas: '"i s dot" "i n dot"'
@@ -709,7 +709,7 @@ big_sensor_bar:
     name:
       - justify-self: start
       - font-size: 14px
-      - opacity: '0.7'
+      - color: var(--secondary-text-color)
       - padding-bottom: 12px
       - font-family: var(--primary-font-family)
     grid:
@@ -778,7 +778,7 @@ extra_bar:
     name:
       - justify-self: start
       - font-size: 14px
-      - opacity: '0.7'
+      - color: var(--secondary-text-color)
       - padding-bottom: 4px
       - font-family: var(--primary-font-family)
     grid:
@@ -795,7 +795,7 @@ extra_bar:
       secondary:
         - justify-self: end
         - font-size: 14px
-        - opacity: '0.7'
+        - color: var(--secondary-text-color)
         - padding-bottom: 4px
         - font-family: var(--primary-font-family)
 
@@ -1141,7 +1141,8 @@ icon_chip_large:
       - height: 28px
       - color: |
           [[[
-            return variables.iconColor;
+            if (entity.state === 'on') return variables.iconColor;
+            return "var(--color-disabled)";
           ]]]
   tap_action:
     action: toggle
@@ -1300,22 +1301,15 @@ time_change_chevron:
 
 time_subtitle:
   show_icon: false
-  show_state: true
-  show_name: false
-  state_display: |
-    [[[
-      if (entity.state === "on") return "Alarm set";
-      return "Alarm disabled";
-    ]]]
   styles:
     card:
-      - padding: 0px
-      - border: none
-      - background: transparent
-    state:
-      - font-size: 12px
+      - padding: 24px
+    name: 
+      - font-size: 16px
       - font-weight: 300
-
+      - font-family: var(--primary-font-family)
+      - color: var(--secondary-text-color)
+      
 #############################################################################
 # TIME PICKER CARD - Custom toggleable button chip, with only icon
 #############################################################################
@@ -1337,6 +1331,8 @@ time_picker_card:
     enableIconColor: ""
     enableOnIcon: ""
     enableOffIcon: "" 
+  tap_action:
+    action: none
   custom_fields:
     up_hour:
       card:
@@ -1379,11 +1375,6 @@ time_picker_card:
           iconColor: "[[[ return variables.enableIconColor; ]]]"
           onIcon: "[[[ return variables.enableOnIcon; ]]]"
           offIcon: "[[[ return variables.enableOffIcon; ]]]"
-    sub:
-      card:
-        type: custom:button-card
-        template: time_subtitle
-        entity: "[[[ return variables.enableEntity; ]]]"
     blank:
       card:
         type: custom:button-card
@@ -1391,11 +1382,15 @@ time_picker_card:
         styles:
           card:
             - height: 12px
+    date:
+      card:
+        type: custom:button-card
+        template: timepicker_datestring
   styles:
     grid:
       - grid-template-areas: >
           "chip blank blank blank aux" "chip up_hour s up_min aux" "chip
-          down_hour s down_min aux" "chip abc sub bcd aux"
+          down_hour s down_min aux" "chip date date date aux"
       - grid-template-columns: 15% 10% 1fr 10% 15%
       - grid-gap: 2px
       - align-items: center
@@ -1422,6 +1417,31 @@ time_picker_card:
       chip:
         - display: flex
         - justify-content: center
+
+
+# TIME-PICKER DATE-STRING
+# 
+timepicker_datestring:
+  show_icon: false
+  show_state: true
+  show_name: false
+  state_display: |
+    [[[
+      const date = new Date(entity.state);
+      const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
+      const month = date.toLocaleDateString('en-US', { month: 'long' });
+      const day = date.getDate();
+      return `${weekday}, ${month} ${day}`;
+    ]]]
+  styles:
+    card:
+      - font-size: 12px
+      - font-weight: 300
+      - font-family: "Open Sans"
+      - padding: 0px
+      - background: transparent
+  tap_action:
+    action: none
 
 
 #############################################################################
