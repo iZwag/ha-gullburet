@@ -383,6 +383,16 @@ tablet_sidebar:
           action: navigate
           navigation_path: /dashboard-tablet/guests
       - type: custom:button-card
+        icon: mdi:delete-variant
+        name: Trashlog
+        template: navbar_button
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "trashlog"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/trashlog
+      - type: custom:button-card
         icon: mdi:speaker
         name: Listen
         template: navbar_button
@@ -397,7 +407,8 @@ tablet_sidebar:
         color_type: blank-card
         styles:
           card:
-            - height: 25vh
+            - height: 15vh
+            #- height: 25vh
       - type: custom:mushroom-chips-card
         alignment: center
         card_mod:
