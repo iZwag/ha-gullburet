@@ -426,3 +426,19 @@
         {% else %}
           {{ cal | round(1)}}
         {% endif %}
+
+- platform: template
+  sensors:
+    active_media_player:
+      friendly_name: "Active media player"
+      value_template: >
+        {% if is_state('media_player.sonos_living', 'playing') and
+          not is_state_attr('media_player.sonos_living', 'source', 'TV') %}
+          living
+        {% elif is_state('media_player.sonos_move', 'playing') %}
+          move
+        {% elif is_state('media_player.sonos_kitchen', 'playing') %}
+          kitchen
+        {% else %}
+          none
+        {% endif %}

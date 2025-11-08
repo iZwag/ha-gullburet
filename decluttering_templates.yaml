@@ -392,16 +392,8 @@ tablet_sidebar:
         tap_action:
           action: navigate
           navigation_path: /dashboard-tablet/trashlog
-      - type: custom:button-card
-        icon: mdi:speaker
-        name: Listen
-        template: navbar_button
-        variables:
-          link_active: '[[active_link]]'
-          link_name: "audio"
-        tap_action:
-          action: navigate
-          navigation_path: /dashboard-tablet/audio
+      - type: custom:decluttering-card
+        template: sidebar_media_button
       # VERTICAL SPACER ELEMENT: ADJUST THE HEIGHT AS NEEDED
       - type: custom:button-card
         color_type: blank-card
@@ -429,3 +421,93 @@ tablet_sidebar:
           entity: weather.yr_weather_home
           show_temperature: true
           show_conditions: false
+
+sidebar_media_button:
+  card:
+    type: custom:state-switch
+    entity: sensor.active_media_player
+    default: none
+    states:
+      none:
+        type: custom:button-card
+        icon: mdi:speaker
+        name: Listen
+        template: navbar_button
+        variables:
+          link_active: '[[active_link]]'
+          link_name: "audio"
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/audio
+      living:
+        type: custom:mini-media-player
+        entity: media_player.sonos_living
+        artwork: material
+        info: scrolling
+        volume_stateless: false
+        toggle_power: false
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/audio
+        hide:
+          name: true
+          icon: true
+          power: true
+          group: true
+          info: false
+          source: true
+          mute: true
+          progress: true
+          runtime: true
+          runtime_remaining: true
+          shuffle: true
+          state_label: true
+          volume: true
+      move:
+        type: custom:mini-media-player
+        entity: media_player.sonos_move
+        artwork: material
+        info: scrolling
+        volume_stateless: false
+        toggle_power: false
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/audio
+        hide:
+          name: true
+          icon: true
+          power: true
+          group: true
+          info: false
+          source: true
+          mute: true
+          progress: true
+          runtime: true
+          runtime_remaining: true
+          shuffle: true
+          state_label: true
+          volume: true
+      kitchen:
+        type: custom:mini-media-player
+        entity: media_player.sonos_kitchen
+        artwork: material
+        info: scrolling
+        volume_stateless: false
+        toggle_power: false
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-tablet/audio
+        hide:
+          name: true
+          icon: true
+          power: true
+          group: true
+          info: false
+          source: true
+          mute: true
+          progress: true
+          runtime: true
+          runtime_remaining: true
+          shuffle: true
+          state_label: true
+          volume: true
