@@ -2351,3 +2351,43 @@
         }}'
       target_entity: input_datetime.bedtime_reminder_after
   mode: restart
+- id: '1761482982318'
+  alias: Living room - Handle curtain control presses
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.curtain_control_kitchen_action
+    to: arrow_right_click
+    from:
+    id: button_right
+  - trigger: state
+    entity_id:
+    - sensor.curtain_control_kitchen_action
+    to: arrow_left_click
+    from:
+    id: button_left
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - button_right
+      sequence:
+      - action: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.curtain_living
+    - conditions:
+      - condition: trigger
+        id:
+        - button_left
+      sequence:
+      - action: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.curtain_living
+  mode: single
