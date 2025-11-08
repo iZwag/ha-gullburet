@@ -111,3 +111,18 @@ bedtime_reminder_after:
   icon: mdi:bed
   has_date: true
   has_time: true
+
+# SUN CYCLE CALCULATED TIMES ==================================================
+# RISENOON - Middle time between sunrise and noon
+risenoon:
+  name: Sun cycle - Rise-Noon time
+  icon: mdi:sun-angle
+  has_date: false
+  has_time: true
+
+# NOONSET - Middle time between noon and sunset
+noonset:
+  name: Sun cycle - Noon-Set time
+  icon: mdi:sun-angle-outline
+  has_date: false
+  has_time: true
