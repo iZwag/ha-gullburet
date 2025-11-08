@@ -54,6 +54,8 @@ cards:
           name: Gardinrobot, stue
         - entity: sensor.left_blind_bedroom_battery
           name: Venstre rullgardin, soverom
+        - entity: sensor.right_blind_bedroom_battery
+          name: Høyre rullgardin, soverom
     # CR2032 batteries
     - type: entities
       title: CR2032
@@ -68,10 +70,10 @@ cards:
           name: Sensor, kjøkken
         - entity: sensor.temperature_battery_living
           name: Sensor, stue
-        - entity: sensor.remote_battery_veranda
-          name: Gardinknapper
         - entity: sensor.left_blind_control_battery
           name: Venstre rullgardin bryter
+        - entity: sensor.right_blind_control_battery
+          name: Høyre rullgardin bryter
     # CR2450 batteries
     - type: entities
       title: CR2450
@@ -97,4 +99,8 @@ cards:
           name: Sensor, bod
         - entity: sensor.light_remote_office_battery
           name: Lyskontroll, kontor
+        - entity: sensor.curtain_control_kitchen_battery
+          name: Gardinknapper
+        - entity: sensor.motion_sensor_entry_battery
+          name: Sensor, gang
     
