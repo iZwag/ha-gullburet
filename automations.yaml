@@ -2391,3 +2391,64 @@
         target:
           entity_id: cover.curtain_living
   mode: single
+- id: '1762701442704'
+  alias: Entry - Handle light on/off with motion
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensor_entry_occupancy
+    to: 'on'
+    id: motion
+  - trigger: state
+    entity_id:
+    - timer.entry_light
+    to: idle
+    id: timer-done
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - motion
+        - condition: time
+          after: 06:00:00
+          before: '23:59:00'
+      sequence:
+      - action: timer.start
+        metadata: {}
+        data:
+          duration: 00:05:00
+        target:
+          entity_id: timer.entry_light
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_pct: '{{ states(''input_number.apartment_dimmer'') }}'
+        target:
+          entity_id: light.downlights_entry
+      - action: switch.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: switch.lenovo_tab_m10_screen
+    - conditions:
+      - condition: trigger
+        id:
+        - timer-done
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.downlights_entry
+      - action: switch.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: switch.lenovo_tab_m10_screen
+  mode: queued
+  max: 10

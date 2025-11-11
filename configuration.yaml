@@ -8,6 +8,7 @@ scene: !include scenes.yaml
 sensor: !include sensors.yaml
 script: !include scripts.yaml
 template: !include templates.yaml
+timer: !include timers.yaml
 input_boolean: !include input_boolean.yaml
 input_number: !include input_number.yaml
 input_select: !include input_select.yaml
