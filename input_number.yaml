@@ -1,6 +1,7 @@
 # mode: box | slider
 # initial: null
 
+# HEATING =====================================================================
 # "Constant" holding the away temperature for office
 temperature_away_office:
   name: "Heating - Office - Away temperature"
@@ -31,6 +32,175 @@ temperature_sleep_office:
   mode: box
   step: 0.5
 
+# BATH
+# Bath: Comfort constant
+# 25.0 C
+temperature_comfort_bath:
+  name: Heating - Bath - Comfort temperature
+  icon: mdi:emoticon
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+
+# Bath: Sleep constant
+# 24.0 C
+temperature_sleep_bath:
+  name: Heating - Bath - Sleep temperature
+  icon: mdi:power-sleep
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Bath: Away constant
+# 22.0 C
+temperature_away_bath:
+  name: Heating - Bath - Away temperature
+  icon: mdi:home-export-outline
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Bathrooms: Vacation constant
+# 12.0 C
+temperature_vacation_bathrooms:
+  name: Heating - Bathrooms - Vacation temperature
+  icon: mdi:palm-tree
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Bedroom: Away constant
+# 16.0 C
+temperature_away_bedroom:
+  name: Heating - Bedroom - Away temperature
+  icon: mdi:home-export-outline
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Bedroom: Sleep constant
+# 19.0 C
+temperature_sleep_bedroom:
+  name: Heating - Bedroom - Sleep temperature
+  icon: mdi:power-sleep
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Bedrooms: Vacation constant
+# 12.0 C
+temperature_vacation_bedrooms:
+  name: Heating - Bedrooms - Vacation temperature
+  icon: mdi:palm-tree
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Guest: Sleep constant
+# 17.0 C
+temperature_sleep_guest:
+  name: Heating - Guest - Sleep temperature
+  icon: mdi:power-sleep
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Guest: Away constant
+# 15.0 C
+temperature_away_guest:
+  name: Heating - Guest - Away temperature
+  icon: mdi:home-export-outline
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Toilet: Away constant
+# 17.0 C
+temperature_away_toilet:
+  name: Heating - Toilet - Away temperature
+  icon: mdi:home-export-outline
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Toilet: Comfort constant
+# 20.0 C
+temperature_comfort_toilet:
+  name: Heating - Toilet - Comfort temperature
+  icon: mdi:emoticon
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Living: Comfort constant
+# 24.0 C
+temperature_comfort_living:
+  name: Heating - Living - Comfort temperature
+  icon: mdi:emoticon
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Living: Sleep constant
+# 23.0 C
+temperature_sleep_living:
+  name: Heating - Living - Sleep temperature
+  icon: mdi:power-sleep
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Living: Away constant
+# 22.0 C
+temperature_away_living:
+  name: Heating - Living - Away temperature
+  icon: mdi:home-export-outline
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+# Commons: Vacation constant
+# 12.0 C
+temperature_vacation_commons:
+  name: Heating - Commons - Vacation temperature
+  icon: mdi:palm-tree
+  min: 10.0
+  max: 35.0
+  unit_of_measurement: "℃"
+  mode: box
+  step: 0.5
+
+
+# POWER =======================================================================
 # Holding the 4th highest max-hour energy record
 power_monthly_highest_max_hour_4:
   name: Power - Monthly highest max-hour 4
@@ -38,6 +208,56 @@ power_monthly_highest_max_hour_4:
   min: 0.0
   max: 30.0
   unit_of_measurement: "kWh"
+  step: 0.01
+  mode: box
+
+# 3,207481
+power_monthly_highest_max_hour_1:
+  name: Power - Monthly highest max-hour 1
+  icon: mdi:lightning-bolt
+  min: 0.0
+  max: 30.0
+  unit_of_measurement: "kWh"
+  step: 0.01
+  mode: box
+
+# 3,020333
+power_monthly_highest_max_hour_2:
+  name: Power - Monthly highest max-hour 2
+  icon: mdi:lightning-bolt
+  min: 0.0
+  max: 30.0
+  unit_of_measurement: "kWh"
+  step: 0.01
+  mode: box
+
+# 3,006435
+power_monthly_highest_max_hour_3:
+  name: Power - Monthly highest max-hour 3
+  icon: mdi:lightning-bolt
+  min: 0.0
+  max: 30.0
+  unit_of_measurement: "kWh"
+  step: 0.01
+  mode: box
+
+# 1,08165 kWh
+power_last_hour_consumed:
+  name: Power - Last hour consumed
+  icon: mdi:lightning-bolt
+  min: 0.0
+  max: 30.0
+  unit_of_measurement: "kWh"
+  step: 0.001
+  mode: box
+
+# 83,28 kr
+power_grid_monthly_variable_price:
+  name: Power - Grid monthly variable price
+  icon: mdi:currency-usd
+  min: 0.0
+  max: 4000.0
+  unit_of_measurement: "kr"
   step: 0.01
   mode: box
 
@@ -140,3 +360,75 @@ bedtime_reminder_after_delay:
   step: 1
   mode: box
   unit_of_measurement: "minutes"
+
+# Bedtime routine - Minutes of heating before bedtime target
+# TODO: Check if replaced by .bedtime_sheet_preheat_advance
+bedtime_preheating_sheet_minutes:
+  name: Bedtime - Preheating heated sheet minutes
+  icon: mdi:alarm
+  min: 5
+  max: 45
+  step: 1
+  mode: box
+  unit_of_measurement: "minutes"
+
+# LIGHTS ======================================================================
+# Apartment dimmer
+apartment_dimmer:
+  name: Lights - Apartment Dimmer
+  icon: mdi:knob
+  min: 1
+  max: 100
+  step: 1
+  mode: slider
+  unit_of_measurement: "%"
+
+# 9%
+dimconstant_low:
+  name: Lights - DimConstant Low
+  icon: mdi:brightness-5
+  min: 1
+  max: 100
+  step: 1
+  mode: box
+  unit_of_measurement: "%"
+
+# 15%
+dimconstant_medium:
+  name: Lights - DimConstant Medium
+  icon: mdi:brightness-6
+  min: 1
+  max: 100
+  step: 1
+  mode: box
+  unit_of_measurement: "%"
+
+# 27%
+dimconstant_high:
+  name: Lights - DimConstant High
+  icon: mdi:brightness-7
+  min: 1
+  max: 100
+  step: 1
+  mode: box
+  unit_of_measurement: "%"
+
+# 5%
+dimconstant_lowest:
+  name: Lights - DimConstant Lowest
+  icon: mdi:circle-outline
+  min: 1
+  max: 100
+  step: 1
+  mode: box
+  unit_of_measurement: "%"
+
+# 50%
+dimconstant_highest:
+  name: Lights - DimConstant Highest
+  icon: mdi:white-balance-sunny
+  min: 1
+  max: 100
+  step: 1
+  mode: box
+  unit_of_measurement: "%"
