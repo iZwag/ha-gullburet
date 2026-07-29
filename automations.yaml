@@ -188,111 +188,97 @@
     data:
       setting: '{{ states(''input_select.bathroom_mode_select'') }}'
   mode: single
-- id: '1713336556278'
-  alias: Tablet charge-switch ON/OFF
-  description: Turns the tablet charge-switch ON if it is below 20%, and OFF if it
-    is above 80%.
-  trigger:
-  - alias: Below 20 pcnt
-    platform: numeric_state
-    entity_id:
-    - sensor.lenovo_tab_m10_battery
-    below: 20
-    id: below-20-pcnt
-  - alias: Above 80 pcnt
-    platform: numeric_state
-    entity_id:
-    - sensor.lenovo_tab_m10_battery
-    above: 80
-    id: above-80-pcnt
-  condition: []
-  action:
-  - alias: Choose switch ON or OFF
-    choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - below-20-pcnt
-      sequence:
-      - alias: Turn Tablet charge-switch ON
-        type: turn_on
-        device_id: 08c265c1d754ce213325346cc0b673dc
-        entity_id: e014659779f203d9916e7f94a8109afb
-        domain: switch
-    - conditions:
-      - condition: trigger
-        id:
-        - above-80-pcnt
-      sequence:
-      - alias: Turn charge-switch OFF
-        type: turn_off
-        device_id: 08c265c1d754ce213325346cc0b673dc
-        entity_id: e014659779f203d9916e7f94a8109afb
-        domain: switch
-  mode: single
 - id: '1713360573726'
   alias: Wakeup - Time triggered actions
   description: Handles all time-triggered actions associated with the wakeup rotuine
     (lights, audio, blinds etc.). Enable-toggle must be ON.
-  trigger:
-  - platform: time
-    at: input_datetime.wakeup_light_start
+  triggers:
+  - at: input_datetime.wakeup_light_start
     id: light-start
-  - platform: time
-    at: input_datetime.wakeup_alarm_time
+    trigger: time
+  - at: input_datetime.wakeup_alarm_time
     id: alarm
-  - platform: time
-    at: input_datetime.wakeup_blinds_open
+    trigger: time
+  - at: input_datetime.wakeup_blinds_open
     id: blinds-open
-  - platform: time
-    at: input_datetime.wakeup_audio_amp
+    trigger: time
+  - at: input_datetime.wakeup_audio_amp
     id: amplify-audio
-  - platform: time
-    at: input_datetime.wakeup_audio_loud
+    trigger: time
+  - at: input_datetime.wakeup_audio_loud
     id: audio-loud
-  - platform: time
-    at: input_datetime.wakeup_ends
+    trigger: time
+  - at: input_datetime.wakeup_ends
     id: routine-ends
-  condition:
+    trigger: time
+  conditions:
   - condition: state
     entity_id: input_boolean.wakeup_alarm_active
     state: 'on'
-  action:
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - light-start
       sequence:
-      - service: light.turn_on
-        data:
+      - data:
           brightness_pct: 40
           transition: 300
         target:
           entity_id: light.pendant_bedroom
+        action: light.turn_on
+      - action: light.turn_on
+        metadata: {}
+        data:
+          color_temp_kelvin: 6500
+          brightness_pct: 25
+          transition: 300
+        target:
+          entity_id: light.bedroom_shelf_strip
     - conditions:
       - condition: trigger
         id:
         - alarm
       sequence:
-      - service: light.turn_on
-        data:
+      - data:
           brightness_pct: 100
           transition: 300
         target:
           entity_id: light.pendant_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - blinds-open
-      sequence:
-      - service: cover.open_cover
+        action: light.turn_on
+      - action: light.turn_on
         metadata: {}
+        data:
+          color_temp_kelvin: 6500
+          brightness_pct: 75
+        target:
+          entity_id: light.bedroom_shelf_strip
+      - action: light.turn_on
+        metadata: {}
+        data:
+          transition: 180
+          color_temp_kelvin: 6500
+          brightness_pct: 60
+        target:
+          entity_id: light.bedroom_reading_lamp
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - blinds-open
+        - condition: state
+          entity_id: light.pendant_bedroom
+          state: 'on'
+      sequence:
+      - metadata: {}
         data: {}
         target:
           entity_id:
           - cover.left_blind_bedroom
           - cover.right_blind_bedroom
+        action: cover.open_cover
     - conditions:
       - condition: trigger
         id:
@@ -303,12 +289,12 @@
           entity_id: media_player.sonos_bedroom
           state: playing
         then:
-        - service: media_player.volume_set
-          target:
+        - target:
             entity_id: media_player.sonos_bedroom
           data:
             volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
               | float(0.08)) + 0.05 }}'
+          action: media_player.volume_set
     - conditions:
       - condition: trigger
         id:
@@ -319,135 +305,57 @@
           entity_id: media_player.sonos_bedroom
           state: playing
         then:
-        - service: media_player.volume_set
-          data:
+        - data:
             volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
               | float(0.08)) + 0.1 }}'
           target:
             entity_id: media_player.sonos_bedroom
+          action: media_player.volume_set
     - conditions:
       - condition: trigger
         id:
         - routine-ends
       sequence:
-      - service: cover.close_cover
-        metadata: {}
+      - metadata: {}
         data: {}
         target:
           entity_id: cover.curtain_living
+        action: cover.close_cover
       - choose:
         - conditions:
           - condition: template
             value_template: '{{ now().weekday() == 4 }}'
           sequence:
-          - service: input_select.select_option
-            metadata: {}
+          - metadata: {}
             data:
               option: weekend
             target:
               entity_id: input_select.wakeup_display_time
+            action: input_select.select_option
           alias: Test if its friday
         - conditions:
           - condition: template
             value_template: '{{ now().weekday() == 6 }}'
           sequence:
-          - service: input_select.select_option
-            metadata: {}
+          - metadata: {}
             data:
               option: weekday
             target:
               entity_id: input_select.wakeup_display_time
+            action: input_select.select_option
           alias: Test if its sunday
       - if:
         - condition: state
           entity_id: input_select.climate_season_select
           state: Warm
         then:
-        - service: cover.close_cover
-          metadata: {}
+        - metadata: {}
           data: {}
           target:
             entity_id:
             - cover.left_blind_bedroom
             - cover.right_blind_bedroom
-  mode: queued
-  max: 10
-- id: '1713970599927'
-  alias: Bedroom - Handle remote presses for light/alarm
-  description: ''
-  trigger:
-  - device_id: 5030e395b732b51ea772e9b0e5554ef5
-    domain: hue
-    platform: device
-    type: short_release
-    subtype: 1
-    unique_id: 0472f0bd-ccb1-4cb1-8c78-5392cf238eb8
-    id: on-button
-  - device_id: 5030e395b732b51ea772e9b0e5554ef5
-    domain: hue
-    platform: device
-    type: short_release
-    subtype: 2
-    unique_id: 4cc3368f-f69e-4f4f-883a-00694c445a9e
-    id: up-button
-  - device_id: 5030e395b732b51ea772e9b0e5554ef5
-    domain: hue
-    platform: device
-    type: short_release
-    subtype: 3
-    unique_id: 276caed8-8551-47e2-b62c-932b110f0920
-    alias: down
-    id: down-button
-  - device_id: 5030e395b732b51ea772e9b0e5554ef5
-    domain: hue
-    platform: device
-    type: short_release
-    subtype: 4
-    unique_id: bd0d0840-ae40-4f99-88b5-9fe2730c63cb
-    id: off-button
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - on-button
-      sequence:
-      - service: light.toggle
-        metadata: {}
-        data: {}
-        target:
-          entity_id: light.pendant_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - up-button
-      sequence:
-      - service: media_player.volume_up
-        metadata: {}
-        data: {}
-        target:
-          entity_id: media_player.sonos_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - down-button
-      sequence:
-      - service: media_player.volume_down
-        metadata: {}
-        data: {}
-        target:
-          entity_id: media_player.sonos_bedroom
-    - conditions:
-      - condition: trigger
-        id:
-        - off-button
-      sequence:
-      - service: media_player.media_play_pause
-        metadata: {}
-        data: {}
-        target:
-          entity_id: media_player.sonos_bedroom
+          action: cover.close_cover
   mode: queued
   max: 10
 - id: '1714376090355'
@@ -975,30 +883,29 @@
 - id: '1733252756139'
   alias: Cleaning - Vacuum 12-00 Mon-Wed-Fri
   description: ''
-  trigger:
-  - platform: time
-    at: '12:00:00'
-  condition:
-  - condition: time
+  triggers:
+  - at: '12:00:00'
+    trigger: time
     weekday:
     - mon
     - wed
     - fri
-  action:
-  - service: input_select.select_option
-    metadata: {}
+  conditions: []
+  actions:
+  - metadata: {}
     data:
       option: 2xDeep
     target:
       entity_id: input_select.vacuum_mop_session
+    action: input_select.select_option
   - delay:
       hours: 0
       minutes: 0
       seconds: 3
       milliseconds: 0
-  - service: script.robot_clean_clean_all_rooms
-    metadata: {}
+  - metadata: {}
     data: {}
+    action: script.robot_clean_clean_all_rooms
   mode: single
 - id: '1736011246760'
   alias: Special - Handle vacation mode ON/OFF
@@ -2452,3 +2359,284 @@
           entity_id: switch.lenovo_tab_m10_screen
   mode: queued
   max: 10
+- id: '1769376646455'
+  alias: Bedroom - Handle light remote presses
+  description: ''
+  triggers:
+  - domain: mqtt
+    device_id: 2db1ac53a375ce2babaa709d0caf8615
+    type: action
+    subtype: off_press_release
+    trigger: device
+    id: 'off'
+  - domain: mqtt
+    device_id: 2db1ac53a375ce2babaa709d0caf8615
+    type: action
+    subtype: on_press
+    trigger: device
+    id: 'on'
+  - domain: mqtt
+    device_id: 2db1ac53a375ce2babaa709d0caf8615
+    type: action
+    subtype: off_hold_release
+    trigger: device
+    id: off-hold
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - if:
+        - condition: state
+          entity_id: light.bedroom_reading_lamp
+          state: 'on'
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data:
+            brightness_step_pct: 5
+          target:
+            entity_id: light.bedroom_reading_lamp
+        else:
+        - action: light.turn_on
+          metadata: {}
+          data:
+            color_temp_kelvin: 2000
+            brightness_pct: 10
+            transition: 2
+          target:
+            entity_id: light.bedroom_reading_lamp
+    - conditions:
+      - condition: trigger
+        id:
+        - 'off'
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          brightness_step_pct: -5
+        target:
+          entity_id: light.bedroom_reading_lamp
+    - conditions:
+      - condition: trigger
+        id:
+        - off-hold
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data:
+          transition: 2
+        target:
+          entity_id: light.bedroom_reading_lamp
+  mode: queued
+  max: 10
+- id: '1769377151873'
+  alias: Bedroom - Link pendant off to shelf strip/reading lamp
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.pendant_bedroom
+    from: 'on'
+    to: 'off'
+    id: turned-off
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - turned-off
+        - condition: time
+          before: '21:00:00'
+          weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+          after: 02:00:00
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - light.bedroom_shelf_strip
+          - light.bedroom_reading_lamp
+  mode: queued
+  max: 10
+- id: '1770277974535'
+  alias: Entry - Tablet motion ON/OFF
+  description: ''
+  triggers:
+  - alias: Tablet motion ON
+    entity_id:
+    - switch.galaxy_s9_wall_tablet_motion_detection
+    to: 'on'
+    id: tablet-motion-on
+    trigger: state
+    from: 'off'
+  - alias: Tablet motion OFF
+    entity_id:
+    - switch.galaxy_s9_wall_tablet_motion_detection
+    to: 'off'
+    id: tablet-motion-off
+    trigger: state
+    from: 'on'
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - tablet-motion-on
+      sequence:
+      - alias: Turn Tablet screen ON
+        action: switch.turn_on
+        data: {}
+        target:
+          entity_id: switch.galaxy_s9_wall_tablet_screen
+    - conditions:
+      - condition: trigger
+        id:
+        - tablet-motion-off
+      sequence:
+      - alias: Turn tablet screen OFF
+        action: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.galaxy_s9_wall_tablet_screen
+  mode: single
+- id: '1780692953989'
+  alias: Lights - Handle Fibaro Dimmer double-clicks
+  description: ''
+  triggers:
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 11
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: entry-double-click
+    alias: Listen for Fibaro Dimmer entry double-clicked
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 5
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: kitchen-double-click
+    alias: Listen for Fibaro Dimmer kitchen double-clicked
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 7
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: dining-double-click
+    alias: Listen for Fibaro Dimmer dining double-clicked
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 13
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: bath-downlights-2x
+    alias: Listen for Fibaro Dimmer bath downlights 2x
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 14
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: bath-lighstrip-2x
+    alias: Listen for Fibaro Dimmer bath lighstrip 2x
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 4
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: living-track4-2x
+    alias: Listen for Fibaro Dimmer living track4 2x
+    trigger: event
+  - event_type: zwave_js_value_notification
+    event_data:
+      node_id: 3
+      command_class: 43
+      property: sceneId
+      value: 14
+    id: living-downlights-2x
+    alias: Listen for Fibaro Dimmer living downlights 2x
+    trigger: event
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - entry-double-click
+      sequence:
+      - action: script.all_lights_off
+      alias: Entry double-click
+    - conditions:
+      - condition: trigger
+        id:
+        - kitchen-double-click
+      sequence:
+      - action: script.lights_kitchen_cooking_mood
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - dining-double-click
+      sequence:
+      - action: script.lights_dinner_mood
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - bath-downlights-2x
+      sequence:
+      - action: script.bathroom_bright_mode
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - bath-lighstrip-2x
+      sequence:
+      - action: script.bathroom_night_mode
+        metadata: {}
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - living-track4-2x
+      sequence:
+      - data: {}
+        action: script.all_lights_on
+    - conditions:
+      - condition: trigger
+        id:
+        - living-downlights-2x
+      sequence:
+      - action: script.lights_tv_mood
+        metadata: {}
+        data: {}
+  mode: queued

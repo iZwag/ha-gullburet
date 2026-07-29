@@ -41,44 +41,6 @@
                 entity_id: light.lightstrip_undershelf_kitchen
               data:
                 brightness: "{{ trigger.to_state.attributes.brightness }}"
-- id: "1702642524314"
-  alias: Tablet motion turns screen ON/OFF
-  description: ""
-  trigger:
-    - platform: state
-      entity_id:
-        - switch.lenovo_tab_m10_motion_detection
-      to: "on"
-      id: tablet-motion-on
-      alias: Tablet motion ON
-    - platform: state
-      entity_id:
-        - switch.lenovo_tab_m10_motion_detection
-      to: "off"
-      alias: Tablet motion OFF
-      id: tablet-motion-off
-  condition: []
-  action:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - tablet-motion-on
-          sequence:
-            - alias: Turn Tablet screen ON
-              service: switch.turn_on
-              target:
-                entity_id: switch.lenovo_tab_m10_screen
-        - conditions:
-            - condition: trigger
-              id:
-                - tablet-motion-off
-          sequence:
-            - alias: Turn tablet screen OFF
-              service: switch.turn_off
-              target:
-                entity_id: switch.lenovo_tab_m10_screen
-  mode: single
   
 - id: '1708602051833'
   alias: Special - Handle Vacation return time

@@ -69,57 +69,57 @@ all_lights_on:
   mode: restart
   icon: mdi:lightbulb-group
   sequence:
-  - service: light.turn_on
-    data:
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlights_entry
+    action: light.turn_on
   - delay: 00:00:01
-  - service: switch.turn_on
-    target:
+  - target:
       entity_id: switch.lamp_globe_living
     data: {}
-  - service: light.turn_on
-    data:
+    action: switch.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlights_living
-  - service: light.turn_on
-    data:
+    action: light.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.spottrack4_living
-  - service: switch.turn_on
-    target:
+    action: light.turn_on
+  - target:
       entity_id: switch.lamp_mushroom_living
     data: {}
-  - service: light.turn_on
-    data:
-      color_temp: 400
+    action: switch.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
+      color_temp_kelvin: 2500
     target:
       entity_id: light.mood_lamp_living
+    action: light.turn_on
   - delay: 00:00:01
-  - service: light.turn_on
-    data:
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.pendants_living
-  - service: light.turn_on
-    data:
+    action: light.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.pendants_kitchen
-  - service: light.turn_on
-    data:
+    action: light.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.spottrack6_kitchen
-  - service: light.turn_on
-    data:
+    action: light.turn_on
+  - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
       entity_id: light.downlights_bath
+    action: light.turn_on
 calculate_risenoon:
   alias: Sun-cycle - Calculates RiseNoon-time
   mode: single
@@ -143,30 +143,50 @@ calculate_noonset:
 bedtime_lights:
   alias: Lights - Bedtime-mode (Lights off)
   sequence:
-  - service: scene.turn_on
+  - action: light.turn_on
+    metadata: {}
+    data:
+      effect: fireplace
+      brightness_pct: 25
     target:
+      entity_id: light.bedroom_shelf_strip
+  - target:
       entity_id: scene.toilet_lights_off
     data: {}
-  - service: scene.turn_on
-    target:
+    action: scene.turn_on
+  - target:
       entity_id: scene.bathroom_lights_off
     data: {}
-  - service: scene.turn_on
-    target:
+    action: scene.turn_on
+  - target:
       entity_id: scene.office_lights_off
     data: {}
-  - service: scene.turn_on
-    target:
+    action: scene.turn_on
+  - target:
       entity_id: scene.entry_lights_off
     data: {}
-  - service: scene.turn_on
-    target:
+    action: scene.turn_on
+  - target:
       entity_id: scene.living_room_lights_off
     data: {}
-  - service: scene.turn_on
-    target:
+    action: scene.turn_on
+  - target:
       entity_id: scene.kitchen_lights_off
     data: {}
+    action: scene.turn_on
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - cover.left_blind_bedroom
+      - cover.right_blind_bedroom
+  - action: light.turn_off
+    metadata: {}
+    data:
+      transition: 180
+    target:
+      entity_id: light.bedroom_shelf_strip
   mode: single
   icon: mdi:bed
 select_floorplan_room:
@@ -711,44 +731,64 @@ lights_kitchen_cooking_mood:
 lights_dinner_mood:
   alias: Lights - Dinner mood
   sequence:
-  - service: scene.turn_on
-    metadata: {}
+  - metadata: {}
     target:
       entity_id: scene.lights_kitchen_dinner_mood
-  - service: scene.turn_on
-    metadata: {}
+    action: scene.turn_on
+  - metadata: {}
     target:
       entity_id: scene.lights_dinner_mood
-  - service: scene.turn_on
-    metadata: {}
+    action: scene.turn_on
+  - metadata: {}
     target:
       entity_id: scene.hue_control_room_solnedgang_pa_savannen
+    action: scene.turn_on
+  - action: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.lights_dining_mode
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.lights_cooking_mode
+      - input_boolean.lights_movie_mode
   mode: single
   icon: mdi:silverware-variant
 lights_tv_mood:
   alias: Lights - TV Mood
   sequence:
-  - service: cover.open_cover
-    metadata: {}
+  - metadata: {}
     data: {}
     target:
       entity_id: cover.curtain_living
-  - service: scene.turn_on
-    metadata: {}
+    action: cover.open_cover
+  - metadata: {}
     target:
       entity_id: scene.lights_entry_tv_mood
-  - service: scene.turn_on
-    metadata: {}
+    action: scene.turn_on
+  - metadata: {}
     target:
       entity_id: scene.lights_kitchen_tv_mood
-  - service: scene.turn_on
-    metadata: {}
+    action: scene.turn_on
+  - metadata: {}
     target:
       entity_id: scene.lights_living_tv_mood
-  - service: scene.turn_on
+    action: scene.turn_on
+  - action: input_boolean.turn_off
     metadata: {}
+    data: {}
     target:
-      entity_id: scene.hue_control_room_soho
+      entity_id:
+      - input_boolean.lights_cooking_mode
+      - input_boolean.lights_dining_mode
+  - action: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.lights_movie_mode
   mode: single
   icon: mdi:video-vintage
 bedroom_heated_sheet_control:
@@ -1099,25 +1139,25 @@ system_restart_rpi:
 robot_clean_clean_all_rooms:
   alias: Robot clean - Clean all rooms
   sequence:
-  - service: vacuum.start
+  - action: vacuum.start
     metadata: {}
     data: {}
     target:
       entity_id: vacuum.esmeralda
-  - service: input_text.set_value
-    metadata: {}
+  - metadata: {}
     data:
       value: Everywhere
     target:
       entity_id: input_text.last_cleaned_rooms
-  - service: script.robot_clean_create_mode_string
-    metadata: {}
+    action: input_text.set_value
+  - metadata: {}
     data: {}
-  - service: input_boolean.turn_on
-    metadata: {}
+    action: script.robot_clean_create_mode_string
+  - metadata: {}
     data: {}
     target:
       entity_id: input_boolean.show_vacuum_map
+    action: input_boolean.turn_on
   mode: single
   icon: mdi:robot-vacuum
 robot_clean_create_mode_string:
@@ -1281,3 +1321,35 @@ bedtime_blink_lights:
       retain: false
   mode: single
   icon: mdi:alarm-light
+bathroom_night_mode:
+  sequence:
+  - metadata: {}
+    target:
+      entity_id: scene.bathroom_night_mode
+    action: scene.turn_on
+  - metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.lights_override_bath
+    action: input_boolean.turn_on
+  alias: Bathroom - Night mode
+  mode: restart
+  icon: mdi:power-sleep
+  fields: {}
+  description: ''
+bathroom_bright_mode:
+  sequence:
+  - metadata: {}
+    target:
+      entity_id: scene.bathroom_bright_mode
+    action: scene.turn_on
+  - target:
+      entity_id:
+      - input_boolean.lights_override_bath
+    data: {}
+    action: input_boolean.turn_on
+  alias: Bathroom - Bright mode
+  mode: restart
+  icon: mdi:brightness-7
+  fields: {}
+  description: ''

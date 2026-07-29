@@ -8,80 +8,83 @@
   trigger:
   - platform: state
     entity_id: input_number.apartment_dimmer
-  condition: []
-  action:
-  - service: script.masterdim_script
+  conditions: []
+  actions:
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_veranda', 'on') }}"
       light_entity: light.wall_lantern_veranda
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Veranda wall lantern
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.spottrack6_kitchen
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen 6-track
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
       light_entity: light.pendants_kitchen
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen pendants
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.pendants_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living pendants
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.downlights_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living downlights
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.spottrack4_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living 4-track
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
       light_entity: light.mood_lamp_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living mood ball
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_entry', 'on') }}"
       light_entity: light.downlights_entry
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Entry downlights
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_office', 'on') }}"
       light_entity: light.pendant_office
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Office pendants
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
       light_entity: light.lightstrip_bath
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath lightstrip
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
       light_entity: light.downlights_bath
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath downlights
-  - service: script.masterdim_script
+  - action: script.masterdim_script
     data:
       manual_override: false
       light_entity: light.downlight_toilet
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Toilet downlight
+  - action: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.lights_master_dimmer_override
   mode: restart
 
 - id: '1709814409323'
@@ -369,6 +372,7 @@
   mode: queued
 
 # HANDLE FIBARO DIMMER DOUBLE-CLICK
+# >>> MOVED TO automations.yaml <<<
 # - First, configure the relevant Dimmer Switch device to:
 #   - Parameter 23: Double Click Sets Brightness to 100% - disable
 #   - Parameter 28: Scene Activation Functionality - enable
@@ -376,132 +380,27 @@
 # use HA Developer Tools to listen for Z-wave events with trigger:
 #  'zwave_js_value_notification'. Then physically double-click the target 
 #  switch to identify its information. 
-- id: '1710423415819'
-  alias: Lights - Handle Fibaro Dimmer double-clicks
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 11
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: entry-double-click
-    alias: Listen for Fibaro Dimmer entry double-clicked
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 5
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: kitchen-double-click
-    alias: Listen for Fibaro Dimmer kitchen double-clicked
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 7
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: dining-double-click
-    alias: Listen for Fibaro Dimmer dining double-clicked
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 13
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: bath-downlights-2x
-    alias: Listen for Fibaro Dimmer bath downlights 2x
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 14
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: bath-lighstrip-2x
-    alias: Listen for Fibaro Dimmer bath lighstrip 2x
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 4
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: living-track4-2x
-    alias: Listen for Fibaro Dimmer living track4 2x
-  - platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 3
-      command_class: 43
-      property: sceneId
-      value: 14
-    id: living-downlights-2x
-    alias: Listen for Fibaro Dimmer living downlights 2x
-  condition: []
-  action:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id:
-        - entry-double-click
-      sequence:
-      - service: script.all_lights_off
-      alias: Entry double-click
-    - conditions:
-      - condition: trigger
-        id:
-        - kitchen-double-click
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.lights_cooking_mode
-    - conditions:
-      - condition: trigger
-        id:
-        - dining-double-click
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.lights_dining_mode
-    - conditions:
-      - condition: trigger
-        id:
-        - bath-downlights-2x
-      sequence:
-      - service: input_select.select_option
-        target:
-          entity_id: input_select.bathroom_mode_select
-        data:
-          option: "bright"
-    - conditions:
-      - condition: trigger
-        id:
-        - bath-lighstrip-2x
-      sequence:
-      - service: input_select.select_option
-        target:
-          entity_id: input_select.bathroom_mode_select
-        data:
-          option: "night"
-    - conditions:
-      - condition: trigger
-        id:
-        - living-track4-2x
-      sequence:
-      - service: script.all_lights_on
-        data: {}
-    - conditions:
-      - condition: trigger
-        id:
-        - living-downlights-2x
-      sequence:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.lights_movie_mode
-  mode: queued
+#- id: '1710423415819'
+#  alias: Lights - Handle Fibaro Dimmer double-clicks
+#  description: ''
+#  trigger:
+#  - platform: event
+#    event_type: zwave_js_value_notification
+#    event_data:
+#      node_id: 11
+#      command_class: 43
+#      property: sceneId
+#      value: 14
+#    id: entry-double-click
+#    alias: Listen for Fibaro Dimmer entry double-clicked
+#  condition: []
+#  action:
+#  - choose:
+#    - conditions:
+#      - condition: trigger
+#        id:
+#        - entry-double-click
+#      sequence:
+#      - service: script.all_lights_off
+#      alias: Entry double-click    
+#  mode: queued
