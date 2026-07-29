@@ -1,0 +1,295 @@
+# HEATING =====================================================================
+# Schedules to track the automatic heating modes (Comfort, Sleep, Away)
+# Note: Away-mode is automatically activated in periods of the day where the
+#   Comfort/Sleep schedules are inactive.
+heating_comfort_bath:
+  name: Heating - Bath - Comfort schedule
+  icon: mdi:emoticon
+  monday:
+    - from: "15:00:00"
+      to: "23:00:00"
+      #data:
+  tuesday:
+    - from: "15:00:00"
+      to: "23:00:00"
+  wednesday:
+    - from: "15:00:00"
+      to: "23:00:00"
+  thursday:
+    - from: "15:00:00"
+      to: "23:00:00"
+  friday:
+    - from: "15:00:00"
+      to: "23:30:00"
+  saturday:
+    - from: "07:00:00"
+      to: "23:30:00"
+  sunday:
+    - from: "07:00:00"
+      to: "23:00:00"
+
+heating_sleep_bath:
+  name: Heating - Bath - Sleep schedule
+  icon: mdi:power-sleep
+  monday:
+    - from: "00:00:00"
+      to: "08:00:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  tuesday:
+    - from: "00:00:00"
+      to: "08:00:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  wednesday:
+    - from: "00:00:00"
+      to: "08:00:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  thursday:
+    - from: "00:00:00"
+      to: "08:00:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  friday:
+    - from: "00:00:00"
+      to: "08:00:00"
+    - from: "23:30:00"
+      to: "23:59:59"
+  saturday:
+    - from: "00:00:00"
+      to: "07:00:00"
+    - from: "23:30:00"
+      to: "23:59:59"
+  sunday:
+    - from: "00:00:00"
+      to: "07:00:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+
+heating_sleep_guest:
+  name: Heating - Guest - Sleep schedule
+  icon: mdi:power-sleep
+  monday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "20:30:00"
+      to: "23:59:59"
+  tuesday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "20:30:00"
+      to: "23:59:59"
+  wednesday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "20:30:00"
+      to: "23:59:59"
+  thursday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "20:30:00"
+      to: "23:59:59"
+  friday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "20:30:00"
+      to: "23:59:59"
+  saturday:
+    - from: "00:00:00"
+      to: "10:00:00"
+    - from: "21:00:00"
+      to: "23:59:59"
+  sunday:
+    - from: "00:00:00"
+      to: "10:00:00"
+    - from: "21:00:00"
+      to: "23:59:59"
+
+heating_sleep_bedroom:
+  name: Heating - Bedroom - Sleep schedule
+  icon: mdi:power-sleep
+  monday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  tuesday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  wednesday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  thursday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  friday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  saturday:
+    - from: "00:00:00"
+      to: "09:00:00"
+    - from: "21:30:00"
+      to: "23:59:59"
+  sunday:
+    - from: "00:00:00"
+      to: "09:00:00"
+    - from: "21:30:00"
+      to: "23:59:59" 
+
+heating_comfort_toilet:
+  name: Heating - Toilet - Comfort schedule
+  icon: mdi:emoticon
+  monday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  tuesday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  wednesday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  thursday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  friday:
+    - from: "15:30:00"
+      to: "23:30:00"
+  saturday:
+    - from: "09:00:00"
+      to: "23:30:00"
+  sunday:
+    - from: "09:00:00"
+      to: "23:00:00"
+
+heating_comfort_living:
+  name: Heating - Living - Comfort schedule
+  icon: mdi:emoticon
+  monday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  tuesday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  wednesday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  thursday:
+    - from: "15:30:00"
+      to: "23:00:00"
+  friday:
+    - from: "15:30:00"
+      to: "23:59:59"
+  saturday:
+    - from: "07:30:00"
+      to: "23:59:59"
+  sunday:
+    - from: "07:30:00"
+      to: "23:00:00"
+
+heating_sleep_living:
+  name: Heating - Living - Sleep schedule
+  icon: mdi:power-sleep
+  monday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  tuesday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  wednesday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  thursday:
+    - from: "00:00:00"
+      to: "08:30:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+  friday:
+    - from: "00:00:00"
+      to: "08:30:00"
+  saturday:
+    - from: "00:00:00"
+      to: "07:30:00"
+  sunday:
+    - from: "00:00:00"
+      to: "07:30:00"
+    - from: "23:00:00"
+      to: "23:59:59"
+
+heating_comfort_office:
+  name: Heating - Office - Comfort schedule
+  icon: mdi:emoticon
+  monday:
+    - from: "18:00:00"
+      to: "22:30:00"
+  tuesday:
+    - from: "18:00:00"
+      to: "22:30:00"
+  wednesday:
+    - from: "18:00:00"
+      to: "22:30:00"
+  thursday:
+    - from: "18:00:00"
+      to: "22:30:00"
+  friday:
+    - from: "08:00:00"
+      to: "22:30:00"
+  saturday:
+    - from: "08:00:00"
+      to: "21:00:00"
+  sunday:
+    - from: "08:00:00"
+      to: "21:00:00"
+
+heating_sleep_office:
+  name: Heating - Office - Sleep schedule
+  icon: mdi:power-sleep
+  monday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "17:00:00"
+      to: "23:59:59"
+  tuesday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "17:00:00"
+      to: "23:59:59"
+  wednesday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "17:00:00"
+      to: "23:59:59"
+  thursday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "17:00:00"
+      to: "23:59:59"
+  friday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "19:00:00"
+      to: "23:59:59"
+  saturday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "21:00:00"
+      to: "23:59:59"
+  sunday:
+    - from: "06:00:00"
+      to: "08:00:00"
+    - from: "21:00:00"
+      to: "23:59:59"
