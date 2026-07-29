@@ -442,3 +442,14 @@
         {% else %}
           none
         {% endif %}
+
+- platform: group
+  name: Temperature apartment avg
+  type: mean
+  device_class: temperature
+  unit_of_measurement: °C
+  ignore_non_numeric: true
+  entities:
+    - sensor.temperature_entry
+    - sensor.temperature_living
+    - sensor.temperature_kitchen

@@ -9,16 +9,20 @@ sensor: !include sensors.yaml
 script: !include scripts.yaml
 template: !include templates.yaml
 # HELPERS (as code) - Replaces Settings > Devices & services > Helpers UI-configured
-timer: !include timers.yaml
-input_boolean: !include input_boolean.yaml
-input_number: !include input_number.yaml
-input_select: !include input_select.yaml
-input_text: !include input_text.yaml
-input_datetime: !include input_datetime.yaml
-shell_command: !include shell_commands.yaml
+timer: !include helper_timers.yaml
+input_boolean: !include helper_input_booleans.yaml
+input_number: !include helper_input_numbers.yaml
+input_select: !include helper_input_selects.yaml
+input_text: !include helper_input_texts.yaml
+input_datetime: !include helper_input_datetimes.yaml
 schedule: !include helper_schedules.yaml
+camera: !include helper_cameras.yaml
+light: !include helper_lights.yaml
+media_player: !include helper_media_players.yaml
 
-camera: !include cameras.yaml
+
+shell_command: !include shell_commands.yaml
+
 
 # TEXT TO SPEECH
 tts:

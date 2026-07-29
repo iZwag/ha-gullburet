@@ -1,0 +1,6 @@
+- platform: group
+  name: Audio - Common speakers group
+  entities:
+    - media_player.sonos_living
+    - media_player.sonos_kitchen
+    - media_player.sonos_move
