@@ -258,12 +258,20 @@ cards:
                   entity: input_boolean.show_vacuum_map
                   tap_action:
                     action: toggle
+                  variables:
+                    iconColor: '#1ac8ed'
                 - type: custom:button-card
                   template: text_chip
-                  icon: mdi:fan
-                  entity: input_select.vacuum_fan_mode
+                  icon: mdi:calendar-sync
+                  state_display: | 
+                    [[[
+                      return "Auto";
+                    ]]]
+                  entity: automation.cleaning_vacuum_12_00_mon_wed_fri
                   tap_action:
-                    action: none
+                    action: toggle
+                  variables:
+                    iconColor: '#1ac8ed'
                 - type: custom:button-card
                   template: text_chip
                   icon: |
@@ -349,27 +357,31 @@ cards:
                         # Vacuum modes: Off, Quiet, Balanced, Turbo, Max
                         cards:
                         - type: custom:button-card
-                          template: input_select_icon
+                          template: input_select_buttons
                           entity: input_select.vacuum_fan_mode
                           icon: mdi:power-sleep
+                          name: Quiet
                           variables:
                             select_option: "Quiet"
                         - type: custom:button-card
-                          template: input_select_icon
+                          template: input_select_buttons
                           entity: input_select.vacuum_fan_mode
                           icon: mdi:fan
+                          name: Balanced
                           variables:
                             select_option: "Balanced"
                         - type: custom:button-card
-                          template: input_select_icon
+                          template: input_select_buttons
                           entity: input_select.vacuum_fan_mode
                           icon: mdi:fan-plus
+                          name: Turbo
                           variables:
                             select_option: "Turbo"
                         - type: custom:button-card
-                          template: input_select_icon
+                          template: input_select_buttons
                           entity: input_select.vacuum_fan_mode
                           icon: mdi:fan-speed-3
+                          name: Max
                           variables:
                             select_option: "Max"
                     - type: conditional
