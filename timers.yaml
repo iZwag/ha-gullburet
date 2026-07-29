@@ -1,2 +1,13 @@
 entry_light:
+  name: Entry - Light timer
+  restore: true
+
+storage_room_light_timer:
+  name: Storage - Light timer
+  icon: mdi:sun-clock
+  restore: true
+
+heated_sheet_timer:
+  name: Bedroom - Heated sheet timer
+  icon: mdi:heating-coil
   restore: true

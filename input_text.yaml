@@ -1,3 +1,4 @@
+# CLEANING ====================================================================
 # Stores a list of room IDs to be cleaned when selected
 # A text string is used in lack of list/array support
 selected_room_ids_cleaning:
@@ -16,3 +17,16 @@ last_cleaning_mode:
   name: "Cleaning - Last cleaning mode"
   icon: mdi:robot-vacuum
   max: 255
+
+# SUN-CYCLE
+sun_cycle_next_event:
+  name: Sun cycle - Next event
+  icon: mdi:theme-light-dark
+  max: 120
+
+# SECRET
+# Must be set manually in HA, state is only stored locally. Cleartext for UI
+guest_wifi_password:
+  name: Guest - Wi-Fi Password
+  icon: mdi:key
+  max: 64

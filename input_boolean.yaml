@@ -1,3 +1,4 @@
+# HEATING =====================================================================
 # Mode for pausing heating, effectively reducing power consumption
 # Turned On = Heating devices are turned off
 # Turned Off = Heating devices are turned back on - Occurs every hour
@@ -5,6 +6,7 @@ pause_heating:
   name: Heating - Pause heat devices
   icon: mdi:radiator-off
 
+# CLEANING ====================================================================
 # Mode for selecting rooms for robot vacuum session in 3D-floorplan
 # Turned On = Prepares 3D-floorplan for selecting rooms for cleaning
 # Turned Off = Clears 3D-floorplan of select rooms
@@ -12,6 +14,18 @@ select_rooms_cleaning:
   name: Cleaning - Select rooms
   icon: mdi:floor-plan
 
+# If set to true, runs the robot on deep clean mop setting after vacuuming
+mop_after_vacuum:
+  name: "Cleaning - Mop after vacuum"
+  icon: mdi:water-check
+
+# Toggles showing map in 3D-model on/off
+show_vacuum_map:
+  name: "Cleaning - Show vacuum map"
+  icon: mdi:map-marker-path
+
+# FLOORPLAN ===================================================================
+# Boolean select tracking, needed for the 3D-floorplan interactions
 floorplan_bedroom_selected:
   name: Floorplan - Bedroom selected
   icon: mdi:gesture-tap
@@ -36,21 +50,18 @@ floorplan_office_selected:
   name: Floorplan - Office selected
   icon: mdi:gesture-tap
 
-# If set to true, runs the robot on deep clean mop setting after vacuuming
-mop_after_vacuum:
-  name: "Cleaning - Mop after vacuum"
-  icon: mdi:water-check
+# Show icons boolean enable/disable
+floorplan_show_icons:
+  name: FloorPlan - Show icons
+  icon: mdi:eye-off
 
-# Toggles showing map in 3D-model on/off
-show_vacuum_map:
-  name: "Cleaning - Show vacuum map"
-  icon: mdi:map-marker-path
-
+# WAKEUP ======================================================================
 # Wakeup routine - Alarm enabled/disabled
 wakeup_alarm_active:
   name: "Wakeup - Alarm enabled"
   icon: mdi:alarm-check
 
+# BEDTIME =====================================================================
 # Bedtime routine - Trigger enabled/disabled
 bedtime_trigger_active:
   name: "Bedtime - Enable trigger"
@@ -60,3 +71,68 @@ bedtime_trigger_active:
 bedtime_heating_sheet_enable:
   name: "Bedtime - Heating sheet enable"
   icon: mdi:heating-coil
+
+# LIGHTS ======================================================================
+# If master dimmer has been used, this is enabled to override automations
+lights_master_dimmer_override:
+  name: "Lights - Master dimmer override"
+  icon: mdi:power
+
+auto_suncycle_masterdim:
+  name: Lights - Automatic sun-cycle masterdim
+  icon: mdi:sun-clock
+
+# Overrides
+lights_override_veranda:
+  name: Lights - Veranda - Manual override
+  icon: mdi:gesture-tap-hold
+
+lights_override_kitchen:
+  name: Lights - Kitchen - Manual override
+  icon: mdi:gesture-tap-hold
+
+lights_override_living:
+  name: Lights - Living room - Manual override
+  icon: mdi:gesture-tap-hold
+
+lights_override_entry:
+  name: Lights - Entry hall - Manual override
+  icon: mdi:gesture-tap-hold
+
+lights_override_bath:
+  name: Lights - Bathroom - Manual override
+  icon: mdi:gesture-tap-hold
+
+lights_override_office:
+  name: Lights - Office - Manual override
+  icon: mdi:gesture-tap-hold
+
+# Light modes
+lights_cooking_mode:
+  name: Lights - Cooking mode
+  icon: mdi:pot-steam
+
+lights_dining_mode:
+  name: Lights - Dining mode
+  icon: mdi:silverware-variant
+
+lights_movie_mode:
+  name: Lights - Movie mode
+  icon: mdi:video-vintage
+
+# SPECIAL =====================================================================
+vacation_mode_enable:
+  name: Special - Vacation mode enable
+  icon: mdi:palm-tree
+
+guest_mode_enable:
+  name: Special - Guest mode enable
+  icon: mdi:account-plus
+
+party_mode_enable:
+  name: Special - Party mode enable
+  icon: mdi:party-popper
+
+guest_show_wifi:
+  name: Guest - Show Wi-Fi
+  icon: mdi:eye

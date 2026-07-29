@@ -1,4 +1,6 @@
-# Tracks the currently active control mode 
+# HEATING =====================================================================
+# Tracks the currently active heating control mode 
+# OFFICE
 heating_mode_office:
   name: "Heating - Office - Control mode"
   icon: mdi:heat-wave
@@ -9,6 +11,70 @@ heating_mode_office:
     - Comfort
     - Vacation
 
+# BATH
+heating_mode_bath:
+  name: Heating - Bath - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Comfort
+    - Vacation
+
+# GUEST
+heating_mode_guest:
+  name: Heating - Guest - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Vacation  
+
+# BEDROOM
+heating_mode_bedroom:
+  name: Heating - Bedroom - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Vacation
+
+# KITCHEN
+heating_mode_kitchen:
+  name: Heating - Kitchen - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Comfort
+    - Vacation
+
+# LIVING ROOM
+heating_mode_living:
+  name: Heating - Living - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Sleep
+    - Comfort
+    - Vacation
+  
+# TOILET
+heating_mode_toilet:
+  name: Heating - Toilet - Control mode
+  icon: mdi:heat-wave
+  options:
+    - Manual
+    - Away
+    - Comfort
+    - Vacation
+
+# CLEANING ====================================================================
 # Vacuum robot fan-mode - Options are the app-names, comments API-names.
 vacuum_fan_mode:
   name: "Cleaning - Fan mode"
@@ -65,3 +131,62 @@ wakeup_display_time:
   options:
     - weekday
     - weekend
+
+# FLOORPLAN ===================================================================
+# Selected floorplan state picker
+floorplan_select_state:
+  name: Floorplan - Select state
+  icon: mdi:floor-plan
+  options:
+    - none
+    - bath
+    - bedroom
+    - entry
+    - guest
+    - kitchen
+    - living
+    - office
+    - storage
+    - toilet
+    - veranda
+
+# CLIMATE =====================================================================
+# Cold/warm season select
+climate_season_select:
+  name: Climate - Cold/warm season select
+  icon: mdi:sun-snowflake-variant
+  options:
+    - Cold
+    - Warm
+
+# AUDIO =======================================================================
+# Speaker select
+audio_speaker_select:
+  name: Audio - Speaker select
+  icon: mdi:speaker
+  options:
+    - Living room
+    - Kitchen
+    - Sonos Move
+    - Bedroom
+
+# LIGHTS ======================================================================
+# TBR?
+office_mode_select:
+  name: Office - Mode select
+  icon: mdi:ceiling-light-multiple
+  options:
+    - Focus
+    - Bright
+    - Chill
+    - Night
+
+# TBR?
+bathroom_mode_select:
+  name: Bathroom - Mode select
+  icon: mdi:shower-head
+  options:
+    - off
+    - bright
+    - night
+    - spa
