@@ -1,3 +1,9 @@
+/**
+ * NOTE: THIS FILE IS ONLY KEPT AS INSPIRATION ON A SIMPLE, CLEAN EXAMPLE ON
+ *  HOW TO IMPLEMENT A CARD LIKE THIS.
+ *  IT WAS ONCE FETCHED FROM HACS, BUT WAS LATER CUSTOMIZED BY @iZwag
+ */
+
 const LitElement = customElements.get("hui-masonry-view") ? Object.getPrototypeOf(customElements.get("hui-masonry-view")) : Object.getPrototypeOf(customElements.get("hui-view"));
 const html = LitElement.prototype.html;
 const css = LitElement.prototype.css;
