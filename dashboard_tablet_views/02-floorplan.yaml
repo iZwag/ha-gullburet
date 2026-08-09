@@ -634,7 +634,7 @@ cards:
                         padding: 4px var(--ha-card-padding) 4px !important;
                       }
                 - type: custom:mushroom-light-card
-                  entity: light.pendant_bedroom
+                  entity: light.bedroom_pendant
                   icon: mdi:ceiling-light
                   icon_color: white
                   name: Pendant lamp
@@ -1789,7 +1789,7 @@ cards:
             # BEDROOM PENDANT ICON
             - type: custom:button-card
               template: light
-              entity: light.pendant_bedroom
+              entity: light.bedroom_pendant
               style:
                 left: 27%
                 top: 80%
@@ -1832,7 +1832,7 @@ cards:
             # GUEST PENDANT ICON
             - type: custom:button-card
               template: light
-              entity: light.pendant_guest
+              entity: light.guest_pendant
               style:
                 left: 75%
                 top: 80%
@@ -1846,14 +1846,14 @@ cards:
             # ENTRY DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
-              entity: light.downlights_entry
+              entity: light.entry_downlights
               style:
                 left: 71.75%
                 top: 64%
             # TOILET DOWNLIGHT ICON
             - type: custom:button-card
               template: light
-              entity: light.downlight_toilet
+              entity: light.toilet_downlight
               style:
                 left: 85%
                 top: 52%
@@ -1867,14 +1867,14 @@ cards:
             # BATH DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
-              entity: light.downlights_bath
+              entity: light.bath_downlights
               style:
                 left: 64%
                 top: 54%
             # BATH LIGHTSTRIP ICON
             - type: custom:button-card
               template: light
-              entity: light.lightstrip_bath
+              entity: light.bath_lightstrip
               styles:
                 icon:
                   - transform: rotate(45deg)
@@ -1891,14 +1891,14 @@ cards:
             # LIVING ROOM SPOTTRACK ICON
             - type: custom:button-card
               template: light
-              entity: light.spottrack4_living
+              entity: light.living_4_spot_track
               style:
                 left: 41%
                 top: 44%
             # LIVING ROOM DOWNLIGHTS ICON
             - type: custom:button-card
               template: light
-              entity: light.downlights_living
+              entity: light.living_downlights
               style:
                 left: 14%
                 top: 45%
@@ -1940,7 +1940,7 @@ cards:
             # LIVING ROOM PENDANTS ICON (DINING TABLE)
             - type: custom:button-card
               template: light
-              entity: light.pendants_living
+              entity: light.living_dining_pendants
               style:
                 left: 34.5%
                 top: 20%
@@ -2034,7 +2034,7 @@ cards:
             # KITCHEN PENDANTS ICON
             - type: custom:button-card
               template: light
-              entity: light.pendants_kitchen
+              entity: light.kitchen_flowerpots
               style:
                 left: 61%
                 top: 20%

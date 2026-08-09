@@ -180,7 +180,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_living
+        entity: light.living_downlights
         name: Spottekasse
         color: accent
         tap_action:
@@ -188,7 +188,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.spottrack4_living
+        entity: light.living_4_spot_track
         name: Spotteskinne
         color: accent
         tap_action:
@@ -199,7 +199,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendants_living
+        entity: light.living_dining_pendants
         name: Spisebord
         color: accent
         tap_action:
@@ -274,7 +274,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendants_kitchen
+        entity: light.kitchen_flowerpots
         name: Flowerpots
         color: accent
         tap_action:
@@ -335,7 +335,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_bedroom
+        entity: light.bedroom_pendant
         name: Pendel
         color: accent
         tap_action:
@@ -375,7 +375,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_bath
+        entity: light.bath_downlights
         name: Spotter
         color: accent
         tap_action:
@@ -383,7 +383,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.lightstrip_bath
+        entity: light.bath_lightstrip
         name: Badelys
         color: accent
         tap_action:
@@ -425,7 +425,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_office
+        entity: light.office_pendant
         name: Pendler
         color: accent
         tap_action:
@@ -464,7 +464,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_entry
+        entity: light.entry_downlights
         name: Spotter
         color: accent
         tap_action:
@@ -550,7 +550,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_guest
+        entity: light.guest_pendant
         name: Skypendel
         color: accent
         tap_action:
@@ -590,7 +590,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlight_toilet
+        entity: light.toilet_downlight
         name: Takspott
         color: accent
         tap_action:

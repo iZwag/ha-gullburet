@@ -2,5 +2,5 @@
   name: Pendants, office
   all: false
   entities:
-    - light.pendant_office_left
-    - light.pendant_office_right
+    - light.office_pendant_left
+    - light.office_pendant_right

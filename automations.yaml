@@ -226,7 +226,7 @@
           brightness_pct: 40
           transition: 300
         target:
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
         action: light.turn_on
       - action: light.turn_on
         metadata: {}
@@ -245,7 +245,7 @@
           brightness_pct: 100
           transition: 300
         target:
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
         action: light.turn_on
       - action: light.turn_on
         metadata: {}
@@ -269,7 +269,7 @@
           id:
           - blinds-open
         - condition: state
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
           state: 'on'
       sequence:
       - metadata: {}
@@ -364,7 +364,7 @@
   trigger:
   - platform: state
     entity_id:
-    - light.pendant_bedroom
+    - light.bedroom_pendant
     from: 'on'
     to: 'off'
   condition:
@@ -794,19 +794,19 @@
   trigger:
   - platform: state
     entity_id:
-    - light.downlights_bath
+    - light.bath_downlights
     from: 'on'
     to: 'off'
   condition:
   - condition: state
-    entity_id: light.lightstrip_bath
+    entity_id: light.bath_lightstrip
     state: 'on'
   action:
   - service: light.turn_off
     metadata: {}
     data: {}
     target:
-      entity_id: light.lightstrip_bath
+      entity_id: light.bath_lightstrip
   mode: single
 - id: '1732224070644'
   alias: Heating - Handle heater calibrations
@@ -1345,22 +1345,22 @@
   trigger:
   - platform: state
     entity_id:
-    - light.downlights_bath
+    - light.bath_downlights
     from: 'on'
     to: 'off'
   - platform: state
     entity_id:
-    - light.lightstrip_bath
+    - light.bath_lightstrip
     from: 'on'
     to: 'off'
   condition:
   - condition: and
     conditions:
     - condition: state
-      entity_id: light.downlights_bath
+      entity_id: light.bath_downlights
       state: 'off'
     - condition: state
-      entity_id: light.lightstrip_bath
+      entity_id: light.bath_lightstrip
       state: 'off'
     - condition: not
       conditions:
@@ -1380,13 +1380,13 @@
   trigger:
   - platform: state
     entity_id:
-    - light.pendant_office
+    - light.office_pendant
     from: 'on'
     to: 'off'
     id: 'off'
   - platform: state
     entity_id:
-    - light.pendant_office
+    - light.office_pendant
     from: 'off'
     to: 'on'
     id: 'on'
@@ -1408,7 +1408,7 @@
     id: mode-change
   - platform: state
     entity_id:
-    - light.pendant_office
+    - light.office_pendant
     attribute: brightness
     id: brightness
   condition: []
@@ -1559,7 +1559,7 @@
       - service: light.turn_on
         metadata: {}
         data:
-          brightness_pct: '{{ state_attr(''light.pendant_office'', ''brightness'')
+          brightness_pct: '{{ state_attr(''light.office_pendant'', ''brightness'')
             }}'
         target:
           entity_id: light.pendants_office
@@ -2336,7 +2336,7 @@
         data:
           brightness_pct: '{{ states(''input_number.apartment_dimmer'') }}'
         target:
-          entity_id: light.downlights_entry
+          entity_id: light.entry_downlights
       - action: switch.turn_on
         metadata: {}
         data: {}
@@ -2351,7 +2351,7 @@
         metadata: {}
         data: {}
         target:
-          entity_id: light.downlights_entry
+          entity_id: light.entry_downlights
       - action: switch.turn_off
         metadata: {}
         data: {}
@@ -2439,7 +2439,7 @@
   triggers:
   - trigger: state
     entity_id:
-    - light.pendant_bedroom
+    - light.bedroom_pendant
     from: 'on'
     to: 'off'
     id: turned-off

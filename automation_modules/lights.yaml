@@ -25,25 +25,25 @@
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
-      light_entity: light.pendants_kitchen
+      light_entity: light.kitchen_flowerpots
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen pendants
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
-      light_entity: light.pendants_living
+      light_entity: light.living_dining_pendants
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living pendants
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
-      light_entity: light.downlights_living
+      light_entity: light.living_downlights
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living downlights
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
-      light_entity: light.spottrack4_living
+      light_entity: light.living_4_spot_track
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living 4-track
   - action: script.masterdim_script
@@ -55,31 +55,31 @@
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_entry', 'on') }}"
-      light_entity: light.downlights_entry
+      light_entity: light.entry_downlights
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Entry downlights
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_office', 'on') }}"
-      light_entity: light.pendant_office
+      light_entity: light.office_pendant
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Office pendants
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
-      light_entity: light.lightstrip_bath
+      light_entity: light.bath_lightstrip
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath lightstrip
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_bath', 'on') }}"
-      light_entity: light.downlights_bath
+      light_entity: light.bath_downlights
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Bath downlights
   - action: script.masterdim_script
     data:
       manual_override: false
-      light_entity: light.downlight_toilet
+      light_entity: light.toilet_downlight
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Toilet downlight
   - action: input_boolean.turn_on

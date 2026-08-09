@@ -15,7 +15,7 @@
       unique_id: pendant_bedroom_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendant_bedroom', 'brightness') %}
+        {% set brightness = state_attr('light.bedroom_pendant', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -61,7 +61,7 @@
       unique_id: pendant_guest_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendant_guest', 'brightness') %}
+        {% set brightness = state_attr('light.guest_pendant', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -84,7 +84,7 @@
       unique_id: downlights_entry_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_entry', 'brightness') %}
+        {% set brightness = state_attr('light.entry_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -107,7 +107,7 @@
       unique_id: downlight_toilet_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlight_toilet', 'brightness') %}
+        {% set brightness = state_attr('light.toilet_downlight', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -130,7 +130,7 @@
       unique_id: downlights_bath_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_bath', 'brightness') %}
+        {% set brightness = state_attr('light.bath_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -153,7 +153,7 @@
       unique_id: lightstrip_bath_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.lightstrip_bath', 'brightness') %}
+        {% set brightness = state_attr('light.bath_lightstrip', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -176,7 +176,7 @@
       unique_id: spottrack_living_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.spottrack4_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_4_spot_track', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -199,7 +199,7 @@
       unique_id: downlights_living_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -222,7 +222,7 @@
       unique_id: pendants_dining_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendants_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_dining_pendants', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -245,7 +245,7 @@
       unique_id: pendants_kitchen_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendants_kitchen', 'brightness') %}
+        {% set brightness = state_attr('light.kitchen_flowerpots', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -370,19 +370,19 @@
     unit_of_measurement: ''
     state: >
       {{ [states('light.ceiling_light_storage'), 
-          states('light.downlight_toilet'),
-          states('light.downlights_bath'),
-          states('light.downlights_entry'),
-          states('light.downlights_living'),
-          states('light.lightstrip_bath'),
+          states('light.toilet_downlight'),
+          states('light.bath_downlights'),
+          states('light.entry_downlights'),
+          states('light.living_downlights'),
+          states('light.bath_lightstrip'),
           states('light.lightstrip_undershelf_kitchen'),
           states('light.mood_lamp_living'),
-          states('light.pendant_bedroom'),
-          states('light.pendant_guest'),
-          states('light.pendants_kitchen'),
-          states('light.pendants_living'),
-          states('light.pendant_office'),
-          states('light.spottrack4_living'),
+          states('light.bedroom_pendant'),
+          states('light.guest_pendant'),
+          states('light.kitchen_flowerpots'),
+          states('light.living_dining_pendants'),
+          states('light.office_pendant'),
+          states('light.living_4_spot_track'),
           states('light.spottrack6_kitchen'),
           states('light.wall_light_veranda'),
           states('switch.lamp_globe_living'),
@@ -846,21 +846,21 @@
     unit_of_measurement: 'W'
     state: >
       {% set sensors = [
-        states('sensor.power_downlight_toilet') | float(default=0),
-        states('sensor.power_downlights_bath') | float(default=0),
-        states('sensor.power_downlights_entry') | float(default=0),
-        states('sensor.power_downlights_living') | float(default=0),
-        states('sensor.power_lightstrip_bath') | float(default=0),
+        states('sensor.toilet_downlight_power') | float(default=0),
+        states('sensor.bath_downlights_power') | float(default=0),
+        states('sensor.entry_downlights_power') | float(default=0),
+        states('sensor.living_downlights_power') | float(default=0),
+        states('sensor.bath_lightstrip_power') | float(default=0),
         states('sensor.power_lightstrip_kitchen') | float(default=0),
         states('sensor.power_mushroom_living') | float(default=0),
         states('sensor.power_globe_living') | float(default=0),
-        states('sensor.power_pendant_bedroom') | float(default=0),
-        states('sensor.power_pendant_guest') | float(default=0),
-        states('sensor.power_pendants_kitchen') | float(default=0),
-        states('sensor.power_pendants_living') | float(default=0),
-        states('sensor.power_pendant_office') | float(default=0),
-        states('sensor.power_spottrack_kitchen') | float(default=0),
-        states('sensor.power_spottrack_living') | float(default=0),
+        states('sensor.bedroom_pendant_power') | float(default=0),
+        states('sensor.guest_pendant_power') | float(default=0),
+        states('sensor.kitchen_flowerpots_power') | float(default=0),
+        states('sensor.living_dining_pendants_power') | float(default=0),
+        states('sensor.office_pendant_power') | float(default=0),
+        states('sensor.kitchen_6_spot_track_power') | float(default=0),
+        states('sensor.living_4_spot_track_power') | float(default=0),
         states('sensor.power_stringlights_veranda') | float(default=0)
       ] %}
       {{ sensors | sum }}
