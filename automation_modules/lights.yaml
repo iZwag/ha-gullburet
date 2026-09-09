@@ -19,7 +19,7 @@
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_kitchen', 'on') }}"
-      light_entity: light.spottrack6_kitchen
+      light_entity: light.kitchen_6_spot_track
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Kitchen 6-track
   - action: script.masterdim_script
@@ -49,7 +49,7 @@
   - action: script.masterdim_script
     data:
       manual_override: "{{ is_state('input_boolean.lights_override_living', 'on') }}"
-      light_entity: light.mood_lamp_living
+      light_entity: light.mood_light_living
       brightness: "{{ states('input_number.apartment_dimmer') }}"
     alias: Masterdim Living mood ball
   - action: script.masterdim_script

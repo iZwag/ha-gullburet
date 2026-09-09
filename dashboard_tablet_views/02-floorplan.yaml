@@ -231,6 +231,7 @@ cards:
                         padding: 4px var(--ha-card-padding) var(--ha-card-padding) !important;
                       }
                   # background-color: var(--nested-card-background);
+
             # HOME-VIEW: CLEANING
             - type: custom:stack-in-card
               mode: vertical
@@ -277,14 +278,14 @@ cards:
                   template: text_chip
                   icon: |
                     [[[
-                      let ready = states['binary_sensor.esmeralda_mop_ready'].state
+                      let ready = states['binary_sensor.vaskepott_mop_ready'].state
                       if (ready == "on") return "mdi:water";
                       return "mdi:water-off";
                     ]]]
                   state_display: |
                     [[[
-                      let mop = states['binary_sensor.esmeralda_mop_attached'].state
-                      let box = states['binary_sensor.esmeralda_water_box_attached'].state
+                      let mop = states['binary_sensor.vaskepott_mop_attached'].state
+                      let box = states['binary_sensor.vaskepott_tank_installed'].state
 
                       if (mop == "off") return "No mop";
                       if (box == "off") return "No tank";
@@ -293,7 +294,7 @@ cards:
                   tap_action:
                     action: none
               - type: custom:state-switch
-                entity: vacuum.esmeralda
+                entity: vacuum.vaskepott
                 default: 'other'
                 states:
                   docked:
@@ -345,7 +346,7 @@ cards:
                     - type: conditional
                       conditions:
                         - type: state
-                          entity: binary_sensor.esmeralda_mop_ready
+                          entity: binary_sensor.vaskepott_mop_ready
                           state_not: "on"
                       card:
                         type: custom:layout-card
@@ -388,7 +389,7 @@ cards:
                     - type: conditional
                       conditions:
                       - type: state
-                        entity: binary_sensor.esmeralda_mop_ready
+                        entity: binary_sensor.vaskepott_mop_ready
                         state: "on"
                       card:
                         type: "custom:layout-card"
@@ -451,7 +452,7 @@ cards:
                           action: call-service
                           service: vacuum.pause
                           target:
-                            entity_id: vacuum.esmeralda
+                            entity_id: vacuum.vaskepott
                       - type: custom:button-card
                         template: light_mode
                         icon: mdi:home-import-outline
@@ -507,7 +508,7 @@ cards:
                           action: call-service
                           service: vacuum.start
                           target:
-                            entity_id: vacuum.esmeralda
+                            entity_id: vacuum.vaskepott
                       - type: custom:button-card
                         template: light_mode
                         icon: mdi:home-import-outline
@@ -549,10 +550,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_bath
+                - temperature_entity: sensor.temperature_room_bath
                 - humidity_entity: sensor.humidity_placeholder
                 - mode_entity: input_select.heating_mode_bath
-                - climate_entity: climate.floor_heat_bath
+                - climate_entity: climate.floor_heating_bath
             # BATH-VIEW: LIGHT MODES
             - type: custom:stack-in-card
               mode: vertical
@@ -606,10 +607,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_bedroom
-                - humidity_entity: sensor.humidity_bedroom
+                - temperature_entity: sensor.temperature_room_bedroom
+                - humidity_entity: sensor.humidity_room_bedroom
                 - mode_entity: input_select.heating_mode_bedroom
-                - climate_entity: climate.heater_bedroom
+                - climate_entity: climate.panel_heater_bedroom
             # BEDROOM-VIEW: DEVICES
             - type: custom:stack-in-card
               mode: vertical
@@ -624,7 +625,7 @@ cards:
               - type: horizontal-stack
                 cards:
                 - type: custom:mushroom-light-card
-                  entity: light.lightstrip_closet_bedroom
+                  entity: light.closet_strip_bedroom
                   name: Wardrobe light
                   icon: mdi:hanger
                   icon_color: white
@@ -706,8 +707,8 @@ cards:
             - type: custom:decluttering-card
               template: climate_section_wo_thermo
               variables:
-                - temperature_entity: sensor.temperature_entry
-                - humidity_entity: sensor.humidity_entry
+                - temperature_entity: sensor.temperature_room_entry
+                - humidity_entity: sensor.humidity_room_entry
           # ###############################################################
           # GUEST VIEW
           guest:
@@ -721,10 +722,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_guest
-                - humidity_entity: sensor.humidity_guest
+                - temperature_entity: sensor.temperature_room_guest
+                - humidity_entity: sensor.humidity_room_guest
                 - mode_entity: input_select.heating_mode_guest
-                - climate_entity: climate.heater_guest
+                - climate_entity: climate.panel_heater_guest
           # ###############################################################
           # KITCHEN VIEW
           kitchen:
@@ -738,10 +739,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_kitchen
-                - humidity_entity: sensor.humidity_kitchen
+                - temperature_entity: sensor.temperature_room_kitchen
+                - humidity_entity: sensor.humidity_room_kitchen
                 - mode_entity: input_select.heating_mode_kitchen
-                - climate_entity: climate.heater_kitchen
+                - climate_entity: climate.panel_heater_kitchen
           # ###############################################################
           # LIVING VIEW
           living:
@@ -755,10 +756,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_living
-                - humidity_entity: sensor.humidity_living
+                - temperature_entity: sensor.temperature_room_living
+                - humidity_entity: sensor.humidity_room_living
                 - mode_entity: input_select.heating_mode_living
-                - climate_entity: climate.heater_living
+                - climate_entity: climate.panel_heater_living
           # ###############################################################
           # OFFICE VIEW
           office:
@@ -772,10 +773,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_office
-                - humidity_entity: sensor.humidity_office
+                - temperature_entity: sensor.temperature_room_office
+                - humidity_entity: sensor.humidity_room_office
                 - mode_entity: input_select.heating_mode_office
-                - climate_entity: climate.heater_office
+                - climate_entity: climate.panel_heater_office
           # ###############################################################
           # STORAGE VIEW
           storage:
@@ -789,7 +790,7 @@ cards:
             - type: custom:decluttering-card
               template: climate_section_wo_thermo
               variables:
-                - temperature_entity: sensor.temperature_storage
+                - temperature_entity: sensor.temperature_room_storage
                 - humidity_entity: sensor.humidity_placeholder
             # STORAGE-VIEW: LIGHTS
             - type: custom:stack-in-card
@@ -825,12 +826,12 @@ cards:
                   action: call-service
                   service: script.turn_on
                   target:
-                    entity_id: script.storage_room_finish_timer
+                    entity_id: script.storage_room_light_off_finish_timer
                 icon_tap_action:
                   action: call-service
                   service: script.turn_on
                   target:
-                    entity_id: script.storage_room_finish_timer                  
+                    entity_id: script.storage_room_light_off_finish_timer
           # ###############################################################
           # TOILET ROOM VIEW
           toilet:
@@ -844,10 +845,10 @@ cards:
             - type: custom:decluttering-card
               template: climate_section
               variables: 
-                - temperature_entity: sensor.temperature_toilet
+                - temperature_entity: sensor.temperature_room_toilet
                 - humidity_entity: sensor.humidity_placeholder
                 - mode_entity: input_select.heating_mode_toilet
-                - climate_entity: climate.floor_heat_toilet
+                - climate_entity: climate.floor_heating_toilet
           # ###############################################################
           # VERANDA VIEW
           veranda:
@@ -1802,7 +1803,7 @@ cards:
                 top: 80%
             # OFFICE HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.heater_office
+              entity: climate.panel_heater_office
               template: heat_device
               style:
                   left: 60%
@@ -1810,14 +1811,14 @@ cards:
             # BEDROOM HEATED SHEET ICON (ONLY DISPLAYS WHEN ON)
             # COMMENTED OUT DUE TO OUT OF SEASON - DEVICE DISABLED
             - type: custom:button-card
-              entity: switch.plug_seasonal_heat
+              entity: switch.seasonal_heat
               template: heat_device
               style:
                   left: 31%
                   top: 86%
             # BEDROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.heater_bedroom
+              entity: climate.panel_heater_bedroom
               template: heat_device
               style:
                   left: 23%
@@ -1838,7 +1839,7 @@ cards:
                 top: 80%
             # GUEST HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.heater_guest
+              entity: climate.panel_heater_guest
               template: heat_device
               style:
                 left: 75%
@@ -1883,7 +1884,7 @@ cards:
                 top: 41%
             # BATH FLOOR HEAT ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.floor_heat_bath
+              entity: climate.floor_heating_bath
               template: heat_device
               style:
                 left: 64%
@@ -1905,21 +1906,21 @@ cards:
             # LIVING ROOM MUSHROOM LAMP
             - type: custom:button-card
               template: light
-              entity: switch.lamp_mushroom_living
+              entity: switch.mushroom_lamp_living
               style:
                 left: 50%
                 top: 51%
             # LIVING ROOM MOOD BALL
             - type: custom:button-card
               template: light
-              entity: light.mood_lamp_living
+              entity: light.mood_light_living
               style:
                 left: 50%
                 top: 38%
             # LIVING ROOM GLOBE LAMP
             - type: custom:button-card
               template: light
-              entity: switch.lamp_globe_living
+              entity: switch.globe_lamp_living
               style:
                 left: 18%
                 top: 67%
@@ -1932,7 +1933,7 @@ cards:
                 top: 44.5%
             # LIVING ROOM HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.heater_living
+              entity: climate.panel_heater_living
               template: heat_device
               style:
                 left: 17%
@@ -2041,14 +2042,14 @@ cards:
             # KITCHEN SPOTTRACK ICON
             - type: custom:button-card
               template: light
-              entity: light.spottrack6_kitchen
+              entity: light.kitchen_6_spot_track
               style:
                 left: 74%
                 top: 20%
             # KITCHEN LIGHTSTRIP UNDER-SHELF
             - type: custom:button-card
               template: light
-              entity: light.lightstrip_undershelf_kitchen
+              entity: light.undershelf_strip_kitchen
               styles:
                 icon:
                   - transform: rotate(45deg)
@@ -2057,7 +2058,7 @@ cards:
                 top: 32%
             # KITCHEN HEATER ICON (ONLY DISPLAYS WHEN ON)
             - type: custom:button-card
-              entity: climate.heater_kitchen
+              entity: climate.panel_heater_kitchen
               template: heat_device
               style:
                 left: 61%

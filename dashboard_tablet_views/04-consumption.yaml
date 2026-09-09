@@ -45,7 +45,7 @@ cards:
               template: big_sensor_bar
               name: Power, realtime
               icon: mdi:home-lightning-bolt
-              entity: sensor.tibber_power_consumption_realtime
+              entity: sensor.power_realtime_tibber
               variables:
                 barMax: 8800
                 barHiSeverity: 5000
@@ -192,11 +192,11 @@ cards:
           cards:
           - type: custom:button-card
             template: big_sensor
-            entity: sensor.tibber_min_power_daily
+            entity: sensor.power_daily_min_tibber
             name: Lowest power today
           - type: custom:button-card
             template: big_sensor
-            entity: sensor.tibber_max_power_daily
+            entity: sensor.power_daily_max_tibber
             name: Highest power today
         # 10DAYS ENERGY CONSUMPTION COLUMNS CHART
         - type: custom:stack-in-card
@@ -229,7 +229,7 @@ cards:
                 min: 0
                 max: ~20
             series:
-              - entity: sensor.tibber_energy_consumption_current_day
+              - entity: sensor.energy_consumed_today_tibber
                 type: column
                 name: Consumption
                 color: '#1ac8ed'
@@ -244,7 +244,7 @@ cards:
           cards:
           - type: custom:button-card
             template: big_sensor_dot
-            entity: sensor.tibber_energy_consumption_this_month
+            entity: sensor.energy_monthly_net_average_tibber
             name: So far this month
             numeric_precision: 0
             variables:
@@ -252,7 +252,7 @@ cards:
               dotMidSeverity: 400
           - type: custom:button-card
             template: big_sensor_dot
-            entity: sensor.tibber_energy_consumption_current_day
+            entity: sensor.energy_consumed_today_tibber
             name: So far today
             numeric_precision: 1
             variables:
@@ -299,7 +299,7 @@ cards:
               - type: custom:button-card
                 template: chart_legend_line
                 name: "Tibber"
-                entity: sensor.tibber_energy_price_hourly
+                entity: sensor.price_hourly_tibber
                 variables:
                   dotColor: "var(--color-primary)"
                 state_display: |
@@ -421,7 +421,7 @@ cards:
                       data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                     }
                     return data;
-                - entity: sensor.tibber_energy_price_hourly
+                - entity: sensor.price_hourly_tibber
                   name: Tibber
                   color: '#1ac8ed'
                   opacity: 0
@@ -544,7 +544,7 @@ cards:
                       data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                     }
                     return data;
-                - entity: sensor.tibber_energy_price_hourly
+                - entity: sensor.price_hourly_tibber
                   name: Tibber
                   color: '#1ac8ed'
                   opacity: 0
@@ -561,7 +561,7 @@ cards:
           cards:
           - type: custom:button-card
             template: big_sensor
-            entity: sensor.tibber_monthly_cost
+            entity: sensor.cost_monthly_tibber
             name: 'Electricity (Tibber)'
             units: 'kr'
             numeric_precision: 1
@@ -579,7 +579,7 @@ cards:
           # THIS HOUR ENERGY, WITH BAR
           - type: custom:button-card
             template: big_sensor_bar
-            entity: sensor.tibber_energy_consumption_current_hour
+            entity: sensor.energy_consumed_this_hour_tibber
             icon: mdi:lightning-bolt
             name: Energy consumed so far this hour
             numeric_precision: 2
@@ -599,7 +599,7 @@ cards:
           # ESTIMATED ENERGY
           - type: custom:button-card
             template: extra_bar
-            entity: sensor.tibber_estimated_energy_consumption
+            entity: sensor.energy_estimated_this_hour_tibber
             name: Estimated consumption this hour
             numeric_precision: 2
             variables:
@@ -610,7 +610,7 @@ cards:
           # MAXHOUR AVERAGE    
           - type: custom:button-card
             template: extra_bar
-            entity: sensor.power_monthly_maxhour_average
+            entity: sensor.energy_monthly_maxhour_average
             name: Maxhour average, this month
             numeric_precision: 2
             variables:
@@ -621,7 +621,7 @@ cards:
           # MAXHOUR 1    
           - type: custom:button-card
             template: extra_bar
-            entity: sensor.power_monthly_maxhour_1
+            entity: sensor.energy_monthly_maxhour_1
             name: Maxhour 1
             numeric_precision: 2
             variables:
@@ -638,7 +638,7 @@ cards:
           # MAXHOUR 2    
           - type: custom:button-card
             template: extra_bar
-            entity: sensor.power_monthly_maxhour_2
+            entity: sensor.energy_monthly_maxhour_2
             name: Maxhour 2
             numeric_precision: 2
             variables:
@@ -655,7 +655,7 @@ cards:
           # MAXHOUR 3
           - type: custom:button-card
             template: extra_bar
-            entity: sensor.power_monthly_maxhour_3
+            entity: sensor.energy_monthly_maxhour_3
             name: Maxhour 3
             numeric_precision: 2
             styles:
