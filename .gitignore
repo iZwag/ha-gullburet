@@ -18,3 +18,4 @@ zigbee.db-shm
 zigbee.db-wal
 
 guest-wifi-qr-private.png
+zigbee2mqtt/
