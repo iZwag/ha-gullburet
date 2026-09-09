@@ -9,7 +9,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_bath
-      thermostat_entity: climate.floor_heat_bath
+      thermostat_entity: climate.floor_heating_bath
       away_temperature_entity: input_number.temperature_away_bath
       sleep_temperature_entity: input_number.temperature_sleep_bath
       comfort_temperature_entity: input_number.temperature_comfort_bath
@@ -22,7 +22,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_toilet
-      thermostat_entity: climate.floor_heat_toilet
+      thermostat_entity: climate.floor_heating_toilet
       away_temperature_entity: input_number.temperature_away_toilet
       sleep_temperature_entity: input_number.temperature_sleep_bath
       comfort_temperature_entity: input_number.temperature_comfort_toilet
@@ -35,7 +35,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_bedroom
-      thermostat_entity: climate.heater_bedroom
+      thermostat_entity: climate.panel_heater_bedroom
       away_temperature_entity: input_number.temperature_away_bedroom
       sleep_temperature_entity: input_number.temperature_sleep_bedroom
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -48,7 +48,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_guest
-      thermostat_entity: climate.heater_guest
+      thermostat_entity: climate.panel_heater_guest
       away_temperature_entity: input_number.temperature_away_guest
       sleep_temperature_entity: input_number.temperature_sleep_guest
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -61,7 +61,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_living
-      thermostat_entity: climate.heater_living
+      thermostat_entity: climate.panel_heater_living
       away_temperature_entity: input_number.temperature_away_living
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -74,7 +74,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_kitchen
-      thermostat_entity: climate.heater_kitchen
+      thermostat_entity: climate.panel_heater_kitchen
       away_temperature_entity: input_number.temperature_away_living
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -87,7 +87,7 @@
     path: homeassistant/thermostat-control-mode.yaml
     input:
       select_entity: input_select.heating_mode_office
-      thermostat_entity: climate.heater_office
+      thermostat_entity: climate.panel_heater_office
       away_temperature_entity: input_number.temperature_away_office
       sleep_temperature_entity: input_number.temperature_sleep_office
       comfort_temperature_entity: input_number.temperature_comfort_office
@@ -228,7 +228,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_bath
-      thermostat_entity: climate.floor_heat_bath
+      thermostat_entity: climate.floor_heating_bath
       away_temperature_entity: input_number.temperature_away_bath
       sleep_temperature_entity: input_number.temperature_sleep_bath
       comfort_temperature_entity: input_number.temperature_comfort_bath
@@ -240,7 +240,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_toilet
-      thermostat_entity: climate.floor_heat_toilet
+      thermostat_entity: climate.floor_heating_toilet
       away_temperature_entity: input_number.temperature_away_toilet
       sleep_temperature_entity: input_number.temperature_sleep_bath
       comfort_temperature_entity: input_number.temperature_comfort_toilet
@@ -252,7 +252,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_bedroom
-      thermostat_entity: climate.heater_bedroom
+      thermostat_entity: climate.panel_heater_bedroom
       away_temperature_entity: input_number.temperature_away_bedroom
       sleep_temperature_entity: input_number.temperature_sleep_bedroom
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -264,7 +264,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_living
-      thermostat_entity: climate.heater_living
+      thermostat_entity: climate.panel_heater_living
       away_temperature_entity: input_number.temperature_away_living
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -276,7 +276,7 @@
   use_blueprint:
     path: homeassistant/thermostat-power-on.yaml
     input:
-      thermostat_entity: climate.heater_guest
+      thermostat_entity: climate.panel_heater_guest
       select_entity: input_select.heating_mode_guest
       away_temperature_entity: input_number.temperature_away_guest
       sleep_temperature_entity: input_number.temperature_sleep_guest
@@ -290,7 +290,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_kitchen
-      thermostat_entity: climate.heater_kitchen
+      thermostat_entity: climate.panel_heater_kitchen
       away_temperature_entity: input_number.temperature_away_living
       sleep_temperature_entity: input_number.temperature_sleep_living
       comfort_temperature_entity: input_number.temperature_comfort_living
@@ -303,7 +303,7 @@
     path: homeassistant/thermostat-power-on.yaml
     input:
       select_entity: input_select.heating_mode_office
-      thermostat_entity: climate.heater_office
+      thermostat_entity: climate.panel_heater_office
       away_temperature_entity: input_number.temperature_away_office
       sleep_temperature_entity: input_number.temperature_sleep_office
       comfort_temperature_entity: input_number.temperature_comfort_office
