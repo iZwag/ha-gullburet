@@ -45,21 +45,12 @@ lovelace:
       title: Tablet
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
-    dashboard-tablet-lenovo:
-      mode: yaml
-      filename: dashboard-tablet-lenovo.yaml
-      title: Tablet Lenovo
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
     dashboard-mobile:
       mode: yaml
       filename: dashboard-mobile.yaml
       title: Mobile
       icon: mdi:cellphone
       show_in_sidebar: true
-  resources:
-    - url: /local/community/decluttering-card/decluttering-card.js
-      type: module
     
 
 # PYTHON SCRIPTS
@@ -69,8 +60,6 @@ python_script:
 # Enables logging from Python-scripts.
 logger:
   default: warning
-  logs:
-    homeassistant.components.python_script: debug
 
 # CUSTOM JINJA2 TEMPLATES
 # Templates stored in this directory can be used for Jinja templating
