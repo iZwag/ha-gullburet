@@ -274,7 +274,7 @@ cards:
               - type: custom:button-card
                 template: chart_legend_line
                 name: "Tibber"
-                entity: sensor.tibber_energy_price_hourly
+                entity: sensor.price_hourly_tibber
                 variables:
                   dotColor: "var(--color-primary)"
                 state_display: |
@@ -394,7 +394,7 @@ cards:
                       data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                     }
                     return data;
-                - entity: sensor.tibber_energy_price_hourly
+                - entity: sensor.price_hourly_tibber
                   name: Tibber
                   color: '#1ac8ed'
                   opacity: 0
@@ -515,7 +515,7 @@ cards:
                       data.push([noon.getTime() + i * 1000 * 3600, prices[i].total * 100])
                     }
                     return data;
-                - entity: sensor.tibber_energy_price_hourly
+                - entity: sensor.price_hourly_tibber
                   name: Tibber
                   color: '#1ac8ed'
                   opacity: 0
@@ -541,7 +541,7 @@ cards:
             # SENSOR THIS HOUR ENERGY, WITH DOT
             - type: custom:button-card
               template: big_sensor_dot
-              entity: sensor.tibber_energy_consumption_current_hour
+              entity: sensor.energy_consumed_this_hour_tibber
               icon: mdi:lightning-bolt-circle
               name: Energy, this hour
               numeric_precision: 2
@@ -656,7 +656,7 @@ cards:
               template: big_sensor_dot
               name: Power, realtime
               icon: mdi:home-lightning-bolt
-              entity: sensor.tibber_power_consumption_realtime
+              entity: sensor.power_realtime_tibber
               variables:
                 dotHiSeverity: 5000
                 dotMidSeverity: 2000

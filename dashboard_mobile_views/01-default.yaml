@@ -97,7 +97,7 @@ cards:
           {% set price = states('sensor.energy_price_hourly_total') | float(default=0) %}
           {{ ((price * 100) | round(0)) ~ " øre/kWh" }}
       - type: entity
-        entity: sensor.tibber_power_consumption_realtime
+        entity: sensor.power_realtime_tibber
     # Aktivere vekkerutine
     - type: tile
       entity: input_boolean.wakeup_alarm_active
@@ -170,9 +170,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_living
+        entity: sensor.temperature_room_living
       - type: entity
-        entity: sensor.humidity_living
+        entity: sensor.humidity_room_living
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_living
@@ -180,7 +180,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_living
+        entity: light.living_downlights
         name: Spottekasse
         color: accent
         tap_action:
@@ -188,7 +188,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.spottrack4_living
+        entity: light.living_4_spot_track
         name: Spotteskinne
         color: accent
         tap_action:
@@ -199,7 +199,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendants_living
+        entity: light.living_dining_pendants
         name: Spisebord
         color: accent
         tap_action:
@@ -207,7 +207,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.mood_lamp_living
+        entity: light.mood_light_living
         name: Fargekule
         color: accent
         tap_action:
@@ -218,7 +218,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: switch.lamp_mushroom_living
+        entity: switch.mushroom_lamp_living
         name: Sopplampe
         color: accent
         tap_action:
@@ -226,7 +226,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: switch.lamp_globe_living
+        entity: switch.globe_lamp_living
         name: Globus
         color: accent
         tap_action:
@@ -241,7 +241,7 @@ cards:
       layout: horizontal
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_living
+      entity: climate.panel_heater_living
       name: Panelovn
       hvac_modes:
         - heat
@@ -264,9 +264,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_kitchen
+        entity: sensor.temperature_room_kitchen
       - type: entity
-        entity: sensor.humidity_kitchen
+        entity: sensor.humidity_room_kitchen
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_kitchen
@@ -274,7 +274,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendants_kitchen
+        entity: light.kitchen_flowerpots
         name: Flowerpots
         color: accent
         tap_action:
@@ -282,7 +282,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.spottrack6_kitchen
+        entity: light.kitchen_6_spot_track
         name: Spotteskinner
         color: accent
         tap_action:
@@ -293,7 +293,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.lightstrip_undershelf_kitchen
+        entity: light.undershelf_strip_kitchen
         name: Oppvasklys
         color: accent
         tap_action:
@@ -302,7 +302,7 @@ cards:
           action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_kitchen
+      entity: climate.panel_heater_kitchen
       name: Panelovn
       hvac_modes:
         - heat
@@ -325,9 +325,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_bedroom
+        entity: sensor.temperature_room_bedroom
       - type: entity
-        entity: sensor.humidity_bedroom
+        entity: sensor.humidity_room_bedroom
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bedroom
@@ -335,7 +335,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_bedroom
+        entity: light.bedroom_pendant
         name: Pendel
         color: accent
         tap_action:
@@ -344,7 +344,7 @@ cards:
           action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_bedroom
+      entity: climate.panel_heater_bedroom
       name: Panelovn
       hvac_modes:
         - heat
@@ -367,7 +367,7 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_bath
+        entity: sensor.temperature_room_bath
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bath
@@ -375,7 +375,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_bath
+        entity: light.bath_downlights
         name: Spotter
         color: accent
         tap_action:
@@ -383,7 +383,7 @@ cards:
         hold_action:
           action: more-info
       - type: tile
-        entity: light.lightstrip_bath
+        entity: light.bath_lightstrip
         name: Badelys
         color: accent
         tap_action:
@@ -392,7 +392,7 @@ cards:
           action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.floor_heat_bath
+      entity: climate.floor_heating_bath
       name: Gulvvarme
       hvac_modes:
         - heat
@@ -415,9 +415,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_office
+        entity: sensor.temperature_room_office
       - type: entity
-        entity: sensor.humidity_office
+        entity: sensor.humidity_room_office
       #- type: entity
       #  icon: mdi:heat-wave
       #  entity: input_select.heating_mode_office
@@ -425,7 +425,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_office
+        entity: light.office_pendant
         name: Pendler
         color: accent
         tap_action:
@@ -434,7 +434,7 @@ cards:
           action: more-info
     # Panel heater
     #- type: custom:mushroom-climate-card
-    #  entity: climate.heater_bedroom
+    #  entity: climate.panel_heater_bedroom
     #  name: Panelovn
     #  hvac_modes:
     #    - heat
@@ -457,14 +457,14 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_entry
+        entity: sensor.temperature_room_entry
       - type: entity
-        entity: sensor.humidity_entry
+        entity: sensor.humidity_room_entry
     # Lights
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlights_entry
+        entity: light.entry_downlights
         name: Spotter
         color: accent
         tap_action:
@@ -540,9 +540,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_guest
+        entity: sensor.temperature_room_guest
       - type: entity
-        entity: sensor.humidity_guest
+        entity: sensor.humidity_room_guest
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_guest
@@ -550,7 +550,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.pendant_guest
+        entity: light.guest_pendant
         name: Skypendel
         color: accent
         tap_action:
@@ -559,7 +559,7 @@ cards:
           action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_guest
+      entity: climate.panel_heater_guest
       name: Panelovn
       hvac_modes:
         - heat
@@ -582,7 +582,7 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_toilet
+        entity: sensor.temperature_room_toilet
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_toilet
@@ -590,7 +590,7 @@ cards:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: light.downlight_toilet
+        entity: light.toilet_downlight
         name: Takspott
         color: accent
         tap_action:
@@ -599,7 +599,7 @@ cards:
           action: more-info
     # Floor heat
     - type: custom:mushroom-climate-card
-      entity: climate.floor_heat_toilet
+      entity: climate.floor_heating_toilet
       name: Gulvvarme
       hvac_modes:
         - heat
@@ -622,7 +622,7 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_storage
+        entity: sensor.temperature_room_storage
     # Lights
     - type: horizontal-stack
       cards:

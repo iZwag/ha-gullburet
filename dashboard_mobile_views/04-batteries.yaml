@@ -41,8 +41,8 @@ cards:
       show_header_toggle: false
       state_color: true
       entities:
-        - entity: sensor.esmeralda_battery
-          name: Esmeralda
+        - entity: sensor.battery_vaskepott
+          name: Vaskepott
         - entity: sensor.sonos_move_battery
           name: Sonos Move
         - entity: sensor.lenovo_tab_m10_battery
@@ -52,9 +52,9 @@ cards:
           name: Jon's iPhone
         - entity: sensor.curtains_battery_living
           name: Gardinrobot, stue
-        - entity: sensor.left_blind_bedroom_battery
+        - entity: sensor.battery_left_blind_bedroom
           name: Venstre rullgardin, soverom
-        - entity: sensor.right_blind_bedroom_battery
+        - entity: sensor.battery_right_blind_bedroom
           name: Høyre rullgardin, soverom
     # CR2032 batteries
     - type: entities
@@ -62,17 +62,17 @@ cards:
       show_header_toggle: false
       state_color: true
       entities:
-        - entity: sensor.temperature_battery_bedroom
+        - entity: sensor.battery_temperature_sensor_bedroom
           name: Sensor, soverom
-        - entity: sensor.temperature_battery_entry
+        - entity: sensor.battery_temperature_sensor_entry
           name: Sensor, entre
-        - entity: sensor.temperature_battery_kitchen
+        - entity: sensor.battery_temperature_sensor_kitchen
           name: Sensor, kjøkken
-        - entity: sensor.temperature_battery_living
+        - entity: sensor.battery_temperature_sensor_living
           name: Sensor, stue
-        - entity: sensor.left_blind_control_battery
+        - entity: sensor.battery_left_blind_control
           name: Venstre rullgardin bryter
-        - entity: sensor.right_blind_control_battery
+        - entity: sensor.battery_right_blind_control
           name: Høyre rullgardin bryter
     # CR2450 batteries
     - type: entities
@@ -81,13 +81,13 @@ cards:
       state_color: true
       entities:
         # Hue Dimmer Switches
-        - entity: sensor.temperature_battery_guest
+        - entity: sensor.battery_temperature_sensor_guest
           name: Sensor, gjesterom
-        - entity: sensor.temperature_battery_office
+        - entity: sensor.battery_temperature_sensor_office
           name: Sensor, kontor
         - entity: sensor.alarm_remote_battery
           name: Vekkerklokke kontroll
-        - entity: sensor.sheet_remote_battery
+        - entity: sensor.battery_sheet_remote_bedroom
           name: Varmelaken kontroll
     # AAA batteries
     - type: entities
@@ -95,12 +95,12 @@ cards:
       show_header_toggle: false
       state_color: true
       entities:  
-        - entity: sensor.motion_battery_storage
+        - entity: sensor.battery_motion_sensor_storage
           name: Sensor, bod
-        - entity: sensor.light_remote_office_battery
+        - entity: sensor.battery_light_remote_office
           name: Lyskontroll, kontor
-        - entity: sensor.curtain_control_kitchen_battery
+        - entity: sensor.battery_curtain_control_kitchen
           name: Gardinknapper
-        - entity: sensor.motion_sensor_entry_battery
+        - entity: sensor.battery_motion_sensor_entry
           name: Sensor, gang
     

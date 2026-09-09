@@ -8,14 +8,28 @@
 # #############################################################################
 - sensor:
     # =========================================================================
+    # Average apartment temperature, rounded to 1 decimal
+    # Replaces the old "group" sensor (group platform has no round option)
+    - name: "Temperature apartment avg"
+      unique_id: temperature_apartment_avg
+      device_class: temperature
+      unit_of_measurement: °C
+      state: >
+        {% set temps = [
+          'sensor.temperature_room_entry', 
+          'sensor.temperature_room_living', 
+          'sensor.temperature_room_kitchen'
+          ] | map('states') | select('is_number') | map('float') | list %}
+        {{ (temps | sum / temps | length) | round(1) if temps | length > 0 else none }}
+    # =========================================================================
     # Floor Plan brightness levels. Linked to opacity-levels for PNG layers
     # Entity IDs were manually edited in Home Assistant: 
     # Settings > Devices and services > Entities > Change each entity_id
-    - name: "Bedroom pendant brightness level"
+    - name: "Pendant bedroom dim"
       unique_id: pendant_bedroom_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendant_bedroom', 'brightness') %}
+        {% set brightness = state_attr('light.bedroom_pendant', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -34,7 +48,7 @@
         {% else %}
           100
         {% endif %}
-    - name: "Office pendants brightness level"
+    - name: "Pendants office dim"
       unique_id: pendants_office_dim
       unit_of_measurement: '%'
       state: >
@@ -57,11 +71,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Guest pendant brightness level"
+    - name: "Pendant guest dim"
       unique_id: pendant_guest_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendant_guest', 'brightness') %}
+        {% set brightness = state_attr('light.guest_pendant', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -80,11 +94,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Entry downlights brightness level"
+    - name: "Downlights entry dim"
       unique_id: downlights_entry_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_entry', 'brightness') %}
+        {% set brightness = state_attr('light.entry_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -103,11 +117,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Toilet downlight brightness level"
+    - name: "Downlight toilet dim"
       unique_id: downlight_toilet_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlight_toilet', 'brightness') %}
+        {% set brightness = state_attr('light.toilet_downlight', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -126,11 +140,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Bathroom downlights brightness level"
+    - name: "Downlights bath dim"
       unique_id: downlights_bath_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_bath', 'brightness') %}
+        {% set brightness = state_attr('light.bath_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -149,11 +163,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Bathroom lightstrip brightness level"
+    - name: "Lightstrip bath dim"
       unique_id: lightstrip_bath_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.lightstrip_bath', 'brightness') %}
+        {% set brightness = state_attr('light.bath_lightstrip', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -172,11 +186,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Living room spottrack brightness level"
+    - name: "Spottrack living dim"
       unique_id: spottrack_living_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.spottrack4_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_4_spot_track', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -195,11 +209,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Living room downlights brightness level"
+    - name: "Downlights living dim"
       unique_id: downlights_living_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.downlights_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_downlights', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -218,11 +232,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Dining pendants brightness level"
+    - name: "Pendants dining dim"
       unique_id: pendants_dining_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendants_living', 'brightness') %}
+        {% set brightness = state_attr('light.living_dining_pendants', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -241,11 +255,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Kitchen pendants brightness level"
+    - name: "Pendants kitchen dim"
       unique_id: pendants_kitchen_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.pendants_kitchen', 'brightness') %}
+        {% set brightness = state_attr('light.kitchen_flowerpots', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -264,11 +278,11 @@
         {% else %}
           100
         {% endif %}
-    - name: "Kitchen spottrack brightness level"
+    - name: "Spottrack kitchen dim"
       unique_id: spottrack_kitchen_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.spottrack6_kitchen', 'brightness') %}
+        {% set brightness = state_attr('light.kitchen_6_spot_track', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -287,11 +301,11 @@
         {% else %}
           100
         {% endif %} 
-    - name: "Kitchen lightstrip brightness level"
+    - name: "Lightstrip undershelf kitchen dim"
       unique_id: lightstrip_undershelf_kitchen_dim
       unit_of_measurement: '%'
       state: >
-        {% set brightness = state_attr('light.lightstrip_undershelf_kitchen', 'brightness') %}
+        {% set brightness = state_attr('light.undershelf_strip_kitchen', 'brightness') %}
         {% set percent = (brightness / 255 * 100) | round(0) if brightness != None else 0 %}
         {% if percent <= 0 %}
           0
@@ -310,7 +324,7 @@
         {% else %}
           100
         {% endif %}
-    - name: "Storage room ceiling light brightness level"
+    - name: "Ceiling light storage dim"
       unique_id: ceiling_light_storage_dim
       unit_of_measurement: '%'
       state: >
@@ -333,7 +347,7 @@
         {% else %}
           100
         {% endif %}
-    - name: "Veranda wall lantern brightness level"
+    - name: "Wall lantern veranda dim"
       unique_id: wall_lantern_veranda_dim
       unit_of_measurement: '%'
       state: >
@@ -358,11 +372,11 @@
         {% endif %}
     
 - binary_sensor:
-  - name: "Esmeralda Mop Ready"
-    unique_id: esmeralda_mop_ready
+  - name: "Vaskepott Mop Ready"
+    unique_id: vaskepott_mop_ready
     state: >
-      {{ is_state('binary_sensor.esmeralda_mop_attached', 'on') 
-          and is_state('binary_sensor.esmeralda_water_box_attached', 'on') }}
+      {{ is_state('binary_sensor.vaskepott_mop_attached', 'on') 
+          and is_state('binary_sensor.vaskepott_tank_installed', 'on') }}
 
 - sensor:
   - name: "Lights On Count"
@@ -370,106 +384,102 @@
     unit_of_measurement: ''
     state: >
       {{ [states('light.ceiling_light_storage'), 
-          states('light.downlight_toilet'),
-          states('light.downlights_bath'),
-          states('light.downlights_entry'),
-          states('light.downlights_living'),
-          states('light.lightstrip_bath'),
-          states('light.lightstrip_undershelf_kitchen'),
-          states('light.mood_lamp_living'),
-          states('light.pendant_bedroom'),
-          states('light.pendant_guest'),
-          states('light.pendants_kitchen'),
-          states('light.pendants_living'),
-          states('light.pendant_office'),
-          states('light.spottrack4_living'),
-          states('light.spottrack6_kitchen'),
+          states('light.toilet_downlight'),
+          states('light.bath_downlights'),
+          states('light.entry_downlights'),
+          states('light.living_downlights'),
+          states('light.bath_lightstrip'),
+          states('light.undershelf_strip_kitchen'),
+          states('light.mood_light_living'),
+          states('light.bedroom_pendant'),
+          states('light.guest_pendant'),
+          states('light.kitchen_flowerpots'),
+          states('light.living_dining_pendants'),
+          states('light.office_pendant'),
+          states('light.living_4_spot_track'),
+          states('light.kitchen_6_spot_track'),
           states('light.wall_light_veranda'),
-          states('switch.lamp_globe_living'),
-          states('switch.lamp_mushroom_living')] | select('eq', 'on') | list | count }}
+          states('switch.globe_lamp_living'),
+          states('switch.mushroom_lamp_living')] | select('eq', 'on') | list | count }}
 
+# Elvia fixed price levels 1-5 and the ACTIVE price level
 - sensor:
   - unique_id: elvia_fixed_price_level_1
-    name: Elvia fixed month price level 1
+    name: Elvia fixed price level 1
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['monthlyTotal'] }}
+      {{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['monthlyTotal'] }}
     attributes:
-      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueMin'] }}"
-      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueMax'] }}"
-      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['valueUnitOfMeasure'] }}"
-      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['id'] }}"
-      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['nextIdUp'] }}"
-      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[0]['nextIdDown'] }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[0]['nextIdDown'] }}"
 
-- sensor:
   - unique_id: elvia_fixed_price_level_2
-    name: Elvia fixed month price level 2
+    name: Elvia fixed price level 2
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['monthlyTotal'] }}
+      {{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['monthlyTotal'] }}
     attributes:
-      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueMin'] }}"
-      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueMax'] }}"
-      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['valueUnitOfMeasure'] }}"
-      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['id'] }}"
-      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['nextIdUp'] }}"
-      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[1]['nextIdDown'] }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[1]['nextIdDown'] }}"
 
-- sensor:
   - unique_id: elvia_fixed_price_level_3
-    name: Elvia fixed month price level 3
+    name: Elvia fixed price level 3
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['monthlyTotal'] }}
+      {{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['monthlyTotal'] }}
     attributes:
-      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueMin'] }}"
-      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueMax'] }}"
-      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['valueUnitOfMeasure'] }}"
-      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['id'] }}"
-      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['nextIdUp'] }}"
-      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[2]['nextIdDown'] }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[2]['nextIdDown'] }}"
 
-- sensor:
   - unique_id: elvia_fixed_price_level_4
-    name: Elvia fixed month price level 4
+    name: Elvia fixed price level 4
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['monthlyTotal'] }}
+      {{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['monthlyTotal'] }}
     attributes:
-      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueMin'] }}"
-      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueMax'] }}"
-      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['valueUnitOfMeasure'] }}"
-      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['id'] }}"
-      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['nextIdUp'] }}"
-      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[3]['nextIdDown'] }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[3]['nextIdDown'] }}"
 
-- sensor:
   - unique_id: elvia_fixed_price_level_5 
-    name: Elvia fixed month price level 5
+    name: Elvia fixed price level 5
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['monthlyTotal'] }}
+      {{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['monthlyTotal'] }}
     attributes:
-      value_min: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueMin'] }}"
-      value_max: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueMax'] }}"
-      value_unit: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['valueUnitOfMeasure'] }}"
-      id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['id'] }}"
-      next_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['nextIdUp'] }}"
-      prev_id: "{{ state_attr('sensor.elvia_fixed_prices', 'priceLevels')[4]['nextIdDown'] }}"
+      value_min: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['valueMin'] }}"
+      value_max: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['valueMax'] }}"
+      value_unit: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['valueUnitOfMeasure'] }}"
+      id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['id'] }}"
+      next_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['nextIdUp'] }}"
+      prev_id: "{{ state_attr('sensor.elvia_fixed_prices_raw', 'priceLevels')[4]['nextIdDown'] }}"
 
-- sensor:
   - unique_id: elvia_active_fixed_price_level
     name: Elvia active fixed price level 
     device_class: monetary
     unit_of_measurement: NOK
     state: >
-      {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
+      {% set current_average = states('sensor.energy_monthly_maxhour_average') | float(default=0) %}
       {% for i in range(1, 6) %}
         {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
         {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
@@ -481,7 +491,7 @@
       {% endfor %}
     attributes:
       level_max: >
-        {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
+        {% set current_average = states('sensor.energy_monthly_maxhour_average') | float(default=0) %}
         {% for i in range(1, 6) %}
           {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
           {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
@@ -492,7 +502,7 @@
             {% endif %}
         {% endfor %}
       prev_max: >
-        {% set current_average = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
+        {% set current_average = states('sensor.energy_monthly_maxhour_average') | float(default=0) %}
         {% for i in range(1, 6) %}
           {% set sensor_id = 'sensor.elvia_fixed_price_level_' ~ i %}
           {% set value_min = state_attr(sensor_id, 'value_min') | float(default=0) %}
@@ -503,15 +513,17 @@
             {% endif %}
         {% endfor %}
 
-  - unique_id: power_monthly_maxhour_1
-    name: Monthly top max-hour 1 power consumption 
+# Monthly power max-hours 1-4 sensor trackers and average
+- sensor:
+  - unique_id: energy_monthly_maxhour_1
+    name: Energy monthly maxhour 1
     device_class: energy
     unit_of_measurement: kWh
-    state: "{{ states('input_number.power_monthly_highest_max_hour_1') | round(2) }}"
+    state: "{{ states('input_number.energy_monthly_maxhour_1') | round(2) }}"
     attributes:
-      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_1') }}"
+      start_time: "{{ states('input_datetime.energy_monthly_maxhour_1') }}"
       prcnt_of_limit: >
-        {% set maxhour = states('input_number.power_monthly_highest_max_hour_1') | float(default=0) %}
+        {% set maxhour = states('input_number.energy_monthly_maxhour_1') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {% if limit > 0 %}
           {{ ((maxhour / limit) * 100 ) | round(2) }}
@@ -519,15 +531,15 @@
           {{ ((maxhour / 2) * 100 ) | round(2) }}
         {% endif %}
 
-  - unique_id: power_monthly_maxhour_2
-    name: Monthly top max-hour 2 power consumption 
+  - unique_id: energy_monthly_maxhour_2
+    name: Energy monthly maxhour 2
     device_class: energy
     unit_of_measurement: kWh
-    state: "{{ states('input_number.power_monthly_highest_max_hour_2') | round(2) }}"
+    state: "{{ states('input_number.energy_monthly_maxhour_2') | round(2) }}"
     attributes:
-      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_2') }}"
+      start_time: "{{ states('input_datetime.energy_monthly_maxhour_2') }}"
       prcnt_of_limit: >
-        {% set maxhour = states('input_number.power_monthly_highest_max_hour_2') | float(default=0) %}
+        {% set maxhour = states('input_number.energy_monthly_maxhour_2') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {% if limit > 0 %}
           {{ ((maxhour / limit) * 100 ) | round(2) }}
@@ -535,15 +547,31 @@
           {{ ((maxhour / 2) * 100 ) | round(2) }}
         {% endif %}
 
-  - unique_id: power_monthly_maxhour_3
-    name: Monthly top max-hour 3 power consumption 
+  - unique_id: energy_monthly_maxhour_3
+    name: Energy monthly maxhour 3
     device_class: energy
     unit_of_measurement: kWh
-    state: "{{ states('input_number.power_monthly_highest_max_hour_3') | round(2) }}"
+    state: "{{ states('input_number.energy_monthly_maxhour_3') | round(2) }}"
     attributes:
-      start_time: "{{ states('input_datetime.power_monthly_highest_max_hour_3') }}"
+      start_time: "{{ states('input_datetime.energy_monthly_maxhour_3') }}"
       prcnt_of_limit: >
-        {% set maxhour = states('input_number.power_monthly_highest_max_hour_3') | float(default=0) %}
+        {% set maxhour = states('input_number.energy_monthly_maxhour_3') | float(default=0) %}
+        {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
+        {% if limit > 0 %}
+          {{ ((maxhour / limit) * 100 ) | round(2) }}
+        {% else %}
+          {{ ((maxhour / 2) * 100 ) | round(2) }}
+        {% endif %}
+  
+  - unique_id: energy_monthly_maxhour_4
+    name: Energy monthly maxhour 4
+    device_class: energy
+    unit_of_measurement: kWh
+    state: "{{ states('input_number.energy_monthly_maxhour_4') | round(2) }}"
+    attributes:
+      start_time: "{{ states('input_datetime.energy_monthly_maxhour_4') }}"
+      prcnt_of_limit: >
+        {% set maxhour = states('input_number.energy_monthly_maxhour_4') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {% if limit > 0 %}
           {{ ((maxhour / limit) * 100 ) | round(2) }}
@@ -554,23 +582,25 @@
   # Holds the calculated average of this month's top 3 max-hour consumption
   # The attribute holds the percentage of the comparison of the average to the
   #  current fixed-price level
-  - unique_id: power_monthly_maxhour_average
-    name: Monthly top max-hour average power consumption 
+  - unique_id: energy_monthly_maxhour_average
+    name: Energy monthly maxhour average
     device_class: energy
     unit_of_measurement: kWh
     state: >
-      {% set maxhour1 = states('input_number.power_monthly_highest_max_hour_1') | float(default=0) %}
-      {% set maxhour2 = states('input_number.power_monthly_highest_max_hour_2') | float(default=0) %}
-      {% set maxhour3 = states('input_number.power_monthly_highest_max_hour_3') | float(default=0) %}
+      {% set maxhour1 = states('input_number.energy_monthly_maxhour_1') | float(default=0) %}
+      {% set maxhour2 = states('input_number.energy_monthly_maxhour_2') | float(default=0) %}
+      {% set maxhour3 = states('input_number.energy_monthly_maxhour_3') | float(default=0) %}
       {{ ((maxhour1 + maxhour2 + maxhour3) / 3) | round(2) }}
     attributes:
       prcnt_of_limit: >
-        {% set maxhour = states('sensor.power_monthly_maxhour_average') | float(default=0) %}
+        {% set maxhour = states('sensor.energy_monthly_maxhour_average') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {{ ((maxhour / limit) * 100 ) | round(2) }}
-  
+
+# Power price-chart show 24h or 48h state tracker
+- sensor:
   - unique_id: power_price_chart_show_hours
-    name: Power - Price chart show hours state
+    name: Power price chart show hours
     state: >
       {% if now().hour < 13 %}
         24h
@@ -713,16 +743,16 @@
 #  fixed price max-level. Does the same for the estimated hour total
 #  consumption as attribute
 - sensor:
-  - name: Tibber energy - Percentages of active fixed level
+  - name: Tibber percentage of maxlevel
     unique_id: tibber_percentage_of_maxlevel
     unit_of_measurement: '%'
     state: >
-      {% set current_hour = states('sensor.tibber_energy_consumption_current_hour') | float(default=0) %}
+      {% set current_hour = states('sensor.energy_consumed_this_hour_tibber') | float(default=0) %}
       {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
       {{ ((current_hour / limit) * 100 ) | round(2) }}
     attributes:
       estimate: >
-        {% set estimate = states('sensor.tibber_estimated_energy_consumption') | float(default=0) %}
+        {% set estimate = states('sensor.energy_estimated_this_hour_tibber') | float(default=0) %}
         {% set limit = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=2) %}
         {{ ((estimate / limit) * 100 ) | round(2) }}
 
@@ -814,11 +844,12 @@
     device_class: humidity
     unit_of_measurement: '%'
     state: >
-      {% set sensor_1 = states('sensor.humidity_kitchen') | float(default=0) %}
-      {% set sensor_2 = states('sensor.humidity_living') | float(default=0) %}
-      {% set sensor_3 = states('sensor.humidity_entry') | float(default=0) %}
+      {% set sensor_1 = states('sensor.humidity_room_kitchen') | float(default=0) %}
+      {% set sensor_2 = states('sensor.humidity_room_living') | float(default=0) %}
+      {% set sensor_3 = states('sensor.humidity_room_entry') | float(default=0) %}
       {{ ((sensor_1 + sensor_2 + sensor_3) / 3) | round(0) }}
 
+# Bedtime weekday/weekend state tracker
 - sensor:
   # current_day == 4 : is friday
   - name: Bedtime - Display time
@@ -844,6 +875,7 @@
     unique_id: power_momentary_light_consumption
     device_class: power
     unit_of_measurement: 'W'
+    icon: mdi:flash
     state: >
       {% set sensors = [
         states('sensor.power_downlight_toilet') | float(default=0),
@@ -856,11 +888,11 @@
         states('sensor.power_globe_living') | float(default=0),
         states('sensor.power_pendant_bedroom') | float(default=0),
         states('sensor.power_pendant_guest') | float(default=0),
-        states('sensor.power_pendants_kitchen') | float(default=0),
-        states('sensor.power_pendants_living') | float(default=0),
+        states('sensor.power_flowerpots_kitchen') | float(default=0),
+        states('sensor.power_dining_pendants_living') | float(default=0),
         states('sensor.power_pendant_office') | float(default=0),
-        states('sensor.power_spottrack_kitchen') | float(default=0),
-        states('sensor.power_spottrack_living') | float(default=0),
+        states('sensor.power_6_spot_track_kitchen') | float(default=0),
+        states('sensor.power_4_spot_track_living') | float(default=0),
         states('sensor.power_stringlights_veranda') | float(default=0)
       ] %}
       {{ sensors | sum }}
@@ -870,23 +902,27 @@
     unique_id: power_momentary_heating_consumption
     device_class: power
     unit_of_measurement: 'W'
+    icon: mdi:flash
     state: >
       {% set sensors = [
-        states('sensor.power_floor_heat_toilet') | float(default=0),
-        states('sensor.power_floor_heat_bath') | float(default=0),
-        states('sensor.power_heater_guest') | float(default=0),
-        states('sensor.power_heater_bedroom') | float(default=0),
-        states('sensor.power_heater_office') | float(default=0),
-        states('sensor.power_heater_kitchen') | float(default=0),
+        states('sensor.power_floor_heating_toilet') | float(default=0),
+        states('sensor.power_floor_heating_bath') | float(default=0),
+        states('sensor.power_panel_heater_guest') | float(default=0),
+        states('sensor.power_panel_heater_bedroom') | float(default=0),
+        states('sensor.power_panel_heater_office') | float(default=0),
+        states('sensor.power_panel_heater_kitchen') | float(default=0),
+        states('sensor.power_panel_heater_living') | float(default=0),
         states('sensor.power_seasonal_heat') | float(default=0)
       ] %}
-      {{ sensors | sum }}
+      {% set total = sensors | sum %}
+      {{ total if total > 3.0 else 0.0 }}
   
   # Total power consumption of STATIC DEVICES (things that should always be on)
   - name: Power - Momentary static devices consumption
     unique_id: power_momentary_static_consumption
     device_class: power
     unit_of_measurement: 'W'
+    icon: mdi:flash
     state: >
       {% set sensors = [
         states('sensor.power_fridge_kitchen') | float(default=0),
@@ -900,6 +936,7 @@
     unique_id: power_momentary_dynamic_consumption
     device_class: power
     unit_of_measurement: 'W'
+    icon: mdi:flash
     state: >
       {% set sensors = [
         states('sensor.power_desktop_pc_office') | float(default=0),
@@ -913,8 +950,9 @@
     unique_id: power_other_momentary_consumption
     device_class: power
     unit_of_measurement: 'W'
+    icon: mdi:flash
     state: >
-      {% set total = states('sensor.tibber_power_consumption_realtime') | float(default=0) %}
+      {% set total = states('sensor.power_realtime_tibber') | float(default=0) %}
       {% set lights = states('sensor.power_momentary_light_consumption') | float(default=0) %}
       {% set heating = states('sensor.power_momentary_heating_consumption') | float(default=0) %}
       {% set static = states('sensor.power_momentary_static_consumption') | float(default=0) %}
@@ -925,6 +963,7 @@
         {{ total - lights - heating - static - dynamic}}
       {% endif %}
 
+# Time progress sensors
 - sensor:
   # Tracks hour progress - literally
   - name: Hour progress
@@ -946,6 +985,67 @@
         {% set energy_level = state_attr('sensor.elvia_active_fixed_price_level', 'level_max') | float(default=0) %}
         {% set state = states('sensor.hour_progress') | float(default=0) %}
         {{ ((state / 100) * energy_level) * 0.85 | round(2) }}
+
+# Power sensors
+- sensor:
+    # Chat-GPT aproximated model for power consumption, fitted using a
+    # exponential model: P(x) = a * e^(b*x) + c, where x = brightness
+    # Measurements: 1% = 1.1W, 50% = 4.7W, 75% = 9.8W, 85% = 12.9W, 90% = 14.8W, 95% = 17W, 100% = 20W
+    - name: "Power lightstrip kitchen"
+      unique_id: power_lightstrip_kitchen
+      device_class: power
+      unit_of_measurement: W
+      icon: mdi:flash
+      state: >
+        {% if is_state('light.undershelf_strip_kitchen', 'on') %}
+          {% set brightness_int = state_attr('light.undershelf_strip_kitchen', 'brightness') | int %}
+          {% set brightness = ((brightness_int / 255) | float) * 100 %}
+          {% set a = 1.13587816 %}
+          {% set b = 0.02862676 %}
+          {% set c = -0.04965023 %}
+          {{ (a * (e ** (b * brightness)) + c) | round(1) }}
+        {% else %}
+          0
+        {% endif %}
+
+    # Measured to be 3.3W when on
+    - name: "Power mushroom living"
+      unique_id: power_mushroom_living
+      device_class: power
+      unit_of_measurement: W
+      icon: mdi:flash
+      state: >
+        {% if is_state('switch.mushroom_lamp_living', 'on') %}
+          4
+        {% else %}
+          0
+        {% endif %}
+
+    # Measured to be 9W when on - Both Donut and Globe
+    - name: "Power globe living"
+      unique_id: power_globe_living
+      device_class: power
+      unit_of_measurement: W
+      icon: mdi:flash
+      state: >
+        {% if is_state('switch.globe_lamp_living', 'on') %}
+          9
+        {% else %}
+          0
+        {% endif %}
+
+    # Measured to be 7.1W when on
+    - name: "Power stringlights veranda"
+      unique_id: power_stringlights_veranda
+      device_class: power
+      icon: mdi:flash
+      unit_of_measurement: W
+      state: >
+        {% if is_state('switch.string_lights_veranda', 'on') %}
+          8
+        {% else %}
+          0
+        {% endif %}
 
 # ELVIA VARIABLE PRICING - FULL LIST OF HOURS UNTIL TOMORROW 23:00-00:00
 #  Reduced list of info with only useful fields
@@ -975,3 +1075,265 @@
             {%- endfor %}
             ]
           {% endif %}
+    
+    # Total cost this month for electric grid usage. Billed to Elvia
+    - name: "Elvia monthly total"
+      unique_id: elvia_monthly_total
+      device_class: monetary
+      unit_of_measurement: NOK
+      icon: mdi:cash
+      state: >
+        {{ (states('sensor.elvia_active_fixed_price_level') | float(default=0)) + (states('input_number.power_grid_monthly_variable_price') | float(default=0)) }}
+    
+    # Total cost for power (Tibber and Elvia) for the current hour
+    - name: "Energy price hourly total"
+      unique_id: energy_price_hourly_total
+      device_class: monetary
+      unit_of_measurement: NOK/kWh
+      icon: mdi:cash
+      state: >
+        {% set energy = states('sensor.tibber_prices') | float(default=0) %}
+        {% set grid = states('sensor.elvia_variable_pricing_this_hour') | float(default=0) %}
+        {{ energy + grid }}
+
+# Date and month texts/names
+- sensor:
+  # Readable string for week-day, as sensor
+  - name: "Day name"
+    unique_id: day_name 
+    icon: mdi:calendar
+    state: >
+      {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+      {{ days[now().weekday()] }}
+  
+  - name: "Day nor"
+    unique_id: day_name_nor
+    icon: mdi:calendar
+    state: >
+      {% set days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"] %}
+      {{ days[now().weekday()] }}
+    
+  - name: "Month name"
+    unique_id: month_name
+    icon: mdi:calendar
+    state: >
+      {% set months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] %}
+      {{ months[now().month-1] }} 
+
+  - name: "Month name nor"
+    unique_id: month_name_nor
+    icon: mdi:calendar
+    state: >
+      {% set months = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"] %}
+      {{ months[now().month-1] }}
+    
+    # Formats the week-day and date into a humanly readable sentence for UI, as sensor
+    # Ending with YEAR:
+    # {{ states('sensor.day_name') ~ ', ' ~ states('sensor.month_name') ~ ' ' ~ day ~ ordinal ~ now().strftime(' %Y') }}
+  - name: "Date string"
+    unique_id: date_string
+    icon: mdi:calendar
+    state: >
+      {% set day = now().day %}
+      {% set ordinal = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th') %}
+      {{ states('sensor.day_name') ~ ', ' ~ states('sensor.month_name') ~ ' ' ~ day ~ ordinal }}
+
+  - name: "Date string nor"
+    unique_id: date_string_nor
+    icon: mdi:calendar
+    state: "{{ states('sensor.day_name_nor') }}, {{ now().day }}.  {{ states('sensor.month_name_nor') }} {{ now().year }}"
+    
+# Misc temperatures and humidity sensors
+- sensor:
+  # Temperature sensor for Kitchen Heater
+  - name: "Panel temperature kitchen"
+    unique_id: panel_temperature_kitchen
+    unit_of_measurement: "°C"
+    device_class: temperature
+    icon: mdi:thermometer
+    state: "{{ state_attr('climate.panel_heater_kitchen', 'current_temperature') }}"
+    
+  
+  # Temperature sensor for Living Room Heater
+  - name: "Panel temperature living"
+    unique_id: panel_temperature_living
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: "{{ state_attr('climate.panel_heater_living', 'current_temperature') }}"
+    device_class: temperature
+  
+  # Temperature sensor for Kitchen Heater
+  - name: "Panel temperature bedroom"
+    unique_id: panel_temperature_bedroom
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: "{{ state_attr('climate.panel_heater_bedroom', 'current_temperature') }}"
+    device_class: temperature
+
+  # Temperature sensor for current outdoor weather from weather integration
+  - name: "Temperature outdoor"
+    unique_id: temperature_outdoor
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    device_class: temperature
+    state: "{{ state_attr('weather.yr_weather_home', 'temperature') }}"
+    
+    
+  # Humidity sensor for current outdoor humidity
+  - name: "Humidity outdoor"
+    unique_id: humidity_outdoor
+    unit_of_measurement: "%"
+    device_class: humidity
+    icon: mdi:water-percent
+    state: "{{ state_attr('weather.yr_weather_home', 'humidity') }}"
+    
+  # Always 0 humidity placeholder
+  - name: "Humidity placeholder"
+    unique_id: humidity_placeholder
+    device_class: humidity
+    unit_of_measurement: '%'
+    icon: mdi:water-percent
+    state: "{{ 0 | float(default=0) }}"
+
+# Misc appliance and device sensors
+- sensor:
+  - name: "Active media player"
+    unique_id: active_media_player
+    icon: mdi:speaker
+    state: >
+        {% if is_state('media_player.sonos_living', 'playing') and
+          not is_state_attr('media_player.sonos_living', 'source', 'TV') %}
+          living
+        {% elif is_state('media_player.sonos_move', 'playing') %}
+          move
+        {% elif is_state('media_player.sonos_kitchen', 'playing') %}
+          kitchen
+        {% else %}
+          none
+        {% endif %}
+
+  # Finds the current setting of the physical remote for the heated sheet
+  - name: "Heated sheet setting"
+    unique_id: heated_sheet_setting
+    icon: mdi:thermometer
+    state: >-
+        {% if states('sensor.power_seasonal_heat')|float >= 0 and states('sensor.power_seasonal_heat')|float < 1 %}
+          Off
+        {% elif states('sensor.power_seasonal_heat')|float >= 15 and states('sensor.power_seasonal_heat')|float <= 20 %}
+          #1
+        {% elif states('sensor.power_seasonal_heat')|float >= 28 and states('sensor.power_seasonal_heat')|float <= 40 %}
+          Feet
+        {% elif states('sensor.power_seasonal_heat')|float >= 50 and states('sensor.power_seasonal_heat')|float <= 80 %}
+          #2
+        {% else %}
+          On
+        {% endif %}
+    
+
+  # Dedicated sensor for robot vacuum battery status
+  #- name: "Vaskepott battery status"
+  #- unique_id: vaskepott_battery
+  #- unit_of_measurement: "%"
+  #- state: "{{ state_attr('vacuum.vaskepott', 'battery_level') }}"
+  #- device_class: battery
+
+
+  # Translates the robot vacuum fan-speed from default Xiaomi to Roborock terminology
+  - name: "Vaskepott current fan-speed"
+    unique_id: vaskepott_fan_speed
+    state: >-
+      {% set fan_speed = state_attr('vacuum.vaskepott', 'fan_speed') %}
+      {% if fan_speed == "Silent" %}
+        Quiet
+      {% elif fan_speed == "Standard" %}
+        Balanced
+      {% elif fan_speed == "Medium" %}
+        Turbo
+      {% elif fan_speed == "Turbo" %}
+        Max
+      {% elif fan_speed == "105" %}
+        Off
+      {% else %}
+        Unknown
+      {% endif %}
+    
+# Namron panel heater temperature calibration trackers
+- sensor:
+  - name: "Temperature difference office"
+    unique_id: temperature_difference_office
+    device_class: temperature
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: >
+        {% set diff = (states('sensor.temperature_room_office') | float(default=0)) -
+          (state_attr('climate.panel_heater_office', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.panel_heater_office', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+    
+  - name: "Temperature difference guest"
+    unique_id: temperature_difference_guest
+    device_class: temperature
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: >
+        {% set diff = (states('sensor.temperature_room_guest') | float(default=0)) -
+          (state_attr('climate.panel_heater_guest', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.panel_heater_guest', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+    
+  - name: "Temperature difference bedroom"
+    unique_id: temperature_difference_bedroom
+    device_class: temperature
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: >
+        {% set diff = (states('sensor.temperature_room_bedroom') | float(default=0)) -
+          (state_attr('climate.panel_heater_bedroom', 'local_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (state_attr('climate.panel_heater_bedroom', 'local_temperature_calibration') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+

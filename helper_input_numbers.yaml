@@ -202,8 +202,8 @@ temperature_vacation_commons:
 
 # POWER =======================================================================
 # Holding the 4th highest max-hour energy record
-power_monthly_highest_max_hour_4:
-  name: Power - Monthly highest max-hour 4
+energy_monthly_maxhour_4:
+  name: Energy - Monthly highest max-hour 4
   icon: mdi:lightning-bolt
   min: 0.0
   max: 30.0
@@ -212,8 +212,8 @@ power_monthly_highest_max_hour_4:
   mode: box
 
 # 3,207481
-power_monthly_highest_max_hour_1:
-  name: Power - Monthly highest max-hour 1
+energy_monthly_maxhour_1:
+  name: Energy - Monthly highest max-hour 1
   icon: mdi:lightning-bolt
   min: 0.0
   max: 30.0
@@ -222,8 +222,8 @@ power_monthly_highest_max_hour_1:
   mode: box
 
 # 3,020333
-power_monthly_highest_max_hour_2:
-  name: Power - Monthly highest max-hour 2
+energy_monthly_maxhour_2:
+  name: Energy - Monthly highest max-hour 2
   icon: mdi:lightning-bolt
   min: 0.0
   max: 30.0
@@ -232,8 +232,8 @@ power_monthly_highest_max_hour_2:
   mode: box
 
 # 3,006435
-power_monthly_highest_max_hour_3:
-  name: Power - Monthly highest max-hour 3
+energy_monthly_maxhour_3:
+  name: Energy - Monthly highest max-hour 3
   icon: mdi:lightning-bolt
   min: 0.0
   max: 30.0
@@ -242,8 +242,8 @@ power_monthly_highest_max_hour_3:
   mode: box
 
 # 1,08165 kWh
-power_last_hour_consumed:
-  name: Power - Last hour consumed
+energy_last_hour_consumed:
+  name: Energy - Last hour consumed
   icon: mdi:lightning-bolt
   min: 0.0
   max: 30.0

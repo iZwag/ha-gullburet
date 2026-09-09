@@ -150,7 +150,7 @@ cards:
             action: more-info
     # Panel heaters
     - type: custom:mushroom-climate-card
-      entity: climate.heater_living
+      entity: climate.panel_heater_living
       name: Panelovn, stue
       hvac_modes:
         - heat
@@ -158,7 +158,7 @@ cards:
       show_temperature_control: true
       layout: horizontal
     - type: custom:mushroom-climate-card
-      entity: climate.heater_kitchen
+      entity: climate.panel_heater_kitchen
       name: Panelovn, kjøkken
       hvac_modes:
         - heat
@@ -181,9 +181,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_office
+        entity: sensor.temperature_room_office
       - type: entity
-        entity: sensor.humidity_office
+        entity: sensor.humidity_room_office
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_office
@@ -265,7 +265,7 @@ cards:
             action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_office
+      entity: climate.panel_heater_office
       name: Panelovn
       hvac_modes:
         - heat
@@ -289,9 +289,9 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_bedroom
+        entity: sensor.temperature_room_bedroom
       - type: entity
-        entity: sensor.humidity_bedroom
+        entity: sensor.humidity_room_bedroom
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bedroom
@@ -354,7 +354,7 @@ cards:
             action: more-info
     # Panel heater
     - type: custom:mushroom-climate-card
-      entity: climate.heater_bedroom
+      entity: climate.panel_heater_bedroom
       name: Panelovn
       hvac_modes:
         - heat
@@ -377,7 +377,7 @@ cards:
           }
       chips:
       - type: entity
-        entity: sensor.temperature_bath
+        entity: sensor.temperature_room_bath
       - type: entity
         icon: mdi:heat-wave
         entity: input_select.heating_mode_bath
@@ -458,7 +458,7 @@ cards:
             action: more-info
     # Floor heating
     - type: custom:mushroom-climate-card
-      entity: climate.floor_heat_bath
+      entity: climate.floor_heating_bath
       name: Gulvvarme
       hvac_modes:
         - heat

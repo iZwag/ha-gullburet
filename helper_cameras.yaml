@@ -21,6 +21,13 @@
 # Observations:
 # Vacuuming entry, kitchen, living room and bedroom on MAX with chairs on floor
 #   takes 4488s = 74m 48s
+# -------------------
+# PRE-REQUISITES:
+# 1. If Vacuum is on a different VLAN than Home Assistant, go into router and
+#  configure a NAT rule from Home Assistant to Vacuum robot.
+# - If using Unifi, its in Setting > Policy Table
+# 2. Download integration from HACS
+# -------------------
 - platform: xiaomi_cloud_map_extractor
   host: !secret xiaomi_vacuum_host
   token: !secret xiaomi_vacuum_token

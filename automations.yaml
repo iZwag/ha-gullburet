@@ -5,7 +5,7 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.tibber_monthly_cost
+    - sensor.cost_monthly_tibber
     below: 0.1
   condition: []
   action:
@@ -14,18 +14,18 @@
       value: 0
     target:
       entity_id:
-      - input_number.power_monthly_highest_max_hour_1
-      - input_number.power_monthly_highest_max_hour_2
-      - input_number.power_monthly_highest_max_hour_3
+      - input_number.energy_monthly_maxhour_1
+      - input_number.energy_monthly_maxhour_2
+      - input_number.energy_monthly_maxhour_3
       - input_number.power_grid_monthly_variable_price
-      - input_number.power_monthly_highest_max_hour_4
+      - input_number.energy_monthly_maxhour_4
   - service: input_datetime.set_datetime
     target:
       entity_id:
-      - input_datetime.power_monthly_highest_max_hour_1
-      - input_datetime.power_monthly_highest_max_hour_2
-      - input_datetime.power_monthly_highest_max_hour_3
-      - input_datetime.power_monthly_highest_max_hour_4
+      - input_datetime.energy_monthly_maxhour_1
+      - input_datetime.energy_monthly_maxhour_2
+      - input_datetime.energy_monthly_maxhour_3
+      - input_datetime.energy_monthly_maxhour_4
     data:
       timestamp: '{{ now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
         }}'
@@ -136,15 +136,14 @@
   alias: System - Daily reset & maintenance tasks
   description: Performs resets, upgrades and maintenance at a daily time set by the
     provided time-helper.
-  trigger:
-  - platform: time
-    at: input_datetime.system_daily_reset_time
-  condition: []
-  action:
-  - service: script.lights_reset_overrides
-    data: {}
-  - service: input_boolean.turn_off
-    target:
+  triggers:
+  - at: input_datetime.system_daily_reset_time
+    trigger: time
+  conditions: []
+  actions:
+  - data: {}
+    action: script.lights_reset_overrides
+  - target:
       entity_id:
       - input_boolean.party_mode_enable
       - input_boolean.lights_movie_mode
@@ -153,27 +152,23 @@
       - input_boolean.guest_show_wifi
       - input_boolean.select_rooms_cleaning
     data: {}
-  - service: script.deselect_floorplan_room
-    data: {}
-  - service: input_select.select_option
-    data:
-      option: 'off'
-    target:
-      entity_id: input_select.office_mode_select
-  - service: input_select.select_option
-    target:
+    action: input_boolean.turn_off
+  - data: {}
+    action: script.deselect_floorplan_room
+  - target:
       entity_id: input_select.bathroom_mode_select
     data:
       option: 'off'
-  - service: script.speakers_unjoin_all
-    metadata: {}
+    action: input_select.select_option
+  - metadata: {}
     data: {}
-  - service: input_select.select_option
-    metadata: {}
+    action: script.speakers_unjoin_all
+  - metadata: {}
     data:
       option: Living room
     target:
       entity_id: input_select.audio_speaker_select
+    action: input_select.select_option
   mode: single
 - id: '1712303592468'
   alias: Bathroom - Handle light mode change
@@ -226,7 +221,7 @@
           brightness_pct: 40
           transition: 300
         target:
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
         action: light.turn_on
       - action: light.turn_on
         metadata: {}
@@ -235,7 +230,7 @@
           brightness_pct: 25
           transition: 300
         target:
-          entity_id: light.bedroom_shelf_strip
+          entity_id: light.shelf_strip_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -245,15 +240,16 @@
           brightness_pct: 100
           transition: 300
         target:
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
         action: light.turn_on
       - action: light.turn_on
         metadata: {}
         data:
           color_temp_kelvin: 6500
           brightness_pct: 75
+          transition: 60
         target:
-          entity_id: light.bedroom_shelf_strip
+          entity_id: light.shelf_strip_bedroom
       - action: light.turn_on
         metadata: {}
         data:
@@ -261,7 +257,7 @@
           color_temp_kelvin: 6500
           brightness_pct: 60
         target:
-          entity_id: light.bedroom_reading_lamp
+          entity_id: light.reading_lamp_bedroom
     - conditions:
       - condition: and
         conditions:
@@ -269,7 +265,7 @@
           id:
           - blinds-open
         - condition: state
-          entity_id: light.pendant_bedroom
+          entity_id: light.bedroom_pendant
           state: 'on'
       sequence:
       - metadata: {}
@@ -287,13 +283,14 @@
       - if:
         - condition: state
           entity_id: media_player.sonos_bedroom
-          state: playing
+          state:
+          - playing
         then:
         - target:
             entity_id: media_player.sonos_bedroom
           data:
             volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
-              | float(0.08)) + 0.05 }}'
+              | float) + 0.05 }}'
           action: media_player.volume_set
     - conditions:
       - condition: trigger
@@ -307,7 +304,7 @@
         then:
         - data:
             volume_level: '{{ (states(''input_number.wakeup_audio_start_volume'')
-              | float(0.08)) + 0.1 }}'
+              | float) + 0.1 }}'
           target:
             entity_id: media_player.sonos_bedroom
           action: media_player.volume_set
@@ -356,27 +353,34 @@
             - cover.left_blind_bedroom
             - cover.right_blind_bedroom
           action: cover.close_cover
+      - action: light.turn_off
+        metadata: {}
+        target:
+          entity_id:
+          - light.shelf_strip_bedroom
+          - light.reading_lamp_bedroom
+        data: {}
   mode: queued
   max: 10
 - id: '1714376090355'
   alias: Bedroom - Pause Sonos when light turned off
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - light.pendant_bedroom
+  triggers:
+  - entity_id:
+    - light.bedroom_pendant
     from: 'on'
     to: 'off'
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: media_player.sonos_bedroom
     state: playing
-  action:
-  - service: media_player.media_pause
+  actions:
+  - action: media_player.media_stop
     metadata: {}
-    data: {}
     target:
       entity_id: media_player.sonos_bedroom
+    data: {}
   mode: single
 - id: '1714643311108'
   alias: Bedtime - Time triggered actions
@@ -467,56 +471,67 @@
   alias: Veranda lights automatic ON/OFF
   description: Lights are turned off with sunset, or at latest 22:00. Lights are turned
     off at dawn, or at latest 08:00.
-  trigger:
-  - platform: time
-    at: sensor.veranda_lights_on_time
+  triggers:
+  - at: sensor.veranda_lights_on_time
     id: sun-down
-  - platform: time
-    at: sensor.veranda_lights_off_time
+    trigger: time
+  - at: sensor.veranda_lights_off_time
     id: sun-dawn
-  condition: []
-  action:
+    trigger: time
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - sun-down
       sequence:
-      - type: turn_on
-        device_id: 566fe21e7b944509a9e0d09103f0bba2
-        entity_id: cd7249fddd178416baa06258feb86991
-        domain: switch
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id: light.string_lights_veranda
+        data: {}
     - conditions:
       - condition: trigger
         id:
         - sun-dawn
       sequence:
-      - type: turn_off
-        device_id: 566fe21e7b944509a9e0d09103f0bba2
-        entity_id: cd7249fddd178416baa06258feb86991
-        domain: switch
+      - action: light.turn_off
+        metadata: {}
+        target:
+          entity_id: light.string_lights_veranda
+        data: {}
   mode: single
 - id: '1717858387784'
   alias: Veranda - Handle remote presses L/R/MID/UP/DOWN
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.action_veranda_remote
-    to: arrow_right_click
+  triggers:
+  - entity_id:
+    - sensor.action_curtain_control_kitchen
+    to:
+    - arrow_right_click
     id: right
-  - platform: state
-    entity_id:
-    - sensor.action_veranda_remote
-    to: arrow_left_click
+    trigger: state
+  - entity_id:
+    - sensor.action_curtain_control_kitchen
+    to:
+    - arrow_left_click
     id: left
-  - platform: state
-    entity_id:
-    - sensor.action_veranda_remote
-    to: toggle
-    id: middle
-  condition: []
-  action:
+    trigger: state
+  - entity_id:
+    - sensor.action_curtain_control_kitchen
+    to:
+    - 'on'
+    id: up
+    trigger: state
+  - entity_id:
+    - sensor.action_curtain_control_kitchen
+    to:
+    - 'off'
+    id: down
+    trigger: state
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
@@ -530,16 +545,16 @@
             entity_id: sensor.curtain_state_living
             state: stopped
         then:
-        - service: cover.stop_cover
-          metadata: {}
+        - metadata: {}
           data: {}
           target:
             entity_id: cover.curtain_living
+          action: cover.stop_cover
         else:
-        - service: cover.close_cover
-          target:
+        - target:
             entity_id: cover.curtain_living
           data: {}
+          action: cover.close_cover
     - conditions:
       - condition: trigger
         id:
@@ -552,63 +567,74 @@
             entity_id: sensor.curtain_state_living
             state: stopped
         then:
-        - service: cover.stop_cover
-          metadata: {}
+        - metadata: {}
           data: {}
           target:
             entity_id: cover.curtain_living
+          action: cover.stop_cover
         else:
-        - service: cover.open_cover
-          metadata: {}
+        - metadata: {}
           data: {}
           target:
             entity_id: cover.curtain_living
+          action: cover.open_cover
     - conditions:
       - condition: trigger
         id:
-        - middle
+        - up
       sequence:
-      - service: light.toggle
+      - action: light.turn_on
         metadata: {}
-        data: {}
         target:
-          entity_id: light.wall_light_veranda
+          entity_id: light.string_lights_veranda
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - down
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        target:
+          entity_id: light.string_lights_veranda
+        data: {}
   mode: single
 - id: '1724167870416'
   alias: Storage room light ON/OFF with motion/timer
   description: ''
-  trigger:
-  - type: motion
-    platform: device
-    device_id: b84fcc8638043ae4b155921ff3e1d28d
-    entity_id: 83e8a6edb56e981eb53faf14879e2aa2
-    domain: binary_sensor
-    id: motion
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - timer.storage_room_light_timer
     from: active
     to: idle
     id: timer
-  condition: []
-  action:
+    trigger: state
+  - trigger: motion.detected
+    target:
+      entity_id: binary_sensor.motion_sensor_storage
+    options:
+      behavior: each
+      for: 00:00:00
+    id: motion
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - motion
       sequence:
-      - service: script.storage_room_light_on_auto
-        metadata: {}
+      - metadata: {}
         data: {}
+        action: script.storage_room_light_on_auto
     - conditions:
       - condition: trigger
         id:
         - timer
       sequence:
-      - service: script.storage_room_light_off_finish_timer
-        metadata: {}
+      - metadata: {}
         data: {}
+        action: script.storage_room_light_off_finish_timer
   mode: single
 - id: '1727439077538'
   alias: Heating - Handle pause heating ON/OFF
@@ -639,13 +665,13 @@
         data: {}
         target:
           entity_id:
-          - climate.floor_heat_bath
-          - climate.floor_heat_toilet
-          - climate.heater_bedroom
-          - climate.heater_guest
-          - climate.heater_kitchen
-          - climate.heater_living
-          - climate.heater_office
+          - climate.floor_heating_bath
+          - climate.floor_heating_toilet
+          - climate.panel_heater_bedroom
+          - climate.panel_heater_guest
+          - climate.panel_heater_kitchen
+          - climate.panel_heater_living
+          - climate.panel_heater_office
     - conditions:
       - condition: trigger
         id:
@@ -657,13 +683,13 @@
           hvac_mode: heat
         target:
           entity_id:
-          - climate.floor_heat_bath
-          - climate.floor_heat_toilet
-          - climate.heater_bedroom
-          - climate.heater_guest
-          - climate.heater_kitchen
-          - climate.heater_living
-          - climate.heater_office
+          - climate.floor_heating_bath
+          - climate.floor_heating_toilet
+          - climate.panel_heater_bedroom
+          - climate.panel_heater_guest
+          - climate.panel_heater_kitchen
+          - climate.panel_heater_living
+          - climate.panel_heater_office
   mode: single
 - id: '1727445980885'
   alias: Energy - Time triggered pause heating checks
@@ -712,7 +738,7 @@
           - 50min
           - 55min
         - condition: template
-          value_template: '{{ ( states(''sensor.tibber_energy_consumption_current_hour'')
+          value_template: '{{ ( states(''sensor.energy_consumed_this_hour_tibber'')
             | float ) > state_attr(''sensor.hour_progress'', ''of_energy_level'')
             }}'
       sequence:
@@ -794,19 +820,19 @@
   trigger:
   - platform: state
     entity_id:
-    - light.downlights_bath
+    - light.bath_downlights
     from: 'on'
     to: 'off'
   condition:
   - condition: state
-    entity_id: light.lightstrip_bath
+    entity_id: light.bath_lightstrip
     state: 'on'
   action:
   - service: light.turn_off
     metadata: {}
     data: {}
     target:
-      entity_id: light.lightstrip_bath
+      entity_id: light.bath_lightstrip
   mode: single
 - id: '1732224070644'
   alias: Heating - Handle heater calibrations
@@ -934,7 +960,7 @@
       sequence:
       - service: light.turn_off
         target:
-          entity_id: light.lightstrip_closet_bedroom
+          entity_id: light.closet_strip_bedroom
         data: {}
       - service: input_boolean.turn_off
         target:
@@ -959,7 +985,7 @@
         data: {}
       - service: light.turn_on
         target:
-          entity_id: light.lightstrip_closet_bedroom
+          entity_id: light.closet_strip_bedroom
         data: {}
       - if:
         - condition: template
@@ -1134,7 +1160,7 @@
         data:
           fan_speed: Silent
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
     - conditions:
       - condition: trigger
         id:
@@ -1145,7 +1171,7 @@
         data:
           fan_speed: Standard
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
     - conditions:
       - condition: trigger
         id:
@@ -1156,7 +1182,7 @@
         data:
           fan_speed: Medium
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
     - conditions:
       - condition: trigger
         id:
@@ -1167,7 +1193,7 @@
         data:
           fan_speed: Turbo
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
   mode: single
 - id: '1736713687559'
   alias: Cleaning - Handle mop ready changes
@@ -1175,13 +1201,13 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.esmeralda_mop_ready
+    - binary_sensor.vaskepott_mop_ready
     from: 'on'
     to: 'off'
     id: turned-off
   - platform: state
     entity_id:
-    - binary_sensor.esmeralda_mop_ready
+    - binary_sensor.vaskepott_mop_ready
     from: 'off'
     to: 'on'
     id: turned-on
@@ -1216,7 +1242,7 @@
   trigger:
   - platform: state
     entity_id:
-    - vacuum.esmeralda
+    - vacuum.vaskepott
     from: returning
     to: docked
     id: returned
@@ -1237,13 +1263,13 @@
         entity_id: input_boolean.mop_after_vacuum
         state: 'on'
       - condition: state
-        entity_id: binary_sensor.esmeralda_mop_ready
+        entity_id: binary_sensor.vaskepott_mop_ready
         state: 'on'
     then:
     - wait_for_trigger:
       - platform: state
         entity_id:
-        - vacuum.esmeralda
+        - vacuum.vaskepott
         attribute: status
         to: Emptying the bin
         for:
@@ -1285,13 +1311,13 @@
         metadata: {}
         data: {}
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
       else: []
     - service: xiaomi_miio.vacuum_clean_segment
       data:
         segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
       target:
-        entity_id: vacuum.esmeralda
+        entity_id: vacuum.vaskepott
     else: []
   - service: input_boolean.turn_off
     metadata: {}
@@ -1345,22 +1371,22 @@
   trigger:
   - platform: state
     entity_id:
-    - light.downlights_bath
+    - light.bath_downlights
     from: 'on'
     to: 'off'
   - platform: state
     entity_id:
-    - light.lightstrip_bath
+    - light.bath_lightstrip
     from: 'on'
     to: 'off'
   condition:
   - condition: and
     conditions:
     - condition: state
-      entity_id: light.downlights_bath
+      entity_id: light.bath_downlights
       state: 'off'
     - condition: state
-      entity_id: light.lightstrip_bath
+      entity_id: light.bath_lightstrip
       state: 'off'
     - condition: not
       conditions:
@@ -1377,42 +1403,26 @@
 - id: '1744142825753'
   alias: Lights - Office pendants link
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - light.pendant_office
+  triggers:
+  - entity_id:
+    - light.office_pendant
     from: 'on'
     to: 'off'
     id: 'off'
-  - platform: state
-    entity_id:
-    - light.pendant_office
+    trigger: state
+  - entity_id:
+    - light.office_pendant
     from: 'off'
     to: 'on'
     id: 'on'
-  - platform: time
-    at: 07:30:00
-    id: focus
-  - platform: time
-    at: '14:30:00'
-    id: bright
-  - platform: time
-    at: '17:00:00'
-    id: chill
-  - platform: time
-    at: '21:30:00'
-    id: night
-  - platform: state
-    entity_id:
-    - input_select.office_mode_select
-    id: mode-change
-  - platform: state
-    entity_id:
-    - light.pendant_office
+    trigger: state
+  - entity_id:
+    - light.office_pendant
     attribute: brightness
     id: brightness
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - variables:
       focus_dim: 191
       focus_temp: 6535
@@ -1428,124 +1438,21 @@
         id:
         - 'on'
       sequence:
-      - service: light.turn_on
-        metadata: {}
+      - metadata: {}
         data: {}
         target:
           entity_id: light.pendants_office
+        action: light.turn_on
     - conditions:
       - condition: trigger
         id:
         - 'off'
       sequence:
-      - service: light.turn_off
-        metadata: {}
+      - metadata: {}
         data: {}
         target:
           entity_id: light.pendants_office
-    - conditions:
-      - condition: trigger
-        id:
-        - focus
-      sequence:
-      - service: input_select.select_option
-        metadata: {}
-        data:
-          option: Focus
-        target:
-          entity_id: input_select.office_mode_select
-    - conditions:
-      - condition: trigger
-        id:
-        - bright
-      sequence:
-      - service: input_select.select_option
-        metadata: {}
-        data:
-          option: Bright
-        target:
-          entity_id: input_select.office_mode_select
-    - conditions:
-      - condition: trigger
-        id:
-        - chill
-      sequence:
-      - service: input_select.select_option
-        metadata: {}
-        data:
-          option: Chill
-        target:
-          entity_id: input_select.office_mode_select
-    - conditions:
-      - condition: trigger
-        id:
-        - night
-      sequence:
-      - service: input_select.select_option
-        metadata: {}
-        data:
-          option: Night
-        target:
-          entity_id: input_select.office_mode_select
-    - conditions:
-      - condition: and
-        conditions:
-        - condition: trigger
-          id:
-          - mode-change
-        - condition: state
-          entity_id: light.pendants_office
-          state: 'on'
-      sequence:
-      - choose:
-        - conditions:
-          - condition: state
-            entity_id: input_select.office_mode_select
-            state: Focus
-          sequence:
-          - service: light.turn_on
-            metadata: {}
-            data:
-              kelvin: 6500
-              brightness_pct: 75
-            target:
-              entity_id: light.pendants_office
-        - conditions:
-          - condition: state
-            entity_id: input_select.office_mode_select
-            state: Bright
-          sequence:
-          - service: light.turn_on
-            metadata: {}
-            data:
-              kelvin: 4003
-              brightness_pct: 50
-            target:
-              entity_id: light.pendants_office
-        - conditions:
-          - condition: state
-            entity_id: input_select.office_mode_select
-            state: Chill
-          sequence:
-          - service: light.turn_on
-            metadata: {}
-            data:
-              kelvin: 2603
-              brightness_pct: 20
-            target:
-              entity_id: light.pendants_office
-        - conditions:
-          - condition: state
-            entity_id: input_select.office_mode_select
-            state: Night
-          sequence:
-          - service: light.turn_on
-            metadata: {}
-            data:
-              kelvin: 2000
-              brightness_pct: 5
-            target:
-              entity_id: light.pendants_office
+        action: light.turn_off
     - conditions:
       - condition: and
         conditions:
@@ -1556,13 +1463,13 @@
           entity_id: light.pendants_office
           state: 'on'
       sequence:
-      - service: light.turn_on
-        metadata: {}
+      - metadata: {}
         data:
-          brightness_pct: '{{ state_attr(''light.pendant_office'', ''brightness'')
+          brightness_pct: '{{ state_attr(''light.office_pendant'', ''brightness'')
             }}'
         target:
           entity_id: light.pendants_office
+        action: light.turn_on
   mode: queued
   max: 10
 - id: '1746371725883'
@@ -1667,76 +1574,76 @@
   alias: Wakeup - Handle input changes
   description: Reacts to changes done to UI-inputs related to Wakeup. Must not validate
     enable-toggle.
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - input_number.wakeup_audio_amp_delay
     id: amp-delay
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_number.wakeup_audio_loud_delay
     id: loud-delay
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_number.wakeup_blinds_open_delay
     id: blinds-delay
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_number.wakeup_light_start_advance
     id: light-advance
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_number.wakeup_audio_start_volume
     id: start-vol
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_datetime.wakeup_alarm_weekdays
     id: alarm-weekdays
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_datetime.wakeup_alarm_weekends
     id: alarm-weekends
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_boolean.wakeup_alarm_active
     from: 'off'
     to: 'on'
     id: alarm-enabled
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_boolean.wakeup_alarm_active
     from: 'on'
     to: 'off'
     id: alarm-disabled
-  - platform: time
-    at: '20:00:00'
+    trigger: state
+  - at: '20:00:00'
     id: display-check
-  - platform: state
-    entity_id:
+    trigger: time
+  - entity_id:
     - input_select.wakeup_display_time
     to: weekend
     from: weekday
     id: to-weekend
-  - platform: state
-    entity_id:
+    trigger: state
+  - entity_id:
     - input_select.wakeup_display_time
     id: to-weekday
     from: weekend
     to: weekday
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - amp-delay
       sequence:
-      - service: script.adjust_datetime
-        data:
+      - data:
           base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
           delta_minutes: '{{ states(''input_number.wakeup_audio_amp_delay'') | float(0)
             }}'
           target_entity: input_datetime.wakeup_audio_amp
+        action: script.adjust_datetime
     - conditions:
       - condition: trigger
         id:
@@ -1752,53 +1659,52 @@
 
             {{ loud_delay > amp_delay }}'
         then:
-        - service: script.adjust_datetime
-          data:
+        - data:
             base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
             delta_minutes: '{{ states(''input_number.wakeup_audio_loud_delay'') |
               float(0) }}'
             target_entity: input_datetime.wakeup_audio_loud
+          action: script.adjust_datetime
     - conditions:
       - condition: trigger
         id:
         - blinds-delay
       sequence:
-      - service: script.adjust_datetime
-        data:
+      - data:
           base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
           delta_minutes: '{{ states(''input_number.wakeup_blinds_open_delay'') | float(0)
             }}'
           target_entity: input_datetime.wakeup_blinds_open
+        action: script.adjust_datetime
     - conditions:
       - condition: trigger
         id:
         - light-advance
       sequence:
-      - service: script.adjust_datetime
-        data:
+      - data:
           base_datetime: '{{ states(''input_datetime.wakeup_alarm_time'') }}'
           delta_minutes: '{{ states(''input_number.wakeup_light_start_advance'') |
             float(0) }}'
           target_entity: input_datetime.wakeup_light_start
+        action: script.adjust_datetime
     - conditions:
       - condition: trigger
         id:
         - start-vol
       sequence:
-      - service: sonos.update_alarm
-        data:
+      - data:
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
           volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
             }}'
         target:
           entity_id: media_player.sonos_bedroom
+        action: sonos.update_alarm
     - conditions:
       - condition: trigger
         id:
         - alarm-enabled
       sequence:
-      - service: sonos.update_alarm
-        metadata: {}
+      - metadata: {}
         data:
           enabled: true
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
@@ -1806,30 +1712,40 @@
             }}'
         target:
           entity_id: media_player.sonos_bedroom
+        action: sonos.update_alarm
+      - action: switch.turn_on
+        metadata: {}
+        target:
+          entity_id: switch.sonos_alarm_72
+        data: {}
     - conditions:
       - condition: trigger
         id:
         - alarm-disabled
       sequence:
-      - service: sonos.update_alarm
-        metadata: {}
+      - metadata: {}
         data:
           enabled: false
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int(72) }}'
         target:
           entity_id: media_player.sonos_bedroom
+        action: sonos.update_alarm
+      - action: switch.turn_off
+        metadata: {}
+        target:
+          entity_id: switch.sonos_alarm_72
+        data: {}
     - conditions:
       - condition: trigger
         id:
         - alarm-weekdays
         - to-weekday
       sequence:
-      - service: script.utility_set_alarm_time
-        data:
+      - data:
           time_input: '{{ states(''input_datetime.wakeup_alarm_weekdays'') }}'
           alarm_entity: input_datetime.wakeup_alarm_time
-      - service: sonos.update_alarm
-        data:
+        action: script.utility_set_alarm_time
+      - data:
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
           volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
             }}'
@@ -1841,18 +1757,18 @@
             '
         target:
           entity_id: media_player.sonos_bedroom
+        action: sonos.update_alarm
     - conditions:
       - condition: trigger
         id:
         - alarm-weekends
         - to-weekend
       sequence:
-      - service: script.utility_set_alarm_time
-        data:
+      - data:
           time_input: '{{ states(''input_datetime.wakeup_alarm_weekends'') }}'
           alarm_entity: input_datetime.wakeup_alarm_time
-      - service: sonos.update_alarm
-        data:
+        action: script.utility_set_alarm_time
+      - data:
           alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
           volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
             }}'
@@ -1864,6 +1780,7 @@
             '
         target:
           entity_id: media_player.sonos_bedroom
+        action: sonos.update_alarm
     - conditions:
       - condition: trigger
         id:
@@ -1874,23 +1791,23 @@
           - condition: template
             value_template: '{{ now().weekday() == 4 }}'
           sequence:
-          - service: input_select.select_option
-            metadata: {}
+          - metadata: {}
             data:
               option: weekend
             target:
               entity_id: input_select.wakeup_display_time
+            action: input_select.select_option
           alias: Test if its friday
         - conditions:
           - condition: template
             value_template: '{{ now().weekday() == 6 }}'
           sequence:
-          - service: input_select.select_option
-            metadata: {}
+          - metadata: {}
             data:
               option: weekday
             target:
               entity_id: input_select.wakeup_display_time
+            action: input_select.select_option
           alias: Test if its sunday
       - delay:
           hours: 0
@@ -1902,12 +1819,11 @@
           entity_id: input_select.wakeup_display_time
           state: weekday
         then:
-        - service: script.utility_set_alarm_time
-          data:
+        - data:
             time_input: '{{ states(''input_datetime.wakeup_alarm_weekdays'') }}'
             alarm_entity: input_datetime.wakeup_alarm_time
-        - service: sonos.update_alarm
-          data:
+          action: script.utility_set_alarm_time
+        - data:
             alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
             volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
               }}'
@@ -1919,13 +1835,13 @@
               '
           target:
             entity_id: media_player.sonos_bedroom
+          action: sonos.update_alarm
         else:
-        - service: script.utility_set_alarm_time
-          data:
+        - data:
             time_input: '{{ states(''input_datetime.wakeup_alarm_weekends'') }}'
             alarm_entity: input_datetime.wakeup_alarm_time
-        - service: sonos.update_alarm
-          data:
+          action: script.utility_set_alarm_time
+        - data:
             alarm_id: '{{ states(''input_number.wakeup_sonos_alarm_id'') | int }}'
             volume: '{{ states(''input_number.wakeup_audio_start_volume'') | float(0.08)
               }}'
@@ -1937,6 +1853,7 @@
               '
           target:
             entity_id: media_player.sonos_bedroom
+          action: sonos.update_alarm
   mode: queued
   max: 10
 - id: '1748890659372'
@@ -1988,52 +1905,78 @@
 - id: '1749107493109'
   alias: Office - Light remote presses
   description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - sensor.light_remote_office_action
-    to: arrow_left_click
+  triggers:
+  - entity_id:
+    - sensor.action_light_remote_office
+    to:
+    - arrow_left_click
     id: left
-  - platform: state
-    entity_id:
-    - sensor.light_remote_office_action
-    to: arrow_right_click
+    trigger: state
+  - entity_id:
+    - sensor.action_light_remote_office
+    to:
+    - arrow_right_click
     id: right
-  - platform: state
-    entity_id:
-    - sensor.light_remote_office_action
+    trigger: state
+  - entity_id:
+    - sensor.action_light_remote_office
     id: up
-    to: 'on'
-  - platform: state
-    entity_id:
-    - sensor.light_remote_office_action
-    to: 'off'
+    to:
+    - 'on'
+    trigger: state
+  - entity_id:
+    - sensor.action_light_remote_office
+    to:
+    - 'off'
     id: down
-  condition: []
-  action:
+    trigger: state
+  conditions: []
+  actions:
   - choose:
     - conditions:
       - condition: trigger
         id:
         - up
       sequence:
-      - service: light.turn_on
-        metadata: {}
+      - metadata: {}
         data:
           brightness_step_pct: 10
         target:
           entity_id: light.pendants_office
+        action: light.turn_on
     - conditions:
       - condition: trigger
         id:
         - down
       sequence:
-      - service: light.turn_on
-        metadata: {}
+      - metadata: {}
         data:
           brightness_step_pct: -8
         target:
           entity_id: light.pendants_office
+        action: light.turn_on
+    - conditions:
+      - condition: trigger
+        id:
+        - left
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id: light.pendants_office
+        data:
+          color_temp_kelvin: 2000
+    - conditions:
+      - condition: trigger
+        id:
+        - right
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id: light.pendants_office
+        data:
+          color_temp_kelvin: 4006
   mode: queued
   max: 10
 - id: '1749332974341'
@@ -2282,29 +2225,54 @@
         id:
         - button_right
       sequence:
-      - action: cover.open_cover
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.curtain_living
+      - if:
+        - condition: state
+          entity_id: binary_sensor.curtain_running
+          state:
+          - 'on'
+        then:
+        - action: cover.stop_cover
+          metadata: {}
+          target:
+            device_id: 0ed5a6306879924780322aa44e5d9acc
+          data: {}
+        else:
+        - action: cover.open_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.curtain_living
     - conditions:
       - condition: trigger
         id:
         - button_left
       sequence:
-      - action: cover.close_cover
-        metadata: {}
-        data: {}
-        target:
-          entity_id: cover.curtain_living
-  mode: single
+      - if:
+        - condition: state
+          entity_id: binary_sensor.curtain_running
+          state:
+          - 'on'
+        then:
+        - action: cover.stop_cover
+          metadata: {}
+          target:
+            device_id: 0ed5a6306879924780322aa44e5d9acc
+          data: {}
+        else:
+        - action: cover.close_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.curtain_living
+  mode: queued
+  max: 10
 - id: '1762701442704'
   alias: Entry - Handle light on/off with motion
   description: ''
   triggers:
   - trigger: state
     entity_id:
-    - binary_sensor.motion_sensor_entry_occupancy
+    - binary_sensor.motion_sensor_entry
     to: 'on'
     id: motion
   - trigger: state
@@ -2336,12 +2304,12 @@
         data:
           brightness_pct: '{{ states(''input_number.apartment_dimmer'') }}'
         target:
-          entity_id: light.downlights_entry
+          entity_id: light.entry_downlights
       - action: switch.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: switch.lenovo_tab_m10_screen
+          entity_id: switch.screen_wall_tablet_entry
     - conditions:
       - condition: trigger
         id:
@@ -2351,36 +2319,36 @@
         metadata: {}
         data: {}
         target:
-          entity_id: light.downlights_entry
+          entity_id: light.entry_downlights
       - action: switch.turn_off
         metadata: {}
         data: {}
         target:
-          entity_id: switch.lenovo_tab_m10_screen
+          entity_id: switch.screen_wall_tablet_entry
   mode: queued
   max: 10
 - id: '1769376646455'
   alias: Bedroom - Handle light remote presses
   description: ''
   triggers:
-  - domain: mqtt
-    device_id: 2db1ac53a375ce2babaa709d0caf8615
-    type: action
-    subtype: off_press_release
-    trigger: device
+  - trigger: state
+    entity_id:
+    - sensor.action_light_remote_bedroom
+    to:
+    - off_press
     id: 'off'
-  - domain: mqtt
-    device_id: 2db1ac53a375ce2babaa709d0caf8615
-    type: action
-    subtype: on_press
-    trigger: device
-    id: 'on'
-  - domain: mqtt
-    device_id: 2db1ac53a375ce2babaa709d0caf8615
-    type: action
-    subtype: off_hold_release
-    trigger: device
+  - trigger: state
+    entity_id:
+    - sensor.action_light_remote_bedroom
+    to:
+    - off_hold
     id: off-hold
+  - trigger: state
+    entity_id:
+    - sensor.action_light_remote_bedroom
+    to:
+    - on_press
+    id: 'on'
   conditions: []
   actions:
   - choose:
@@ -2391,7 +2359,7 @@
       sequence:
       - if:
         - condition: state
-          entity_id: light.bedroom_reading_lamp
+          entity_id: light.reading_lamp_bedroom
           state: 'on'
         then:
         - action: light.turn_on
@@ -2399,7 +2367,7 @@
           data:
             brightness_step_pct: 5
           target:
-            entity_id: light.bedroom_reading_lamp
+            entity_id: light.reading_lamp_bedroom
         else:
         - action: light.turn_on
           metadata: {}
@@ -2408,7 +2376,7 @@
             brightness_pct: 10
             transition: 2
           target:
-            entity_id: light.bedroom_reading_lamp
+            entity_id: light.reading_lamp_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -2419,7 +2387,7 @@
         data:
           brightness_step_pct: -5
         target:
-          entity_id: light.bedroom_reading_lamp
+          entity_id: light.reading_lamp_bedroom
     - conditions:
       - condition: trigger
         id:
@@ -2430,7 +2398,7 @@
         data:
           transition: 2
         target:
-          entity_id: light.bedroom_reading_lamp
+          entity_id: light.reading_lamp_bedroom
   mode: queued
   max: 10
 - id: '1769377151873'
@@ -2439,7 +2407,7 @@
   triggers:
   - trigger: state
     entity_id:
-    - light.pendant_bedroom
+    - light.bedroom_pendant
     from: 'on'
     to: 'off'
     id: turned-off
@@ -2469,8 +2437,8 @@
         data: {}
         target:
           entity_id:
-          - light.bedroom_shelf_strip
-          - light.bedroom_reading_lamp
+          - light.shelf_strip_bedroom
+          - light.reading_lamp_bedroom
   mode: queued
   max: 10
 - id: '1770277974535'
@@ -2479,18 +2447,13 @@
   triggers:
   - alias: Tablet motion ON
     entity_id:
-    - switch.galaxy_s9_wall_tablet_motion_detection
-    to: 'on'
+    - switch.bevegelsesdeteksjon_samsung_galaxy_tab_entre
+    to:
+    - 'on'
     id: tablet-motion-on
     trigger: state
-    from: 'off'
-  - alias: Tablet motion OFF
-    entity_id:
-    - switch.galaxy_s9_wall_tablet_motion_detection
-    to: 'off'
-    id: tablet-motion-off
-    trigger: state
-    from: 'on'
+    from:
+    - 'off'
   conditions: []
   actions:
   - choose:
@@ -2503,7 +2466,7 @@
         action: switch.turn_on
         data: {}
         target:
-          entity_id: switch.galaxy_s9_wall_tablet_screen
+          entity_id: switch.screen_wall_tablet_entry
     - conditions:
       - condition: trigger
         id:
@@ -2513,7 +2476,7 @@
         action: switch.turn_off
         data: {}
         target:
-          entity_id: switch.galaxy_s9_wall_tablet_screen
+          entity_id: switch.screen_wall_tablet_entry
   mode: single
 - id: '1780692953989'
   alias: Lights - Handle Fibaro Dimmer double-clicks
@@ -2640,3 +2603,42 @@
         metadata: {}
         data: {}
   mode: queued
+- id: '1786394619676'
+  alias: Kitchen - Tracklight to Shelf Strip ON/OFF/DIM
+  description: Handles the mirroring of turning ON/OFF and dimming the brightness
+    of the shelf lightning when the Spot-track is interacted with.
+  triggers:
+  - entity_id:
+    - light.kitchen_6_spot_track
+    id: turned-on-dimmed
+    trigger: state
+    attribute: brightness
+  - trigger: light.turned_off
+    target:
+      entity_id: light.kitchen_6_spot_track
+    options:
+      for: 00:00:00
+    id: turned-off
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-off
+      sequence:
+      - target:
+          entity_id: light.undershelf_strip_kitchen
+        action: light.turn_off
+        data: {}
+    - conditions:
+      - condition: trigger
+        id:
+        - turned-on-dimmed
+      sequence:
+      - target:
+          entity_id: light.undershelf_strip_kitchen
+        data:
+          brightness: '{{ trigger.to_state.attributes.brightness }}'
+        action: light.turn_on
+  mode: restart
