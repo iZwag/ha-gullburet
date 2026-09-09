@@ -28,7 +28,7 @@
       friendly_name: 'Downlights '
       supported_features: 32
       state: 'off'
-    switch.lamp_mushroom_living:
+    switch.mushroom_lamp_living:
       linkquality: 236
       power_on_behavior: previous
       update:
@@ -40,7 +40,7 @@
       icon: mdi:lamp
       friendly_name: Lamp, mushroom
       state: 'off'
-    light.mood_lamp_living:
+    light.mood_light_living:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
       min_mireds: 153
@@ -77,7 +77,7 @@
       friendly_name: Lamp, mood
       supported_features: 44
       state: 'off'
-    switch.lamp_globe_living:
+    switch.globe_lamp_living:
       linkquality: 200
       power_on_behavior: previous
       update:
@@ -102,7 +102,7 @@
       friendly_name: Pendants, Flowerpots
       supported_features: 32
       state: 'off'
-    light.spottrack6_kitchen:
+    light.kitchen_6_spot_track:
       supported_color_modes:
       - brightness
       color_mode:
@@ -186,23 +186,82 @@
       - brightness
       color_mode:
       brightness:
-      icon: mdi:ceiling-light-multiple
-      friendly_name: Pendants
+      icon: mdi:ceiling-light
+      friendly_name: Pendel
       supported_features: 32
       state: 'off'
-    input_select.office_mode_select:
-      options:
-      - 'off'
-      - focus
-      - gaming
-      editable: true
-      icon: mdi:desk-lamp-on
-      friendly_name: Office - Mode select
+    light.left_pendant_office:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6666
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - sunset
+      - sunrise
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - none
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      icon: mdi:ceiling-light
+      friendly_name: Venstre pendel
+      supported_features: 44
+      state: 'off'
+    light.right_pendant_office:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6666
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - sunset
+      - sunrise
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - none
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      icon: mdi:ceiling-light
+      friendly_name: Høyre pendel
+      supported_features: 44
       state: 'off'
   icon: mdi:lightbulb-group-off-outline
-  metadata:
-    input_select.office_mode_select:
-      entity_only: true
+  metadata: {}
 - id: '1691002062131'
   name: Bedroom - OFF
   entities:
@@ -212,21 +271,135 @@
       color_mode:
       brightness:
       icon: mdi:ceiling-light
-      friendly_name: Pendant
+      friendly_name: Pendel
       supported_features: 32
+      state: 'off'
+    light.shelf_strip_bedroom:
+      min_color_temp_kelvin: 1000
+      max_color_temp_kelvin: 20000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - sparkle
+      - opal
+      - glisten
+      - prism
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - sunset
+      - sunrise
+      - none
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      icon: mdi:led-strip
+      friendly_name: LED-stripe
+      supported_features: 44
+      state: 'off'
+    light.reading_lamp_bedroom:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - sunset
+      - sunrise
+      - sparkle
+      - opal
+      - glisten
+      - underwater
+      - cosmos
+      - sunbeam
+      - enchant
+      - none
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      icon: mdi:desk-lamp-on
+      friendly_name: Leselampe
+      supported_features: 44
       state: 'off'
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1706691991132'
   name: Veranda - OFF
   entities:
-    light.wall_lantern_veranda:
+    light.string_lights_veranda:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      icon: mdi:string-lights
+      friendly_name: Lyslenke
+      supported_features: 0
+      state: 'off'
+    light.wall_light_veranda:
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
       supported_color_modes:
       - brightness
+      effect:
+      color_mode:
+      brightness:
       icon: mdi:coach-lamp
-      friendly_name: Wall light, lantern
-      supported_features: 40
-      state: unavailable
+      friendly_name: Vegglampe
+      supported_features: 44
+      state: 'off'
+    light.ceiling_light_storage:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Taklys
+      supported_features: 44
+      state: 'off'
   icon: mdi:lightbulb-group-off-outline
   metadata: {}
 - id: '1709804779112'
@@ -240,7 +413,7 @@
       friendly_name: Spot-track 6 (2)
       supported_features: 32
       state: 'off'
-    light.spottrack6_kitchen:
+    light.kitchen_6_spot_track:
       supported_color_modes:
       - brightness
       color_mode: brightness
@@ -264,7 +437,7 @@
       friendly_name: Pendants, Flowerpots
       supported_features: 32
       state: 'on'
-    light.lightstrip_undershelf_kitchen:
+    light.undershelf_strip_kitchen:
       supported_color_modes:
       - brightness
       color_mode: brightness
@@ -318,10 +491,10 @@
       friendly_name: 'Downlights '
       supported_features: 32
       state: 'on'
-    switch.lamp_mushroom_living:
+    switch.mushroom_lamp_living:
       friendly_name: Lamp, mushroom
       state: 'on'
-    switch.lamp_globe_living:
+    switch.globe_lamp_living:
       friendly_name: Lamp, globe
       state: 'on'
     light.spot_track_4_2_3:
@@ -373,7 +546,7 @@
       friendly_name: Spot-track 6 (2)
       supported_features: 32
       state: 'off'
-    light.spottrack6_kitchen:
+    light.kitchen_6_spot_track:
       supported_color_modes:
       - brightness
       color_mode: brightness
@@ -397,7 +570,7 @@
       friendly_name: Pendants, Flowerpots
       supported_features: 32
       state: 'on'
-    light.lightstrip_undershelf_kitchen:
+    light.undershelf_strip_kitchen:
       supported_color_modes:
       - brightness
       color_mode: brightness
@@ -467,10 +640,10 @@
       friendly_name: Spot-track 4
       supported_features: 32
       state: 'off'
-    switch.lamp_mushroom_living:
+    switch.mushroom_lamp_living:
       friendly_name: Lamp, mushroom
       state: 'off'
-    switch.lamp_globe_living:
+    switch.globe_lamp_living:
       friendly_name: Lamp, globe
       state: 'on'
     input_boolean.lights_override_living:
@@ -493,7 +666,7 @@
       friendly_name: Spot-track 6 (2)
       supported_features: 32
       state: 'off'
-    light.spottrack6_kitchen:
+    light.kitchen_6_spot_track:
       supported_color_modes:
       - brightness
       color_mode:
@@ -501,7 +674,7 @@
       friendly_name: Spot-track 6
       supported_features: 32
       state: 'off'
-    light.lightstrip_undershelf_kitchen:
+    light.undershelf_strip_kitchen:
       supported_color_modes:
       - brightness
       color_mode:
