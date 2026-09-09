@@ -1,46 +1,6 @@
 # TIPS:
 # Want to remove default, unused 'metadata: {-}' and 'data: {-}' fields?
 # Search and replace (with nothing) with this Regex: ^.*data: \{\}.*\n?
-
-- id: "1702582088817"
-  alias: Spot-track6 to Lightstrip shelf ON/OFF/DIM
-  mode: restart
-  description:
-    Handles the mirroring of turning ON/OFF and dimming the brightness
-    of the shelf lightning when the Spot-track is interacted with.
-  trigger:
-    - platform: device
-      type: turned_off
-      device_id: 3b314b934fee629a9f95316c027e2ad0
-      entity_id: 6a483694307cabbe1f0abc602ed6b17f
-      domain: light
-      id: turned-off
-    - platform: state
-      entity_id:
-        - light.spottrack6_kitchen
-      attribute: brightness
-      id: turned-on-dimmed
-  condition: []
-  action:
-    - choose:
-        - conditions:
-            - condition: trigger
-              id:
-                - turned-off
-          sequence:
-            - service: light.turn_off
-              target:
-                entity_id: light.lightstrip_undershelf_kitchen
-        - conditions:
-            - condition: trigger
-              id:
-                - turned-on-dimmed
-          sequence:
-            - service: light.turn_on
-              target:
-                entity_id: light.lightstrip_undershelf_kitchen
-              data:
-                brightness: "{{ trigger.to_state.attributes.brightness }}"
   
 - id: '1708602051833'
   alias: Special - Handle Vacation return time
@@ -106,7 +66,7 @@
   trigger:
   - platform: state
     entity_id:
-    - input_number.power_last_hour_consumed
+    - input_number.energy_last_hour_consumed
   condition: []
   action:
   - service: input_number.set_value
@@ -114,22 +74,22 @@
       entity_id: input_number.power_grid_monthly_variable_price
     data:
       value: >
-        {% set last_hour = states('input_number.power_last_hour_consumed') | float %}
+        {% set last_hour = states('input_number.energy_last_hour_consumed') | float %}
         {% set hour_price = states('sensor.elvia_variable_pricing_this_hour') | float %}
         {% set month_price = states('input_number.power_grid_monthly_variable_price') | float %}
         {{ ( (last_hour * hour_price) + month_price ) | round(2) }}
   - service: python_script.power_compare_maxhours
     data:
-      newhour_value: "{{ states('input_number.power_last_hour_consumed') }}"
-      newhour_time: "{{ states('input_datetime.power_last_hour_consumed') }}"
-      top_maxhour_val_1: 'input_number.power_monthly_highest_max_hour_1'
-      top_maxhour_time_1: 'input_datetime.power_monthly_highest_max_hour_1'
-      top_maxhour_val_2: 'input_number.power_monthly_highest_max_hour_2'
-      top_maxhour_time_2: 'input_datetime.power_monthly_highest_max_hour_2'
-      top_maxhour_val_3: 'input_number.power_monthly_highest_max_hour_3'
-      top_maxhour_time_3: 'input_datetime.power_monthly_highest_max_hour_3'
-      top_maxhour_val_4: 'input_number.power_monthly_highest_max_hour_4'
-      top_maxhour_time_4: 'input_datetime.power_monthly_highest_max_hour_4'
+      newhour_value: "{{ states('input_number.energy_last_hour_consumed') }}"
+      newhour_time: "{{ states('input_datetime.energy_last_hour_consumed') }}"
+      top_maxhour_val_1: 'input_number.energy_monthly_maxhour_1'
+      top_maxhour_time_1: 'input_datetime.energy_monthly_maxhour_1'
+      top_maxhour_val_2: 'input_number.energy_monthly_maxhour_2'
+      top_maxhour_time_2: 'input_datetime.energy_monthly_maxhour_2'
+      top_maxhour_val_3: 'input_number.energy_monthly_maxhour_3'
+      top_maxhour_time_3: 'input_datetime.energy_monthly_maxhour_3'
+      top_maxhour_val_4: 'input_number.energy_monthly_maxhour_4'
+      top_maxhour_time_4: 'input_datetime.energy_monthly_maxhour_4'
   mode: single
 
 - id: '1710100627159'
@@ -143,13 +103,13 @@
   action:
   - service: input_datetime.set_datetime
     data:
-      entity_id: input_datetime.power_last_hour_consumed
+      entity_id: input_datetime.energy_last_hour_consumed
       datetime: "{{ now().strftime('%Y-%m-%d %H:00:00') }}"
   - service: input_number.set_value
     data:
-      value: "{{states('sensor.tibber_energy_consumption_current_hour')}}"
+      value: "{{states('sensor.energy_consumed_this_hour_tibber')}}"
     target:
-      entity_id: input_number.power_last_hour_consumed
+      entity_id: input_number.energy_last_hour_consumed
   mode: single
 
 # BLUEPRINT TO HANDLE SELECTING ROOMS FOR CLEANING
@@ -201,5 +161,5 @@
   use_blueprint:
     path: homeassistant/disable-vacuum-map-updates.yaml
     input:
-      vacuum: vacuum.esmeralda
+      vacuum: vacuum.vaskepott
       camera: camera.vaskepott_path
