@@ -50,7 +50,7 @@ The smarthome-system is compromised of many hardware devices, obviously.
 - **Sonos** speakers: Play:1, One, Beam, Move
 - **Roborock** S7 Plus, robot vacuum
 - **Samsung** The Frame 55" TV
-- **Lenovo** Tab M10 FHD Plus wall-mounted tablet
+- **Samsung** Galaxy S9 Tab wall-mounted tablet
 - **Shelly** Plug Plus S for binary control and power-monitoring
 - **Tibber** Pulse - Realtime apartment power consumption meter. Uses the HAN-port.
 
@@ -64,7 +64,17 @@ The smarthome-system is compromised of many hardware devices, obviously.
 - **Namron** Temperature & Humidity sensors. Wall-mounted panel heaters.
 - **Philips Hue** (bulbs, switches, sensors)
 
-## Software 
+## Software
+
+### Emulating Tablet layout in Chrome Devtools
+
+For the Samsung Galaxy S9 Tab, running Fully Kiosk Browser:
+
+- Width: `1366`
+- Height: `854`
+- DPR: `1.875`
+
+**Remember to set zoom to normal 100%.**
 
 ### Containers in Docker
 
