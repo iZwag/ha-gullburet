@@ -3,48 +3,47 @@ all_lights_off:
   mode: single
   icon: mdi:lightbulb-group-outline
   sequence:
-  - service: scene.turn_on
-    data: {}
+  - data: {}
+    action: scene.turn_on
     target:
-      entity_id: scene.kitchen_lights_off
+      entity_id: scene.kitchen_off
   - delay: 00:00:01
-  - service: scene.turn_on
-    data: {}
+  - data: {}
+    action: scene.turn_on
     target:
-      entity_id: scene.living_room_lights_off
+      entity_id: scene.living_room_off
   - delay: 00:00:01
-  - service: scene.turn_on
-    data: {}
+  - data: {}
     target:
-      entity_id: scene.entry_lights_off
+      entity_id: scene.entry_off
+    action: scene.turn_on
   - delay: 00:00:01
-  - service: scene.turn_on
-    data: {}
+  - data: {}
     target:
-      entity_id: scene.bathroom_lights_off
-  - service: scene.turn_on
-    data: {}
+      entity_id: scene.bathroom_off
+    action: scene.turn_on
+  - data: {}
     target:
-      entity_id: scene.toilet_lights_off
+      entity_id: scene.toilet_off
+    action: scene.turn_on
   - delay: 00:00:01
-  - service: scene.turn_on
-    data: {}
+  - data: {}
     target:
-      entity_id: scene.guestroom_lights_off
-  - service: scene.turn_on
-    data: {}
+      entity_id: scene.guest_room_off
+    action: scene.turn_on
+  - data: {}
     target:
-      entity_id: scene.office_lights_off
-  - service: scene.turn_on
-    data: {}
+      entity_id: scene.office_off
+    action: scene.turn_on
+  - data: {}
     target:
-      entity_id: scene.bedroom_lights_off
-  - service: scene.turn_on
-    target:
-      entity_id: scene.veranda_lights_off
+      entity_id: scene.bedroom_off
+    action: scene.turn_on
+  - target:
+      entity_id: scene.veranda_off
     data: {}
-  - service: input_boolean.turn_off
-    metadata: {}
+    action: scene.turn_on
+  - metadata: {}
     data: {}
     target:
       entity_id:
@@ -52,18 +51,7 @@ all_lights_off:
       - input_boolean.lights_movie_mode
       - input_boolean.lights_dining_mode
       - input_boolean.party_mode_enable
-  - service: input_select.select_option
-    metadata: {}
-    data:
-      option: 'off'
-    target:
-      entity_id: input_select.office_mode_select
-  - service: input_select.select_option
-    metadata: {}
-    data:
-      option: 'off'
-    target:
-      entity_id: input_select.bathroom_mode_select
+    action: input_boolean.turn_off
 all_lights_on:
   alias: 'Lights - All lights: On'
   mode: restart
@@ -76,7 +64,7 @@ all_lights_on:
     action: light.turn_on
   - delay: 00:00:01
   - target:
-      entity_id: switch.lamp_globe_living
+      entity_id: switch.globe_lamp_living
     data: {}
     action: switch.turn_on
   - data:
@@ -90,14 +78,14 @@ all_lights_on:
       entity_id: light.living_4_spot_track
     action: light.turn_on
   - target:
-      entity_id: switch.lamp_mushroom_living
+      entity_id: switch.mushroom_lamp_living
     data: {}
     action: switch.turn_on
   - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
       color_temp_kelvin: 2500
     target:
-      entity_id: light.mood_lamp_living
+      entity_id: light.mood_light_living
     action: light.turn_on
   - delay: 00:00:01
   - data:
@@ -113,7 +101,7 @@ all_lights_on:
   - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
     target:
-      entity_id: light.spottrack6_kitchen
+      entity_id: light.kitchen_6_spot_track
     action: light.turn_on
   - data:
       brightness_pct: '{{ states(''input_number.apartment_dimmer'') | int }}'
@@ -149,7 +137,7 @@ bedtime_lights:
       effect: fireplace
       brightness_pct: 25
     target:
-      entity_id: light.bedroom_shelf_strip
+      entity_id: light.shelf_strip_bedroom
   - target:
       entity_id: scene.toilet_lights_off
     data: {}
@@ -186,7 +174,7 @@ bedtime_lights:
     data:
       transition: 180
     target:
-      entity_id: light.bedroom_shelf_strip
+      entity_id: light.shelf_strip_bedroom
   mode: single
   icon: mdi:bed
 select_floorplan_room:
@@ -282,7 +270,7 @@ robot_clean_target_room:
     data:
       fan_speed: '{{ fan_speed }}'
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
   - delay:
       hours: 0
       minutes: 0
@@ -290,7 +278,7 @@ robot_clean_target_room:
       milliseconds: 0
   - service: xiaomi_miio.vacuum_clean_segment
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
     data:
       segments: '{{ room_number_id }}'
   mode: single
@@ -444,7 +432,7 @@ robot_set_mop_mode:
         %}\n  [201]\n{% elif mopping_mode == 'Medium' %}\n  [202]\n{% elif mopping_mode
         == 'High' %}\n  [203]\n{% else %}\n  [202]\n{% endif %}\n"
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
     alias: Send command Mop mode
   - alias: If Map route has been given
     if:
@@ -456,7 +444,7 @@ robot_set_mop_mode:
         command: set_custom_mode
         params: 105
       target:
-        entity_id: vacuum.esmeralda
+        entity_id: vacuum.vaskepott
       alias: Send command Fan-mode OFF
     - service: vacuum.send_command
       data:
@@ -465,7 +453,7 @@ robot_set_mop_mode:
           == 'Deep' %}\n  [301]\n{% elif mopping_route == 'DeepPlus' %}\n  [303]\n{%
           else %}\n  [300]\n{% endif %}\n"
       target:
-        entity_id: vacuum.esmeralda
+        entity_id: vacuum.vaskepott
       alias: Send command Mop route
     - service: input_select.select_option
       metadata: {}
@@ -648,7 +636,7 @@ set_fan_speed_roborock_wrapper:
         data:
           fan_speed: Silent
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
       - service: input_select.select_option
         metadata: {}
         data:
@@ -664,7 +652,7 @@ set_fan_speed_roborock_wrapper:
         data:
           fan_speed: Standard
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
       - service: input_select.select_option
         metadata: {}
         data:
@@ -680,7 +668,7 @@ set_fan_speed_roborock_wrapper:
         data:
           fan_speed: Medium
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
       - service: input_select.select_option
         metadata: {}
         data:
@@ -696,7 +684,7 @@ set_fan_speed_roborock_wrapper:
         data:
           fan_speed: Turbo
         target:
-          entity_id: vacuum.esmeralda
+          entity_id: vacuum.vaskepott
       - service: input_select.select_option
         metadata: {}
         data:
@@ -1096,7 +1084,7 @@ clean_selected_rooms:
     data:
       segments: '{{ states(''input_text.selected_room_ids_cleaning'') }}'
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
   - service: script.robot_clean_create_mode_string
     metadata: {}
     data: {}
@@ -1143,7 +1131,7 @@ robot_clean_clean_all_rooms:
     metadata: {}
     data: {}
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
   - metadata: {}
     data:
       value: Everywhere
@@ -1182,7 +1170,7 @@ robot_clean_stop_and_return:
     metadata: {}
     data: {}
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
   - delay:
       hours: 0
       minutes: 0
@@ -1192,7 +1180,7 @@ robot_clean_stop_and_return:
     metadata: {}
     data: {}
     target:
-      entity_id: vacuum.esmeralda
+      entity_id: vacuum.vaskepott
   mode: single
   icon: mdi:home-import-outline
 bedtime_lights_adjust_off:
@@ -1203,15 +1191,15 @@ bedtime_lights_adjust_off:
     data: {}
     target:
       entity_id:
-      - light.mood_lamp_living
+      - light.mood_light_living
       - light.living_dining_pendants
   - service: switch.turn_off
     metadata: {}
     data: {}
     target:
       entity_id:
-      - switch.lamp_mushroom_living
-      - switch.lamp_globe_living
+      - switch.mushroom_lamp_living
+      - switch.globe_lamp_living
   - service: input_number.set_value
     metadata: {}
     data:
@@ -1301,7 +1289,7 @@ lights_blink_lights_common_room:
     target:
       entity_id:
       - light.pendants_office
-      - light.mood_lamp_living
+      - light.mood_light_living
   mode: queued
   icon: mdi:alarm-light
 bedtime_blink_lights:
