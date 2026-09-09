@@ -1,5 +1,26 @@
+# The purpose of this script is to compare the most recent hour's energy
+#  consumption to the top 4 highest recorded energy-hours, and insert it if it
+#  is higher than any of the existing records.
+#
+# Both the energy-value for the hour, and the date/time of when the hour started
+#  are stored (in respective input_number and input_datetime entities).
+# 
+# Same date constraint:
+#  - Only one record per date is allowed. So if the new hour is higher than an
+#  existing record, but the same date already exists with a higher energy-value, 
+# then the new hour will not be inserted. 
+
+
 def get_date(date_str: str):
-    return date_str.split("T")[0]
+    if not date_str:
+        return ""
+
+    date_value = str(date_str).strip()
+    if "T" in date_value:
+        return date_value.split("T", 1)[0]
+    if " " in date_value:
+        return date_value.split(" ", 1)[0]
+    return date_value[:10]
 
 def set_power(entity: str, value: float):
     service_data = {
@@ -47,42 +68,24 @@ maxhours = [
     {'power': float(maxhour_4), 'time': maxhour_4_time}
 ]
 
-inserted = False
+# Normalize existing top list first: only keep highest value per date.
+by_date = {}
+for record in maxhours:
+    record_date = get_date(record['time'])
+    existing = by_date.get(record_date)
+    if existing is None or record['power'] > existing['power']:
+        by_date[record_date] = {'power': record['power'], 'time': record['time']}
 
-# Check if same date already exists
-same_date_index = None
-for i in range(len(maxhours)):
-    if get_date(maxhours[i]['time']) == get_date(newhour_time):
-        same_date_index = i
-        break
+# Apply current hour with same-date replacement rule.
+newhour_date = get_date(newhour_time)
+existing_same_date = by_date.get(newhour_date)
+if existing_same_date is None or newhour_value > existing_same_date['power']:
+    by_date[newhour_date] = {'power': float(newhour_value), 'time': newhour_time}
 
-# If same date exists and the new value is not higher, skip insertion
-if same_date_index is not None and newhour_value <= maxhours[same_date_index]['power']:
-    inserted = False  
-
-# Loop through the list of maxhours, descending
-for i in range(len(maxhours)):
-
-    # Quit comparing if new_value is less than an exists value and its the same date
-    if (newhour_value < maxhours[i]['power']) and (get_date(maxhours[i]['time']) == get_date(newhour_time)):
-        break
-
-    # Compare newhour_value to maxhours(i) - Insert if found
-    if (newhour_value > maxhours[i]['power']) and not inserted:
-        maxhours.insert(i, {'power': float(newhour_value), 'time': newhour_time})
-        inserted = True
-        # Go to next loop iteration to not trigger the following if
-        continue
-    
-    # Value been inserted, looking for same date - Remove if found
-    if (get_date(maxhours[i]['time']) == get_date(newhour_time)) and inserted:
-        maxhours.pop(i)
-        # Loop can end: new_value inserted, same date handled, list has 4 elements
-        break
-
-# Handle if 5 elements
-if len(maxhours) > 4:
-    maxhours.pop(4)
+# Build final ranked list and enforce exactly 4 output entries.
+maxhours = sorted(by_date.values(), key=lambda item: item['power'], reverse=True)[:4]
+while len(maxhours) < 4:
+    maxhours.append({'power': 0.0, 'time': newhour_time})
 
 set_power(maxhour_1_entity, maxhours[0]['power'])
 set_power(maxhour_2_entity, maxhours[1]['power'])

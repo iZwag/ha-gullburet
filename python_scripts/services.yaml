@@ -60,28 +60,28 @@ power_compare_maxhours:
       example: "2023-01-23T12:00:00"
     top_maxhour_val_1:
       description: Power consumption entity of the top 1 max-hour this month, in kWh
-      example: input_number.power_monthly_highest_max_hour_1
+      example: input_number.energy_monthly_maxhour_1
     top_maxhour_time_1:
       description: Date and time entity for when the top 1 max-hour this month started
-      example: input_datetime.power_monthly_highest_max_hour_1
+      example: input_datetime.energy_monthly_maxhour_1
     top_maxhour_val_2:
       description: Power consumption entity of the top 2 max-hour this month, in kWh
-      example: input_number.power_monthly_highest_max_hour_2
+      example: input_number.energy_monthly_maxhour_2
     top_maxhour_time_2:
       description: Date and time entity for when the top 2 max-hour this month started
-      example: input_datetime.power_monthly_highest_max_hour_2
+      example: input_datetime.energy_monthly_maxhour_2
     top_maxhour_val_3:
       description: Power consumption entity of the top 3 max-hour this month, in kWh
-      example: input_number.power_monthly_highest_max_hour_3
+      example: input_number.energy_monthly_maxhour_3
     top_maxhour_time_3:
       description: Date and time entity for when the top 3 max-hour this month started
-      example: input_datetime.power_monthly_highest_max_hour_3
+      example: input_datetime.energy_monthly_maxhour_3
     top_maxhour_val_4:
       description: Power consumption entity of the top 4 max-hour this month, in kWh
-      example: input_number.power_monthly_highest_max_hour_4
+      example: input_number.energy_monthly_maxhour_4
     top_maxhour_time_4:
       description: Date and time entity for when the top 3 max-hour this month started
-      example: input_datetime.power_monthly_highest_max_hour_4
+      example: input_datetime.energy_monthly_maxhour_4
 
 cleaning_room_add:
   name: Add room for cleaning
