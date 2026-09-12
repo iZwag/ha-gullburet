@@ -1103,25 +1103,15 @@ clean_selected_rooms:
 system_restart_home_assistant:
   alias: System - Restart Home Assistant
   sequence:
-  - service: homeassistant.restart
-    metadata: {}
-    data: {}
+  - action: homeassistant.restart
   mode: single
   icon: mdi:restart
 system_restart_zigbee2mqtt:
   alias: System - Restart Zigbee2MQTT
   sequence:
-  - service: shell_command.restart_zigbee2mqtt
-    metadata: {}
-    data: {}
-  mode: single
-  icon: mdi:restart
-system_restart_rpi:
-  alias: System - Restart RPi
-  sequence:
-  - service: shell_command.restart_rpi_server
-    metadata: {}
-    data: {}
+  - action: hassio.app_restart
+    data:
+      app: 45df7312_zigbee2mqtt
   mode: single
   icon: mdi:restart
 robot_clean_clean_all_rooms:

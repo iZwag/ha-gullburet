@@ -20,10 +20,6 @@ camera: !include helper_cameras.yaml
 light: !include helper_lights.yaml
 media_player: !include helper_media_players.yaml
 
-
-shell_command: !include shell_commands.yaml
-
-
 # TEXT TO SPEECH
 tts:
   - platform: google_translate
