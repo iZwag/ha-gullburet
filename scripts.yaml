@@ -975,59 +975,60 @@ bathroom_control_light_mode:
   - choose:
     - conditions:
       - condition: template
-        value_template: '{{ setting == ''off'' }}'
+        value_template: '{{ setting == ''lights-off'' }}'
       sequence:
-      - service: scene.turn_on
-        metadata: {}
+      - metadata: {}
+        action: scene.turn_on
+        data: {}
         target:
-          entity_id: scene.bathroom_lights_off
-      - service: input_boolean.turn_off
-        metadata: {}
+          entity_id: scene.bathroom_off
+      - metadata: {}
         data: {}
         target:
           entity_id: input_boolean.lights_override_bath
+        action: input_boolean.turn_off
       alias: 'off'
     - conditions:
       - condition: template
         value_template: '{{ setting == ''bright'' }}'
       sequence:
-      - service: scene.turn_on
-        metadata: {}
+      - metadata: {}
         target:
           entity_id: scene.bathroom_bright_mode
-      - service: input_boolean.turn_on
-        target:
+        action: scene.turn_on
+      - target:
           entity_id:
           - input_boolean.lights_override_bath
         data: {}
+        action: input_boolean.turn_on
       alias: bright
     - conditions:
       - condition: template
         value_template: '{{ setting == ''spa'' }}'
       sequence:
-      - service: scene.turn_on
-        metadata: {}
+      - metadata: {}
         target:
           entity_id: scene.bathroom_spa_mode
-      - service: input_boolean.turn_on
-        metadata: {}
+        action: scene.turn_on
+      - metadata: {}
         data: {}
         target:
           entity_id: input_boolean.lights_override_bath
+        action: input_boolean.turn_on
       alias: spa
     - conditions:
       - condition: template
         value_template: '{{ setting == ''night'' }}'
       sequence:
-      - service: scene.turn_on
-        metadata: {}
+      - metadata: {}
         target:
           entity_id: scene.bathroom_night_mode
-      - service: input_boolean.turn_on
-        metadata: {}
+        action: scene.turn_on
+      - metadata: {}
         data: {}
         target:
           entity_id: input_boolean.lights_override_bath
+        action: input_boolean.turn_on
       alias: night
   mode: restart
   icon: mdi:lightbulb-multiple

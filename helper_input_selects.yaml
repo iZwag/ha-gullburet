@@ -186,7 +186,7 @@ bathroom_mode_select:
   name: Bathroom - Mode select
   icon: mdi:shower-head
   options:
-    - off
+    - lights-off
     - bright
     - night
     - spa
