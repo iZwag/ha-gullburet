@@ -1266,7 +1266,7 @@
     icon: mdi:thermometer
     state: >
         {% set diff = (states('sensor.temperature_room_office') | float(default=0)) -
-          (state_attr('climate.panel_heater_office', 'local_temperature') | float(default=0))
+          (state_attr('climate.panel_heater_office', 'current_temperature') | float(default=0))
         %}
         {% if (diff > -0.5) and (diff < 0.5) %}
           {% set diff = 0 %}
@@ -1276,7 +1276,7 @@
           {% set diff = -6 %}
         {% endif %}
         {% set cal = diff + 
-          (state_attr('climate.panel_heater_office', 'local_temperature_calibration') | float(default=0)) %}
+          (states('number.temperature_calibration_heater_office') | float(default=0)) %}
         {% if cal > 3 %}
           {{ 3 }}
         {% elif cal < -3 %}
@@ -1292,7 +1292,7 @@
     icon: mdi:thermometer
     state: >
         {% set diff = (states('sensor.temperature_room_guest') | float(default=0)) -
-          (state_attr('climate.panel_heater_guest', 'local_temperature') | float(default=0))
+          (state_attr('climate.panel_heater_guest', 'current_temperature') | float(default=0))
         %}
         {% if (diff > -0.5) and (diff < 0.5) %}
           {% set diff = 0 %}
@@ -1302,7 +1302,7 @@
           {% set diff = -6 %}
         {% endif %}
         {% set cal = diff + 
-          (state_attr('climate.panel_heater_guest', 'local_temperature_calibration') | float(default=0)) %}
+          (states('number.temperature_calibration_heater_guest') | float(default=0)) %}
         {% if cal > 3 %}
           {{ 3 }}
         {% elif cal < -3 %}
@@ -1318,7 +1318,7 @@
     icon: mdi:thermometer
     state: >
         {% set diff = (states('sensor.temperature_room_bedroom') | float(default=0)) -
-          (state_attr('climate.panel_heater_bedroom', 'local_temperature') | float(default=0))
+          (state_attr('climate.panel_heater_bedroom', 'current_temperature') | float(default=0))
         %}
         {% if (diff > -0.5) and (diff < 0.5) %}
           {% set diff = 0 %}
@@ -1328,7 +1328,7 @@
           {% set diff = -6 %}
         {% endif %}
         {% set cal = diff + 
-          (state_attr('climate.panel_heater_bedroom', 'local_temperature_calibration') | float(default=0)) %}
+          (states('number.temperature_calibration_heater_bedroom') | float(default=0)) %}
         {% if cal > 3 %}
           {{ 3 }}
         {% elif cal < -3 %}
@@ -1336,4 +1336,45 @@
         {% else %}
           {{ cal | round(1)}}
         {% endif %}
+  
+  - name: "Temperature difference kitchen"
+    unique_id: temperature_difference_kitchen
+    device_class: temperature
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    state: >
+        {% set diff = (states('sensor.temperature_room_kitchen') | float(default=0)) -
+          (state_attr('climate.panel_heater_kitchen', 'current_temperature') | float(default=0))
+        %}
+        {% if (diff > -0.5) and (diff < 0.5) %}
+          {% set diff = 0 %}
+        {% elif diff > 6 %}
+          {% set diff = 6 %}
+        {% elif diff < -6 %}
+          {% set diff = -6 %}
+        {% endif %}
+        {% set cal = diff + 
+          (states('number.temperature_calibration_heater_kitchen') | float(default=0)) %}
+        {% if cal > 3 %}
+          {{ 3 }}
+        {% elif cal < -3 %}
+          {{ -3 }}
+        {% else %}
+          {{ cal | round(1)}}
+        {% endif %}
+
+# number.temperature_calibration_heater_kitchen
+
+- binary_sensor:
+  - name: "Zigbee network unavailable"
+    unique_id: zigbee_network_unavailable
+    device_class: problem
+    state: >
+      {% set entities = [
+          'climate.panel_heater_kitchen',
+          'switch.globe_lamp_living',
+          'light.mood_light_living'
+        ] %}
+        {{ entities | count > 0 and entities | select('is_state', 'unavailable') | list | count == entities | count }}
+
 
