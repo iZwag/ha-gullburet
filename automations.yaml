@@ -159,7 +159,7 @@
       entity_id: input_select.bathroom_mode_select
     action: input_select.select_option
     data:
-      option: 'lights-off'
+      option: lights-off
   - metadata: {}
     data: {}
     action: script.speakers_unjoin_all
@@ -539,11 +539,11 @@
         - left
       sequence:
       - if:
-        - condition: not
-          conditions:
-          - condition: state
-            entity_id: sensor.curtain_state_living
-            state: stopped
+        - condition: state
+          entity_id: cover.curtain_living
+          state:
+          - closing
+          - opening
         then:
         - metadata: {}
           data: {}
@@ -561,11 +561,11 @@
         - right
       sequence:
       - if:
-        - condition: not
-          conditions:
-          - condition: state
-            entity_id: sensor.curtain_state_living
-            state: stopped
+        - condition: state
+          entity_id: cover.curtain_living
+          state:
+          - closing
+          - opening
         then:
         - metadata: {}
           data: {}
@@ -583,22 +583,49 @@
         id:
         - up
       sequence:
-      - action: light.turn_on
-        metadata: {}
-        target:
-          entity_id: light.string_lights_veranda
-        data: {}
+      - if:
+        - condition: state
+          entity_id: cover.outdoor_zip_screen
+          state:
+          - closing
+          - opening
+        then:
+        - action: cover.stop_cover
+          metadata: {}
+          target:
+            entity_id: cover.outdoor_zip_screen
+          data: {}
+        else:
+        - action: cover.open_cover
+          metadata: {}
+          data: {}
+          target:
+            entity_id: cover.outdoor_zip_screen
     - conditions:
       - condition: trigger
         id:
         - down
       sequence:
-      - action: light.turn_off
-        metadata: {}
-        target:
-          entity_id: light.string_lights_veranda
-        data: {}
-  mode: single
+      - if:
+        - condition: state
+          entity_id: cover.outdoor_zip_screen
+          state:
+          - closing
+          - opening
+        then:
+        - action: cover.stop_cover
+          metadata: {}
+          target:
+            entity_id: cover.outdoor_zip_screen
+          data: {}
+        else:
+        - action: cover.close_cover
+          metadata: {}
+          target:
+            entity_id: cover.outdoor_zip_screen
+          data: {}
+  mode: queued
+  max: 10
 - id: '1724167870416'
   alias: Storage room light ON/OFF with motion/timer
   description: ''
@@ -850,6 +877,10 @@
     entity_id:
     - sensor.temperature_difference_bedroom
     id: bedroom
+  - platform: state
+    entity_id:
+    - sensor.temperature_difference_kitchen
+    id: kitchen
   condition: []
   action:
   - choose:
@@ -869,7 +900,7 @@
           value: '{{ states(''sensor.temperature_difference_office'') | float(default=0)
             }}'
         target:
-          entity_id: number.temperature_calibration_office
+          entity_id: number.temperature_calibration_heater_office
     - conditions:
       - condition: trigger
         id:
@@ -886,7 +917,7 @@
           value: '{{ states(''sensor.temperature_difference_guest'') | float(default=0)
             }}'
         target:
-          entity_id: number.temperature_calibration_guest
+          entity_id: number.temperature_calibration_heater_guest
     - conditions:
       - condition: trigger
         id:
@@ -903,7 +934,24 @@
           value: '{{ states(''sensor.temperature_difference_bedroom'') | float(default=0)
             }}'
         target:
-          entity_id: number.temperature_calibration_bedroom
+          entity_id: number.temperature_calibration_heater_bedroom
+    - conditions:
+      - condition: trigger
+        id:
+        - kitchen
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - service: number.set_value
+        metadata: {}
+        data:
+          value: '{{ states(''sensor.temperature_difference_kitchen'') | float(default=0)
+            }}'
+        target:
+          entity_id: number.temperature_calibration_heater_kitchen
   mode: queued
   max: 10
 - id: '1733252756139'
@@ -2632,13 +2680,18 @@
         action: light.turn_off
         data: {}
     - conditions:
-      - condition: trigger
-        id:
-        - turned-on-dimmed
+      - condition: and
+        conditions:
+        - condition: trigger
+          id:
+          - turned-on-dimmed
+        - condition: state
+          entity_id: light.kitchen_6_spot_track
+          state: 'on'
       sequence:
       - target:
           entity_id: light.undershelf_strip_kitchen
         data:
-          brightness: '{{ trigger.to_state.attributes.brightness }}'
+          brightness: '{{ trigger.to_state.attributes.brightness | int(0) }}'
         action: light.turn_on
   mode: restart
